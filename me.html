@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iron Hulk - Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0f172a] text-white font-sans">
+
+  <div class="flex h-screen overflow-hidden">
+    <!-- Left Sidebar -->
+    <aside class="w-64 bg-[#1e293b] p-5 flex flex-col space-y-6">
+      <h1 class="text-2xl font-bold border-b border-gray-600 pb-2">Iron Hulk</h1>
+      <nav class="space-y-2 text-blue-400">
+        <a href="#" class="block hover:underline">About Me</a>
+        <a href="#" class="block hover:underline">Certifications</a>
+        <a href="#" class="block hover:underline">My Projects</a>
+        <a href="#" class="block hover:underline">Contact</a>
+      </nav>
+    </aside>
+
+    <!-- Main Dashboard -->
+    <main class="flex-1 p-6 mr-72 overflow-y-auto space-y-6">
+      <!-- Welcome Card -->
+      <div class="bg-[#1f2937] p-6 rounded-xl flex justify-between items-center shadow-md">
+        <div>
+          <h2 class="text-xl font-bold">Welcome back, <span class="text-blue-400">Iron Hulk</span> 👋</h2>
+          <p class="text-gray-400">Malware Developer | Red/Blue/Purple Teamer | CISM/CISSP</p>
+        </div>
+        <div class="text-right">
+          <p class="text-3xl font-bold">$65.4K</p>
+          <p class="text-sm text-green-400">Today's Revenue</p>
+        </div>
+      </div>
+    </main>
+
+      <!-- JS for collapsible sections -->
+  <script>
+    const toggle = (id) => {
+      const section = document.getElementById(id);
+      section.classList.toggle("hidden");
+    };
+  </script>
+</body>
+</html>
