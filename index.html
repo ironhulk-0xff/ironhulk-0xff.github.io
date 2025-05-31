@@ -6,168 +6,94 @@
   <title>Iron Hulk - Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-  <body class="bg-[#0f172a] text-white font-sans">
-    
-    
-    <div class="flex h-screen overflow-hidden">
-      <!-- Left Sidebar -->
-      <aside class="w-64 bg-[#1e293b] p-5 flex flex-col space-y-6">
-        <h1 class="text-2xl font-bold border-b border-gray-600 pb-2">Iron Hulk</h1>
-        <nav class="space-y-2 text-blue-400">
-          <button onclick="showSection('about')" class="block text-left w-full hover:underline">About Me</button>
-          <button onclick="showSection('certifications')" class="block text-left w-full hover:underline">Certifications</button>
-          <button onclick="showSection('projects')" class="block text-left w-full hover:underline">My Projects</button>
-          <button onclick="showSection('contact')" class="block text-left w-full hover:underline">Contact</button>
-        </nav>
-      </aside>
+<body class="bg-[#0f172a] text-white font-sans">
 
-      <!-- Main Dashboard -->
-      <main id="mainDashboard" class="flex-1 p-6 overflow-y-auto space-y-6">
-        <!-- Welcome Card -->
-        <div class="bg-[#1f2937] p-6 rounded-xl flex justify-between items-center shadow-md">
-          <div>
-            <h2 class="text-xl font-bold"><span class="text-blue-400">Iron Hulk</span> 👋</h2>
-            <p class="text-gray-400">Malware Developer | Red/Blue/Purple Teamer | CISM/CISSP</p>
-          </div>
+  <div class="flex h-screen overflow-hidden">
+    <!-- Left Sidebar -->
+    <aside class="w-64 bg-[#1e293b] p-5 flex flex-col space-y-6">
+      <h1 class="text-2xl font-bold border-b border-gray-600 pb-2">Iron Hulk</h1>
+      <nav class="space-y-2 text-blue-400">
+        <button onclick="showSection('about')" class="block text-left w-full hover:underline">About Me</button>
+        <button onclick="showSection('certifications')" class="block text-left w-full hover:underline">Certifications</button>
+        <button onclick="showSection('projects')" class="block text-left w-full hover:underline">My Projects</button>
+        <button onclick="showSection('contact')" class="block text-left w-full hover:underline">Contact</button>
+      </nav>
+    </aside>
+
+    <!-- Main Dashboard -->
+    <main id="mainDashboard" class="flex-1 p-6 overflow-y-auto space-y-6">
+      <!-- Welcome Card -->
+      <div class="bg-[#1f2937] p-6 rounded-xl flex justify-between items-center shadow-md">
+        <div>
+          <h2 class="text-xl font-bold"><span class="text-blue-400">Iron Hulk</span> 👋</h2>
+          <p class="text-gray-400">Malware Developer | Red/Blue/Purple Teamer | CISM/CISSP</p>
         </div>
+      </div>
 
-        <!-- Embedded Image (Base64) -->
-        <div class="bg-[#1f2937] p-6 rounded-xl shadow-md flex justify-center">
-          <img 
-            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..." 
-            alt="Iron Hulk" 
-            class="max-w-full h-auto rounded-lg shadow-lg"
-          />
-        </div>
-      </main>
+      <!-- Embedded Image (Base64) -->
+      <div class="bg-[#1f2937] p-6 rounded-xl shadow-md flex justify-center">
+        <img 
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..." 
+          alt="Iron Hulk" 
+          class="max-w-full h-auto rounded-lg shadow-lg"
+        />
+      </div>
+    </main>
 
-      <!-- Dynamic Content Container -->
-      <div id="dynamicContent" class="flex-1 p-6 overflow-y-auto space-y-6 hidden"></div>
-    </div>
+    <!-- Dynamic Content Container -->
+    <div id="dynamicContent" class="flex-1 p-6 overflow-y-auto space-y-6 hidden"></div>
+  </div>
 
-    <!-- JavaScript -->
-    <script>
-      function getBarColor(percent) 
-      {
-        if (percent <= 25) return "bg-red-400";
-        if (percent <= 50) return "bg-orange-400";
-        if (percent <= 75) return "bg-yellow-400";
-        return "bg-green-500";
-      }
-
-    function showSection(section) 
-    {
+  <!-- JavaScript -->
+  <script>
+    function showSection(section) {
       const mainDashboard = document.getElementById("mainDashboard");
       const content = document.getElementById("dynamicContent");
 
-        const data = 
-          {
-            about: `
-              <div class="bg-[#1f2937] p-6 rounded-xl shadow-md">
-                  <h3 class="text-2xl font-bold mb-2 text-blue-400">About Me</h3>
-                  <p class="text-gray-300 leading-relaxed text-justify">
-                  Iron Hulk is a seasoned cybersecurity strategist with over eight years of specialized experience in network security, offensive operations, and cyber defense architecture. His expertise spans malware development, red/purple team operations, and enterprise-level security management, reinforced by industry-leading certifications such as CISM and CISSP.
-                  On the blue team front, Iron Hulk is deeply involved in building and maintaining robust defensive infrastructures. His hands-on experience includes EDR deployment and tuning, firewall configuration, IPsec tunneling, Active Directory design and hardening, certificate lifecycle management, patch management automation, and enterprise vulnerability scanning/reporting. His capabilities ensure organizations maintain strong preventive and detective controls while meeting compliance and resilience objectives.
-                  As a malware developer and custom Command-and-Control (C2) server engineer, he creates bespoke offensive toolsets for simulation, red teaming, and post-exploitation workflows. His payloads are designed to operate stealthily in hardened environments, often bypassing state-of-the-art EDRs and network defense layers.
-                  In his red team and pentesting role, Iron Hulk specializes in adversary simulation, initial access, privilege escalation, and lateral movement across enterprise environments. In purple team operations, he facilitates real-time collaboration between red and blue teams, bridging visibility gaps, enhancing detection logic, and aligning threat modeling with incident response procedures.
-                  He also provides deep expertise in firewall and encryption systems, PKI and certificate management, and overall infrastructure security architecture. Iron Hulk ensures that security operations align with business objectives and regulatory mandates, using a combination of strategic leadership and deep technical execution.
-                </p>
-                <p>
-                  <br>
-                  <br>
-                </p>
-                <div class="bg-[#1f2937] p-6 rounded-xl shadow-md">
-                <h3 class="text-2xl font-bold mb-2 text-blue-400">Skill Proficiency</h3>
+      const data = {
+        about: `
+          <div class="bg-[#1f2937] p-6 rounded-xl shadow-md">
+            <h3 class="text-2xl font-bold mb-2 text-blue-400">About Me</h3>
+            <p class="text-gray-300 leading-relaxed">
+              I'm <strong>Iron Hulk</strong>, a cybersecurity specialist and hacker with extensive experience in malware development,
+              red/blue/purple teaming operations, and enterprise risk management. I hold certifications including
+              <span class="text-green-400">CISM</span> and <span class="text-green-400">CISSP</span>. My focus is on developing stealthy attack vectors and defending high-value infrastructures.
+            </p>
+          </div>
+        `,
+        certifications: `
+          <div class="bg-[#1f2937] p-6 rounded-xl shadow-md">
+            <h3 class="text-2xl font-bold mb-2 text-blue-400">Certifications</h3>
+            <ul class="list-disc ml-6 text-gray-300 space-y-1">
+              <li>Certified Information Security Manager (CISM)</li>
+              <li>Certified Information Systems Security Professional (CISSP)</li>
+              <li>Offensive Security Certified Professional (OSCP)</li>
+              <li>Red Team Professional (eCPTX / CRTP)</li>
+            </ul>
+          </div>
+        `,
+        projects: `
+          <div class="bg-[#1f2937] p-6 rounded-xl shadow-md">
+            <h3 class="text-2xl font-bold mb-2 text-blue-400">My Projects</h3>
+            <ul class="list-inside text-gray-300 space-y-1">
+              <li><strong>Process Spoofing Tool</strong> – Custom malware that spawns hidden processes with obfuscated parent IDs.</li>
+              <li><strong>Domain Recon Suite</strong> – Toolkit for real-time Active Directory enumeration and privilege escalation analysis.</li>
+            </ul>
+          </div>
+        `,
+        contact: `
+          <div class="bg-[#1f2937] p-6 rounded-xl shadow-md">
+            <h3 class="text-2xl font-bold mb-2 text-blue-400">Contact</h3>
+            <p class="text-gray-300">Email: <span class="text-green-400">iron.hulk@protonmail.com</span></p>
+            <p class="text-gray-300">GitHub: <a href="https://github.com/ironhulk" class="underline text-blue-400">github.com/ironhulk</a></p>
+          </div>
+        `
+      };
 
-
-                  <!-- Skills List with dynamic colors -->
-                  <div id="skills" class="space-y-4">
-                    <div data-skill="Web Pentesting" data-value="20"></div>
-                    <div data-skill="Mobile Pentesting" data-value="0"></div>
-                    <div data-skill="Active Directory Attack & Defense" data-value="80"></div>
-                    <div data-skill="Network Pentesting" data-value="80"></div>
-                    <div data-skill="Malware Development (AV/EDR bypass - Custom C2 Writer)" data-value="50"></div>
-                    <div data-skill="Firewall Configuration (Routing - Policy - IPsec)" data-value="80"></div>
-                    <div data-skill="EDR Configuration ( Device Control - Application Control - Monitoring)" data-value="80"></div>
-                    <div data-skill="AppLocker Configuration ( White/Black List)" data-value="40"></div>
-                    </div>
-                </div>
-            `,
-            certifications: `
-              <div class="bg-[#1f2937] p-6 rounded-xl shadow-md">
-                <h3 class="text-2xl font-bold mb-2 text-blue-400">Certifications</h3>
-                <ul class="list-disc ml-6 text-gray-300 space-y-1">
-                  <li>Certified Information Security Manager (CISM)</li>
-                  <li>Advanced Penetration Testing Certification (OSEP)</li>
-                  <li>Offensive Security Certified Professional (OSCP)</li>
-                  <li>Certified Professional Penetration Tester (eCPPTv5)</li>
-                  <li>Cyber Security Foundation (CSFPC)</li>
-                  <li>Certified ethical hacker (CEH v10 MASTER )</li>
-                  <li>Cisco CCNA Security certification (CCNA Security )</li>
-                  <li>Cisco CCNA Routing and Switching (CCNA R&S )</li>
-                </ul>
-                <br>
-                <h3 class="text-2xl font-bold mb-2 text-blue-400">Hack The Box ProLabs</h3>
-                <ul class="list-disc ml-6 text-gray-300 space-y-1">
-                  <li>Dante</li>
-                  <li>Offshore</li>
-                  <li>RastaLabs</li>
-                </ul>
-              </div>
-            `,
-            projects: `
-              <div class="bg-[#1f2937] p-6 rounded-xl shadow-md">
-                <h3 class="text-2xl font-bold mb-2 text-blue-400">My Projects</h3>
-                <ul class="list-inside text-gray-300 space-y-1">
-                  <li><strong>Process Spoofing Tool</strong> – Custom malware that spawns hidden processes with obfuscated parent IDs.</li>
-                  <li><strong>Domain Recon Suite</strong> – Toolkit for real-time Active Directory enumeration and privilege escalation analysis.</li>
-                </ul>
-              </div>
-            `,
-            contact: `
-              <div class="bg-[#1f2937] p-6 rounded-xl shadow-md">
-                <h3 class="text-2xl font-bold mb-2 text-blue-400">Contact</h3>        
-                <p class="text-gray-300">GitHub: <a href="https://github.com/ironhulk-0xff" class="underline text-blue-400">ironhulk-0xff</a></p>
-                <p class="text-gray-300">Telegram: <a href="https://t.me/IronHulk_0xff" class="underline text-blue-400">ironhulk-0xff</a></p>
-                <div class="text-gray-300">
-                <br>
-                  <p class="font-medium">Telegram Community:</p>
-                  <ul class="ml-4 list-disc text-blue-400">
-                    <li><a href="https://t.me/sec4al" class="underline">Sec4All</a></li>
-                    <li><a href="https://t.me/GlobalGrayHatTeam/2" class="underline">GGH-Team</a></li>
-                    <li><a href="https://t.me/ForCyber" class="underline">ForCyber</a></li>
-                  </ul>
-                </div>
-
-
-              </div>
-            `            
-          };
-
-
-        mainDashboard.classList.add("hidden");
-        content.classList.remove("hidden");
-        content.innerHTML = data[section] || '';
-
-        // Apply dynamic skill bar colors if About section
-        if (section === "about") {
-          const skills = document.querySelectorAll('#skills > div');
-          skills.forEach(el => {
-            const name = el.dataset.skill;
-            const value = parseInt(el.dataset.value);
-            const color = getBarColor(value);
-            el.innerHTML = `
-              <div class="flex justify-between mb-1">
-                <span class="text-sm text-gray-200">${name}</span>
-                <span class="text-sm text-gray-400">${value}%</span>
-              </div>
-              <div class="w-full bg-gray-700 rounded-full h-3">
-                <div class="h-3 rounded-full ${color}" style="width: ${value}%"></div>
-              </div>
-            `;
-          });
-      }
-      }
-    </script>
-  </body>
+      mainDashboard.classList.add("hidden");
+      content.classList.remove("hidden");
+      content.innerHTML = data[section] || '';
+    }
+  </script>
+</body>
 </html>
