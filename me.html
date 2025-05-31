@@ -13,34 +13,87 @@
     <aside class="w-64 bg-[#1e293b] p-5 flex flex-col space-y-6">
       <h1 class="text-2xl font-bold border-b border-gray-600 pb-2">Iron Hulk</h1>
       <nav class="space-y-2 text-blue-400">
-        <a href="#" class="block hover:underline">About Me</a>
-        <a href="#" class="block hover:underline">Certifications</a>
-        <a href="#" class="block hover:underline">My Projects</a>
-        <a href="#" class="block hover:underline">Contact</a>
+        <button onclick="showSection('about')" class="block text-left w-full hover:underline">About Me</button>
+        <button onclick="showSection('certifications')" class="block text-left w-full hover:underline">Certifications</button>
+        <button onclick="showSection('projects')" class="block text-left w-full hover:underline">My Projects</button>
+        <button onclick="showSection('contact')" class="block text-left w-full hover:underline">Contact</button>
       </nav>
     </aside>
 
     <!-- Main Dashboard -->
-    <main class="flex-1 p-6 mr-72 overflow-y-auto space-y-6">
+    <main id="mainDashboard" class="flex-1 p-6 overflow-y-auto space-y-6">
       <!-- Welcome Card -->
       <div class="bg-[#1f2937] p-6 rounded-xl flex justify-between items-center shadow-md">
         <div>
-          <h2 class="text-xl font-bold">Welcome back, <span class="text-blue-400">Iron Hulk</span> 👋</h2>
+          <h2 class="text-xl font-bold"><span class="text-blue-400">Iron Hulk</span> 👋</h2>
           <p class="text-gray-400">Malware Developer | Red/Blue/Purple Teamer | CISM/CISSP</p>
         </div>
-        <div class="text-right">
-          <p class="text-3xl font-bold">$65.4K</p>
-          <p class="text-sm text-green-400">Today's Revenue</p>
-        </div>
+      </div>
+
+      <!-- Embedded Image (Base64) -->
+      <div class="bg-[#1f2937] p-6 rounded-xl shadow-md flex justify-center">
+        <img 
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..." 
+          alt="Iron Hulk" 
+          class="max-w-full h-auto rounded-lg shadow-lg"
+        />
       </div>
     </main>
 
-      <!-- JS for collapsible sections -->
+    <!-- Dynamic Content Container -->
+    <div id="dynamicContent" class="flex-1 p-6 overflow-y-auto space-y-6 hidden"></div>
+  </div>
+
+  <!-- JavaScript -->
   <script>
-    const toggle = (id) => {
-      const section = document.getElementById(id);
-      section.classList.toggle("hidden");
-    };
+    function showSection(section) {
+      const mainDashboard = document.getElementById("mainDashboard");
+      const content = document.getElementById("dynamicContent");
+
+      const data = {
+        about: `
+          <div class="bg-[#1f2937] p-6 rounded-xl shadow-md">
+            <h3 class="text-2xl font-bold mb-2 text-blue-400">About Me</h3>
+            <p class="text-gray-300 leading-relaxed">
+              I'm <strong>Iron Hulk</strong>, a cybersecurity specialist and hacker with extensive experience in malware development,
+              red/blue/purple teaming operations, and enterprise risk management. I hold certifications including
+              <span class="text-green-400">CISM</span> and <span class="text-green-400">CISSP</span>. My focus is on developing stealthy attack vectors and defending high-value infrastructures.
+            </p>
+          </div>
+        `,
+        certifications: `
+          <div class="bg-[#1f2937] p-6 rounded-xl shadow-md">
+            <h3 class="text-2xl font-bold mb-2 text-blue-400">Certifications</h3>
+            <ul class="list-disc ml-6 text-gray-300 space-y-1">
+              <li>Certified Information Security Manager (CISM)</li>
+              <li>Certified Information Systems Security Professional (CISSP)</li>
+              <li>Offensive Security Certified Professional (OSCP)</li>
+              <li>Red Team Professional (eCPTX / CRTP)</li>
+            </ul>
+          </div>
+        `,
+        projects: `
+          <div class="bg-[#1f2937] p-6 rounded-xl shadow-md">
+            <h3 class="text-2xl font-bold mb-2 text-blue-400">My Projects</h3>
+            <ul class="list-inside text-gray-300 space-y-1">
+              <li><strong>Process Spoofing Tool</strong> – Custom malware that spawns hidden processes with obfuscated parent IDs.</li>
+              <li><strong>Domain Recon Suite</strong> – Toolkit for real-time Active Directory enumeration and privilege escalation analysis.</li>
+            </ul>
+          </div>
+        `,
+        contact: `
+          <div class="bg-[#1f2937] p-6 rounded-xl shadow-md">
+            <h3 class="text-2xl font-bold mb-2 text-blue-400">Contact</h3>
+            <p class="text-gray-300">Email: <span class="text-green-400">iron.hulk@protonmail.com</span></p>
+            <p class="text-gray-300">GitHub: <a href="https://github.com/ironhulk" class="underline text-blue-400">github.com/ironhulk</a></p>
+          </div>
+        `
+      };
+
+      mainDashboard.classList.add("hidden");
+      content.classList.remove("hidden");
+      content.innerHTML = data[section] || '';
+    }
   </script>
 </body>
 </html>
