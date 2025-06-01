@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Me – Iron Hulk</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0f172a] text-white font-sans min-h-screen">
+  <header class="bg-[#1e293b] p-4 shadow flex justify-between items-center">
+    <h1 class="text-xl font-bold text-blue-400">Iron Hulk</h1>
+    <a href="index.html" class="text-gray-300 hover:underline text-sm">← Back to Dashboard</a>
+  </header>
+
+  <main class="p-6 space-y-6">
+    <div class="bg-[#1f2937] p-6 rounded-xl shadow-md">
+      <h2 class="text-3xl font-bold text-blue-400 mb-4">About Me</h2>
+      <p class="text-gray-300 leading-relaxed text-justify">
+        I am a seasoned cybersecurity strategist with more than eight years of hands-on experience in network security, offensive operations, and enterprise cyber-defense architecture. My work spans malware development, red and purple team engagements, and enterprise-level security management, underpinned by CISM certification.
+        On the blue team front, I build and maintain resilient defensive infrastructures: deploying and tuning EDR platforms, configuring firewalls, establishing IPsec tunnels, designing and hardening Active Directory, managing certificate lifecycles, automating patch management, and driving enterprise vulnerability scanning and reporting. These efforts keep preventive and detective controls sharp while ensuring compliance and operational resilience.
+        As a malware developer and custom Command-and-Control server engineer, I craft bespoke offensive toolsets for simulation, red teaming, and post-exploitation workflows. My payloads operate stealthily in hardened environments, routinely bypassing state-of-the-art EDRs and network defense layers.
+        During red team and pentesting operations, I specialize in adversary simulation, initial access, privilege escalation, and lateral movement across complex enterprise landscapes. In purple team engagements, I bridge red and blue efforts, closing visibility gaps, sharpening detection logic, and aligning threat modeling with incident-response playbooks.
+        My expertise extends to firewall and encryption systems, PKI and certificate management, and holistic infrastructure security architecture. I ensure that security operations align with business objectives and regulatory mandates by blending strategic leadership with deep technical execution.  
+        </p> <br><br>
+      <div class="mt-10">
+        <h3 class="text-2xl font-bold text-blue-400 mb-4">Technical Skill</h3>
+        <div id="skills" class="space-y-4">
+          <div data-skill="Web Pentesting" data-value="20"></div>
+          <div data-skill="Mobile Pentesting" data-value="0"></div>
+          <div data-skill="Active Directory Attack & Defense" data-value="85"></div>
+          <div data-skill="Red Team Activity (Cyber Kill Chain)" data-value="75"></div>
+          <div data-skill="Malware Development (AV/EDR bypass – Custom C2 Writer)" data-value="60"></div>
+          <div data-skill="Firewall Configuration (Routing – Policy – IPsec)" data-value="80"></div>
+          <div data-skill="EDR Configuration (Device Control – Application Control – Monitoring)" data-value="70"></div>
+          <div data-skill="AppLocker Configuration (White/Black List)" data-value="50"></div>
+          <div data-skill="Windows Internals (API/Kernel/User Mode)" data-value="80"></div>
+          <div data-skill="Process Injection & Code Execution Techniques" data-value="85"></div>
+          <div data-skill="UAC Bypass & Privilege Escalation" data-value="75"></div>
+          <div data-skill="Persistence Mechanisms (Registry/Services/COM)" data-value="70"></div>
+          <div data-skill="C2 Framework Development (Custom Protocols)" data-value="80"></div>
+          <div data-skill="Shellcode Obfuscation & Evasion" data-value="80"></div>
+          <div data-skill="PowerShell & C# Offensive Scripting" data-value="85"></div>
+          <div data-skill="Network Protocol Tunneling (DNS/ICMP/HTTPS)" data-value="75"></div>
+          <div data-skill="PE File Manipulation & Loader Development" data-value="70"></div>
+        </div>
+      </div>
+      <br><br><br>
+      <div class="mt-10">
+        <h3 class="text-2xl font-bold text-blue-400 mb-4">Non-Technical Skill</h3>
+        <div id="skills" class="space-y-4">
+          <div data-skill="Time Management" data-value="70"></div>
+          <div data-skill="Aggressive & Offensive" data-value="20"></div>
+          <div data-skill="Leadership & Work With Team" data-value="90"></div>
+          <div data-skill="Report Writing and Job Accuracy" data-value="70"></div>
+          <div data-skill="Calm Under Pressure" data-value="75"></div>
+          <div data-skill="Critical Thinking & Problem Solving" data-value="85"></div>
+          <div data-skill="Decision Making" data-value="80"></div>
+          <div data-skill="Presentation Skills" data-value="90"></div>
+          <div data-skill="Mentoring and Coaching" data-value="75"></div>
+          <div data-skill="Professional Ethics & Integrity" data-value="95"></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    function getBarColor(percent) {
+      if (percent <= 25) return "bg-red-400";
+      if (percent <= 50) return "bg-orange-400";
+      if (percent <= 75) return "bg-yellow-400";
+      return "bg-green-500";
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const skillSections = document.querySelectorAll("div[id='skills']");
+
+      skillSections.forEach(section => {
+        section.querySelectorAll("div[data-skill]").forEach(el => {
+          const skill = el.dataset.skill;
+          const value = parseInt(el.dataset.value);
+          const colorClass = getBarColor(value);
+
+          el.innerHTML = `
+            <div class="flex justify-between">
+              <span>${skill}</span><span>${value}%</span>
+            </div>
+            <div class="bg-gray-700 h-3 rounded-full">
+              <div class="h-3 rounded-full ${colorClass}" style="width:${value}%"></div>
+            </div>
+          `;
+        });
+      });
+    });
+  </script>
+
+  <div class="flex-1 flex items-center justify-center">
+    <a href="index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">← Back to Dashboard</a>
+  </div>
+</body>
+</html>
