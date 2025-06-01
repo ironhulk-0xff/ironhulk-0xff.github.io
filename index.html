@@ -20,34 +20,11 @@
     <a href="aboutme.html" class="hover:underline">About Me</a>
     <a href="certifications.html" class="hover:underline">Certifications</a>
     <a href="projects.html" class="hover:underline">My Projects</a>
-  
-    <!-- Blog Dropdown Trigger -->
-    <div class="relative group">
-      <button onclick="toggleBlogs()" class="hover:underline">Blogs</button>
-  
-      <!-- Blog Dropdown Menu -->
-      <div id="blogDropdown" class="hidden absolute top-full left-0 mt-2 w-56 bg-[#1e293b] text-white p-4 rounded shadow space-y-3 z-20">
-        <div>
-          <strong class="block text-blue-400">Red Team</strong>
-          <a href="blog-red-scanning.html" class="block ml-3 text-sm hover:underline">- Scanning</a>
-          <a href="blog-red-foothold.html" class="block ml-3 text-sm hover:underline">- Foothold</a>
-        </div>
-        <div>
-          <strong class="block text-blue-400">Blue Team</strong>
-          <a href="blog-blue-scanning.html" class="block ml-3 text-sm hover:underline">- Scanning</a>
-          <a href="blog-blue-foothold.html" class="block ml-3 text-sm hover:underline">- Foothold</a>
-        </div>
-        <div>
-          <strong class="block text-blue-400">Maldev</strong>
-          <a href="blog-malware-scanning.html" class="block ml-3 text-sm hover:underline">- Scanning</a>
-          <a href="blog-malware-foothold.html" class="block ml-3 text-sm hover:underline">- Foothold</a>
-        </div>
-      </div>
-    </div>
-  
+    <button onclick="showBlogSection()" class="hover:underline">Blogs</button>
     <a href="contact.html" class="hover:underline">Contact</a>
   </nav>
 </header>
+
 <div class="flex flex-1 overflow-hidden">
   <!-- Sidebar Navigation (desktop only) -->
   <aside class="hidden md:flex md:w-64 bg-[#1e293b] p-5 flex-col space-y-6 overflow-y-auto">
@@ -55,7 +32,7 @@
       <img src="/images/your-logo.png" alt="Logo" class="w-100 h-100 mb-1 rounded-full" />
       <h1 class="text-2xl font-bold text-blue-400">Iron Hulk</h1>
     </div>
-    
+
     <nav class="space-y-2 text-blue-400 mt-4">
       <a href="aboutme.html" class="block text-left w-full hover:underline">About Me</a>
       <a href="certifications.html" class="block text-left w-full hover:underline">Certifications</a>
@@ -90,49 +67,61 @@
     </nav>
   </aside>
 
-  <!-- Main Dashboard -->
+  <!-- Main Content Area -->
   <main class="flex-1 p-6 overflow-y-auto space-y-6">
-    <div class="bg-[#1f2937] p-6 rounded-xl flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 shadow-md">
-      <div>
-        <h2 class="text-xl font-bold"><span class="text-blue-400">Hello Everyone</span> 👋</h2>
-        <p class="text-gray-400">
-          Welcome to my page. Have a look around, and if you don’t find exactly what you’re after, send me a message so we can dig into it together.
-        </p>
+    <!-- Main Dashboard -->
+    <div id="mainDashboard" class="space-y-6">
+      <div class="bg-[#1f2937] p-6 rounded-xl flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 shadow-md">
+        <div>
+          <h2 class="text-xl font-bold"><span class="text-blue-400">Hello Everyone</span> 👋</h2>
+          <p class="text-gray-400">
+            Welcome to my page. Have a look around, and if you don’t find exactly what you’re after, send me a message so we can dig into it together.
+          </p>
+        </div>
+      </div>
+      <div class="bg-[#1f2937] p-6 rounded-xl shadow-md flex justify-center">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..." alt="Iron Hulk" class="max-w-full h-auto rounded-lg shadow-lg"/>
       </div>
     </div>
-    <div class="bg-[#1f2937] p-6 rounded-xl shadow-md flex justify-center">
-      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..." alt="Iron Hulk" class="max-w-full h-auto rounded-lg shadow-lg"/>
+
+    <!-- Blog Section -->
+    <div id="blogSection" class="hidden space-y-6">
+      <div class="bg-[#1f2937] p-6 rounded-xl shadow-md text-white">
+        <h2 class="text-xl font-bold text-blue-400 mb-4">Blog Categories</h2>
+
+        <div>
+          <h3 class="text-blue-400 font-semibold">Red Team</h3>
+          <a href="blog-red-scanning.html" class="block ml-4 hover:underline">- Scanning</a>
+          <a href="blog-red-foothold.html" class="block ml-4 hover:underline">- Foothold</a>
+        </div>
+
+        <div class="mt-4">
+          <h3 class="text-blue-400 font-semibold">Blue Team</h3>
+          <a href="blog-blue-scanning.html" class="block ml-4 hover:underline">- Scanning</a>
+          <a href="blog-blue-foothold.html" class="block ml-4 hover:underline">- Foothold</a>
+        </div>
+
+        <div class="mt-4">
+          <h3 class="text-blue-400 font-semibold">Maldev</h3>
+          <a href="blog-malware-scanning.html" class="block ml-4 hover:underline">- Scanning</a>
+          <a href="blog-malware-foothold.html" class="block ml-4 hover:underline">- Foothold</a>
+        </div>
+      </div>
     </div>
   </main>
 </div>
 
 <script>
-  const mobileMenuBtn = document.getElementById("mobileMenuButton");
-  const mobileMenuPane = document.getElementById("mobileMenu");
-  mobileMenuBtn.addEventListener("click", () => {
-    mobileMenuPane.classList.toggle("hidden");
-  });
-
   function toggleBlogDropdown(view) {
     const dropdownId = view === 'mobile' ? 'mobileBlogDropdown' : 'desktopBlogDropdown';
     const dropdown = document.getElementById(dropdownId);
     dropdown.classList.toggle('hidden');
   }
-  function toggleBlogs() {
-    const dropdown = document.getElementById("blogDropdown");
-    dropdown.classList.toggle("hidden");
+
+  function showBlogSection() {
+    document.getElementById("mainDashboard").classList.add("hidden");
+    document.getElementById("blogSection").classList.remove("hidden");
   }
-
-  // Optional: Close the dropdown if clicked outside
-  document.addEventListener("click", function (e) {
-    const blogButton = e.target.closest("button");
-    const dropdown = document.getElementById("blogDropdown");
-    const withinDropdown = e.target.closest("#blogDropdown");
-
-    if (!blogButton && !withinDropdown && dropdown && !dropdown.classList.contains("hidden")) {
-      dropdown.classList.add("hidden");
-    }
-  });
 </script>
 </body>
 </html>
