@@ -118,6 +118,21 @@
     const dropdown = document.getElementById(dropdownId);
     dropdown.classList.toggle('hidden');
   }
+  function toggleBlogs() {
+    const dropdown = document.getElementById("blogDropdown");
+    dropdown.classList.toggle("hidden");
+  }
+
+  // Optional: Close the dropdown if clicked outside
+  document.addEventListener("click", function (e) {
+    const blogButton = e.target.closest("button");
+    const dropdown = document.getElementById("blogDropdown");
+    const withinDropdown = e.target.closest("#blogDropdown");
+
+    if (!blogButton && !withinDropdown && dropdown && !dropdown.classList.contains("hidden")) {
+      dropdown.classList.add("hidden");
+    }
+  });
 </script>
 </body>
 </html>
