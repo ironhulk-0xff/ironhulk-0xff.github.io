@@ -22,13 +22,14 @@
 </header>
 
 <!-- Mobile Collapsible Menu -->
-<nav id="mobileMenu" class="md:hidden justify-left bg-[#1e293b] text-blue-400 p-4 hidden flex-col space-y-2 shadow-md">
-  <div>
-    <a href="aboutme.html" class="text-left w-full hover:underline">About Me</a><br>
-    <a href="certifications.html" class="text-left w-full hover:underline">Certifications</a><br>
-    <a href="projects.html" class="text-left w-full hover:underline">My Projects</a>
-    <button onclick="toggleBlogDropdown('mobile')" class="text-left w-full hover:underline">Blog</button>
-    <div id="mobileBlogDropdown" class="ml-4 mt-2 flex-col space-y-1 hidden">
+<nav id="mobileMenu" class="md:hidden bg-[#1e293b] text-blue-400 p-4 hidden flex flex-wrap justify-center gap-x-6 gap-y-2 shadow-md text-sm">
+  <a href="aboutme.html" class="hover:underline">About Me</a>
+  <a href="certifications.html" class="hover:underline">Certifications</a>
+  <a href="projects.html" class="hover:underline">My Projects</a>
+
+  <div class="relative">
+    <button onclick="toggleBlogDropdown('mobile')" class="hover:underline">Blog</button>
+    <div id="mobileBlogDropdown" class="absolute left-0 mt-2 bg-[#1e293b] text-white p-3 rounded shadow-lg hidden z-10 space-y-2 text-left">
       <div>
         <a href="blog-red.html" class="hover:underline">Red Team</a>
         <div class="ml-4 mt-1 space-y-1 text-sm">
@@ -52,7 +53,8 @@
       </div>
     </div>
   </div>
-  <a href="contact.html" class="text-left w-full hover:underline">Contact</a>
+
+  <a href="contact.html" class="hover:underline">Contact</a>
 </nav>
 
 <div class="flex flex-1 overflow-hidden">
