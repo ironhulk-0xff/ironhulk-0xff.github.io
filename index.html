@@ -7,183 +7,124 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-[#0f172a] text-white font-sans min-h-screen flex flex-col">
-  <!-- Mobile Top Bar -->
-  <header class="md:hidden flex items-center justify-between bg-[#1e293b] p-4 shadow-lg">
-    <h1 class="text-xl font-bold">Iron Hulk</h1>
-    <button id="mobileMenuButton" class="text-blue-400 focus:outline-none" aria-label="Toggle navigation">
-      <!-- Burger icon -->
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-7 h-7">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-      </svg>
-    </button>
-  </header>
 
-  <!-- Mobile Collapsible Menu -->
-  <nav id="mobileMenu" class="md:hidden bg-[#1e293b] text-blue-400 p-4 hidden flex-col space-y-2 shadow-md">
-    <button onclick="showSection('about')" class="text-left w-full hover:underline">About Me</button>
-    <button onclick="showSection('certifications')" class="text-left w-full hover:underline">Certifications</button>
-    <button onclick="showSection('projects')" class="text-left w-full hover:underline">My Projects</button>
-    <button onclick="showSection('contact')" class="text-left w-full hover:underline">Contact</button>
-  </nav>
+<!-- Mobile Top Bar -->
+<header class="md:hidden flex items-center justify-between bg-[#1e293b] p-4 shadow-lg">
+  <div class="flex flex-col items-center">
+    <img src="your-logo.png" alt="Logo" class="w-100 h-100 mb-1 rounded-full" />
+    <h1 class="text-xl font-bold text-blue-400">Iron Hulk</h1>
+  </div>
+  <button id="mobileMenuButton" class="text-blue-400 focus:outline-none" aria-label="Toggle navigation">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-7 h-7">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+  </button>
+</header>
 
-  <div class="flex flex-1 overflow-hidden">
-    <!-- Left Sidebar (desktop only) -->
-    <aside class="hidden md:flex md:w-64 bg-[#1e293b] p-5 flex-col space-y-6 overflow-y-auto">
-      <h1 class="text-2xl font-bold border-b border-gray-600 pb-2">Iron Hulk</h1>
-      <nav class="space-y-2 text-blue-400">
-        <button onclick="showSection('about')" class="block text-left w-full hover:underline">About Me</button>
-        <button onclick="showSection('certifications')" class="block text-left w-full hover:underline">Certifications</button>
-        <button onclick="showSection('projects')" class="block text-left w-full hover:underline">My Projects</button>
-        <button onclick="showSection('contact')" class="block text-left w-full hover:underline">Contact</button>
-      </nav>
-    </aside>
-
-    <!-- Main Dashboard -->
-    <main id="mainDashboard" class="flex-1 p-6 overflow-y-auto space-y-6">
-      <!-- Welcome Card -->
-      <div class="bg-[#1f2937] p-6 rounded-xl flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 shadow-md">
-        <div>
-          <h2 class="text-xl font-bold"><span class="text-blue-400">Hello Everyone</span> 👋</h2>
-          <p class="text-gray-400">Welcome to my page. Have a look around, and if you don’t find exactly what you’re after, send me a message so we can dig into it together </p>
+<!-- Mobile Collapsible Menu -->
+<nav id="mobileMenu" class="md:hidden bg-[#1e293b] text-blue-400 p-4 hidden flex-col space-y-2 shadow-md">
+  <a href="aboutme.html" class="text-left w-full hover:underline">About Me</a>
+  <a href="certifications.html" class="text-left w-full hover:underline">Certifications</a>
+  <a href="projects.html" class="text-left w-full hover:underline">My Projects</a>
+  <div>
+    <button onclick="toggleBlogDropdown('mobile')" class="text-left w-full hover:underline">Blog</button>
+    <div id="mobileBlogDropdown" class="ml-4 mt-2 flex-col space-y-1 hidden">
+      <div>
+        <a href="blog-red.html" class="hover:underline">Red Team</a>
+        <div class="ml-4 mt-1 space-y-1 text-sm">
+          <a href="blog-red-scanning.html" class="hover:underline">- Scanning</a>
+          <a href="blog-red-foothold.html" class="hover:underline">- Foothold</a>
         </div>
       </div>
-
-      <!-- Embedded Image (Base64) -->
-      <div class="bg-[#1f2937] p-6 rounded-xl shadow-md flex justify-center">
-        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..." alt="Iron Hulk" class="max-w-full h-auto rounded-lg shadow-lg"/>
+      <div>
+        <a href="blog-blue.html" class="hover:underline">Blue Team</a>
+        <div class="ml-4 mt-1 space-y-1 text-sm">
+          <a href="blog-blue-fileprotection.html" class="hover:underline">- File protection</a>
+          <a href="blog-blue-ipsec.html" class="hover:underline">- IPSec</a>
+        </div>
       </div>
-    </main>
-
-    <!-- Dynamic Content Container -->
-    <section id="dynamicContent" class="flex-1 p-6 overflow-y-auto space-y-6 hidden"></section>
+      <div>
+        <a href="blog-malware.html" class="hover:underline">Malware Development</a>
+        <div class="ml-4 mt-1 space-y-1 text-sm">
+          <a href="blog-malware-memory.html" class="hover:underline">- Memory allocation</a>
+          <a href="blog-malware-encryption.html" class="hover:underline">- Encryption</a>
+        </div>
+      </div>
+    </div>
   </div>
+  <a href="contact.html" class="text-left w-full hover:underline">Contact</a>
+</nav>
 
-  <!-- JavaScript -->
-  <script>
-    // Utility to choose bar color by percentage
-    function getBarColor(percent) {
-      if (percent <= 25) return "bg-red-400";
-      if (percent <= 50) return "bg-orange-400";
-      if (percent <= 75) return "bg-yellow-400";
-      return "bg-green-500";
-    }
-
-    // Mobile menu toggle
-    const mobileMenuBtn   = document.getElementById("mobileMenuButton");
-    const mobileMenuPane  = document.getElementById("mobileMenu");
-    if (mobileMenuBtn) {
-      mobileMenuBtn.addEventListener("click", () => {
-        mobileMenuPane.classList.toggle("hidden");
-      });
-    }
-
-    // Core router
-    function showSection(section) {
-      const mainDashboard = document.getElementById("mainDashboard");
-      const content       = document.getElementById("dynamicContent");
-
-      // Close mobile drawer on navigation
-      if (window.innerWidth < 768) mobileMenuPane.classList.add("hidden");
-
-      const data = {
-        about: `
-          <div class=\"bg-[#1f2937] p-6 rounded-xl shadow-md\">
-            <h3 class=\"text-2xl font-bold mb-2 text-blue-400\">About Me</h3>
-            <p class=\"text-gray-300 leading-relaxed text-justify\">
-              I am a seasoned cybersecurity strategist with more than eight years of hands-on experience in network security, offensive operations, and enterprise cyber-defense architecture. My work spans malware development, red and purple team engagements, and enterprise-level security management, underpinned by CISM certification.
-              On the blue team front, I build and maintain resilient defensive infrastructures: deploying and tuning EDR platforms, configuring firewalls, establishing IPsec tunnels, designing and hardening Active Directory, managing certificate lifecycles, automating patch management, and driving enterprise vulnerability scanning and reporting. These efforts keep preventive and detective controls sharp while ensuring compliance and operational resilience.
-              As a malware developer and custom Command-and-Control server engineer, I craft bespoke offensive toolsets for simulation, red teaming, and post-exploitation workflows. My payloads operate stealthily in hardened environments, routinely bypassing state-of-the-art EDRs and network defense layers.
-              During red team and pentesting operations, I specialize in adversary simulation, initial access, privilege escalation, and lateral movement across complex enterprise landscapes. In purple team engagements, I bridge red and blue efforts, closing visibility gaps, sharpening detection logic, and aligning threat modeling with incident-response playbooks.
-              My expertise extends to firewall and encryption systems, PKI and certificate management, and holistic infrastructure security architecture. I ensure that security operations align with business objectives and regulatory mandates by blending strategic leadership with deep technical execution.  
-            </p>
-            <div class=\"mt-8\">
-              <h3 class=\"text-2xl font-bold mb-2 text-blue-400\">Skill Proficiency</h3>
-              <div id=\"skills\" class=\"space-y-4\">
-                <div data-skill=\"Web Pentesting\" data-value=\"20\"></div>
-                <div data-skill=\"Mobile Pentesting\" data-value=\"0\"></div>
-                <div data-skill=\"Active Directory Attack & Defense\" data-value=\"80\"></div>
-                <div data-skill=\"Network Pentesting\" data-value=\"80\"></div>
-                <div data-skill=\"Malware Development (AV/EDR bypass – Custom C2 Writer)\" data-value=\"50\"></div>
-                <div data-skill=\"Firewall Configuration (Routing – Policy – IPsec)\" data-value=\"80\"></div>
-                <div data-skill=\"EDR Configuration (Device Control – Application Control – Monitoring)\" data-value=\"80\"></div>
-                <div data-skill=\"AppLocker Configuration (White/Black List)\" data-value=\"40\"></div>
-              </div>
+<div class="flex flex-1 overflow-hidden">
+  <!-- Sidebar Navigation (desktop only) -->
+  <aside class="hidden md:flex md:w-64 bg-[#1e293b] p-5 flex-col space-y-6 overflow-y-auto">
+    <div class="flex flex-col items-center space-y-2 mx-auto">
+      <img src="your-logo.png" alt="Logo" class="w-100 h-100 mb-1 rounded-full" />
+      <h1 class="text-2xl font-bold text-blue-400">Iron Hulk</h1>
+    </div>
+    
+    <nav class="space-y-2 text-blue-400 mt-4">
+      <a href="aboutme.html" class="block text-left w-full hover:underline">About Me</a>
+      <a href="certifications.html" class="block text-left w-full hover:underline">Certifications</a>
+      <a href="projects.html" class="block text-left w-full hover:underline">My Projects</a>
+      <div>
+        <button onclick="toggleBlogDropdown('desktop')" class="block text-left w-full hover:underline">Blog</button>
+        <div id="desktopBlogDropdown" class="ml-4 mt-2 flex-col space-y-2 hidden">
+          <div>
+            <a href="blog-red.html" class="hover:underline">Red Team</a>
+            <div class="ml-4 mt-1 space-y-1 text-sm">
+              <a href="blog-red-scanning.html" class="hover:underline">- Scanning</a><br>
+              <a href="blog-red-foothold.html" class="hover:underline">- Foothold</a><br>
             </div>
           </div>
-        `,
-        certifications: `
-          <div class=\"bg-[#1f2937] p-6 rounded-xl shadow-md\">
-            <h3 class=\"text-2xl font-bold mb-2 text-blue-400\">Certifications</h3>
-            <ul class=\"list-disc ml-6 text-gray-300 space-y-1\">
-              <li>Certified Information Security Manager (CISM)</li>
-              <li>Advanced Penetration Testing Certification (OSEP)</li>
-              <li>Offensive Security Certified Professional (OSCP)</li>
-              <li>Certified Professional Penetration Tester (eCPPTv2)</li>
-              <li>Cyber Security Foundation (CSFPC)</li>
-              <li>Certified Ethical Hacker (CEH v10 MASTER)</li>
-              <li>Cisco CCNA Security (CCNA Security)</li>
-              <li>Cisco CCNA Routing and Switching (CCNA R&S)</li>
-            </ul>
-            <div class=\"mt-6\">
-              <h3 class=\"text-2xl font-bold mb-2 text-blue-400\">Hack The Box ProLabs</h3>
-              <ul class=\"list-disc ml-6 text-gray-300 space-y-1\">
-                <li>Dante</li>
-                <li>Offshore</li>
-                <li>RastaLabs</li>
-              </ul>
+          <div>
+            <a href="blog-blue.html" class="hover:underline">Blue Team</a>
+            <div class="ml-4 mt-1 space-y-1 text-sm">
+              <a href="blog-blue-fileprotection.html" class="hover:underline">- File protection</a><br>
+              <a href="blog-blue-ipsec.html" class="hover:underline">- IPSec</a><br>
             </div>
           </div>
-        `,
-        projects: `
-          <div class=\"bg-[#1f2937] p-6 rounded-xl shadow-md\">
-            <h3 class=\"text-2xl font-bold mb-2 text-blue-400\">My Projects</h3>
-            <ul class=\"list-inside text-gray-300 space-y-1\">
-              <li><strong>Comming Soon</strong> </li>
-            </ul>
-          </div>
-        `,
-        contact: `
-          <div class=\"bg-[#1f2937] p-6 rounded-xl shadow-md\">
-                        <div class=\"text-gray-300 mt-4\">
-            <h3 class=\"text-2xl font-bold mb-2 text-blue-400\">Contact Me</h3>
-              <ul class=\"ml-4 list-disc text-White-400\">
-                <li><a href=\"https://x.com/ironhulk_0xff\">On X</a></li>
-                <li><a href=\"https://github.com/ironhulk-0xff\">GitHub</a></li>
-                <li><a href=\"https://t.me/IronHulk_0xff\">Telegram</a></li>
-              </ul>
-            </div>
-            <br>
-            <div class=\"text-gray-300 mt-4\">
-            <h3 class=\"text-2xl font-bold mb-2 text-blue-400\">Telegram Community</h3>
-              <ul class=\"ml-4 list-disc text-white-400\">
-                <li><a href=\"https://t.me/sec4al\" class=\"underline\">Sec4All</a></li>
-                <li><a href=\"https://t.me/GlobalGrayHatTeam/2\" class=\"underline\">GGH-Team</a></li>
-                <li><a href=\"https://t.me/ForCyber\" class=\"underline\">ForCyber</a></li>
-              </ul>
+          <div>
+            <a href="blog-malware.html" class="hover:underline">Malware Development</a>
+            <div class="ml-4 mt-1 space-y-1 text-sm">
+              <a href="blog-malware-memory.html" class="hover:underline">- Memory allocation</a><br>
+              <a href="blog-malware-encryption.html" class="hover:underline">- Encryption</a><br>
             </div>
           </div>
-        `
-      };
+        </div>
+      </div>
+      <a href="contact.html" class="block text-left w-full hover:underline">Contact</a>
+    </nav>
+  </aside>
 
-      mainDashboard.classList.add("hidden");
-      content.classList.remove("hidden");
-      content.innerHTML = data[section] || "";
+  <!-- Main Dashboard -->
+  <main class="flex-1 p-6 overflow-y-auto space-y-6">
+    <div class="bg-[#1f2937] p-6 rounded-xl flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 shadow-md">
+      <div>
+        <h2 class="text-xl font-bold"><span class="text-blue-400">Hello Everyone</span> 👋</h2>
+        <p class="text-gray-400">
+          Welcome to my page. Have a look around, and if you don’t find exactly what you’re after, send me a message so we can dig into it together.
+        </p>
+      </div>
+    </div>
+    <div class="bg-[#1f2937] p-6 rounded-xl shadow-md flex justify-center">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..." alt="Iron Hulk" class="max-w-full h-auto rounded-lg shadow-lg"/>
+    </div>
+  </main>
+</div>
 
-      // Build skill bars when About is shown
-      if (section === "about") {
-        document.querySelectorAll('#skills > div').forEach(el => {
-          const value = parseInt(el.dataset.value);
-          el.innerHTML = `
-            <div class=\"flex justify-between mb-1\">
-              <span class=\"text-sm text-gray-200\">${el.dataset.skill}</span>
-              <span class=\"text-sm text-gray-400\">${value}%</span>
-            </div>
-            <div class=\"w-full bg-gray-700 rounded-full h-3\">
-              <div class=\"h-3 rounded-full ${getBarColor(value)}\" style=\"width: ${value}%\"></div>
-            </div>`;
-        });
-      }
-    }
-  </script>
+<script>
+  const mobileMenuBtn = document.getElementById("mobileMenuButton");
+  const mobileMenuPane = document.getElementById("mobileMenu");
+  mobileMenuBtn.addEventListener("click", () => {
+    mobileMenuPane.classList.toggle("hidden");
+  });
+
+  function toggleBlogDropdown(view) {
+    const dropdownId = view === 'mobile' ? 'mobileBlogDropdown' : 'desktopBlogDropdown';
+    const dropdown = document.getElementById(dropdownId);
+    dropdown.classList.toggle('hidden');
+  }
+</script>
 </body>
 </html>
