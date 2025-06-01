@@ -9,53 +9,23 @@
 <body class="bg-[#0f172a] text-white font-sans min-h-screen flex flex-col">
 
 <!-- Mobile Top Bar -->
-<header class="md:hidden flex items-center justify-center bg-[#1e293b] p-4 shadow-lg">
-  <div class="flex flex-col items-center">
-    <img src="/images/your-logo.png" alt="Logo" class="w-100 h-100 mb-1 rounded-full" />
-    <h1 class="text-xl font-bold text-blue-400">Iron Hulk</h1>
+<header class="md:hidden bg-[#1e293b] text-blue-400 p-4 shadow-lg">
+  <div class="flex flex-col items-center space-y-2">
+    <img src="/images/your-logo.png" alt="Logo" class="w-16 h-16 rounded-full" />
+    <h1 class="text-2xl font-bold">Iron Hulk</h1>
   </div>
-  <button id="mobileMenuButton" class="text-blue-400 focus:outline-none" aria-label="Toggle navigation">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-7 h-7">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-    </svg>
-  </button>
+
+  <!-- Always visible mobile nav -->
+  <nav class="mt-4 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm">
+    <a href="aboutme.html" class="hover:underline">About Me</a>
+    <a href="certifications.html" class="hover:underline">Certifications</a>
+    <a href="projects.html" class="hover:underline">My Projects</a>
+    <a href="blog-red.html" class="hover:underline">Red Team</a>
+    <a href="blog-blue.html" class="hover:underline">Blue Team</a>
+    <a href="blog-malware.html" class="hover:underline">Malware Dev</a>
+    <a href="contact.html" class="hover:underline">Contact</a>
+  </nav>
 </header>
-
-<!-- Mobile Collapsible Menu -->
-<nav id="mobileMenu" class="md:hidden bg-[#1e293b] text-blue-400 p-4 hidden flex flex-wrap justify-center gap-x-6 gap-y-2 shadow-md text-sm">
-  <a href="aboutme.html" class="hover:underline">About Me</a>
-  <a href="certifications.html" class="hover:underline">Certifications</a>
-  <a href="projects.html" class="hover:underline">My Projects</a>
-
-  <div class="relative">
-    <button onclick="toggleBlogDropdown('mobile')" class="hover:underline">Blog</button>
-    <div id="mobileBlogDropdown" class="absolute left-0 mt-2 bg-[#1e293b] text-white p-3 rounded shadow-lg hidden z-10 space-y-2 text-left">
-      <div>
-        <a href="blog-red.html" class="hover:underline">Red Team</a>
-        <div class="ml-4 mt-1 space-y-1 text-sm">
-          <a href="blog-red-scanning.html" class="hover:underline text-white">- Scanning</a><br>
-          <a href="blog-red-foothold.html" class="hover:underline text-white">- Foothold</a><br>
-        </div>
-      </div>
-      <div>
-        <a href="blog-blue.html" class="hover:underline">Blue Team</a>
-        <div class="ml-4 mt-1 space-y-1 text-sm">
-          <a href="blog-blue-fileprotection.html" class="hover:underline text-white">- File protection</a><br>
-          <a href="blog-blue-ipsec.html" class="hover:underline text-white">- IPSec</a><br>
-        </div>
-      </div>
-      <div>
-        <a href="blog-malware.html" class="hover:underline">Malware Development</a>
-        <div class="ml-4 mt-1 space-y-1 text-sm">
-          <a href="blog-malware-memory.html" class="hover:underline text-white">- Memory allocation</a><br>
-          <a href="blog-malware-encryption.html" class="hover:underline text-white">- Encryption</a><br>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <a href="contact.html" class="hover:underline">Contact</a>
-</nav>
 
 <div class="flex flex-1 overflow-hidden">
   <!-- Sidebar Navigation (desktop only) -->
