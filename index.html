@@ -21,6 +21,7 @@
     <a href="certifications.html" class="hover:underline">Certifications</a>
     <a href="projects.html" class="hover:underline">My Projects</a>
     <button onclick="showBlogSection()" class="hover:underline">Blogs</button>
+    <button onclick="showRoadMapSection()" class="hover:underline">Road Map</button>
     <a href="contact.html" class="hover:underline">Contact</a>
   </nav>
 </header>
@@ -32,7 +33,7 @@
       <img src="/images/your-logo.png" alt="Logo" class="w-100 h-100 mb-1 rounded-full" />
       <h1 class="text-2xl font-bold text-blue-400">Iron Hulk</h1>
     </div>
-
+    <!-- Blog -->
     <nav class="space-y-2 text-blue-400 mt-4">
       <a href="aboutme.html" class="block text-left w-full hover:underline">About Me</a>
       <a href="certifications.html" class="block text-left w-full hover:underline">Certifications</a>
@@ -41,21 +42,21 @@
         <button onclick="toggleBlogDropdown('desktop')" class="block text-left w-full hover:underline">Blogs</button>
         <div id="desktopBlogDropdown" class="ml-4 mt-2 flex-col space-y-2 hidden">
           <div>
-            <a href="blog-red.html" class="hover:underline">Red Team</a>
+            <a>Red Team</a>
             <div class="ml-4 mt-1 space-y-1 text-sm">
               <a href="blog-red-scanning.html" class="hover:underline text-white">- Scanning</a><br>
               <a href="blog-red-foothold.html" class="hover:underline text-white">- Foothold</a><br>
             </div>
           </div>
           <div>
-            <a href="blog-blue.html" class="hover:underline">Blue Team</a>
+            <a>Blue Team</a>
             <div class="ml-4 mt-1 space-y-1 text-sm">
               <a href="blog-blue-fileprotection.html" class="hover:underline text-white">- File protection</a><br>
               <a href="blog-blue-ipsec.html" class="hover:underline text-white">- IPSec</a><br>
             </div>
           </div>
           <div>
-            <a href="blog-malware.html" class="hover:underline">Malware Development</a>
+            <a>Malware Development</a>
             <div class="ml-4 mt-1 space-y-1 text-sm">
               <a href="blog-malware-memory.html" class="hover:underline text-white">- Memory allocation</a><br>
               <a href="blog-malware-encryption.html" class="hover:underline text-white">- Encryption</a><br>
@@ -63,6 +64,33 @@
           </div>
         </div>
       </div>
+      
+      <!-- RoadMap -->
+      <div>
+        <button onclick="toggleRoadMapDropdown('desktop')" class="block text-left w-full hover:underline">Road Map</button>
+        <div id="desktopRoadMapDropdown" class="ml-4 mt-2 flex-col space-y-2 hidden">
+          <div>
+            <a>Red Team</a>
+            <div class="ml-4 mt-1 space-y-1 text-sm">
+              <a href="OSCP.html" class="hover:underline text-white">- OSCP</a><br>
+              <a href="OSEP.html" class="hover:underline text-white">- OSEP</a><br>
+            </div>
+          </div>
+          <div>
+            <a>Custom C2</a>
+            <div class="ml-4 mt-1 space-y-1 text-sm">
+              <a href="C2.html" class="hover:underline text-white">- C2</a><br>
+            </div>
+          </div>
+          <div>
+            <a>Malware Development</a>
+            <div class="ml-4 mt-1 space-y-1 text-sm">
+              <a href="Sector7.html" class="hover:underline text-white">- Sector7</a><br>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <a href="contact.html" class="block text-left w-full hover:underline">Contact</a>
     </nav>
   </aside>
@@ -108,19 +136,57 @@
         </div>
       </div>
     </div>
+
+    <!-- Road Map Section -->
+    <div id="RoadMapSection" class="hidden space-y-6">
+      <div class="bg-[#1f2937] p-6 rounded-xl shadow-md text-white">
+        <h2 class="text-xl font-bold text-blue-400 mb-4">Road Map</h2>
+
+        <div>
+          <h3 class="text-blue-400 font-semibold">Red Team</h3>
+          <a href="OSCP.html" class="block ml-4 hover:underline">- OSCP</a>
+          <a href="OSED.html" class="block ml-4 hover:underline">- OSED</a>
+        </div>
+
+        <div class="mt-4">
+          <h3 class="text-blue-400 font-semibold">Custom C2</h3>
+          <a href="C2.html" class="block ml-4 hover:underline">- C2</a>
+        </div>
+
+        <div class="mt-4">
+          <h3 class="text-blue-400 font-semibold">Malware Development</h3>
+          <a href="Sector7.html" class="block ml-4 hover:underline">- Sector7</a>
+        </div>
+      </div>
+    </div>
   </main>
 </div>
 
 <script>
-  function toggleBlogDropdown(view) {
+  function toggleBlogDropdown(view)
+  {
     const dropdownId = view === 'mobile' ? 'mobileBlogDropdown' : 'desktopBlogDropdown';
     const dropdown = document.getElementById(dropdownId);
     dropdown.classList.toggle('hidden');
   }
 
-  function showBlogSection() {
+  function showBlogSection() 
+  {
     document.getElementById("mainDashboard").classList.add("hidden");
     document.getElementById("blogSection").classList.remove("hidden");
+  }
+
+  function toggleRoadMapDropdown(view)
+  {
+    const dropdownId = view === 'mobile' ? 'mobileRoadMapDropdown' : 'desktopRoadMapDropdown';
+    const dropdown = document.getElementById(dropdownId);
+    dropdown.classList.toggle('hidden');
+  }
+
+  function showRoadMapSection() 
+  {
+    document.getElementById("mainDashboard").classList.add("hidden");
+    document.getElementById("RoadMapSection").classList.remove("hidden");
   }
 </script>
 </body>
