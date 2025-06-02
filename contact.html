@@ -3,55 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Iron Hulk - Contact</title>
+  <title>Iron Hulk - Contact Me</title>
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Google Translate Widget Initialization -->
-  <script type="text/javascript">
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({
-        pageLanguage: 'en',
-        includedLanguages: 'en,ar',
-        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-      }, 'google_translate_element');
-    }
-  </script>
-  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
-  <style>
-    #google_translate_element {
-      position: absolute;
-      top: -1000px;
-      left: -1000px;
-      z-index: -1;
-      opacity: 0;
-    }
-    .goog-te-banner-frame.skiptranslate,
-    .goog-logo-link,
-    .goog-te-gadget span {
-      display: none !important;
-    }
-    body {
-      top: 0 !important;
-    }
-  </style>
 </head>
-
 <body class="bg-[#0f172a] text-white font-sans min-h-screen">
-  <div id="google_translate_element"></div>
-
   <header class="bg-[#1e293b] p-4 shadow flex justify-between items-center">
     <h1 class="text-xl font-bold text-blue-400">Iron Hulk</h1>
-    <a href="index.html" class="text-gray-300 hover:underline text-sm">&larr; Back to Dashboard</a>
+    <a href="index.html" class="text-gray-300 hover:underline text-sm">← Back to Dashboard</a>
   </header>
 
-  <main class="p-6 space-y-4">
-    <!-- Language Switch Buttons -->
-    <div class="flex justify-end space-x-2 mt-4">
-      <button onclick="translateTo('en')" class="bg-gray-700 text-white px-3 py-1 rounded hover:bg-gray-600">EN</button>
-      <button onclick="translateTo('ar')" class="bg-gray-700 text-white px-3 py-1 rounded hover:bg-gray-600">AR</button>
-    </div>
-
+  <main class="p-6">
     <div class="bg-[#1f2937] p-6 rounded-xl shadow-md space-y-6">
       <h2 class="text-3xl font-bold text-blue-400">Contact Me</h2>
       <ul class="list-disc ml-6 text-gray-300 space-y-1">
@@ -68,40 +29,10 @@
       </ul>
     </div>
   </main>
-
-  <div class="flex-1 flex items-center justify-center mt-6">
-    <a href="index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">&larr; Back to Dashboard</a>
-  </div>
-  <br><br>
-
-  <!-- Language Switcher Script -->
-  <script>
-    function translateTo(lang, attempts = 0) {
-      const maxAttempts = 10;
-      const delay = 500;
-      const frame = document.querySelector('iframe.goog-te-menu-frame');
-
-      if (!frame) {
-        if (attempts < maxAttempts) {
-          return setTimeout(() => translateTo(lang, attempts + 1), delay);
-        }
-        return;
-      }
-
-      const langMap = {
-        en: 'English',
-        ar: 'Arabic'
-      };
-
-      const frameDoc = frame.contentWindow.document;
-      const span = Array.from(frameDoc.querySelectorAll('.goog-te-menu2-item span'))
-        .find(el => el.textContent.trim() === langMap[lang]);
-
-      if (span) span.click();
-      else if (attempts < maxAttempts) {
-        setTimeout(() => translateTo(lang, attempts + 1), delay);
-      }
-    }
-  </script>
 </body>
+<div class="flex-1 flex items-center justify-center">
+  <a href="index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">← Back to Dashboard</a>
+  <br>
+</div>
+<br><br>
 </html>
