@@ -7,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Google Translate Setup -->
-  <script type="text/javascript">
+  <script>
     function googleTranslateElementInit() {
       new google.translate.TranslateElement({
         pageLanguage: 'en',
@@ -19,9 +19,13 @@
   <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
   <style>
-    /* Hide Google Translate default UI */
+    /* Keep translate element accessible but hidden visually */
     #google_translate_element {
-      display: none;
+      position: absolute;
+      top: -1000px;
+      left: -1000px;
+      z-index: -1;
+      opacity: 0;
     }
     .goog-te-banner-frame.skiptranslate,
     .goog-logo-link,
@@ -44,7 +48,7 @@
   </header>
 
   <main class="p-6 space-y-4">
-    <!-- Language Switch Buttons (Initially Hidden) -->
+    <!-- Language Switch Buttons -->
     <div id="lang-switcher" class="flex justify-end space-x-2 hidden">
       <button onclick="translateTo('en')" class="bg-gray-700 text-white px-3 py-1 rounded hover:bg-gray-600">EN</button>
       <button onclick="translateTo('ar')" class="bg-gray-700 text-white px-3 py-1 rounded hover:bg-gray-600">AR</button>
@@ -72,28 +76,16 @@
   </div>
   <br><br>
 
-  <!-- Improved Language Switcher Script -->
+  <!-- Language Switcher Script -->
   <script>
-    // Show the language switcher once Google Translate iframe is ready
-    document.addEventListener("DOMContentLoaded", () => {
-      const interval = setInterval(() => {
-        const frame = document.querySelector("iframe.goog-te-menu-frame");
-        if (frame) {
-          document.getElementById("lang-switcher").classList.remove("hidden");
-          clearInterval(interval);
-        }
-      }, 500);
-    });
-
-    // Retry-safe translation trigger
     function translateTo(lang, attempts = 0) {
       const maxAttempts = 10;
       const delay = 500;
-
       const frame = document.querySelector('iframe.goog-te-menu-frame');
+
       if (!frame) {
         if (attempts < maxAttempts) {
-          setTimeout(() => translateTo(lang, attempts + 1), delay);
+          return setTimeout(() => translateTo(lang, attempts + 1), delay);
         }
         return;
       }
@@ -107,12 +99,20 @@
       const span = Array.from(frameDoc.querySelectorAll('.goog-te-menu2-item span'))
         .find(el => el.textContent.trim() === langMap[lang]);
 
-      if (span) {
-        span.click();
-      } else if (attempts < maxAttempts) {
+      if (span) span.click();
+      else if (attempts < maxAttempts) {
         setTimeout(() => translateTo(lang, attempts + 1), delay);
       }
     }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const interval = setInterval(() => {
+        if (document.querySelector("iframe.goog-te-menu-frame")) {
+          document.getElementById("lang-switcher").classList.remove("hidden");
+          clearInterval(interval);
+        }
+      }, 500);
+    });
   </script>
 </body>
 </html>
