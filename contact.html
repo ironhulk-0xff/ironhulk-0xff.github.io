@@ -6,8 +6,8 @@
   <title>Iron Hulk - Contact</title>
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Google Translate Setup -->
-  <script>
+  <!-- Google Translate Widget Initialization -->
+  <script type="text/javascript">
     function googleTranslateElementInit() {
       new google.translate.TranslateElement({
         pageLanguage: 'en',
@@ -16,10 +16,9 @@
       }, 'google_translate_element');
     }
   </script>
-  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
   <style>
-    /* Keep translate element accessible but hidden visually */
     #google_translate_element {
       position: absolute;
       top: -1000px;
@@ -39,17 +38,16 @@
 </head>
 
 <body class="bg-[#0f172a] text-white font-sans min-h-screen">
-  <!-- Hidden Google Translate Widget -->
   <div id="google_translate_element"></div>
 
   <header class="bg-[#1e293b] p-4 shadow flex justify-between items-center">
     <h1 class="text-xl font-bold text-blue-400">Iron Hulk</h1>
-    <a href="index.html" class="text-gray-300 hover:underline text-sm">← Back to Dashboard</a>
+    <a href="index.html" class="text-gray-300 hover:underline text-sm">&larr; Back to Dashboard</a>
   </header>
 
   <main class="p-6 space-y-4">
     <!-- Language Switch Buttons -->
-    <div id="lang-switcher" class="flex justify-end space-x-2 hidden">
+    <div class="flex justify-end space-x-2 mt-4">
       <button onclick="translateTo('en')" class="bg-gray-700 text-white px-3 py-1 rounded hover:bg-gray-600">EN</button>
       <button onclick="translateTo('ar')" class="bg-gray-700 text-white px-3 py-1 rounded hover:bg-gray-600">AR</button>
     </div>
@@ -72,7 +70,7 @@
   </main>
 
   <div class="flex-1 flex items-center justify-center mt-6">
-    <a href="index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">← Back to Dashboard</a>
+    <a href="index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">&larr; Back to Dashboard</a>
   </div>
   <br><br>
 
@@ -104,15 +102,6 @@
         setTimeout(() => translateTo(lang, attempts + 1), delay);
       }
     }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const interval = setInterval(() => {
-        if (document.querySelector("iframe.goog-te-menu-frame")) {
-          document.getElementById("lang-switcher").classList.remove("hidden");
-          clearInterval(interval);
-        }
-      }, 500);
-    });
   </script>
 </body>
 </html>
