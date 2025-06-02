@@ -104,11 +104,13 @@
             </div>
           </div>
         </div>
-        <div class="bg-black text-green-400 font-mono text-sm p-4 rounded-lg shadow-md mt-6 w-full h-[500px] overflow-auto">
+        <div id="terminal-container" class="bg-black text-green-400 font-mono text-sm p-4 rounded-lg shadow-md mt-6 w-full h-[500px] overflow-auto">
           <pre id="terminal-output" class="whitespace-pre-wrap leading-relaxed">&gt;_</pre>
-        </div>        
+        </div>
+        
         <script>
           const lines = [
+            "What I do every day:",
             "$ nmap -sC -sV -p- 10.10.10.10",
             "[+] Discovered open ports: 21, 22, 80, 443, 3306",
             "$ gobuster dir -u http://10.10.10.10 -w /usr/share/wordlists/dirb/common.txt",
@@ -144,14 +146,17 @@
           ];
         
           const output = document.getElementById("terminal-output");
+          const container = document.getElementById("terminal-container");
           let lineIndex = 0;
         
           function typeLine(text, i = 0, callback) {
             if (i < text.length) {
               output.textContent += text[i];
+              container.scrollTop = container.scrollHeight;
               setTimeout(() => typeLine(text, i + 1, callback), 30);
             } else {
               output.textContent += '\n';
+              container.scrollTop = container.scrollHeight;
               callback();
             }
           }
@@ -167,7 +172,7 @@
         
           nextLine();
         </script>
-         
+        
         <!-- Blog Section Start -->
           <div id="blogSection" class="hidden space-y-6">
             <div class="bg-[#1f2937] p-6 rounded-xl shadow-md text-white">
