@@ -5,14 +5,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Iron Hulk - Contact</title>
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Translate Setup -->
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,ar',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+    }
+  </script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+  <style>
+    /* Hide Google Translate default UI */
+    #google_translate_element {
+      display: none;
+    }
+    .goog-te-banner-frame.skiptranslate,
+    .goog-logo-link,
+    .goog-te-gadget span {
+      display: none !important;
+    }
+    body {
+      top: 0 !important;
+    }
+  </style>
 </head>
+
 <body class="bg-[#0f172a] text-white font-sans min-h-screen">
+  <!-- Hidden Google Translate Widget -->
+  <div id="google_translate_element"></div>
+
   <header class="bg-[#1e293b] p-4 shadow flex justify-between items-center">
     <h1 class="text-xl font-bold text-blue-400">Iron Hulk</h1>
     <a href="index.html" class="text-gray-300 hover:underline text-sm">← Back to Dashboard</a>
   </header>
 
-  <main class="p-6">
+  <main class="p-6 space-y-4">
+    <!-- Language Switch Buttons -->
+    <div class="flex justify-end space-x-2">
+      <button onclick="translateTo('en')" class="bg-gray-700 text-white px-3 py-1 rounded hover:bg-gray-600">EN</button>
+      <button onclick="translateTo('ar')" class="bg-gray-700 text-white px-3 py-1 rounded hover:bg-gray-600">AR</button>
+    </div>
+
     <div class="bg-[#1f2937] p-6 rounded-xl shadow-md space-y-6">
       <h2 class="text-3xl font-bold text-blue-400">Contact Me</h2>
       <ul class="list-disc ml-6 text-gray-300 space-y-1">
@@ -29,10 +66,29 @@
       </ul>
     </div>
   </main>
+
+  <div class="flex-1 flex items-center justify-center mt-6">
+    <a href="index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">← Back to Dashboard</a>
+  </div>
+  <br><br>
+
+  <!-- Language Switcher Script -->
+  <script>
+    function translateTo(lang) {
+      const selectFrame = document.querySelector('iframe.goog-te-menu-frame');
+      if (!selectFrame) return alert('Please wait, the translator is still loading...');
+
+      const langMap = {
+        en: 'English',
+        ar: 'Arabic'
+      };
+
+      const frameDoc = selectFrame.contentWindow.document;
+      const span = Array.from(frameDoc.querySelectorAll('.goog-te-menu2-item span'))
+        .find(el => el.textContent.trim() === langMap[lang]);
+
+      if (span) span.click();
+    }
+  </script>
 </body>
-<div class="flex-1 flex items-center justify-center">
-  <a href="index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">← Back to Dashboard</a>
-  <br>
-</div>
-<br><br>
 </html>
