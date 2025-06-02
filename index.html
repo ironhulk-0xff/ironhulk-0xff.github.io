@@ -104,7 +104,48 @@
             </div>
           </div>
         </div>
-
+        <div class="bg-black text-green-400 font-mono text-sm p-4 rounded-lg shadow-md mt-6 w-full h-[280px] overflow-auto">
+          <pre id="terminal-output" class="whitespace-pre-wrap leading-relaxed">&gt;_</pre>
+        </div>
+        
+        <script>
+          const lines = [
+            "$ nmap -sC -sV 10.10.10.10",
+            "[+] Open ports: 22/tcp, 80/tcp, 139/tcp, 445/tcp",
+            "$ smbclient \\\\10.10.10.10\\share",
+            "smb: \\> get creds.txt",
+            "[+] creds.txt saved",
+            "$ hydra -l admin -P rockyou.txt ssh://10.10.10.10",
+            "[+] login: admin / password123",
+            "$ ssh admin@10.10.10.10",
+            "admin@target:~$ whoami",
+            "admin",
+            "admin@target:~$"
+          ];
+        
+          const output = document.getElementById("terminal-output");
+          let lineIndex = 0;
+        
+          function typeLine(text, i = 0, callback) {
+            if (i < text.length) {
+              output.textContent += text[i];
+              setTimeout(() => typeLine(text, i + 1, callback), 35);
+            } else {
+              output.textContent += '\n';
+              callback();
+            }
+          }
+        
+          function nextLine() {
+            if (lineIndex < lines.length) {
+              typeLine(lines[lineIndex], 0, () => {
+                lineIndex++;
+                setTimeout(nextLine, 600);
+              });
+            }
+          }        
+          nextLine();
+        </script>        
         <!-- Blog Section Start -->
           <div id="blogSection" class="hidden space-y-6">
             <div class="bg-[#1f2937] p-6 rounded-xl shadow-md text-white">
