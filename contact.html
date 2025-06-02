@@ -44,8 +44,8 @@
   </header>
 
   <main class="p-6 space-y-4">
-    <!-- Language Switch Buttons -->
-    <div class="flex justify-end space-x-2">
+    <!-- Language Switch Buttons (Initially Hidden) -->
+    <div id="lang-switcher" class="flex justify-end space-x-2 hidden">
       <button onclick="translateTo('en')" class="bg-gray-700 text-white px-3 py-1 rounded hover:bg-gray-600">EN</button>
       <button onclick="translateTo('ar')" class="bg-gray-700 text-white px-3 py-1 rounded hover:bg-gray-600">AR</button>
     </div>
@@ -72,22 +72,46 @@
   </div>
   <br><br>
 
-  <!-- Language Switcher Script -->
+  <!-- Improved Language Switcher Script -->
   <script>
-    function translateTo(lang) {
-      const selectFrame = document.querySelector('iframe.goog-te-menu-frame');
-      if (!selectFrame) return alert('Please wait, the translator is still loading...');
+    // Show the language switcher once Google Translate iframe is ready
+    document.addEventListener("DOMContentLoaded", () => {
+      const interval = setInterval(() => {
+        const frame = document.querySelector("iframe.goog-te-menu-frame");
+        if (frame) {
+          document.getElementById("lang-switcher").classList.remove("hidden");
+          clearInterval(interval);
+        }
+      }, 500);
+    });
+
+    // Retry-safe translation trigger
+    function translateTo(lang, attempts = 0) {
+      const maxAttempts = 10;
+      const delay = 500;
+
+      const frame = document.querySelector('iframe.goog-te-menu-frame');
+      if (!frame) {
+        if (attempts < maxAttempts) {
+          setTimeout(() => translateTo(lang, attempts + 1), delay);
+        }
+        return;
+      }
 
       const langMap = {
         en: 'English',
         ar: 'Arabic'
       };
 
-      const frameDoc = selectFrame.contentWindow.document;
+      const frameDoc = frame.contentWindow.document;
       const span = Array.from(frameDoc.querySelectorAll('.goog-te-menu2-item span'))
         .find(el => el.textContent.trim() === langMap[lang]);
 
-      if (span) span.click();
+      if (span) {
+        span.click();
+      } else if (attempts < maxAttempts) {
+        setTimeout(() => translateTo(lang, attempts + 1), delay);
+      }
     }
   </script>
 </body>
