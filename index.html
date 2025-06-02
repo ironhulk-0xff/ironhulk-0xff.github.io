@@ -20,6 +20,8 @@
         <a href="projects.html" class="hover:underline">My Projects</a>
         <button onclick="showBlogSection()" class="hover:underline">Blogs</button>
         <button onclick="showRoadMapSection()" class="hover:underline">Road Map</button>
+
+        <button onclick="showContactMeSection()" class="hover:underline">Contact Me</button>
         <a href="contact.html" class="hover:underline">Contact</a>
       </nav>
     </header>
@@ -87,8 +89,29 @@
               </div>
             </div>
           </div>
-          <a href="contact.html" class="block text-left w-full hover:underline">Contact</a>
-        </nav>
+
+          <!-- ContactMe -->
+          <div>
+            <button onclick="toggleContactMeDropdown('desktop')" class="block text-left w-full hover:underline">Contac tMe</button>
+            <div id="desktopContactMeDropdown" class="ml-4 mt-2 flex-col space-y-2 hidden">
+              <div>
+                <ul class="list-disc ml-6 text-gray-300 space-y-1">
+                  <li><a href="https://x.com/ironhulk_0xff" class="underline">X (Twitter)</a></li>
+                  <li><a href="https://github.com/ironhulk-0xff" class="underline">GitHub</a></li>
+                  <li><a href="https://t.me/IronHulk_0xff" class="underline">Telegram</a></li>
+                </ul>
+          
+                <h3 class="text-2xl font-bold text-blue-400">Telegram Communities</h3>
+                <ul class="list-disc ml-6 text-gray-300 space-y-1">
+                  <li><a href="https://t.me/sec4al" class="underline">Sec4All</a></li>
+                  <li><a href="https://t.me/GlobalGrayHatTeam/2" class="underline">GGH-Team</a></li>
+                  <li><a href="https://t.me/ForCyber" class="underline">ForCyber</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          </nav>
       </aside>
       <!-- Main Content Area -->
       <main class="flex-1 p-6 overflow-y-auto space-y-6">
@@ -145,6 +168,27 @@
             </div>
           </div>
         </div>
+
+        <!-- Contac tMe Section -->
+        <div id="ContactMeSection" class="hidden space-y-6">
+          <div class="bg-[#1f2937] p-6 rounded-xl shadow-md text-white">
+            <div>
+              <h3 class="text-blue-400 font-semibold">Red Team</h3>
+              <a href="OSCP.html" class="block ml-4 hover:underline">- OSCP</a>
+              <a href="OSED.html" class="block ml-4 hover:underline">- OSED</a>
+            </div>
+            <div class="mt-4">
+              <h3 class="text-blue-400 font-semibold">Custom C2</h3>
+              <a href="C2.html" class="block ml-4 hover:underline">- C2</a>
+            </div>
+            <div class="mt-4">
+              <h3 class="text-blue-400 font-semibold">Malware Development</h3>
+              <a href="Sector7.html" class="block ml-4 hover:underline">- Sector7</a>
+            </div>
+          </div>
+        </div>
+
+
       </main>
     </div>
     
@@ -160,7 +204,7 @@
         {
           document.getElementById("mainDashboard").classList.add("hidden");
           document.getElementById("blogSection").classList.remove("hidden");
-          document.getElementById("RoadMapSection").classList.add("hidden"); // Hide roadmap
+          document.getElementById("RoadMapSection").classList.add("hidden");
         }
 
         function toggleRoadMapDropdown(view)
@@ -174,7 +218,21 @@
         {
           document.getElementById("mainDashboard").classList.add("hidden");
           document.getElementById("RoadMapSection").classList.remove("hidden");
-          document.getElementById("blogSection").classList.add("hidden"); // Hide blog
+          document.getElementById("blogSection").classList.add("hidden");
+        }
+
+        function toggleContactMeDropdown(view)
+        {
+          const dropdownId = view === 'mobile' ? 'mobileContactMeDropdown' : 'desktopContactMeDropdown';
+          const dropdown = document.getElementById(dropdownId);
+          dropdown.classList.toggle('hidden');
+        }
+
+        function showContactMeSection() 
+        {
+          document.getElementById("mainDashboard").classList.add("hidden");
+          document.getElementById("ContactMeSection").classList.remove("hidden");
+          document.getElementById("blogSection").classList.add("hidden");
         }
       </script>
     </body>
