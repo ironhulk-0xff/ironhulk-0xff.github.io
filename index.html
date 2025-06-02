@@ -7,14 +7,12 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-[#0f172a] text-white font-sans min-h-screen flex flex-col">
-
 <!-- Mobile Top Bar -->
 <header class="md:hidden bg-[#1e293b] text-blue-400 p-4 shadow-lg">
   <div class="flex flex-col items-center space-y-2">
     <img src="/images/your-logo.png" alt="Logo" class="w-100 h-100 rounded-full" />
     <h1 class="text-2xl font-bold">Iron Hulk</h1>
   </div>
-
   <!-- Always visible mobile nav -->
   <nav class="mt-4 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm relative">
     <a href="aboutme.html" class="hover:underline">About Me</a>
@@ -25,7 +23,6 @@
     <a href="contact.html" class="hover:underline">Contact</a>
   </nav>
 </header>
-
 <div class="flex flex-1 overflow-hidden">
   <!-- Sidebar Navigation (desktop only) -->
   <aside class="hidden md:flex md:w-64 bg-[#1e293b] p-5 flex-col space-y-6 overflow-y-auto">
@@ -63,8 +60,7 @@
             </div>
           </div>
         </div>
-      </div>
-      
+      </div>      
       <!-- RoadMap -->
       <div>
         <button onclick="toggleRoadMapDropdown('desktop')" class="block text-left w-full hover:underline">Road Map</button>
@@ -90,11 +86,9 @@
           </div>
         </div>
       </div>
-
       <a href="contact.html" class="block text-left w-full hover:underline">Contact</a>
     </nav>
   </aside>
-
   <!-- Main Content Area -->
   <main class="flex-1 p-6 overflow-y-auto space-y-6">
     <!-- Main Dashboard -->
@@ -111,18 +105,14 @@
         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..." alt="Iron Hulk" class="max-w-full h-auto rounded-lg shadow-lg"/>
       </div>
     </div>
-
     <!-- Blog Section -->
     <div id="blogSection" class="hidden space-y-6">
       <div class="bg-[#1f2937] p-6 rounded-xl shadow-md text-white">
-        <h2 class="text-xl font-bold text-blue-400 mb-4">Blog Categories</h2>
-
         <div>
           <h3 class="text-blue-400 font-semibold">Red Team</h3>
           <a href="blog-red-scanning.html" class="block ml-4 hover:underline">- Scanning</a>
           <a href="blog-red-foothold.html" class="block ml-4 hover:underline">- Foothold</a>
         </div>
-
         <div class="mt-4">
           <h3 class="text-blue-400 font-semibold">Blue Team</h3>
           <a href="blog-blue-scanning.html" class="block ml-4 hover:underline">- File protection</a>
@@ -136,23 +126,18 @@
         </div>
       </div>
     </div>
-
     <!-- Road Map Section -->
     <div id="RoadMapSection" class="hidden space-y-6">
       <div class="bg-[#1f2937] p-6 rounded-xl shadow-md text-white">
-        <h2 class="text-xl font-bold text-blue-400 mb-4">Road Map</h2>
-
         <div>
           <h3 class="text-blue-400 font-semibold">Red Team</h3>
           <a href="OSCP.html" class="block ml-4 hover:underline">- OSCP</a>
           <a href="OSED.html" class="block ml-4 hover:underline">- OSED</a>
         </div>
-
         <div class="mt-4">
           <h3 class="text-blue-400 font-semibold">Custom C2</h3>
           <a href="C2.html" class="block ml-4 hover:underline">- C2</a>
         </div>
-
         <div class="mt-4">
           <h3 class="text-blue-400 font-semibold">Malware Development</h3>
           <a href="Sector7.html" class="block ml-4 hover:underline">- Sector7</a>
@@ -161,7 +146,6 @@
     </div>
   </main>
 </div>
-
 <script>
   function toggleBlogDropdown(view)
   {
