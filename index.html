@@ -100,49 +100,59 @@
           </div>
         </div>
         <!-- Wrap the terminal in its own identifiable div -->
-            <div id="terminalSection">
-              <div id="terminal-container" class="bg-black text-green-400 font-mono text-sm p-4 rounded-lg shadow-md mt-6 w-full h-[500px] overflow-auto">
-                <pre id="terminal-output" class="whitespace-pre-wrap leading-relaxed">&gt;_</pre>
-              </div>
-            </div>
-            <script>
-              const files = ["/data/script1.txt", "/data/script2.txt"];
-              const selectedFile = files[Math.floor(Math.random() * files.length)];
-            
-              const output = document.getElementById("terminal-output");
-              const container = document.getElementById("terminal-container");
-            
-              // Append a timestamp to prevent browser cache
-              fetch(`${selectedFile}?_=${Date.now()}`)
-                .then(response => response.text())
-                .then(text => {
-                  const lines = text.split("\n");
-                  let lineIndex = 0;
-            
-                  function typeLine(line, i = 0, callback) {
-                    if (i < line.length) {
-                      output.textContent += line[i];
-                      container.scrollTop = container.scrollHeight;
-                      setTimeout(() => typeLine(line, i + 1, callback), 30);
-                    } else {
-                      output.textContent += "\n";
-                      container.scrollTop = container.scrollHeight;
-                      callback();
-                    }
+        <div id="terminalSection">
+          <div id="terminal-container" class="bg-black text-green-400 font-mono text-sm p-4 rounded-lg shadow-md mt-6 w-full h-[500px] overflow-auto">
+            <pre id="terminal-output" class="whitespace-pre-wrap leading-relaxed">&gt;_</pre>
+          </div>
+        </div>
+        
+        <script>
+          const files = ["/data/script1.txt", "/data/script2.txt", "/data/script3.txt"]; // Add more if needed
+        
+          function runTerminalAnimation() {
+            const selectedFile = files[Math.floor(Math.random() * files.length)];
+            const output = document.getElementById("terminal-output");
+            const container = document.getElementById("terminal-container");
+        
+            output.textContent = ">_"; // Reset terminal display
+        
+            fetch(`${selectedFile}?_=${Date.now()}`) // Prevent caching
+              .then(response => response.text())
+              .then(text => {
+                const lines = text.split("\n");
+                let lineIndex = 0;
+        
+                function typeLine(line, i = 0, callback) {
+                  if (i < line.length) {
+                    output.textContent += line[i];
+                    container.scrollTop = container.scrollHeight;
+                    setTimeout(() => typeLine(line, i + 1, callback), 30);
+                  } else {
+                    output.textContent += "\n";
+                    container.scrollTop = container.scrollHeight;
+                    callback();
                   }
-            
-                  function nextLine() {
-                    if (lineIndex < lines.length) {
-                      typeLine(lines[lineIndex], 0, () => {
-                        lineIndex++;
-                        setTimeout(nextLine, 500);
-                      });
-                    }
+                }
+        
+                function nextLine() {
+                  if (lineIndex < lines.length) {
+                    typeLine(lines[lineIndex], 0, () => {
+                      lineIndex++;
+                      setTimeout(nextLine, 500);
+                    });
+                  } else {
+                    // Wait 15 seconds, then restart with a new random file
+                    setTimeout(runTerminalAnimation, 15000);
                   }
-            
-                  nextLine();
-                });
-            </script>
+                }
+        
+                nextLine();
+              });
+          }
+        
+          runTerminalAnimation();
+        </script>
+        
             
         <!-- Blog Section Start -->
           <div id="blogSection" class="hidden space-y-6">
