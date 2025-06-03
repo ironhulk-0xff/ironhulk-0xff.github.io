@@ -107,16 +107,13 @@
         </div>
         
         <script>
-          const files = ["/data/script1.txt", "/data/script2.txt", "/data/script3.txt"]; // Add more if needed
-        
+          const files = ["/data/script1.txt", "/data/script2.txt"];         
           function runTerminalAnimation() {
             const selectedFile = files[Math.floor(Math.random() * files.length)];
             const output = document.getElementById("terminal-output");
-            const container = document.getElementById("terminal-container");
-        
-            output.textContent = ">_"; // Reset terminal display
-        
-            fetch(`${selectedFile}?_=${Date.now()}`) // Prevent caching
+            const container = document.getElementById("terminal-container");        
+            output.textContent = ">_";         
+            fetch(`${selectedFile}?_=${Date.now()}`)
               .then(response => response.text())
               .then(text => {
                 const lines = text.split("\n");
@@ -132,8 +129,7 @@
                     container.scrollTop = container.scrollHeight;
                     callback();
                   }
-                }
-        
+                }        
                 function nextLine() {
                   if (lineIndex < lines.length) {
                     typeLine(lines[lineIndex], 0, () => {
@@ -141,18 +137,14 @@
                       setTimeout(nextLine, 500);
                     });
                   } else {
-                    // Wait 15 seconds, then restart with a new random file
-                    setTimeout(runTerminalAnimation, 15000);
+                    setTimeout(runTerminalAnimation, 20000);
                   }
-                }
-        
+                }        
                 nextLine();
               });
-          }
-        
+          }        
           runTerminalAnimation();
-        </script>
-        
+        </script>       
             
         <!-- Blog Section Start -->
           <div id="blogSection" class="hidden space-y-6">
