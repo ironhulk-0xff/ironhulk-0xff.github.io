@@ -34,3 +34,13 @@ root@target:/root# whoami
 root
 root@target:/root# hostname
 pwned-box
+root@target:/root# cat about.txt
+You may call me Iron Hulk, and this space is where I share thoughts, tools, and techniques from my journey in cybersecurity.
+
+Offense, defense, and everything in between — no fluff, just actionable insights based on real-world experience.
+Whether you're just starting or deep in the game, there's something here for everyone. Certifications? OSCP, OSEP, ePTP, CISM, and more.
+
+I’ve spent years breaking, building, and defending systems — now I’m here to share it all with you.
+If something here sparks your curiosity or raises a question, reach out — I’m always open to talk, troubleshoot, or tackle a challenge.
+Let’s keep learning, push boundaries, and make this space better together.
+root@target:/root#
