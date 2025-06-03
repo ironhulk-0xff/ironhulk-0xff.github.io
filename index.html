@@ -172,27 +172,9 @@
                   });
                 }
               }
-
               nextLine();
             </script>
-
-            <script>
-              function showBlogSection() {
-                document.getElementById("mainDashboard").classList.add("hidden");
-                document.getElementById("blogSection").classList.remove("hidden");
-                document.getElementById("RoadMapSection").classList.add("hidden");
-                document.getElementById("terminalSection").classList.add("hidden");
-              }
-
-              function showRoadMapSection() {
-                document.getElementById("mainDashboard").classList.add("hidden");
-                document.getElementById("RoadMapSection").classList.remove("hidden");
-                document.getElementById("blogSection").classList.add("hidden");
-                document.getElementById("terminalSection").classList.add("hidden");
-              }
-            </script>
-
-        
+       
         <!-- Blog Section Start -->
           <div id="blogSection" class="hidden space-y-6">
             <div class="bg-[#1f2937] p-6 rounded-xl shadow-md text-white">
@@ -251,6 +233,7 @@
           document.getElementById("mainDashboard").classList.add("hidden");
           document.getElementById("blogSection").classList.remove("hidden");
           document.getElementById("RoadMapSection").classList.add("hidden");
+          document.getElementById("terminalSection").classList.add("hidden");
         }
 
         function toggleRoadMapDropdown(view)
@@ -265,6 +248,14 @@
           document.getElementById("mainDashboard").classList.add("hidden");
           document.getElementById("RoadMapSection").classList.remove("hidden");
           document.getElementById("blogSection").classList.add("hidden");
+          document.getElementById("terminalSection").classList.add("hidden");
+        }
+        function showDashboardSection() 
+        {
+          document.getElementById("mainDashboard").classList.remove("hidden");
+          document.getElementById("blogSection").classList.add("hidden");
+          document.getElementById("RoadMapSection").classList.add("hidden");
+          document.getElementById("terminalSection").classList.remove("hidden");
         }
       </script>
     </body>
