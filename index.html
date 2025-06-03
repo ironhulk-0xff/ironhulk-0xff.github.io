@@ -110,15 +110,15 @@
                 <pre id="terminal-output" class="whitespace-pre-wrap leading-relaxed">&gt;_</pre>
               </div>
             </div>
-
             <script>
-              const files = ["/data/script1.txt", "/data/script2.txt"];
+              const files = ["/data/script1.txt", "/data/script2.txt", "/data/script3.txt"];
               const selectedFile = files[Math.floor(Math.random() * files.length)];
             
               const output = document.getElementById("terminal-output");
               const container = document.getElementById("terminal-container");
             
-              fetch(selectedFile)
+              // Append a timestamp to prevent browser cache
+              fetch(`${selectedFile}?_=${Date.now()}`)
                 .then(response => response.text())
                 .then(text => {
                   const lines = text.split("\n");
@@ -149,7 +149,6 @@
                 });
             </script>
             
-       
         <!-- Blog Section Start -->
           <div id="blogSection" class="hidden space-y-6">
             <div class="bg-[#1f2937] p-6 rounded-xl shadow-md text-white">
