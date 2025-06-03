@@ -1,12 +1,12 @@
 Dear guest, Welcome to my terminal
 
 $ whoami
-ironhulk
+root
 
 $ ls
-intro.txt  tools/  blog/  certs/
+about.txt  tools/  blog/  certs/
 
-$ cat intro.txt
+$ cat about.txt
 Its me, Iron Hulk, and this space is where I share thoughts, tools, and techniques from my journey in cybersecurity.
 
 Offense, defense, and everything in between — no fluff, just actionable insights based on real-world experience.
