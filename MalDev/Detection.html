@@ -44,7 +44,7 @@
                 When the AV vendor discovers a new piece of malware, lets say a banking trojan, they analyze it, extract several reliable byte-patterns, and push those patterns out in the next signature update. 
                 Your AV, upon receiving the update, knows to look for those patterns on disk or in memory. If it finds them, it can immediately flag the file as malicious.
                 <br><br><span class="font-bold">Strengths and Limitations: </span>
-            <ul class="list-disc list-inside pl-12 text-gray-300">
+            <ul class="list-disc list-inside pl-12 text-justify text-gray-300">
                 <li><strong>Speed and simplicity:</strong> Signature checks are usually just a matter of comparing short patterns, which modern AV engines do with highly optimized data structures (like Bloom filters or trie-based indices).</li>
                 <li><strong>Low false positives:</strong> If a byte-pattern matches exactly, it’s almost certainly the same malware family.</li>
                 <li><strong>Poor against minor modifications:</strong> Malware authors can recompile code, insert junk instructions, or pack/encrypt their payload so that the byte-pattern changes just enough to evade detection.</li>
@@ -62,7 +62,7 @@
             Think of a heuristic engine like a detective who knows that safe-crackers often carry lock-picking tools, wear gloves, and loiter around banks late at night. Even if the detective has never seen this particular individual before, seeing those telltale clues can raise suspicion.     
         </p><br>
             <span class="font-bold pl-9">In the AV context, heuristics might include: </span>
-            <ul class="list-disc list-inside pl-12 text-gray-300">
+            <ul class="list-disc list-inside pl-12 text-justify text-gray-300">
                 <li><strong>Unpacking routines:</strong> Many malware samples pack their real code inside multiple layers of encryption or compression. The heuristic engine might look for unusual patterns of “self-modifying” code, for instance, a loop that decrypts a buffer and then jumps into it.</li>
                 <li><strong>Suspicious API sequences:</strong> If a file calls CreateProcess and then immediately injects code into another process (via WriteProcessMemory and CreateRemoteThread), that’s a strong heuristic indicator of process injection, a common malware technique.</li>
                 <li><strong>Embedded shellcode:</strong> A heuristic might scan the file for a sequence of bytes that starts with typical shellcode instructions (like a PUSH/POP combination or a short JMP to relative address), even if it’s encrypted.</li>
@@ -70,7 +70,7 @@
                 <li><strong>Heuristic scoring:</strong> Often, each suspicious attribute adds points to a cumulative “malware score.” If the sum of scores crosses a threshold, the engine declares the file malicious or “potentially malicious” and quarantines it for further analysis.</li>
             </ul>
                 <br><span class="font-bold pl-9">Strengths and Limitations: </span>
-            <ul class="list-disc list-inside pl-12 text-gray-300">
+            <ul class="list-disc list-inside pl-12 text-justify text-gray-300">
                 <li><strong>Spots new versions of malware:</strong> By focusing on behavior indicators and code structures, heuristics can detect malware families that have changed just enough to evade signatures.</li>
                 <li><strong>Higher false-positive risk:</strong> Because heuristics are based on general behaviors (e.g., “calls VirtualAlloc then writes to memory”), benign software that packs itself (like some legitimate installers) or debuggers that perform in-memory patching might trip the heuristics.</li>
                 <li><strong>Tunable thresholds:</strong> AV vendors calibrate heuristic thresholds carefully, if they’re too strict, many harmless programs get flagged; if too lenient, malware slips through.</li>
@@ -103,7 +103,7 @@
                 </p>
             </ul>
                 <br><span class="font-bold pl-9">Strengths and Limitations: </span>
-            <ul class="list-disc list-inside pl-12 text-gray-300">
+            <ul class="list-disc list-inside pl-12 text-justify text-gray-300">
                 <li><strong>Accuracy:</strong> Watching real behavior reduces false positives, if a user is legitimately editing a document, that’s far different from a hidden service encrypting dozens of files.</li>
                 <li><strong>Late-stage detection:</strong> Because the AV/EDR only flags things when code actually runs, there is still a small window where the malware can begin its damage (e.g., delete backups, exfiltrate data) before being stopped.</li>
                 <li><strong>Performance overhead:</strong> Kernel callbacks, file filters, and API hooks add latency to every system call. Good EDR vendors optimize heavily, but if you install two memory scanners or multiple hooking products, you can see noticeable slowdowns.</li>
@@ -123,31 +123,28 @@
             <ul class="list-disc list-inside pl-12 text-gray-300">
                 <li><strong>User and Entity Behavior Analytics (UEBA): </strong></li>
                 <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-9">
-                    A) <strong>Baseline creation:</strong> The EDR agent spends hours learning how a particular user’s machine behaves like what applications are typically launched, how much CPU is used during normal business hours, which servers the machine contacts.
+                    <strong>A) Baseline creation:</strong> The EDR agent spends hours learning how a particular user’s machine behaves like what applications are typically launched, how much CPU is used during normal business hours, which servers the machine contacts.
                     <br>
-                    B) <strong>Statistical models:</strong> Using regression or clustering, the system learns that 90% of the time, Chrome.exe makes HTTP connections to “cdn.jsdelivr.net” and “fonts.googleapis.com.” Suddenly, if Chrome.exe tries SSL connections to an unknown IP in Russia, that deviation flags an alert.
+                    <strong>B) Statistical models:</strong> Using regression or clustering, the system learns that 90% of the time, Chrome.exe makes HTTP connections to “cdn.jsdelivr.net” and “fonts.googleapis.com.” Suddenly, if Chrome.exe tries SSL connections to an unknown IP in Russia, that deviation flags an alert.
                     <br>
-                    C) <strong>Adaptive learning:</strong> When a user legitimately starts using a new cloud-based app, the EDR model gradually incorporates that behavior into the baseline, avoiding repetitive false positives.
+                    <strong>C) Adaptive learning:</strong> When a user legitimately starts using a new cloud-based app, the EDR model gradually incorporates that behavior into the baseline, avoiding repetitive false positives.
                 </p><br>
                 <li><strong>Process and Thread Anomalies: </strong></li>
                 <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-9">
-                    A) <strong>Unexpected child processes:</strong> A common technique for some malware is to spawn “cmd.exe /c regsvr32 /s malicious.dll.” If Word.exe (winword.exe) spawns cmd.exe, that’s unusual behavior—Word normally doesn’t launch a shell. The anomaly engine sees that “winword.exe → cmd.exe” spawning chain as a red flag.
+                    <strong>A) Unexpected child processes:</strong> A common technique for some malware is to spawn “cmd.exe /c regsvr32 /s malicious.dll.” If Word.exe (winword.exe) spawns cmd.exe, that’s unusual behavior—Word normally doesn’t launch a shell. The anomaly engine sees that “winword.exe → cmd.exe” spawning chain as a red flag.
                     <br>
-                    B) <strong>Code injection patterns:</strong>  If a non-privileged process writes into the memory of a privileged process, that’s statistically rare. A model trained on millions of normal process interactions quickly learns that creating a WriteProcessMemory call from Notepad.exe to Explorer.exe almost never happens in benign scenarios.
+                    <strong>B) Code injection patterns:</strong>  If a non-privileged process writes into the memory of a privileged process, that’s statistically rare. A model trained on millions of normal process interactions quickly learns that creating a WriteProcessMemory call from Notepad.exe to Explorer.exe almost never happens in benign scenarios.
                     <br>
-                    C) <strong>DLL load anomalies:</strong> If a system process like svchost.exe loads a suspicious DLL from “C:\Users\Public\somefolder\evil.dll” instead of “C:\Windows\System32,” the anomaly engine sees it as a significant deviation from normal module-load behavior.
+                    <strong>C) DLL load anomalies:</strong> If a system process like svchost.exe loads a suspicious DLL from “C:\Users\Public\somefolder\evil.dll” instead of “C:\Windows\System32,” the anomaly engine sees it as a significant deviation from normal module-load behavior.
                 </p>
             </ul>
                 <br><span class="font-bold pl-9">Strengths and Limitations: </span>
-            <ul class="list-disc list-inside pl-12 text-gray-300">
+            <ul class="list-disc list-inside pl-12 text-justify text-gray-300">
                 <li><strong>Adaptive and future-proof:</strong> Instead of requiring constant rule updates, anomaly engines learn the unique “fingerprint” of a network or device. New malware that behaves differently from any known benign process can get flagged immediately.</li>
                 <li><strong>Complex to tune:</strong> Building a reliable baseline across a diverse environment is challenging. Some departments legitimately run memory-intensive applications or have high network usage; others don’t. A one-size-fits-all anomaly threshold results in noise.</li>
                 <li><strong>Explainability challenges:</strong> Security teams need to know why a particular process was flagged. Some machine learning models are “black boxes,” making it hard to justify why exactly a certain behavior is suspicious. Newer research in explainable AI (XAI) is helping, but it’s still an area in flux.</li>
             </ul>
         </p><br>
-
-
-
         <h2 class="text-2xl font-bold text-blue-400 mb-1 pl-2">5. Sandboxing and Dynamic Analysis</h2>
         <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-9">
             Sandboxing means running a suspicious file inside a controlled, isolated environment—often a virtual machine or a micro-Virtual Machine—where its behavior is observed over a short period (usually a few seconds to minutes). Modern AV/EDR vendors often send suspicious executables to cloud-based sandboxes, where Linux or 
@@ -161,19 +158,19 @@
             <ul class="list-disc list-inside pl-12 text-gray-300">
                 <li><strong>Lightweight Virtual Machines (Hypervisor-Based): </strong></li>
                 <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-9">
-                    A) <strong>Full system emulation:</strong> The sandbox spins up a Windows 10 VM with snapshotting enabled. It clones the base snapshot, runs the executable, and watches kernel events. Everything from file system changes to DirectX calls can be logged. After the analysis period, the VM reverts to a clean snapshot.
+                    <strong>A) Full system emulation:</strong> The sandbox spins up a Windows 10 VM with snapshotting enabled. It clones the base snapshot, runs the executable, and watches kernel events. Everything from file system changes to DirectX calls can be logged. After the analysis period, the VM reverts to a clean snapshot.
                     <br>
-                    B) <strong>Bare-metal or hardware-assisted introspection:</strong> Some sandboxes run on specialized hardware or use virtualization extensions (Intel VT-x or AMD-V) to inspect the guest’s kernel structures without installing agents inside the VM. By watching the guest’s page tables or hooking into VMware’s hypervisor APIs, the sandbox sees exactly which code pages execute, which regions end up being de-obfuscated, and what network traffic flows out.
+                    <strong>B) Bare-metal or hardware-assisted introspection:</strong> Some sandboxes run on specialized hardware or use virtualization extensions (Intel VT-x or AMD-V) to inspect the guest’s kernel structures without installing agents inside the VM. By watching the guest’s page tables or hooking into VMware’s hypervisor APIs, the sandbox sees exactly which code pages execute, which regions end up being de-obfuscated, and what network traffic flows out.
                 </p><br>
                 <li><strong>Behavior Logging and Scoring: </strong></li>
                 <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-9">
-                    A) <strong>File-system exploration:</strong> Does the malware create a ransom note in every user’s Documents folder? Does it drop a malicious DLL into C:\Windows\System32?
+                    <strong>A) File-system exploration:</strong> Does the malware create a ransom note in every user’s Documents folder? Does it drop a malicious DLL into C:\Windows\System32?
                     <br>
-                    B) <strong>Network communication:</strong> Does it try to connect to a known command-and-control domain? Does it launch an HTTPS session on port 443 but craft its own TLS handshake (indicating a custom C2 protocol)?
+                    <strong>B) Network communication:</strong> Does it try to connect to a known command-and-control domain? Does it launch an HTTPS session on port 443 but craft its own TLS handshake (indicating a custom C2 protocol)?
                     <br>
-                    C) <strong>Registry tampering:</strong> Does it add keys under HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce or modify AutoPlay handlers to persist on USB insertion?
+                    <strong>C) Registry tampering:</strong> Does it add keys under HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce or modify AutoPlay handlers to persist on USB insertion?
                     <br>
-                    D) <strong>Process spawning:</strong> Does it spawn Manage-bde.exe (BitLocker tool) repeatedly to disable encryption? Does it run “vssadmin delete shadows” to erase Volume Shadow Copies?
+                    <strong>D) Process spawning:</strong> Does it spawn Manage-bde.exe (BitLocker tool) repeatedly to disable encryption? Does it run “vssadmin delete shadows” to erase Volume Shadow Copies?
                 <br>
                 </p>
             </ul><br>
@@ -187,8 +184,6 @@
                 <li><strong>Evasion by anti-sandbox techniques:</strong> Malware may detect that it’s inside a VM (by checking for VMware tools processes, looking at CPU timing discrepancies, or trying to communicate with a nonexistent router). If detected, it might abort execution or behave benignly to slip through the analysis phase.</li>
             </ul>
         </p><br>
-
-
     </div>
   </main>
   </body>
