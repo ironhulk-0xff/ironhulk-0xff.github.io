@@ -1,13 +1,13 @@
-Dear Guest, Welcome to my terminal
+Dear Guest, Welcome to my Blog
 
 $ whoami
-root
+IronHulk
 
 $ ls
 about.txt  tools/  blog/  certs/
 
 $ cat about.txt
-Its me, Iron Hulk, and this space is where I share thoughts, tools, and techniques from my journey in cybersecurity.
+This space is where I share thoughts, tools, and techniques from my journey in cybersecurity.
 
 Offense, defense, and everything in between — no fluff, just actionable insights based on real-world experience.
 Whether you're just starting or deep in the game, there's something here for everyone. Certifications? OSCP, OSEP, ePTP, CISM, and more.
