@@ -6,15 +6,15 @@ msf6 exploit(...) > set RHOST 10.10.10.10
 msf6 exploit(...) > run
 [*] Backdoor service has been spawned
 [*] Command shell session 1 opened
-$ python3 -c 'import pty; pty.spawn("/bin/bash")'
-ftp@target:/home/ftp$ sudo -l
-User ftp may run the following commands on this host:
-    (ALL : ALL) NOPASSWD: /usr/bin/vim
-$ sudo vim -c ':!sh'
-root@target:/root# whoami
-root
-root@target:/root# cat about.txt
-Its me, Iron Hulk, and this space is where I share thoughts, tools, and techniques from my journey in cybersecurity.
+
+$ whoami
+IronHulk
+
+$ ls
+about.txt  tools/  blog/  certs/
+
+$ cat about.txt
+This space is where I share thoughts, tools, and techniques from my journey in cybersecurity.
 
 Offense, defense, and everything in between — no fluff, just actionable insights based on real-world experience.
 Whether you're just starting or deep in the game, there's something here for everyone. Certifications? OSCP, OSEP, ePTP, CISM, and more.
