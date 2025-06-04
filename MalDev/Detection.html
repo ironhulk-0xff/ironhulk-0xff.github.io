@@ -89,17 +89,17 @@
             <ul class="list-disc list-inside pl-12 text-gray-300">
                 <li><strong>OS-Level Hooks: </strong></li>
                 <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-9">
-                    A) <strong>Kernel-mode callbacks:</strong> On Windows, Microsoft provides mechanisms like the PsSetCreateProcessNotifyRoutine, PsSetCreateThreadNotifyRoutine, and PsSetLoadImageNotifyRoutine that allow security drivers to receive notifications whenever a process is created, a thread is spawned, or an executable image is loaded into memory. 
+                    <strong>A) Kernel-mode callbacks:</strong> On Windows, Microsoft provides mechanisms like the PsSetCreateProcessNotifyRoutine, PsSetCreateThreadNotifyRoutine, and PsSetLoadImageNotifyRoutine that allow security drivers to receive notifications whenever a process is created, a thread is spawned, or an executable image is loaded into memory. 
                     An EDR driver running at kernel privilege can register these callbacks, see that notepad.exe is loading a malicious DLL into another process, and terminate or quarantine on the spot.
                     <br>
-                    B) <strong>User-mode API hooking:</strong> EDR agents often inject a small DLL into every running process. That DLL intercepts calls to key APIs (OpenProcess, VirtualAlloc, WriteProcessMemory, etc.) by patching the first few bytes of the function known as "inline hooking" or by manipulating the Import Address Table (IAT). 
+                    <strong>B) User-mode API hooking:</strong> EDR agents often inject a small DLL into every running process. That DLL intercepts calls to key APIs (OpenProcess, VirtualAlloc, WriteProcessMemory, etc.) by patching the first few bytes of the function known as "inline hooking" or by manipulating the Import Address Table (IAT). 
                     When the hooked function is called, the EDR’s code gets control first, can log the parameters, and even block the call if it looks malicious.
                 </p><br>
                 <li><strong>Real-Time File and Registry Monitoring: </strong></li>
                 <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-9">
-                    A) <strong>File system filter drivers:</strong> An EDR can install a kernel-mode filter that sees every call to CreateFile, WriteFile, or DeleteFile. If a process starts modifying thousands of Office documents within 30 seconds, the system recognizes a sudden mass-encryption pattern and can halt the process.
+                    <strong>A) File system filter drivers:</strong> An EDR can install a kernel-mode filter that sees every call to CreateFile, WriteFile, or DeleteFile. If a process starts modifying thousands of Office documents within 30 seconds, the system recognizes a sudden mass-encryption pattern and can halt the process.
                     <br>
-                    B) <strong>Registry callbacks:</strong> Using PsSetCreateProcessNotifyRoutineEx and other callback routines, an EDR watches registry access. If a process writes to HKLM\Software\Microsoft\Windows\CurrentVersion\Run, attempting to persist on reboot, it might be trying to create a malicious autorun entry. The EDR can stop or flag that behavior.
+                    <strong>B) Registry callbacks:</strong> Using PsSetCreateProcessNotifyRoutineEx and other callback routines, an EDR watches registry access. If a process writes to HKLM\Software\Microsoft\Windows\CurrentVersion\Run, attempting to persist on reboot, it might be trying to create a malicious autorun entry. The EDR can stop or flag that behavior.
                 </p>
             </ul>
                 <br><span class="font-bold pl-9">Strengths and Limitations: </span>
