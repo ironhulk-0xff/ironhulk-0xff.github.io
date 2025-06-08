@@ -92,49 +92,6 @@
                 <li><strong>Requires expert tuning:</strong> The folks designing these rules need deep knowledge of Windows internals, common malware patterns, and the behaviors of legitimate software, so they don’t accidentally trash useful applications.</li>
             </ul>
         <div class="mt-6"></div>
-        <h2 class="text-2xl font-bold text-blue-400 mb-1 pl-2">3. Behavior-Based and Behavioral Monitoring</h2>
-        <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-9">
-            While heuristics focus on static clues inside a file before it runs, behavior-based detection watches what actually happens when a program executes. The AV/EDR hooks into various operating system functions such as kernel callbacks, user-mode API interceptions, or event tracing to observe actions like file creation, 
-            registry modifications, process injection, or network connections. If a process starts encrypting every “.docx” file it finds (classic ransomware behavior) or injects code into system processes, the EDR flags and quarantines it.
-        </p>
-        <div class="mt-6"></div>
-        <p class="font-bold pl-9">Deep Dive into the Mechanics:</p>
-        <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-9">
-            Picture a security guard watching CCTV footage in real-time. They don’t care if the intruder is wearing a disguise (packed or obfuscated code), because the guard can see that the person is breaking into the server room (e.g., encrypting user data).
-        </p>
-        <div class="mt-6"></div>
-        <p class="font-bold pl-9">Behavior-based detection is similar in principle:</p>
-        <ul class="list-disc list-outside pl-14 text-gray-300">
-            <li><strong>OS-Level Hooks: </strong></li>
-                <ol class="list-[upper-alpha] list-outside pl-4 text-gray-300 text-1xl leading-relaxed text-justify">
-                    <li><strong>Kernel-mode callbacks:</strong> 
-                        On Windows, functions such as <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">PsSetCreateProcessNotifyRoutine</code>, <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">PsSetCreateThreadNotifyRoutine</code>, and <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">PsSetLoadImageNotifyRoutine</code> let a security driver receive events
-                        when a process starts, a thread spawns, or an image loads. An EDR running in kernel mode can kill or quarantine the offender immediately.
-                    </li>
-                    <li><strong>User-mode API hooking:</strong>
-                        The agent injects a small DLL into every process and patches the prologue of APIs like <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">OpenProcess</code>, <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">VirtualAlloc</code>, <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">WriteProcessMemory</code>, or uses <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">IAT</code> rewriting. The hook logs or blocks
-                        the call if parameters look malicious.
-                    </li>
-                </ol>
-                <div class="mt-6"></div>
-            <li><strong>Real-Time File and Registry Monitoring: </strong></li>
-                <ol class="list-[upper-alpha] list-outside pl-4 text-gray-300 text-1xl leading-relaxed text-justify">
-                    <li><strong>File system filter drivers:</strong> 
-                        An EDR can install a kernel-mode filter that sees every call to <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">CreateFile</code>, <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">WriteFile</code>, or <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">DeleteFile</code>. If a process starts modifying thousands of Office documents within 30 seconds, the system recognizes a sudden mass-encryption pattern and can halt the process.
-                    </li>
-                    <li><strong>Registry callbacks:</strong>
-                        Using <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">PsSetCreateProcessNotifyRoutineEx</code> and other callback routines, an EDR watches registry access. If a process writes to <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">HKLM\Software\Microsoft\Windows\CurrentVersion\Run</code>, attempting to persist on reboot, it might be trying to create a malicious autorun entry. The EDR can stop or flag that behavior.
-                    </li>
-                </ol>
-        </ul>
-        <div class="mt-6"></div>
-        <p class="font-bold pl-9">Strengths and Limitations: </p>
-        <ul class="list-disc list-outside pl-14 text-justify text-gray-300">
-            <li><strong>Accuracy:</strong> Watching real behavior reduces false positives, if a user is legitimately editing a document, that’s far different from a hidden service encrypting dozens of files.</li>
-            <li><strong>Late-stage detection:</strong> Because the AV/EDR only flags things when code actually runs, there is still a small window where the malware can begin its damage (e.g., delete backups, exfiltrate data) before being stopped.</li>
-            <li><strong>Performance overhead:</strong> Kernel callbacks, file filters, and API hooks add latency to every system call. Good EDR vendors optimize heavily, but if you install two memory scanners or multiple hooking products, you can see noticeable slowdowns.</li>
-            <li><strong>Complexity of evasion:</strong> Advanced attackers sometimes use “living off the land” techniques, utilizing legitimate system utilities like PowerShell or WMI to do malicious work, thereby blending into normal behavior. Detecting these threats requires more sophisticated logic such as “Anomaly-Based Detection” and “Machine Learning”.</li>
-        </ul>
         
     </section>
   </main>
