@@ -134,7 +134,6 @@
                 <li><strong>Performance overhead:</strong> Kernel callbacks, file filters, and API hooks add latency to every system call. Good EDR vendors optimize heavily, but if you install two memory scanners or multiple hooking products, you can see noticeable slowdowns.</li>
                 <li><strong>Complexity of evasion:</strong> Advanced attackers sometimes use “living off the land” techniques, utilizing legitimate system utilities like PowerShell or WMI to do malicious work, thereby blending into normal behavior. Detecting these threats requires more sophisticated logic such as “Anomaly-Based Detection” and “Machine Learning”.</li>
             </ul>
-        </p>
         <div class="mt-6"></div>
         <h2 class="text-2xl font-bold text-blue-400 mb-1 pl-2">4. Anomaly-Based Detection (Statistical and Behavioral Analytics)</h2>
         <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-9">
@@ -170,7 +169,7 @@
                 <li><strong>Complex to tune:</strong> Building a reliable baseline across a diverse environment is challenging. Some departments legitimately run memory-intensive applications or have high network usage; others don’t. A one-size-fits-all anomaly threshold results in noise.</li>
                 <li><strong>Explainability challenges:</strong> Security teams need to know why a particular process was flagged. Some machine learning models are “black boxes,” making it hard to justify why exactly a certain behavior is suspicious. Newer research in explainable AI (XAI) is helping, but it’s still an area in flux.</li>
             </ul>
-        </p>
+
         <div class="mt-6"></div>
         <h2 class="text-2xl font-bold text-blue-400 mb-1 pl-2">5. Sandboxing and Dynamic Analysis</h2>
         <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-9">
@@ -210,7 +209,6 @@
                 <li><strong>Scalability challenges:</strong> Running thousands of VMs or CPU emulations demands massive infrastructure. Cloud-based sandboxes try to parallelize widely, but a very complex malware might delay its malicious logic for hours or check for virtualization artifacts (e.g., unusual device names).</li>
                 <li><strong>Evasion by anti-sandbox techniques:</strong> Malware may detect that it’s inside a VM (by checking for VMware tools processes, looking at CPU timing discrepancies, or trying to communicate with a nonexistent router). If detected, it might abort execution or behave benignly to slip through the analysis phase.</li>
             </ul>
-        </p>
         <div class="mt-6"></div>
     </section>
   </main>
