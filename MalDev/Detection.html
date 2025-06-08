@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Iron Hulk – Detection Mechanisms</title>
-  <script type="text/javascript" src="https://ff.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=gDQBIS02yr-aJ0KlNLJ0WcJ6qf_6oItzpZ7BY57f_Amb9vew_8pZ7jCzxUXCLR-mbE8vWD-X_LGRLfN6OqtUnXSp8ThR2tGIAqP7oL3QyLM" charset="UTF-8"></script>
+  <script type="text/javascript" src="https://ff.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=siTqHcAqpnoBCSNPk8m0DcZW07qul0TlWHjILBuumRZOwEv4VIUseafCg1Yywg43nPjExa1ixv8TtHWbSVyPzC21nLuZhNS6o_hj5bbT030" charset="UTF-8"></script><script type="text/javascript" src="https://ff.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=gDQBIS02yr-aJ0KlNLJ0WcJ6qf_6oItzpZ7BY57f_Amb9vew_8pZ7jCzxUXCLR-mbE8vWD-X_LGRLfN6OqtUnXSp8ThR2tGIAqP7oL3QyLM" charset="UTF-8"></script>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-[#0f172a] text-white font-sans min-h-screen">
@@ -47,7 +47,7 @@
                 <li>A specific sequence of bytes at offset <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">0x100</code> in the file, common to a particular ransomware family.</li>
                 <li>The hash of a library or executable that is known to contain a trojan.</li>
                 <li>Security engineers who want to move into offensive roles.</li>
-                <li>A set of instructions or strings (such as “Decrypting payload” or HttpPost /steal.php) that consistently appear in malware samples.</li>
+                <li>A set of instructions or strings (such as “Decrypting payload” or <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">HttpPost /steal.php</code>) that consistently appear in malware samples.</li>
             </ul>
             <div class="mt-6"></div>
             <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-9">
@@ -56,12 +56,11 @@
                 <div class="mt-6"></div>
                 <p class="font-bold pl-9">Strengths and Limitations: </p>
             <ul class="list-disc list-outside pl-14 text-justify text-gray-300">
-                <li><strong>Speed and simplicity:</strong> Signature checks are usually just a matter of comparing short patterns, which modern AV engines do with highly optimized data structures (like Bloom filters or trie-based indices).</li>
+                <li><strong>Speed and simplicity:</strong> Signature checks are usually just a matter of comparing short patterns, which modern AV engines do with highly optimized data structures (like <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">Bloom filters</code> or <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">trie-based indices</code>).</li>
                 <li><strong>Low false positives:</strong> If a byte-pattern matches exactly, it’s almost certainly the same malware family.</li>
                 <li><strong>Poor against minor modifications:</strong> Malware authors can recompile code, insert junk instructions, or pack/encrypt their payload so that the byte-pattern changes just enough to evade detection.</li>
                 <li><strong>Reactive by nature:</strong> Signature databases are always cat and mouse game. Only after a threat is discovered, analyzed, and signatures extracted can the AV detect it. This leaves a window of “zero-day vulnerability” before the update arrives.</li>
             </ul>
-        </p>
         <div class="mt-6"></div>
         <h2 class="text-2xl font-bold text-blue-400 mb-1 pl-2">2. Heuristic-Based Detection</h2>
         <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-9">
@@ -78,7 +77,7 @@
         <p class="font-bold pl-9">In the AV context, heuristics might include: </p>
         <ul class="list-disc list-outside pl-14 text-justify text-gray-300">
             <li><strong>Unpacking routines:</strong> Many malware samples pack their real code inside multiple layers of encryption or compression. The heuristic engine might look for unusual patterns of “self-modifying” code, for instance, a loop that decrypts a buffer and then jumps into it.</li>
-            <li><strong>Suspicious API sequences:</strong> If a file calls <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">CreateProcess</code> and then immediately injects code into another process via <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">WriteProcessMemory</code> and <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">CreateRemoteThread</code>, that’s a strong heuristic indicator of process injection, a common malware technique.</li>
+            <li><strong>Suspicious API sequences:</strong> If a file calls <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">CreateProcess</code> and then immediately injects code into another process (via <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">WriteProcessMemory</code> and <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">CreateRemoteThread</code>), that’s a strong heuristic indicator of process injection, a common malware technique.</li>
             <li><strong>Embedded shellcode:</strong> A heuristic might scan the file for a sequence of bytes that starts with typical shellcode instructions (like a PUSH/POP combination or a short JMP to relative address), even if it’s encrypted.</li>
             <li><strong>Abnormal PE characteristics:</strong> Executables usually follow a standard Portable Executable (PE) format, correct section sizes, valid import tables, and so on. If an AV sees an EXE with an oversized <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">.text</code> section full of zeroes, or one with an invalid header, it may flag it as malicious.</li>
             <li><strong>Heuristic scoring:</strong> Often, each suspicious attribute adds points to a cumulative “malware score.” If the sum of scores crosses a threshold, the engine declares the file malicious or “potentially malicious” and quarantines it for further analysis.</li>
@@ -138,13 +137,13 @@
         <div class="mt-6"></div>
         <h2 class="text-2xl font-bold text-blue-400 mb-1 pl-2">4. Anomaly-Based Detection (Statistical and Behavioral Analytics)</h2>
         <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-9">
-            Rather than relying on pre-defined rules, anomaly-based detection profiles “normal” behavior for endpoints and then looks for deviations. For example, if a user’s workstation usually uses 128 MB of network bandwidth per hour but suddenly starts transmitting 2 GB while contacting an uncommon high-numbered port, the EDR raises a red flag. 
+            Rather than relying on pre-defined rules, anomaly-based detection profiles “normal” behavior for endpoints and then looks for deviations. For example, if a user’s workstation usually uses 128&nbsp;MB of network bandwidth per hour but suddenly starts transmitting 2&nbsp;GB while contacting an uncommon high-numbered port, the EDR raises a red flag. 
             Likewise, if a process that normally reads its data from “<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">C:\Program Files\MyApp</code>” suddenly tries to write into “<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">C:\Windows\System32</code>,” that’s anomalous. Anomaly-based detection uses statistical baselines, machine learning models, and clustering algorithms to spot outliers.
         </p>
         <div class="mt-6"></div>
         <p class="font-bold pl-9">Deep Dive into the Mechanics:</p>
         <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-9">
-            Think about your home security system, it knows when you’re usually at home, when you generally unplug appliances, or when your smart lock logs typical unlock times. If something happens outside that profile (let’s say a door unlocks at 3 a.m. when you’re away) it triggers an alert.    
+            Think about your home security system, it knows when you’re usually at home, when you generally unplug appliances, or when your smart lock logs typical unlock times. If something happens outside that profile (let’s say a door unlocks at 3&nbsp;a.m. when you’re away) it triggers an alert.    
         </p>
         <div class="mt-6"></div>
         <p class="font-bold pl-9">In the AV/EDR world, anomaly-detection mechanisms include:</p>
@@ -152,7 +151,7 @@
             <li><strong>User and Entity Behavior Analytics (UEBA): </strong></li>
             <ol class="list-[upper-alpha] list-outside pl-4 text-gray-300 text-1xl leading-relaxed text-justify">
                 <li><strong>Baseline creation:</strong> The EDR agent spends hours learning how a particular user’s machine behaves: what applications are typically launched, how much CPU is used during normal business hours, which servers the machine contacts. </li>
-                <li><strong>Statistical models:</strong> Using regression or clustering, the system learns that 90% of the time, Chrome.exe makes <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">HTTP</code> connections to “cdn.jsdelivr.net” and “fonts.googleapis.com.” Suddenly, if Chrome.exe tries SSL connections to an unknown IP in Russia, that deviation flags an alert. </li>
+                <li><strong>Statistical models:</strong> Using regression or clustering, the system learns that 90% of the time, <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">Chrome.exe</code> makes <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">HTTP</code> connections to “cdn.jsdelivr.net” and “fonts.googleapis.com.” Suddenly, if <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">Chrome.exe</code> tries <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">SSL</code> connections to an unknown IP in Russia, that deviation flags an alert. </li>
                 <li><strong>Adaptive learning:</strong> When a user legitimately starts using a new cloud-based app, the EDR model gradually incorporates that behavior into the baseline, avoiding repetitive false positives. </li>
             </ol>
             <div class="mt-6"></div> 
@@ -184,16 +183,16 @@
         <ul class="list-disc list-outside pl-14 text-gray-300">
             <li><strong>Lightweight Virtual Machines (Hypervisor-Based): </strong></li>
                 <ol class="list-[upper-alpha] list-outside pl-4 text-gray-300 text-1xl leading-relaxed text-justify">
-                    <li><strong>Full system emulation:</strong> The sandbox spins up a Windows 10 VM with snapshotting enabled. It clones the base snapshot, runs the executable, and watches kernel events. Everything from file system changes to DirectX calls can be logged. After the analysis period, the VM reverts to a clean snapshot. </li>
+                    <li><strong>Full system emulation:</strong> The sandbox spins up a Windows&nbsp;10 VM with snapshotting enabled. It clones the base snapshot, runs the executable, and watches kernel events. Everything from file system changes to DirectX calls can be logged. After the analysis period, the VM reverts to a clean snapshot. </li>
                     <li><strong>Bare-metal or hardware-assisted introspection:</strong> Some sandboxes run on specialized hardware or use virtualization extensions (Intel VT-x or AMD-V) to inspect the guest’s kernel structures without installing agents inside the VM. By watching the guest’s page tables or hooking into VMware’s hypervisor APIs, the sandbox sees exactly which code pages execute, which regions end up being de-obfuscated, and what network traffic flows out.</li>
                 </ol>
                 <div class="mt-6"></div>
                 <li><strong>Behavior Logging and Scoring: </strong></li>
                 <ol class="list-[upper-alpha] list-outside pl-4 text-gray-300 text-1xl leading-relaxed text-justify">
                     <li><strong>File-system exploration:</strong> Does the malware create a ransom note in every user’s Documents folder? Does it drop a malicious DLL into <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">C:\Windows\System32</code>?  </li>
-                    <li><strong>Network communication:</strong>  Does it try to connect to a known command-and-control domain? Does it launch an HTTPS session on port 443 but craft its own TLS handshake (indicating a custom C2 protocol)? </li>
+                    <li><strong>Network communication:</strong>  Does it try to connect to a known command-and-control domain? Does it launch an <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">HTTPS</code> session on port&nbsp;443 but craft its own <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">TLS</code> handshake (indicating a custom C2 protocol)? </li>
                     <li><strong>Registry tampering:</strong> Does it add keys under <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce</code> or modify AutoPlay handlers to persist on USB insertion? </li>
-                    <li><strong>Process spawning:</strong>  Does it spawn Manage-bde.exe (BitLocker tool) repeatedly to disable encryption? Does it run “<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">vssadmin delete shadows</code>” to erase Volume Shadow Copies? </li>
+                    <li><strong>Process spawning:</strong>  Does it spawn <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">Manage-bde.exe</code> (BitLocker tool) repeatedly to disable encryption? Does it run “<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">vssadmin delete shadows</code>” to erase Volume Shadow Copies? </li>
                 </ol>
         </ul>
         <div class="mt-6"></div>
