@@ -38,14 +38,14 @@
         <p class="font-bold pl-9">Deep Dive into the Mechanics:</p>
         <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-9">
             Imagine you have a phonebook of criminals, each entry lists a name, a photo, and some identifying characteristics. Whenever someone new shows up, you flip through this phonebook to see if the face or name matches.
-            Signature-based AV does something similar, except instead of mugshots, it looks for byte-patterns or cryptographic hashes (e.g., <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">MD5</code>, <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">SHA-256</code>) that uniquely identify a malicious file.
+            Signature-based AV does something similar, except instead of mugshots, it looks for byte-patterns or cryptographic hashes (e.g., <code class="bg-[#334155] text-blue-300 rounded px-1">MD5</code>, <code class="bg-[#334155] text-blue-300 rounded px-1">SHA-256</code>) that uniquely identify a malicious file.
             <br><br>
             <p class="font-bold pl-9">These patterns might be: </p>
             <ul class="list-disc list-outside pl-14 text-gray-300">
-                <li>A specific sequence of bytes at offset <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">0x100</code> in the file, common to a particular ransomware family.</li>
+                <li>A specific sequence of bytes at offset <code class="bg-[#334155] text-blue-300 rounded px-1">0x100</code> in the file, common to a particular ransomware family.</li>
                 <li>The hash of a library or executable that is known to contain a trojan.</li>
                 <li>Security engineers who want to move into offensive roles.</li>
-                <li>A set of instructions or strings (such as “Decrypting payload” or <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">HttpPost /steal.php</code>) that consistently appear in malware samples.</li>
+                <li>A set of instructions or strings (such as “Decrypting payload” or <code class="bg-[#334155] text-blue-300 rounded px-1">HttpPost /steal.php</code>) that consistently appear in malware samples.</li>
             </ul><br>
             <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-9">
                 When the AV vendor discovers a new piece of malware, lets say a banking trojan, they analyze it, extract several reliable byte-patterns, and push those patterns out in the next signature update. 
@@ -53,7 +53,7 @@
                 <br><br>
             <p class="font-bold pl-9">Strengths and Limitations: </p>
             <ul class="list-disc list-outside pl-14 text-justify text-gray-300">
-                <li><strong>Speed and simplicity:</strong> Signature checks are usually just a matter of comparing short patterns, which modern AV engines do with highly optimized data structures (like <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">Bloom filters</code> or <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">trie-based indices</code>).</li>
+                <li><strong>Speed and simplicity:</strong> Signature checks are usually just a matter of comparing short patterns, which modern AV engines do with highly optimized data structures (like <code class="bg-[#334155] text-blue-300 rounded px-1">Bloom filters</code> or <code class="bg-[#334155] text-blue-300 rounded px-1">trie-based indices</code>).</li>
                 <li><strong>Low false positives:</strong> If a byte-pattern matches exactly, it’s almost certainly the same malware family.</li>
                 <li><strong>Poor against minor modifications:</strong> Malware authors can recompile code, insert junk instructions, or pack/encrypt their payload so that the byte-pattern changes just enough to evade detection.</li>
                 <li><strong>Reactive by nature:</strong> Signature databases are always cat and mouse game. Only after a threat is discovered, analyzed, and signatures extracted can the AV detect it. This leaves a window of “zero-day vulnerability” before the update arrives.</li>
@@ -62,7 +62,7 @@
         <h2 class="text-2xl font-bold text-blue-400 mb-1 pl-2">2. Heuristic-Based Detection</h2>
         <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-9">
             To catch threats that don’t yet have a signature, AV vendors introduced heuristics, rules that look for suspicious characteristics inside a file, rather than an exact byte match.
-            These heuristics often involve scanning for “red flags” like encoded or obfuscated code, calls to low-level system functions that typically appear in malware (e.g., <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">VirtualAlloc</code>, <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">CreateRemoteThread</code>), 
+            These heuristics often involve scanning for “red flags” like encoded or obfuscated code, calls to low-level system functions that typically appear in malware (e.g., <code class="bg-[#334155] text-blue-300 rounded px-1">VirtualAlloc</code>, <code class="bg-[#334155] text-blue-300 rounded px-1">CreateRemoteThread</code>), 
             or even suspicious combinations of API calls. Rather than saying “this file is exactly the same as TrojanXYZ,” a heuristic-based engine might say “this file behaves a lot like ransomware because it encrypts files and then writes a ransom note.”
         </p><br>
         <p class="font-bold pl-9">Deep Dive into the Mechanics:</p>
@@ -72,15 +72,15 @@
             <p class="font-bold pl-9">In the AV context, heuristics might include: </p>
             <ul class="list-disc list-outside pl-14 text-justify text-gray-300">
                 <li><strong>Unpacking routines:</strong> Many malware samples pack their real code inside multiple layers of encryption or compression. The heuristic engine might look for unusual patterns of “self-modifying” code, for instance, a loop that decrypts a buffer and then jumps into it.</li>
-                <li><strong>Suspicious API sequences:</strong> If a file calls <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">CreateProcess</code> and then immediately injects code into another process (via <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">WriteProcessMemory</code> and <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">CreateRemoteThread</code>), that’s a strong heuristic indicator of process injection, a common malware technique.</li>
+                <li><strong>Suspicious API sequences:</strong> If a file calls <code class="bg-[#334155] text-blue-300 rounded px-1">CreateProcess</code> and then immediately injects code into another process (via <code class="bg-[#334155] text-blue-300 rounded px-1">WriteProcessMemory</code> and <code class="bg-[#334155] text-blue-300 rounded px-1">CreateRemoteThread</code>), that’s a strong heuristic indicator of process injection, a common malware technique.</li>
                 <li><strong>Embedded shellcode:</strong> A heuristic might scan the file for a sequence of bytes that starts with typical shellcode instructions (like a PUSH/POP combination or a short JMP to relative address), even if it’s encrypted.</li>
-                <li><strong>Abnormal PE characteristics:</strong> Executables usually follow a standard Portable Executable (PE) format, correct section sizes, valid import tables, and so on. If an AV sees an EXE with an oversized <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">.text</code> section full of zeroes, or one with an invalid header, it may flag it as malicious.</li>
+                <li><strong>Abnormal PE characteristics:</strong> Executables usually follow a standard Portable Executable (PE) format, correct section sizes, valid import tables, and so on. If an AV sees an EXE with an oversized <code class="bg-[#334155] text-blue-300 rounded px-1">.text</code> section full of zeroes, or one with an invalid header, it may flag it as malicious.</li>
                 <li><strong>Heuristic scoring:</strong> Often, each suspicious attribute adds points to a cumulative “malware score.” If the sum of scores crosses a threshold, the engine declares the file malicious or “potentially malicious” and quarantines it for further analysis.</li>
             </ul>
                 <br><p class="font-bold pl-9">Strengths and Limitations: </p>
             <ul class="list-disc list-outside pl-14 text-justify text-gray-300">
                 <li><strong>Spots new versions of malware:</strong> By focusing on behavior indicators and code structures, heuristics can detect malware families that have changed just enough to evade signatures.</li>
-                <li><strong>Higher false-positive risk:</strong> Because heuristics are based on general behaviors (e.g., “calls <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">VirtualAlloc</code> then writes to memory”), benign software that packs itself (like some legitimate installers) or debuggers that perform in-memory patching might trip the heuristics.</li>
+                <li><strong>Higher false-positive risk:</strong> Because heuristics are based on general behaviors (e.g., “calls <code class="bg-[#334155] text-blue-300 rounded px-1">VirtualAlloc</code> then writes to memory”), benign software that packs itself (like some legitimate installers) or debuggers that perform in-memory patching might trip the heuristics.</li>
                 <li><strong>Tunable thresholds:</strong> AV vendors calibrate heuristic thresholds carefully, if they’re too strict, many harmless programs get flagged; if too lenient, malware slips through.</li>
                 <li><strong>Requires expert tuning:</strong> The folks designing these rules need deep knowledge of Windows internals, common malware patterns, and the behaviors of legitimate software, so they don’t accidentally trash useful applications.</li>
             </ul>
@@ -99,21 +99,21 @@
                 <li><strong>OS-Level Hooks: </strong></li>
                     <ol class="list-[upper-alpha] list-outside pl-4 text-gray-300 text-1xl leading-relaxed text-justify">
                         <li><strong>Kernel-mode callbacks:</strong> 
-                            On Windows, functions such as <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">PsSetCreateProcessNotifyRoutine</code>, <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">PsSetCreateThreadNotifyRoutine</code>, and <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">PsSetLoadImageNotifyRoutine</code> let a security driver receive events
+                            On Windows, functions such as <code class="bg-[#334155] text-blue-300 rounded px-1">PsSetCreateProcessNotifyRoutine</code>, <code class="bg-[#334155] text-blue-300 rounded px-1">PsSetCreateThreadNotifyRoutine</code>, and <code class="bg-[#334155] text-blue-300 rounded px-1">PsSetLoadImageNotifyRoutine</code> let a security driver receive events
                             when a process starts, a thread spawns, or an image loads. An EDR running in kernel mode can kill or quarantine the offender immediately.
                         </li>
                         <li><strong>User-mode API hooking:</strong>
-                            The agent injects a small DLL into every process and patches the prologue of APIs like <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">OpenProcess</code>, <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">VirtualAlloc</code>, <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">WriteProcessMemory</code>, or uses <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">IAT</code> rewriting. The hook logs or blocks
+                            The agent injects a small DLL into every process and patches the prologue of APIs like <code class="bg-[#334155] text-blue-300 rounded px-1">OpenProcess</code>, <code class="bg-[#334155] text-blue-300 rounded px-1">VirtualAlloc</code>, <code class="bg-[#334155] text-blue-300 rounded px-1">WriteProcessMemory</code>, or uses <code class="bg-[#334155] text-blue-300 rounded px-1">IAT</code> rewriting. The hook logs or blocks
                             the call if parameters look malicious.
                         </li>
                     </ol><br>
                 <li><strong>Real-Time File and Registry Monitoring: </strong></li>
                     <ol class="list-[upper-alpha] list-outside pl-4 text-gray-300 text-1xl leading-relaxed text-justify">
                         <li><strong>File system filter drivers:</strong> 
-                            An EDR can install a kernel-mode filter that sees every call to <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">CreateFile</code>, <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">WriteFile</code>, or <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">DeleteFile</code>. If a process starts modifying thousands of Office documents within 30 seconds, the system recognizes a sudden mass-encryption pattern and can halt the process.
+                            An EDR can install a kernel-mode filter that sees every call to <code class="bg-[#334155] text-blue-300 rounded px-1">CreateFile</code>, <code class="bg-[#334155] text-blue-300 rounded px-1">WriteFile</code>, or <code class="bg-[#334155] text-blue-300 rounded px-1">DeleteFile</code>. If a process starts modifying thousands of Office documents within 30 seconds, the system recognizes a sudden mass-encryption pattern and can halt the process.
                         </li>
                         <li><strong>Registry callbacks:</strong>
-                            Using <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">PsSetCreateProcessNotifyRoutineEx</code> and other callback routines, an EDR watches registry access. If a process writes to <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">HKLM\Software\Microsoft\Windows\CurrentVersion\Run</code>, attempting to persist on reboot, it might be trying to create a malicious autorun entry. The EDR can stop or flag that behavior.
+                            Using <code class="bg-[#334155] text-blue-300 rounded px-1">PsSetCreateProcessNotifyRoutineEx</code> and other callback routines, an EDR watches registry access. If a process writes to <code class="bg-[#334155] text-blue-300 rounded px-1">HKLM\Software\Microsoft\Windows\CurrentVersion\Run</code>, attempting to persist on reboot, it might be trying to create a malicious autorun entry. The EDR can stop or flag that behavior.
                         </li>
                     </ol>
             </ul><br>
@@ -128,7 +128,7 @@
         <h2 class="text-2xl font-bold text-blue-400 mb-1 pl-2">4. Anomaly-Based Detection (Statistical and Behavioral Analytics)</h2>
         <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-9">
             Rather than relying on pre-defined rules, anomaly-based detection profiles “normal” behavior for endpoints and then looks for deviations. For example, if a user’s workstation usually uses 128&nbsp;MB of network bandwidth per hour but suddenly starts transmitting 2&nbsp;GB while contacting an uncommon high-numbered port, the EDR raises a red flag. 
-            Likewise, if a process that normally reads its data from “<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">C:\Program Files\MyApp</code>” suddenly tries to write into “<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">C:\Windows\System32</code>,” that’s anomalous. Anomaly-based detection uses statistical baselines, machine learning models, and clustering algorithms to spot outliers.
+            Likewise, if a process that normally reads its data from “<code class="bg-[#334155] text-blue-300 rounded px-1">C:\Program Files\MyApp</code>” suddenly tries to write into “<code class="bg-[#334155] text-blue-300 rounded px-1">C:\Windows\System32</code>,” that’s anomalous. Anomaly-based detection uses statistical baselines, machine learning models, and clustering algorithms to spot outliers.
         </p><br>
         <p class="font-bold pl-9">Deep Dive into the Mechanics:</p>
         <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-9">
@@ -139,14 +139,14 @@
                 <li><strong>User and Entity Behavior Analytics (UEBA): </strong></li>
                 <ol class="list-[upper-alpha] list-outside pl-4 text-gray-300 text-1xl leading-relaxed text-justify">
                     <li><strong>Baseline creation:</strong> The EDR agent spends hours learning how a particular user’s machine behaves: what applications are typically launched, how much CPU is used during normal business hours, which servers the machine contacts. </li>
-                    <li><strong>Statistical models:</strong> Using regression or clustering, the system learns that 90% of the time, <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">Chrome.exe</code> makes <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">HTTP</code> connections to “cdn.jsdelivr.net” and “fonts.googleapis.com.” Suddenly, if <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">Chrome.exe</code> tries <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">SSL</code> connections to an unknown IP in Russia, that deviation flags an alert. </li>
+                    <li><strong>Statistical models:</strong> Using regression or clustering, the system learns that 90% of the time, <code class="bg-[#334155] text-blue-300 rounded px-1">Chrome.exe</code> makes <code class="bg-[#334155] text-blue-300 rounded px-1">HTTP</code> connections to “cdn.jsdelivr.net” and “fonts.googleapis.com.” Suddenly, if <code class="bg-[#334155] text-blue-300 rounded px-1">Chrome.exe</code> tries <code class="bg-[#334155] text-blue-300 rounded px-1">SSL</code> connections to an unknown IP in Russia, that deviation flags an alert. </li>
                     <li><strong>Adaptive learning:</strong> When a user legitimately starts using a new cloud-based app, the EDR model gradually incorporates that behavior into the baseline, avoiding repetitive false positives. </li>
                 </ol><br> 
                 <li><strong>Process and Thread Anomalies: </strong></li>
                     <ol class="list-[upper-alpha] list-outside pl-4 text-gray-300 text-1xl leading-relaxed text-justify">
-                        <li><strong>Unexpected child processes:</strong> A common technique for some malware is to spawn “<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">cmd.exe /c regsvr32 /s malicious.dll </code>” If Word.exe (<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">winword.exe</code>) spawns <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">cmd.exe</code>, that’s unusual behavior. Word normally doesn’t launch a shell. The anomaly engine sees that “<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">winword.exe</code> → <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">cmd.exe</code>” spawning chain as a red flag. </li>
-                        <li><strong>Code injection patterns:</strong> If a non-privileged process calls <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">WriteProcessMemory</code> from <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">Notepad.exe</code> into <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">explorer.exe</code>, that’s statistically rare. A model trained on millions of normal interactions quickly flags it. </li>
-                        <li><strong>DLL load anomalies:</strong> If a system process like <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">svchost.exe</code> loads a suspicious DLL from “<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">C:\Users\Public\somefolder\evil.dll</code>” instead of “<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">C:\Windows\System32</code>,” the anomaly engine sees it as a major deviation. </li>
+                        <li><strong>Unexpected child processes:</strong> A common technique for some malware is to spawn “<code class="bg-[#334155] text-blue-300 rounded px-1">cmd.exe /c regsvr32 /s malicious.dll </code>” If Word.exe (<code class="bg-[#334155] text-blue-300 rounded px-1">winword.exe</code>) spawns <code class="bg-[#334155] text-blue-300 rounded px-1">cmd.exe</code>, that’s unusual behavior. Word normally doesn’t launch a shell. The anomaly engine sees that “<code class="bg-[#334155] text-blue-300 rounded px-1">winword.exe</code> → <code class="bg-[#334155] text-blue-300 rounded px-1">cmd.exe</code>” spawning chain as a red flag. </li>
+                        <li><strong>Code injection patterns:</strong> If a non-privileged process calls <code class="bg-[#334155] text-blue-300 rounded px-1">WriteProcessMemory</code> from <code class="bg-[#334155] text-blue-300 rounded px-1">Notepad.exe</code> into <code class="bg-[#334155] text-blue-300 rounded px-1">explorer.exe</code>, that’s statistically rare. A model trained on millions of normal interactions quickly flags it. </li>
+                        <li><strong>DLL load anomalies:</strong> If a system process like <code class="bg-[#334155] text-blue-300 rounded px-1">svchost.exe</code> loads a suspicious DLL from “<code class="bg-[#334155] text-blue-300 rounded px-1">C:\Users\Public\somefolder\evil.dll</code>” instead of “<code class="bg-[#334155] text-blue-300 rounded px-1">C:\Windows\System32</code>,” the anomaly engine sees it as a major deviation. </li>
                     </ol><br>
             </ul>
             <p class="font-bold pl-9">Strengths and Limitations: </p>
@@ -174,10 +174,10 @@
                     </ol><br>
                     <li><strong>Behavior Logging and Scoring: </strong></li>
                     <ol class="list-[upper-alpha] list-outside pl-4 text-gray-300 text-1xl leading-relaxed text-justify">
-                        <li><strong>File-system exploration:</strong> Does the malware create a ransom note in every user’s Documents folder? Does it drop a malicious DLL into <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">C:\Windows\System32</code>?  </li>
-                        <li><strong>Network communication:</strong>  Does it try to connect to a known command-and-control domain? Does it launch an <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">HTTPS</code> session on port&nbsp;443 but craft its own <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">TLS</code> handshake (indicating a custom C2 protocol)? </li>
-                        <li><strong>Registry tampering:</strong> Does it add keys under <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce</code> or modify AutoPlay handlers to persist on USB insertion? </li>
-                        <li><strong>Process spawning:</strong>  Does it spawn <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">Manage-bde.exe</code> (BitLocker tool) repeatedly to disable encryption? Does it run “<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-break-spaces">vssadmin delete shadows</code>” to erase Volume Shadow Copies? </li>
+                        <li><strong>File-system exploration:</strong> Does the malware create a ransom note in every user’s Documents folder? Does it drop a malicious DLL into <code class="bg-[#334155] text-blue-300 rounded px-1">C:\Windows\System32</code>?  </li>
+                        <li><strong>Network communication:</strong>  Does it try to connect to a known command-and-control domain? Does it launch an <code class="bg-[#334155] text-blue-300 rounded px-1">HTTPS</code> session on port&nbsp;443 but craft its own <code class="bg-[#334155] text-blue-300 rounded px-1">TLS</code> handshake (indicating a custom C2 protocol)? </li>
+                        <li><strong>Registry tampering:</strong> Does it add keys under <code class="bg-[#334155] text-blue-300 rounded px-1">HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce</code> or modify AutoPlay handlers to persist on USB insertion? </li>
+                        <li><strong>Process spawning:</strong>  Does it spawn <code class="bg-[#334155] text-blue-300 rounded px-1">Manage-bde.exe</code> (BitLocker tool) repeatedly to disable encryption? Does it run “<code class="bg-[#334155] text-blue-300 rounded px-1">vssadmin delete shadows</code>” to erase Volume Shadow Copies? </li>
                     </ol>
             </ul><br>
             <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-9">
@@ -192,6 +192,26 @@
         </p><br>
     </section>
   </main>
+  <style>
+    code 
+    {
+      word-break: break-word;
+      white-space: break-spaces;
+    }
+  
+    pre, code 
+    {
+      overflow-wrap: anywhere;
+    }
+  
+    @media (max-width: 640px) 
+    {
+      .text-justify 
+      {
+        text-align: left; /* mobile-safe readability */
+      }
+    }
+  </style>
   
   <!-- Footer -->
   <footer class="flex items-center justify-center py-6">
