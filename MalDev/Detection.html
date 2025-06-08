@@ -40,7 +40,7 @@
             Imagine you have a phonebook of criminals, each entry lists a name, a photo, and some identifying characteristics. Whenever someone new shows up, you flip through this phonebook to see if the face or name matches.
             Signature-based AV does something similar, except instead of mugshots, it looks for byte-patterns or cryptographic hashes (e.g., <code class="bg-[#334155] text-blue-300 rounded px-1">MD5</code>, <code class="bg-[#334155] text-blue-300 rounded px-1">SHA-256</code>) that uniquely identify a malicious file.
             <br><br>
-            <p class="font-bold">These patterns might be: </p>
+            <p class="font-bold pl-9">These patterns might be: </p>
             <ul class="list-disc list-outside pl-14 text-gray-300">
                 <li>A specific sequence of bytes at offset <code class="bg-[#334155] text-blue-300 rounded px-1">0x100</code> in the file, common to a particular ransomware family.</li>
                 <li>The hash of a library or executable that is known to contain a trojan.</li>
@@ -50,7 +50,8 @@
             <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-9">
                 When the AV vendor discovers a new piece of malware, lets say a banking trojan, they analyze it, extract several reliable byte-patterns, and push those patterns out in the next signature update. 
                 Your AV, upon receiving the update, knows to look for those patterns on disk or in memory. If it finds them, it can immediately flag the file as malicious.
-                <br><br><p class="font-bold">Strengths and Limitations: </p>
+                <br><br>
+            <p class="font-bold pl-9">Strengths and Limitations: </p>
             <ul class="list-disc list-outside pl-14 text-justify text-gray-300">
                 <li><strong>Speed and simplicity:</strong> Signature checks are usually just a matter of comparing short patterns, which modern AV engines do with highly optimized data structures (like <code class="bg-[#334155] text-blue-300 rounded px-1">Bloom filters</code> or <code class="bg-[#334155] text-blue-300 rounded px-1">trie-based indices</code>).</li>
                 <li><strong>Low false positives:</strong> If a byte-pattern matches exactly, it’s almost certainly the same malware family.</li>
