@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iron Hulk - PEB</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#0f172a] text-white font-sans min-h-screen">
+    <!-- Header -->
+    <header class="bg-[#1e293b] p-4 shadow flex items-center justify-between gap-4">
+        <div>
+            <h1 class="text-xl font-bold text-blue-400">Process Environment Block</h1>
+            <small id="reading-time" class="text-xs text-gray-400"></small>
+        </div>
+        <a href="../index.html" class="text-gray-300 text-sm hover:underline">← Back to Dashboard</a>
+    </header>
+
+    <!-- Article -->
+    <main id="article" class="p-6 space-y-6">
+        <section class="bg-[#1f2937] p-6 rounded-xl shadow-md">
+            <h2 class="text-2xl font-bold text-blue-400 mb-1">Introduction</h2>
+            <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-2">
+                Imagine you’ve just launched Notepad or your own custom program. Before the first line of your code (main() or WinMain()) runs, Windows has already set up a small “control panel” behind the 
+                scenes, a chunk of memory known as the Process Environment Block, or PEB. Every single process on a Windows system has its own PEB, and it lives in the process’s user-mode memory so that code 
+                inside the process can inspect (and, in many cases, modify) its own PEB without calling any Windows API functions.
+                <br><span class="font-bold">These patterns might be: </span>
+                <ul class="list-disc list-inside pl-4 text-gray-300">
+                    <li><strong>Startup parameters:</strong> like the exact command line and environment variables the process began with.</li>
+                    <li><strong>Loader data(Ldr):</strong> a linked list of all loaded modules (the EXE plus any DLLs).</li>
+                    <li><strong>Debugging flags:</strong> a single byte that says whether a debugger is attached.</li>
+                    <li><strong>Heap information:</strong> the pointer to the default heap that the process uses for its malloc/HeapAlloc calls.</li>
+                    <li><strong>Global flags:</strong> that tell if special debugging or heap-verification features are in effect.</li>
+                </ul>
+            </p>
+            <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-2">
+                Because malware authors want to avoid “noisy” API calls that security software can hook (for example, GetModuleHandle, IsDebuggerPresent, GetCommandLineW), they read these fields directly from the PEB.
+                And defenders, in turn, look for suspicious PEB reads or tampering as signs of stealthy malware.
+            </p><br>
+            <h2 class="text-2xl font-bold text-blue-400 mb-1 text-justify"> The PEB’s Core Fields and What They Do </h2>
+                <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-2">
+                    <strong>1. Reserved1[2] and Reserved2[1]:</strong> These first three bytes (Reserved1[2] plus Reserved2[1]) are simply padding. In a real 64-bit PEB, Windows uses those two bytes for internal flags we rarely inspect (things like “InheritedAddressSpace” or “ReadImageFileExecOptions”).<br>
+                    <strong class="text-1xl text-gray-300 leading-relaxed text-justify pl-5">Inside that:</strong>
+                </p>
+                <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-10">    
+                    <strong>1. InheritedAddressSpace:</strong> Indicates if the process inherited its address space from a parent process (common in debugger scenarios)..<br>
+                    <strong>2. ReadImageFileExecOptions:</strong> Flags whether image execution options (registry debuggers, compatibility settings) were processed.. <br>
+                </p><br>
+
+                <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-2">
+                    <strong>2. BeingDebugged (offset 0x002):</strong> A single byte set to 1 if the Windows loader or a debugging agent (like Visual Studio’s debugger) is attached to the process. Otherwise, it's 0.<br>
+                    <strong class="text-1xl text-gray-300 leading-relaxed text-justify pl-5">Why malware cares?</strong> Instead of calling the API function "IsDebuggerPresent" which an AV or EDR might hook, malware just peeks at ""PEB->BeingDebugged". If it sees 1, it can:
+                </p>
+                <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-10">    
+                    <strong>1. Stall or sleep:</strong> to frustrate the analyst.<br>
+                    <strong>2. Exit immediately:</strong> to avoid getting reverse engineered. <br>
+                    <strong>3. Flip into a “stealth” mode:</strong> to skip suspicious behavior. <br>
+                </p><br>                
+                <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-2">
+                    <strong>3. PPEB_LDR_DATA Ldr (x64 offset: 0x018, x86 offset: 0x00C):</strong> A pointer to a PEB_LDR_DATA structure. That structure contains three doubly-linked lists of modules (the EXE + every loaded DLL).<br>
+                    <strong class="text-1xl text-gray-300 leading-relaxed text-justify pl-5">The three module lists (inside PEB_LDR_DATA):</strong>
+                <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-10">    
+                    <strong>1. InInitializationOrderModuleList:</strong> links modules by the order their DllMain ran. <br>
+                    <strong>2. InLoadOrderModuleList:</strong> links modules by load order.<br>
+                    <strong>3. InMemoryOrderModuleList:</strong> links modules by their memory base address. <br>
+                </p><br>
+                <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-2">
+                    <strong class="text-1xl text-gray-300 leading-relaxed text-justify pl-5">TKey structure in that list "Each node is an LDR_DATA_TABLE_ENTRY, which holds:</strong>
+                <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-10">    
+                    1. DllBase (the module’s base address in memory). <br>
+                    2. FullDllName (e.g., C:\Windows\System32\kernel32.dll). <br>
+                    3. BaseDllName (just kernel32.dll). <br>
+                    4. Various flags (e.g., “module is being loaded” or “module is removable”).
+                </p><br>
+                <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-2">
+                    <strong class="text-1xl text-gray-300 leading-relaxed text-justify pl-5">Why malware cares?</strong>
+                <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-10">    
+                    A. Once malware has peb->Ldr, it can walk each linked list and find exactly where kernel32.dll, ntdll.dll, or any other support DLL lives in memory. From there, it parses the DLL’s export table to get addresses of VirtualAlloc, LoadLibraryA, GetProcAddress, etc.<br>
+                    B. Because it never calls GetModuleHandle or GetProcAddress directly, it bypasses any user-mode hooks a security product might have installed on those APIs.<br>
+                </p><br>
+                <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-2">
+                    <strong>4. ProcessParameters (x64 offset 0x020, x86 offset 0x010):</strong> It contains the command line parameters passed to the process when created.<br>
+                    <strong class="text-1xl text-gray-300 leading-relaxed text-justify pl-5">Inside that:</strong><br>
+                    <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-10">
+                        <strong>1. ImagePathName (UNICODE_STRING):</strong> full path to the EXE on disk (e.g., C:\Tools\myapp.exe).<br>
+                        <strong>2. CommandLine (UNICODE_STRING):</strong> the exact command-line the process was invoked with (e.g., "myapp.exe -s stealth"). <br>
+                        <strong>3. CurrentDirectory:</strong> where the process will open relative files if none is specified. <br>
+                        <strong>4. Environment:</strong> a pointer to the environment block (UTF-16 strings like "PATH=…" or "USER=alice"). <br>
+                    </p>
+                </p><br>
+                <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-2">
+                    <strong class="text-1xl text-gray-300 leading-relaxed text-justify pl-5">Why malware cares?</strong>
+                <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-10">    
+                    <strong>1. Avoid logging API calls:</strong> Instead of calling GetCommandLineW(), which might be hooked or monitored, malware just reads pp->CommandLine.<br>
+                    <strong>2. Environment evasion:</strong> Malware can look for unusual environment variables (for instance, variables indicating an analysis sandbox). If the sandbox left a specific env var like SANDBOX_ID=2321, malware sees it immediately and can “lay low” or wipe out evidence. <br>
+                    <strong>3. Payload injection:</strong> A sophisticated loader might modify pp->ImagePathName or pp->CommandLine in memory to mislead forensic tools looking at live RAM. They can do so after calling DbgOsRtlSetProcessParameters (internal function) to rewrite command-line text. <br>
+                </p><br>
+                <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-2">
+                    <strong>5. PostProcessInitRoutine:</strong> By the time this appears in memory (generally after all the reserved padding), Windows is giving you a function pointer it will call after the loader finishes running DllMain for every loaded module. In other words, once your EXE and all its DLLs have run their initialization routines, 
+                    Windows may call this “post‐process initialization” function. Most user code never touches this; it’s something internal the loader or certain system DLLs might set to perform final tweaks before handing control to your main().<br>
+                </p><br>
+
+                <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-2">
+                    <strong>6. SessionId:</strong> Finally, near the very end, you have SessionId, which tells you which Windows session this process belongs to. What a “Session” Really Means:<br>
+                </p>
+                <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-10">    
+                    <strong>1. Interactive Desktop vs. Service Session:</strong> When you log into Windows normally (at the console or via Remote Desktop), you get a session. Lets say, Session 1 or Session 2 and anything you launch runs inside that same session.<br>
+                    <strong>2. Session 0:</strong> Before Windows Vista, services ran in Session 0 alongside user processes. Now, services still run in Session 0, but your normal desktop is Session 1 or higher. This separation helps isolate system components from user‐launched programs. <br>
+                </p><br>   
+            </p>
+        </section>
+    </main>
+    <!-- Footer -->
+    <footer class="flex items-center justify-center py-6">
+        <a href="../index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">← Back to Dashboard</a>
+    </footer>
+
+  <!-- Reading-time logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const dateWritten = '1/May/2025';
+      const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
+      const minutes = Math.max(1, Math.ceil(words / 230));
+      document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
+    });
+  </script>
+</html>

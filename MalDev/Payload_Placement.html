@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iron Hulk – Payload Placement</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#0f172a] text-white font-sans min-h-screen">
+  <!-- Header -->
+  <header class="bg-[#1e293b] p-4 shadow flex items-center justify-between gap-4">
+    <div>
+      <h1 class="text-xl font-bold text-blue-400">Payload Placement in PE Files</h1>
+      <small id="reading-time" class="text-xs text-gray-400"></small>
+    </div>
+    <a href="../index.html" class="text-gray-300 text-sm hover:underline">← Back to Dashboard</a>
+  </header>
+  <!-- Article -->
+  <main id="article" class="p-6 space-y-6">
+    <section class="bg-[#1f2937] p-6 rounded-xl shadow-md">
+      <h2 class="text-2xl font-bold text-blue-400 mb-1">Introduction</h2>
+      <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-2">
+        When security researchers talk about “payload placement,” they are discussing "where inside the binary itself" a piece of machine code, configuration data, or encrypted shellcode is stashed so 
+        that it can be reached at run-time without relying on an external file. In the Windows ecosystem, those storage nooks are the PE sections carved out by the linker. Legitimate software uses them 
+        for strings, constants, resources, and executable logic; attackers exploit the very same real estate to hide or at least disguise malicious functionality.
+        <br><br><span class="font-bold">Four Most Common Sections for Payload Stashing: </span>
+        <ul class="list-disc list-inside pl-4 text-gray-300">
+          <li><strong>.data:</strong>
+              <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Default Memory Protection:</strong> RW (read/write) unless the image is built with /NXCOMPAT, in which case DEP blocks execution. </p></li>
+              <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Legitimate Purpose:</strong> Global or static variables that change at run-time. </p></li>
+              <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Will shellcode run straight from it?</strong> No, DEP marks it non-executable and non-writable. </p></li>
+              <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Why Offenders Like It:</strong> Its easy any writable global drops here automatically. Attackers can embed an encrypted blob, decrypt it at start-up, then copy it elsewhere for execution. </p></li>
+              <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Trade-offs & notes:</strong> RW→RX transitions generate the noisiest telemetry (EDR hooks, ETW). Encrypting the payload in .data mitigates static YARA hits, but the protection flip remains loud. </p></li>
+              <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Typical trigger strategy:</strong> VirtualProtect/NtProtectVirtualMemory to flip the page to RWX, then cast a delegate. Also, Copy the bytes to a fresh VirtualAlloc region created RWX and jump there.</p></li><br>
+          <li><strong>.rdata:</strong>
+              <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Default Memory Protection:</strong> R (read-only). </p></li>
+              <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Legitimate Purpose:</strong> String literals, RTTI, v-tables, constants. </p></li>
+              <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Will shellcode run straight from it?</strong> No, page is read-only and non-executable. </p></li>
+              <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Why Offenders Like It:</strong> A one-time RO → RX or RO → RWX flip is quieter in EDR telemetry than modifying an already-writable page. </p></li>
+              <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Trade-offs & notes:</strong> A single RO→RX flip usually scores lower than RW→RX in behavior engines; no self-modifying write occurs. Payload must be marked const or placed with #pragma const_seg / __declspec(allocate()) to land here. </p></li>
+              <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Typical trigger strategy:</strong> Most crews: copy blob to an RWX heap region and execute. A stealthier variant: change original page to RX once (RO→RX), then jump. </p></li><br>
+          <li><strong>.text:</strong>
+              <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Default Memory Protection:</strong> RX (read + execute) </p></li>
+              <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Legitimate Purpose:</strong> Compiled program instructions. </p></li>
+              <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Will shellcode run straight from it?</strong> Yes, it’s already executable. </p></li>
+              <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Why Offenders Like It:</strong> Already executable, so no permission change is necessary. Static scanners will see the raw bytes, so adversaries encrypt or pack them to stay under the radar. </p></li>
+              <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Trade-offs & notes:</strong> Direct execution leaves raw opcodes visible on disk; static scanners catch this unless you pack/encrypt the section and decrypt at run-time. </p></li>
+              <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Typical trigger strategy:</strong> Call a function pointer to the payload bytes, Overwrite an existing function prologue to branch into the blob, and Abuse a TLS callback or delay-load thunk to point at the blob </p></li><br>
+          <li><strong>.rsrc information:</strong>
+              <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Default Memory Protection:</strong> R (read-only, data only) </p></li>
+              <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Legitimate Purpose:</strong> Icons, dialogs, version info, arbitrary resources. </p></li>
+              <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Will shellcode run straight from it?</strong> No, loader never maps it executable. </p></li>
+              <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Why Offenders Like It:</strong> Resource data is treated as opaque by most engines until it’s explicitly loaded. Malware authors embed a binary blob here and extract it at run-time with the Windows resource APIs. </p></li>
+        </ul>
+      </p>
+      <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-2">
+          Malware developers choose among these sections based on the trade-offs they must balance: stealth vs. simplicity vs. compatibility with exploit mitigations such as DEP, CFG, and runtime monitoring.
+          And when crafting a payload placement strategy, you must understand PE (Portable Executable) sections, because the operating system loader will decide how to treat your code depending on which section it's embedded in.
+      </p><br>
+      <h2 class="text-2xl font-bold text-blue-400 mb-1">Key ideas for triggering the payload when the section itself isn’t executable</h2>
+      <ul class="list-disc list-inside pl-4 text-gray-300">
+        <li><strong>Page-protection flip:</strong> 
+            <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Win32 API:</strong> VirtualProtect, VirtualAlloc, VirtualAllocEx </p></li>
+            <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Direct syscalls:</strong> NtProtectVirtualMemory, NtAllocateVirtualMemory </p></li>
+            <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Pros:</strong> simplest </p></li>
+            <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Cons:</strong> produces unmistakable RW→RX or RO→RX telemetry.</p></li><br>
+        <li><strong>Copy–then–jump:</strong> 
+            <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> Allocate a new region RWX, memcpy the blob, jump/call. </p></li>
+            <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Pros:</strong> original image stays untouched; avoids self-modification flags. </p></li>
+            <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Cons:</strong> still emits the classic “allocate → write → execute” triad.</p></li><br>
+        <li><strong>Section merge with executable flag:</strong> 
+            <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Linker trick:</strong> /MERGE: .rdata - .text or /SECTION: .mydat,RWX so the loader already maps the payload pages executable. </p></li>
+            <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Pros:</strong> no runtime VirtualProtect </p></li>
+            <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Cons:</strong> suspicious PE characteristics (data section with E flag), flagged by static heuristics.</p></li><br>
+            <li><strong>Code-cave hijack:</strong> 
+                <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5">- Store the payload in .rdata or .rsrc, then patch an existing function or import-thunk to jump into an RWX copy of that payload. Lets the binary appear normal until first call. </p></li><br>
+        <li><strong>Choosing the right home for shellcode:</strong> 
+            <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Speed over stealth</strong> → .text (jump in place, no API noise). </p></li>
+            <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Balance</strong> → .rdata (encrypted blob + one RO→RX flip). </p></li>
+            <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Deep static hiding</strong> → .rsrc (encrypted RCDATA, extract and run). </p></li>
+            <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-5"> <strong>- Easy prototyping</strong> → Embedded resources. </p></li>
+            <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-2"> <strong>No matter which section holds the bytes, execution only begins when your loader actively transfers control, either by flipping protections and calling into the section or by copying the blob elsewhere and invoking it. The operating system will never “auto-run” data just because it lives in a particular PE section.</strong> </li>
+      </ul><br>
+      <h2 class="text-2xl font-bold text-blue-400 mb-1">Final Thoughts</h2>
+      <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-2">
+        As a malware developer or red teamer, mastering payload placement is critical. It teaches you how to operate within the boundaries of the Windows PE ecosystem, manipulate runtime memory, and bypass primitive static defenses. 
+        Whether you're building a loader, designing a crypter, or analyzing malware samples, understanding where the payload lives inside a PE file is as important as knowing what it does.
+      </p><br>      
+    </section>
+  </main>
+  <!-- Footer -->
+  <footer class="flex items-center justify-center py-6">
+    <a href="../index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">← Back to Dashboard</a>
+  </footer>
+  <!-- Reading-time logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const dateWritten = '1/Jan/2025';
+      const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
+      const minutes = Math.max(1, Math.ceil(words / 230));
+      document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
+    });
+  </script>
+  <br>
+</html>
