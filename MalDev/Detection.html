@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>  
+<head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Iron Hulk - Detection Mechanisms</title>
+  <title>Iron Hulk – Detection Mechanisms</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-[#0f172a] text-white font-sans min-h-screen">
-  <header class="bg-[#1e293b] p-4 shadow flex justify-between items-center">
-    <h1 class="text-xl font-bold text-blue-400">Detection Mechanisms</h1>
-    <a href="../index.html" class="text-gray-300 hover:underline text-sm">← Back to Dashboard</a>
+  <!-- Header -->
+  <header class="bg-[#1e293b] p-4 shadow flex items-center justify-between gap-4">
+    <div>
+      <h1 class="text-xl font-bold text-blue-400">Detection Mechanisms</h1>
+      <small id="reading-time" class="text-xs text-gray-400"></small>
+    </div>
+    <a href="../index.html" class="text-gray-300 text-sm hover:underline">← Back to Dashboard</a>
   </header>
-  <main class="p-6 space-y-6">
-    <div class="bg-[#1f2937] p-6 rounded-xl shadow-md">
+
+  <!-- Article -->
+  <main id="article" class="p-6 space-y-6">
+    <section class="bg-[#1f2937] p-6 rounded-xl shadow-md">
         <h2 class="text-2xl font-bold text-blue-400 mb-1">Introduction</h2>
         <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-2">
             When you install an antivirus (AV) or an Endpoint Detection and Response (EDR) solution on your machine, you rarely stop to think about the intricate mechanisms working behind the scenes. 
@@ -32,7 +38,7 @@
         <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-9">
             Imagine you have a phonebook of criminals, each entry lists a name, a photo, and some identifying characteristics. Whenever someone new shows up, you flip through this phonebook to see if the face or name matches.
             Signature-based AV does something similar, except instead of mugshots, it looks for byte-patterns or cryptographic hashes (e.g., MD5, SHA-256) that uniquely identify a malicious file.
-        <br><br>
+            <br><br>
             <span class="font-bold">These patterns might be: </span>
             <ul class="list-disc list-inside pl-12 text-gray-300">
                 <li>A specific sequence of bytes at offset 0x100 in the file, common to a particular ransomware family.</li>
@@ -184,12 +190,20 @@
                 <li><strong>Evasion by anti-sandbox techniques:</strong> Malware may detect that it’s inside a VM (by checking for VMware tools processes, looking at CPU timing discrepancies, or trying to communicate with a nonexistent router). If detected, it might abort execution or behave benignly to slip through the analysis phase.</li>
             </ul>
         </p><br>
-    </div>
+    </section>
   </main>
-  </body>
-  <div class="flex-1 flex items-center justify-center">
+  <!-- Footer -->
+  <footer class="flex items-center justify-center py-6">
     <a href="../index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">← Back to Dashboard</a>
-    <br>
-  </div>
-  <br>
+  </footer>
+  <!-- Reading-time logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const dateWritten = '25/May/2025';
+      const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
+      const minutes = Math.max(1, Math.ceil(words / 230));
+      document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
+    });
+  </script>
+</body>
 </html>
