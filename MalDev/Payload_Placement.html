@@ -64,18 +64,58 @@
                   color: #dcdcdc;
                   font-family: Consolas, monospace;
                   overflow-x: auto;
-                }
+                  position: relative;
+                }              
+                .copy-button 
+                {
+                  position: absolute;
+                  top: 10px;
+                  right: 15px;
+                  background-color: #1e293b;
+                  color: #f8fafc;
+                  border: none;
+                  padding: 5px 10px;
+                  font-size: 18px;
+                  cursor: pointer;
+                  border-radius: 5px;
+                  z-index: 2;
+                }              
+                .copy-button:hover 
+                {
+                  background-color: #3b82f6;
+                }              
                 summary 
                 {
                   font-size: 1.1em;
                   font-weight: bold;
                   cursor: pointer;
                   padding: 10px;
-                }                
-              </style>              
+                }              
+                details 
+                {
+                  position: relative;
+                  margin-bottom: 1.5rem;
+                }
+              </style>
+              <script>
+                function copyCode(button) {
+                  const codeBlock = button.parentElement.querySelector('code');
+                  const text = codeBlock.textContent;
+              
+                  navigator.clipboard.writeText(text).then(() => {
+                    button.textContent = 'Copied!';
+                    setTimeout(() => {
+                      button.textContent = 'Copy';
+                    }, 1500);
+                  });
+                }
+              </script>
+                 
               <details>
                 <summary class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">Click here to see a simple C++ project</summary>
-                <pre><code class="language-cpp">
+                <pre>
+                  <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                  <code class="language-cpp">
                   #include &lt;Windows.h&gt;
                   #include &lt;iostream&gt;
 
@@ -134,9 +174,8 @@
                       ((void(*)())textSection)();
 
                       return 0;
-                    }
-                    
-                </code></pre>
+                    }                    
+                  </code></pre>
               </details>
           <li><strong><code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">.rsrc</code> information:</strong>
               <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2"> <strong>- Default Memory Protection:</strong> R (read-only, data only) </p></li>
