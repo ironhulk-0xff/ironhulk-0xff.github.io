@@ -79,7 +79,7 @@
             <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
                 <li><strong>Bulk encryption demands speed and stealth ⇒ symmetric wins:</strong> Encrypting gigabytes of victim data (or even a 500 KB reflective DLL) must finish before EDR’s behavioural models flag the process. AES-NI or ChaCha20 running in user space gives gigabytes-per-second throughput with only a few hundred bytes of decryption stub.</li>
                 <li><strong>Key protection demands one-way secrecy ⇒ asymmetric wins:</strong> If the same raw AES key were hard-coded in every build, any incident-responder could reverse one sample and unlock them all. Wrapping that key inside an RSA/ECC envelope means the blue team would have to crack 2048-bit RSA (computationally infeasible) or reach the attacker’s C2 to obtain the private key.</li>
-                <li><strong>In practice, attackers merge both in a hybrid design:</strong><code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal"> Generate random symmetric key → encrypt payload/data → encrypt that key with attacker’s public RSA/ECC key</code>. This is the workflow documented in LockBit 3.0, BlackCat, Hive, Conti, and “fake” LockBit variants discovered by <a href="https://www.trendmicro.com/en_us/research/24/j/fake-lockbit-real-damage-ransomware-samples-abuse-aws-s3-to-stea.html" class="underline">Trend Micro</a> that switched to AES-CTR + MD5-derived per-file keys.</li>
+                <li><strong>In practice, attackers merge both in a hybrid design:</strong><code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">Generate random symmetric key → encrypt payload/data → encrypt that key with attacker’s public RSA/ECC key</code>. This is the workflow documented in LockBit 3.0, BlackCat, Hive, Conti, and “fake” LockBit variants discovered by <a href="https://www.trendmicro.com/en_us/research/24/j/fake-lockbit-real-damage-ransomware-samples-abuse-aws-s3-to-stea.html" class="underline">Trend Micro</a> that switched to AES-CTR + MD5-derived per-file keys.</li>
                 <li><strong>Why not purely asymmetric?</strong></li>
                 <ol class="list-disc list-outside pl-3 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
                     <li><strong>Throughput:</strong> RSA/ECC is slow for large data.</li>
@@ -195,6 +195,9 @@
                 </tbody>
             </table>  
             <br>
+            <div class="flex justify-center">
+                <img src="/images/Enc.png" class="w-80 md:w-96 h-auto" />
+            </div>
             <style>
                 pre 
                 {
