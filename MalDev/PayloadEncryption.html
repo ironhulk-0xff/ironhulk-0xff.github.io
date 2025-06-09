@@ -28,7 +28,7 @@
         </p>
         <br>
         <h2 class="text-[17px] font-bold text-blue-400">Why Do Adversaries Bother?</h2>
-        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2"> Attackers encrypt payloads for three intertwined reasons.</p>
+        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2"> Attackers encrypt payloads for three intertwined reasons:</p>
             <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
                 <li><strong>Stealth:</strong> static scanners cannot match signatures they cannot see.</li>
                 <li><strong>Flexibility:</strong> a single loader can unpack multiple mission-specific modules at runtime.</li>
@@ -428,7 +428,7 @@
   <!-- Reading-time logic -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const dateWritten = '9/Jan/2025';
+      const dateWritten = '9/Jun/2025';
       const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
       const minutes = Math.max(1, Math.ceil(words / 230));
       document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
