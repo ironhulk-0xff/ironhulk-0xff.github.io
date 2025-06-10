@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -181,7 +182,7 @@
               <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2"> <strong>- Default Memory Protection:</strong> R (read-only, data only) </p></li>
               <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2"> <strong>- Legitimate Purpose:</strong> Icons, dialogs, version info, arbitrary resources. </p>
               <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2"> <strong>- Will shellcode run straight from it?</strong> No, loader never maps it executable. </p>
-              <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2"> <strong>- Why Offenders Like It:</strong> Resource data is treated as opaque by most engines until it’s explicitly loaded. Malware authors embed a binary blob here and extract it at run-time with the Windows <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">resource APIs</code>. </p>
+              <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2"> <strong>- Why Offenders Like It:</strong> Resource data is treated as opaque by most engines until it’s explicitly loaded. Malware authors embed a binary here and extract it at run-time with the Windows <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">resource APIs</code>. </p>
         </ul><br>
       <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
           Malware developers choose among these sections based on the trade-offs they must balance: stealth vs. simplicity vs. compatibility with exploit mitigations such as <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">DEP</code>, Control-flow guard (CFG), and runtime monitoring.
@@ -197,7 +198,7 @@
             <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify"> <strong>- Cons:</strong> produces unmistakable <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">RW → RX</code> or <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">RO → RX</code> telemetry.</p>
             <div class="mt-6"></div>
         <li><strong>Copy–then–jump:</strong> 
-            <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify"> Allocate a new region <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">RWX</code>, memcpy the blob, jump/call. </p></li>
+            <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify"> Allocate a new region <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">RWX</code>, memcpy the payload, jump/call. </p></li>
             <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify"> <strong>- Pros:</strong> original image stays untouched; avoids self-modification flags. </p>
             <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify"> <strong>- Cons:</strong> still emits the classic “allocate → write → execute” triad.</p>
             <div class="mt-6"></div>
@@ -211,10 +212,10 @@
                 <div class="mt-6"></div>
         <li><strong>Choosing the right home for shellcode:</strong> 
             <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify"> <strong>- Speed over stealth</strong> → <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">.text</code> (jump in place, no API noise). </p></li>
-            <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify"> <strong>- Balance</strong> → <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">.rdata</code> (encrypted blob + one <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">RO → RX</code> flip). </p>
+            <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify"> <strong>- Balance</strong> → <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">.rdata</code> (encrypted payload + one <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">RO → RX</code> flip). </p>
             <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify"> <strong>- Deep static hiding</strong> → <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">.rsrc</code> (encrypted RCDATA, extract and run). </p>
             <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify"> <strong>- Easy prototyping</strong> → Embedded resources. </p><br>
-            <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify"> <strong>No matter which section holds the bytes, execution only begins when your loader actively transfers control, either by flipping protections and calling into the section or by copying the blob elsewhere and invoking it. The operating system will never “auto-run” data just because it lives in a particular PE section.</strong>
+            <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify"> <strong>No matter which section holds the bytes, execution only begins when your loader actively transfers control, either by flipping protections and calling into the section or by copying the payload elsewhere and invoking it. The operating system will never “auto-run” data just because it lives in a particular PE section.</strong>
       </ul>
       <div class="mt-6"></div>
       <h2 class="text-[17px] font-bold text-blue-400 mb-1">Final Thoughts</h2>
