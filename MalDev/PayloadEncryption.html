@@ -197,7 +197,17 @@
             <br>
             <div class="flex justify-center">
                 <img src="/images/Enc.png" class="w-80 md:w-96 h-auto" />
-            </div>
+            </div><br>
+            <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
+                Below are two projects, the 1st one will encrypt your shellcode using AES, while the 2nd does the hard work, it will do:
+                <ol class="list-disc list-outside pl-6 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
+                    <li><strong>Decrypt the payload:</strong>  <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">SmokeScreen()</code> derives a 256-bit key and 128-bit IV from the passphrase with PBKDF2, then AES-CBC-decrypts the byte array (<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">Enc</code>) to produce raw shellcode.</li>
+                    <li><strong>Allocate executable memory:</strong> <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">VirtualAlloc(..., MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE)</code> returns <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">barrel</code>, a buffer large enough for the shellcode and already marked <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">RWX</code>.</li>
+                    <li><strong>Copy the shellcode into that buffer:</strong> <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">Marshal.Copy()</code>moves the decrypted bytes into <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">barrel</code>.</li>
+                    <li><strong>Create a new thread that starts at the buffer:</strong> <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CreateThread()</code> sets the thread’s start address to <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">barrel; WaitForSingleObject()</code> blocks the current thread until execution ends.</li>
+                    <li><strong>Hide the console window:</strong> <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">GetConsoleWindow() + ShowWindow()</code> runs before decryption to keep the process silent.</li>
+                </ol>
+            </p>
             <style>
                 pre 
                 {
