@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iron Hulk – Payload Obfuscation </title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0f172a] text-white font-sans min-h-screen">
+  <!-- Header -->
+  <header class="bg-[#1e293b] p-4 shadow flex items-center justify-between gap-4">
+    <div>
+      <h1 class="text-xl font-bold text-blue-400">Payload Obfuscation </h1>
+      <small id="reading-time" class="text-xs text-gray-400"></small>
+    </div>
+    <a href="../index.html" class="text-gray-300 text-sm hover:underline">← Back to Dashboard</a>
+  </header>
+
+  <!-- Article -->
+  <main id="article" class="p-6 space-y-6">
+    <section class="bg-[#1f2937] p-6 rounded-xl shadow-md">
+        <h2 class="text-[17px] font-bold text-blue-400">What Is Payload Obfuscation?</h2>
+        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
+            Payload obfuscation is the deliberate transformation of malicious code so that it no longer resembles its original, recognisable form while still executing 
+            exactly the same behaviour at run time. Instead of shipping a plainly readable sequence of opcodes, strings, and API calls, the attacker applies layers such 
+            as encryption or encoding, control-flow flattening, dead-code insertion, dynamic unpacking, steganography, or even full-scale virtualization. The result looks 
+            incoherent to static scanners, reverse engineers, and signature engines, yet the moment the payload reaches its target environment it self-decodes (or is externally
+            decoded) and proceeds as if nothing had been altered. Modern campaigns rotate several obfuscators in a single infection chain, PowerShell DOSfuscation for initial 
+            execution, a crypter that unwraps a loader, and finally an in-memory DLL hidden inside a bitmap resource, creating a moving target that traditional detection logic 
+            finds difficult to pin down
+        </p>
+        <br>
+        <h2 class="text-[17px] font-bold text-blue-400">Why malware developers rely on it?</h2>
+        <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
+            <li><strong>Bypassing static detection:</strong> Signature scanners, YARA rules, and reputation systems depend on predictable byte sequences; obfuscation reshapes those sequences so thoroughly that the hash, the entropy profile, and even the printable strings lose their diagnostic value. Agent Tesla, XWorm, and FormBook variants routinely achieve multiday detection gaps by rotating fresh encryption keys and junk instructions.</li>
+            <li><strong>Slowing reverse-engineering and analysis:</strong> Human analysts work against the clock; every hour spent disentangling opaque control flow or decrypting strings is time the attacker can use to harvest data or pivot. Black Hat research on DOSfuscation showed that even simple command-line payloads can expand into multi-kilobyte, character-inserted tangles that frustrate quick triage.</li>
+            <li><strong>Defeating automated sandboxes:</strong> Many sandboxes impose tight execution windows and limited emulation depth. Obfuscated samples embed stalling loops, environment checks, or staged decryptors that withhold the real code until the sandbox gives up, allowing the file to look inert during automated scoring yet detonate on a live host.</li>
+            <li><strong>Layered defence in depth for the attacker:</strong> If any single layer like packer, loader, dropper is caught, the upstream layers can be swapped without touching core functionality, giving threat actors an agile way to iterate faster than defenders can blacklist. Recent steganographic loaders that stash AES-encrypted DLLs inside bitmaps exemplify this modular approach.</li>
+        </ol>
+        <br>
+        <h2 class="text-[17px] font-bold text-blue-400">My Project</h2>
+        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
+            Before diving in, a big Thank You to my friend <a href="https://x.com/BenaliGait79114?t=NXyIypgJUgm68F1-BDkn2Q&s=09" class="hover:underline font-bold">MR.G</a>, his encouragement kept the late-night tests rolling. 
+            While absorbing MalDevAcademy’s modules on IPv4/IPv6 Fuscation, MAC Fuscation, and UUID Fuscation, I set out to push beyond the textbook. After dozens of scraped attempts 
+            and back-to-back recompiles, a fresh idea took shape: disguise raw shellcode as a string of perfectly ordinary phone numbers. It took countless iterations and more coffee 
+            than I’ll admit, but the method is now solid and repeatable. Here’s the core workflow we’ll explore together:
+            <ul class="list-disc list-outside pl-6 text-gray-300">
+                <li><strong>The idea:</strong> 
+                <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify"> - Get the RAW shellcode: 0xFC, 0x48, 0x83, 0xE4, 0xF0</p>
+                <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify"> - Convert: hex -> decimal</p>
+                <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify"> - Pad every value to three digits so the entire stream looks like a legitimate phone-number block. 72 → 072, 229 → 229, … </p>
+                <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify"> - Put everything together</p>
+                </li>
+          </ul>
+        </p>
+        <br>
+        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2 font-bold">1. Create a Shellcode:</p>
+        <div class="flex justify-Left">
+            <img src="../MalDev/PaOb/1.png" class="w-90px h-auto" />
+        </div><br>
+        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2 font-bold">2. Create PhoneScator Project:</p>
+        <div class="flex justify-Left">
+            <img src="../MalDev/PaOb/2.png" class="w-90px h-auto" />
+        </div><br>
+        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2 font-bold">3. The Result:</p>
+        <div class="flex justify-Left">
+            <img src="../MalDev/PaOb/3.png" class="w-90px h-auto" />
+        </div><br>
+        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2 font-bold">4. Create PhoneDescator Project:</p>
+        <div class="flex justify-Left">
+            <img src="../MalDev/PaOb/4.png" class="w-90px h-auto" />
+        </div><br>
+        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2 font-bold">5. Final Result:</p>
+        <div class="flex justify-Left">
+            <img src="../MalDev/PaOb/5.png" class="w-90px h-auto" />
+        </div><br>
+        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2 font-bold">6. Confirm they match:</p>
+        <div class="flex justify-Left">
+            <img src="../MalDev/PaOb/6.png" class="w-90px h-auto" />
+        </div><br>
+        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
+            This is just the first milestone, we’ve beaten a static scanner, but a long, gritty road lies ahead before we can bypass every security layer and
+            trigger our payload in the wild. "Keep learning"
+        </p>
+    </section>
+  </main>
+  <!-- Footer -->
+  <footer class="flex items-center justify-center py-6">
+    <a href="../index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">← Back to Dashboard</a>
+  </footer>
+
+  <!-- Reading-time logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const dateWritten = '1/Jan/2025';
+      const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
+      const minutes = Math.max(1, Math.ceil(words / 230));
+      document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
+    });
+  </script>
+</body>
+</html>
