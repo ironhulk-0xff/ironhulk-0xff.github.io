@@ -38,12 +38,11 @@
         <br>
         <h2 class="text-[17px] font-bold text-blue-400">Pros and Cons from an Operator’s Perspective:</h2>
         <div class="overflow-x-auto rounded-md border border-gray-700">
-
             <table class="table-auto w-full border-collapse text-sm md:text-base">
                 <thead class="bg-gray-800 text-white">
                 <tr>
-                    <th class="px-4 py-2 border border-gray-600 font-semibold text-left">Pros</th>
-                    <th class="px-4 py-2 border border-gray-600 font-semibold text-left">Cons</th>
+                    <th class="border:1px solid #555; padding:6px;">Pros</th>
+                    <th class="border:1px solid #555; padding:6px;">Cons</th>
                 </tr>
                 </thead>
                 <tbody class="bg-gray-900 text-gray-100">
@@ -61,7 +60,6 @@
                 </tr>
                 </tbody>
             </table>
-
         </div>
         
         <h2 class="text-[17px] font-bold text-blue-400">Detection and Defensive Considerations:</h2>
@@ -143,37 +141,39 @@
                 </style>
             </p>
             <h2 class="text-[17px] font-bold text-blue-400">Typical entropy ranges in clean files</h2>
-            <table style="width:100%; border-collapse:collapse; border:1px solid #555;">
-                <thead class="bg-gray-800 text-white">
-                <tr>
-                    <th style="border:1px solid #555; padding:6px;">File type</th>
-                    <th style="border:1px solid #555; padding:6px;">Common range&nbsp;(bits/byte)</th>
-                    <th style="border:1px solid #555; padding:6px;">Notes</th>
-                </tr>
-                </thead>
-                <tbody class="bg-gray-900 text-gray-100">
-                <tr>
-                    <td style="border:1px solid #555; padding:6px;">Plain text / scripts</td>
-                    <td style="border:1px solid #555; padding:6px;">4.0 – 6.0</td>
-                    <td style="border:1px solid #555; padding:6px;">ASCII is highly repetitive.</td>
-                </tr>
-                <tr>
-                    <td style="border:1px solid #555; padding:6px;">Native executables: <code>/bin/bash</code>, <code>kernel32.dll</code></td>
-                    <td style="border:1px solid #555; padding:6px;">6.0 – 7.0</td>
-                    <td style="border:1px solid #555; padding:6px;">Mix of code and structured headers.</td>
-                </tr>
-                <tr>
-                    <td style="border:1px solid #555; padding:6px;">Compressed archives: ZIP, PNG</td>
-                    <td style="border:1px solid #555; padding:6px;">7.5 – 7.9</td>
-                    <td style="border:1px solid #555; padding:6px;">Compression flattens byte frequency.</td>
-                </tr>
-                <tr>
-                    <td style="border:1px solid #555; padding:6px;">Encrypted payloads / packed ransomware</td>
-                    <td style="border:1px solid #555; padding:6px;">7.8 – 8.0</td>
-                    <td style="border:1px solid #555; padding:6px;">Near-perfect uniformity (“TV snow”).</td>
-                </tr>
-                </tbody>
-            </table><br>
+            <div class="overflow-x-auto rounded-md border border-gray-700">  
+                <table style="width:100%; border-collapse:collapse; border:1px solid #555;">
+                    <thead class="bg-gray-800 text-white">
+                    <tr>
+                        <th style="border:1px solid #555; padding:6px;">File type</th>
+                        <th style="border:1px solid #555; padding:6px;">Common range&nbsp;(bits/byte)</th>
+                        <th style="border:1px solid #555; padding:6px;">Notes</th>
+                    </tr>
+                    </thead>
+                    <tbody class="bg-gray-900 text-gray-100">
+                    <tr>
+                        <td style="border:1px solid #555; padding:6px;">Plain text / scripts</td>
+                        <td style="border:1px solid #555; padding:6px;">4.0 – 6.0</td>
+                        <td style="border:1px solid #555; padding:6px;">ASCII is highly repetitive.</td>
+                    </tr>
+                    <tr>
+                        <td style="border:1px solid #555; padding:6px;">Native executables: <code>/bin/bash</code>, <code>kernel32.dll</code></td>
+                        <td style="border:1px solid #555; padding:6px;">6.0 – 7.0</td>
+                        <td style="border:1px solid #555; padding:6px;">Mix of code and structured headers.</td>
+                    </tr>
+                    <tr>
+                        <td style="border:1px solid #555; padding:6px;">Compressed archives: ZIP, PNG</td>
+                        <td style="border:1px solid #555; padding:6px;">7.5 – 7.9</td>
+                        <td style="border:1px solid #555; padding:6px;">Compression flattens byte frequency.</td>
+                    </tr>
+                    <tr>
+                        <td style="border:1px solid #555; padding:6px;">Encrypted payloads / packed ransomware</td>
+                        <td style="border:1px solid #555; padding:6px;">7.8 – 8.0</td>
+                        <td style="border:1px solid #555; padding:6px;">Near-perfect uniformity (“TV snow”).</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div><br>
             <h2 class="text-[17px] font-bold text-blue-400">Compression-Then-Encryption: Beating the Entropy Sensor</h2>
             <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
                 Static engines often flag any section with near-perfect entropy (~7.9 bits/byte). LockBit sidesteps this by LZ-compressing each victim file before running 
@@ -181,36 +181,38 @@
             </p><br>
             <h2 class="text-[17px] font-bold text-blue-400">Loader Taxonomy: Packers vs. Crypters vs. Protectors:</h2>
             <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">Malware authors rarely hand-roll encryption from scratch. Instead, they lean on a small ecosystem of commercial or cracked builders that wrap a payload in layers of compression, encryption, and anti-analysis glue:</p>
-            <table class="table-auto w-full border border-gray-600 border-collapse">
-                <thead class="bg-gray-800 text-white">
-                <tr>
-                    <th class="px-3 py-2 border border-gray-600 font-semibold">Type</th>
-                    <th class="px-3 py-2 border border-gray-600 font-semibold">What It Does</th>
-                    <th class="px-3 py-2 border border-gray-600 font-semibold">Typical Examples</th>
-                    <th class="px-3 py-2 border border-gray-600 font-semibold">Telltale Artifacts</th>
-                </tr>
-                </thead>            
-                <tbody class="bg-gray-900 text-gray-100">
-                <tr>
-                    <td class="px-3 py-2 border border-gray-600">Packer</td>
-                    <td class="px-3 py-2 border border-gray-600">Compresses (optionally encrypts) a payload and self-extracts at runtime</td>
-                    <td class="px-3 py-2 border border-gray-600">UPX, MPRESS, PECompact</td>
-                    <td class="px-3 py-2 border border-gray-600">Inflated entry-point stub, decompression loops visible in disassembly</td>
-                </tr>            
-                <tr>
-                    <td class="px-3 py-2 border border-gray-600">Crypter</td>
-                    <td class="px-3 py-2 border border-gray-600">Encrypts with user-supplied key and adds a runtime decryptor stub</td>
-                    <td class="px-3 py-2 border border-gray-600">ScrubCrypt, CryptOne</td>
-                    <td class="px-3 py-2 border border-gray-600">Encrypted .data section, minimal strings, single AES/RC4 decryptor</td>
-                </tr>            
-                <tr>
-                    <td class="px-3 py-2 border border-gray-600">Protector</td>
-                    <td class="px-3 py-2 border border-gray-600">Adds VM obfuscation, anti-debug, integrity checks on top of a crypter</td>
-                    <td class="px-3 py-2 border border-gray-600">Themida, VMProtect</td>
-                    <td class="px-3 py-2 border border-gray-600">Custom VM bytecode, mangled import tables, heavy anti-analysis tricks</td>
-                </tr>
-                </tbody>
-            </table>  
+            <div class="overflow-x-auto rounded-md border border-gray-700">  
+                <table class="table-auto w-full border border-gray-600 border-collapse">
+                    <thead class="bg-gray-800 text-white">
+                    <tr>
+                        <th class="px-3 py-2 border border-gray-600 font-semibold">Type</th>
+                        <th class="px-3 py-2 border border-gray-600 font-semibold">What It Does</th>
+                        <th class="px-3 py-2 border border-gray-600 font-semibold">Typical Examples</th>
+                        <th class="px-3 py-2 border border-gray-600 font-semibold">Telltale Artifacts</th>
+                    </tr>
+                    </thead>            
+                    <tbody class="bg-gray-900 text-gray-100">
+                    <tr>
+                        <td class="px-3 py-2 border border-gray-600">Packer</td>
+                        <td class="px-3 py-2 border border-gray-600">Compresses (optionally encrypts) a payload and self-extracts at runtime</td>
+                        <td class="px-3 py-2 border border-gray-600">UPX, MPRESS, PECompact</td>
+                        <td class="px-3 py-2 border border-gray-600">Inflated entry-point stub, decompression loops visible in disassembly</td>
+                    </tr>            
+                    <tr>
+                        <td class="px-3 py-2 border border-gray-600">Crypter</td>
+                        <td class="px-3 py-2 border border-gray-600">Encrypts with user-supplied key and adds a runtime decryptor stub</td>
+                        <td class="px-3 py-2 border border-gray-600">ScrubCrypt, CryptOne</td>
+                        <td class="px-3 py-2 border border-gray-600">Encrypted .data section, minimal strings, single AES/RC4 decryptor</td>
+                    </tr>            
+                    <tr>
+                        <td class="px-3 py-2 border border-gray-600">Protector</td>
+                        <td class="px-3 py-2 border border-gray-600">Adds VM obfuscation, anti-debug, integrity checks on top of a crypter</td>
+                        <td class="px-3 py-2 border border-gray-600">Themida, VMProtect</td>
+                        <td class="px-3 py-2 border border-gray-600">Custom VM bytecode, mangled import tables, heavy anti-analysis tricks</td>
+                    </tr>
+                    </tbody>
+                </table>  
+            </div>
             <br>
             <div class="flex justify-center">
                 <img src="/images/Enc.png" class="w-80 md:w-96 h-auto" />
