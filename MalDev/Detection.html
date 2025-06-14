@@ -253,48 +253,51 @@
             monitoring tracks what programs do in real time, while anomaly detection provides adaptive insight based on past activity. Sandboxing isolates execution for safe 
             analysis, revealing behaviors that can’t be seen through static inspection. No single method is perfect, but together they create a much more resilient security posture.
         </p><br>
-        <table class="table-auto w-full border border-gray-500 border-collapse">
-            <thead>
-              <tr>
-                <th class="px-4 py-2 border border-gray-500 font-semibold">Detection Method</th>
-                <th class="px-4 py-2 border border-gray-500 font-semibold">Strengths</th>
-                <th class="px-4 py-2 border border-gray-500 font-semibold">Weaknesses</th>
-                <th class="px-4 py-2 border border-gray-500 font-semibold">Typical Use Case</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="px-4 py-3 border border-gray-500"><strong>Signature-Based</strong></td>
-                <td class="px-4 py-3 border border-gray-500">Fast, low false positives</td>
-                <td class="px-4 py-3 border border-gray-500">Ineffective against new or obfuscated malware</td>
-                <td class="px-4 py-3 border border-gray-500">Detecting known malware variants</td>
-              </tr>
-              <tr>
-                <td class="px-4 py-3 border border-gray-500"><strong>Heuristic-Based</strong></td>
-                <td class="px-4 py-3 border border-gray-500">Catches slightly altered threats</td>
-                <td class="px-4 py-3 border border-gray-500">Can cause false positives if overly broad</td>
-                <td class="px-4 py-3 border border-gray-500">Identifying polymorphic or packed malware</td>
-              </tr>
-              <tr>
-                <td class="px-4 py-3 border border-gray-500"><strong>Behavioral Monitoring</strong></td>
-                <td class="px-4 py-3 border border-gray-500">Real-time insight into execution behavior</td>
-                <td class="px-4 py-3 border border-gray-500">May detect too late; resource intensive</td>
-                <td class="px-4 py-3 border border-gray-500">Stopping ransomware or process injection</td>
-              </tr>
-              <tr>
-                <td class="px-4 py-3 border border-gray-500"><strong>Anomaly-Based Detection</strong></td>
-                <td class="px-4 py-3 border border-gray-500">Adaptive to new threats and behaviors</td>
-                <td class="px-4 py-3 border border-gray-500">Requires time to train; difficult to explain verdicts</td>
-                <td class="px-4 py-3 border border-gray-500">Detecting insider threats, rare behaviors</td>
-              </tr>
-              <tr>
-                <td class="px-4 py-3 border border-gray-500"><strong>Sandboxing</strong></td>
-                <td class="px-4 py-3 border border-gray-500">Exposes actual runtime behavior safely</td>
-                <td class="px-4 py-3 border border-gray-500">Resource-heavy; can be evaded by sandbox-aware malware</td>
-                <td class="px-4 py-3 border border-gray-500">Validating suspicious executables or scripts</td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="overflow-x-auto rounded-md border border-gray-700">
+            <table class="table-auto w-full border-collapse text-sm md:text-base">
+              <thead class="bg-gray-800 text-white">
+                <tr>
+                  <th class="px-4 py-2 border border-gray-600 font-semibold text-left">Detection Method</th>
+                  <th class="px-4 py-2 border border-gray-600 font-semibold text-left">Strengths</th>
+                  <th class="px-4 py-2 border border-gray-600 font-semibold text-left">Weaknesses</th>
+                  <th class="px-4 py-2 border border-gray-600 font-semibold text-left">Typical Use Case</th>
+                </tr>
+              </thead>
+              <tbody class="bg-gray-900 text-gray-100">
+                <tr>
+                  <td class="px-4 py-3 border border-gray-700 font-semibold">Signature-Based</td>
+                  <td class="px-4 py-3 border border-gray-700">Fast, low false positives</td>
+                  <td class="px-4 py-3 border border-gray-700">Ineffective against new or obfuscated malware</td>
+                  <td class="px-4 py-3 border border-gray-700">Detecting known malware variants</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 border border-gray-700 font-semibold">Heuristic-Based</td>
+                  <td class="px-4 py-3 border border-gray-700">Catches slightly altered threats</td>
+                  <td class="px-4 py-3 border border-gray-700">Can cause false positives if overly broad</td>
+                  <td class="px-4 py-3 border border-gray-700">Identifying polymorphic or packed malware</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 border border-gray-700 font-semibold">Behavioral Monitoring</td>
+                  <td class="px-4 py-3 border border-gray-700">Real-time insight into execution behavior</td>
+                  <td class="px-4 py-3 border border-gray-700">May detect too late; resource intensive</td>
+                  <td class="px-4 py-3 border border-gray-700">Stopping ransomware or process injection</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 border border-gray-700 font-semibold">Anomaly-Based Detection</td>
+                  <td class="px-4 py-3 border border-gray-700">Adaptive to new threats and behaviors</td>
+                  <td class="px-4 py-3 border border-gray-700">Requires time to train; difficult to explain verdicts</td>
+                  <td class="px-4 py-3 border border-gray-700">Detecting insider threats, rare behaviors</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 border border-gray-700 font-semibold">Sandboxing</td>
+                  <td class="px-4 py-3 border border-gray-700">Exposes actual runtime behavior safely</td>
+                  <td class="px-4 py-3 border border-gray-700">Resource-heavy; can be evaded by sandbox-aware malware</td>
+                  <td class="px-4 py-3 border border-gray-700">Validating suspicious executables or scripts</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
     </section>
   </main>
   <!-- Footer -->
