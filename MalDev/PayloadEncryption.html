@@ -37,28 +37,33 @@
             </ol>
         <br>
         <h2 class="text-[17px] font-bold text-blue-400">Pros and Cons from an Operator’s Perspective:</h2>
-        <table class="table-auto w-full border border-gray-500 border-collapse">
-            <thead>
-            <tr>
-                <th class="px-4 py-2 border border-gray-500 font-semibold">Pros</th>
-                <th class="px-4 py-2 border border-gray-500 font-semibold">Cons</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td class="px-4 py-3 border border-gray-500">Bypasses string- and opcode-based detection; hampers reverse engineering</td>
-                <td class="px-4 py-3 border border-gray-500">Adds operational complexity; builds can break if key exchange fails</td>
-            </tr>
-            <tr>
-                <td class="px-4 py-3 border border-gray-500">Facilitates reuse of commodity implants under new cryptographic wrappers (crypters / packers)</td>
-                <td class="px-4 py-3 border border-gray-500">Increased binary size and runtime overhead</td>
-            </tr>
-            <tr>
-                <td class="px-4 py-3 border border-gray-500">Enables fine-grained target gating&nbsp;(decrypt only on hosts in a certain domain)</td>
-                <td class="px-4 py-3 border border-gray-500">Mishandled crypto (weak keys, predictable IVs) exposes the campaign and aids decryptor tooling</td>
-            </tr>
-            </tbody>
-        </table><br>
+        <div class="overflow-x-auto rounded-md border border-gray-700">
+
+            <table class="table-auto w-full border-collapse text-sm md:text-base">
+                <thead class="bg-gray-800 text-white">
+                <tr>
+                    <th class="px-4 py-2 border border-gray-600 font-semibold text-left">Pros</th>
+                    <th class="px-4 py-2 border border-gray-600 font-semibold text-left">Cons</th>
+                </tr>
+                </thead>
+                <tbody class="bg-gray-900 text-gray-100">
+                <tr>
+                    <td class="px-4 py-3 border border-gray-500">Bypasses string- and opcode-based detection; hampers reverse engineering</td>
+                    <td class="px-4 py-3 border border-gray-500">Adds operational complexity; builds can break if key exchange fails</td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-3 border border-gray-500">Facilitates reuse of commodity implants under new cryptographic wrappers (crypters / packers)</td>
+                    <td class="px-4 py-3 border border-gray-500">Increased binary size and runtime overhead</td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-3 border border-gray-500">Enables fine-grained target gating&nbsp;(decrypt only on hosts in a certain domain)</td>
+                    <td class="px-4 py-3 border border-gray-500">Mishandled crypto (weak keys, predictable IVs) exposes the campaign and aids decryptor tooling</td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+        
         <h2 class="text-[17px] font-bold text-blue-400">Detection and Defensive Considerations:</h2>
         <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
             Static YARA signatures can still flag decryptor stubs like API import patterns for <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CryptEncrypt</code>, <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">VirtualProtect</code>, or self-modifying loops. Memory scanners hunt 
@@ -118,35 +123,47 @@
                         <li>global rule “if entropy > 7.5 bits & section name ≠ .text ⇒ flag as packed”. or</li>
                         <li>ML feature vector where entropy is one signal among many.</li>
                     </ol>
-                </ol><br>
-                <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
+                </ol>
+                <div class="boxed-inline">
                     Behavioural or anti-ransomware monitors go one step further, they hook write APIs <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">NtWriteFile</code> & <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">WriteFileEx</code> and measure the entropy of every outbound 
                     buffer in real time. If a process suddenly starts saving 7.6-bit data into dozens of documents, the tool blocks the write exactly the trick demonstrated 
                     in an open-source anti-ransomware library that denies writes above 7.5 bits/byte
-                </p>
-            </p><br>
+                </div>
+                <style>
+                    .boxed-inline
+                    {
+                        display:inline-block;
+                        border:5px solid #555;
+                        background:#334155;
+                        padding:14px 18px;
+                        margin:20px 0;
+                        border-radius:6px;
+                        line-height:1.45;
+                    }
+                </style>
+            </p>
             <h2 class="text-[17px] font-bold text-blue-400">Typical entropy ranges in clean files</h2>
             <table style="width:100%; border-collapse:collapse; border:1px solid #555;">
-                <thead>
+                <thead class="bg-gray-800 text-white">
                 <tr>
                     <th style="border:1px solid #555; padding:6px;">File type</th>
                     <th style="border:1px solid #555; padding:6px;">Common range&nbsp;(bits/byte)</th>
                     <th style="border:1px solid #555; padding:6px;">Notes</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody class="bg-gray-900 text-gray-100">
                 <tr>
                     <td style="border:1px solid #555; padding:6px;">Plain text / scripts</td>
                     <td style="border:1px solid #555; padding:6px;">4.0 – 6.0</td>
                     <td style="border:1px solid #555; padding:6px;">ASCII is highly repetitive.</td>
                 </tr>
                 <tr>
-                    <td style="border:1px solid #555; padding:6px;">Native executables<br>(<code>/bin/bash</code>, <code>kernel32.dll</code>)</td>
+                    <td style="border:1px solid #555; padding:6px;">Native executables: <code>/bin/bash</code>, <code>kernel32.dll</code></td>
                     <td style="border:1px solid #555; padding:6px;">6.0 – 7.0</td>
                     <td style="border:1px solid #555; padding:6px;">Mix of code and structured headers.</td>
                 </tr>
                 <tr>
-                    <td style="border:1px solid #555; padding:6px;">Compressed archives<br>(ZIP, PNG)</td>
+                    <td style="border:1px solid #555; padding:6px;">Compressed archives: ZIP, PNG</td>
                     <td style="border:1px solid #555; padding:6px;">7.5 – 7.9</td>
                     <td style="border:1px solid #555; padding:6px;">Compression flattens byte frequency.</td>
                 </tr>
@@ -165,7 +182,7 @@
             <h2 class="text-[17px] font-bold text-blue-400">Loader Taxonomy: Packers vs. Crypters vs. Protectors:</h2>
             <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">Malware authors rarely hand-roll encryption from scratch. Instead, they lean on a small ecosystem of commercial or cracked builders that wrap a payload in layers of compression, encryption, and anti-analysis glue:</p>
             <table class="table-auto w-full border border-gray-600 border-collapse">
-                <thead>
+                <thead class="bg-gray-800 text-white">
                 <tr>
                     <th class="px-3 py-2 border border-gray-600 font-semibold">Type</th>
                     <th class="px-3 py-2 border border-gray-600 font-semibold">What It Does</th>
@@ -173,7 +190,7 @@
                     <th class="px-3 py-2 border border-gray-600 font-semibold">Telltale Artifacts</th>
                 </tr>
                 </thead>            
-                <tbody>
+                <tbody class="bg-gray-900 text-gray-100">
                 <tr>
                     <td class="px-3 py-2 border border-gray-600">Packer</td>
                     <td class="px-3 py-2 border border-gray-600">Compresses (optionally encrypts) a payload and self-extracts at runtime</td>
