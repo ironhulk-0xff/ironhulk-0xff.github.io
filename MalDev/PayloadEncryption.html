@@ -38,30 +38,30 @@
         <br>
         <h2 class="text-[17px] font-bold text-blue-400">Pros and Cons from an Operator’s Perspective:</h2>
         <div class="overflow-x-auto rounded-md border border-gray-700">
-            <table class="table-auto w-full border-collapse text-sm md:text-base">
+            <table class="table-auto w-full border border-gray-600 border-collapse">
                 <thead class="bg-gray-800 text-white">
                 <tr>
-                    <th class="border:1px solid #555; padding:6px;">Pros</th>
-                    <th class="border:1px solid #555; padding:6px;">Cons</th>
+                    <th class="px-3 py-2 border border-gray-600 font-semibold">Pros</th>
+                    <th class="px-3 py-2 border border-gray-600 font-semibold">Cons</th>
                 </tr>
                 </thead>
                 <tbody class="bg-gray-900 text-gray-100">
                 <tr>
-                    <td class="px-4 py-3 border border-gray-500">Bypasses string- and opcode-based detection; hampers reverse engineering</td>
-                    <td class="px-4 py-3 border border-gray-500">Adds operational complexity; builds can break if key exchange fails</td>
+                    <td class="px-3 py-2 border border-gray-600">Bypasses string- and opcode-based detection; hampers reverse engineering</td>
+                    <td class="px-3 py-2 border border-gray-600">Adds operational complexity; builds can break if key exchange fails</td>
                 </tr>
                 <tr>
-                    <td class="px-4 py-3 border border-gray-500">Facilitates reuse of commodity implants under new cryptographic wrappers (crypters / packers)</td>
-                    <td class="px-4 py-3 border border-gray-500">Increased binary size and runtime overhead</td>
+                    <td class="px-3 py-2 border border-gray-600">Facilitates reuse of commodity implants under new cryptographic wrappers (crypters / packers)</td>
+                    <td class="px-3 py-2 border border-gray-600">Increased binary size and runtime overhead</td>
                 </tr>
                 <tr>
-                    <td class="px-4 py-3 border border-gray-500">Enables fine-grained target gating&nbsp;(decrypt only on hosts in a certain domain)</td>
-                    <td class="px-4 py-3 border border-gray-500">Mishandled crypto (weak keys, predictable IVs) exposes the campaign and aids decryptor tooling</td>
+                    <td class="px-3 py-2 border border-gray-600">Enables fine-grained target gating&nbsp;(decrypt only on hosts in a certain domain)</td>
+                    <td class="px-3 py-2 border border-gray-600">Mishandled crypto (weak keys, predictable IVs) exposes the campaign and aids decryptor tooling</td>
                 </tr>
                 </tbody>
             </table>
         </div>
-        
+        <br>
         <h2 class="text-[17px] font-bold text-blue-400">Detection and Defensive Considerations:</h2>
         <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
             Static YARA signatures can still flag decryptor stubs like API import patterns for <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CryptEncrypt</code>, <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">VirtualProtect</code>, or self-modifying loops. Memory scanners hunt 
@@ -146,7 +146,7 @@
                     <thead class="bg-gray-800 text-white">
                     <tr>
                         <th style="border:1px solid #555; padding:6px;">File type</th>
-                        <th style="border:1px solid #555; padding:6px;">Common range&nbsp;(bits/byte)</th>
+                        <th style="border:1px solid #555; padding:6px;">Common range (bits/byte)</th>
                         <th style="border:1px solid #555; padding:6px;">Notes</th>
                     </tr>
                     </thead>
