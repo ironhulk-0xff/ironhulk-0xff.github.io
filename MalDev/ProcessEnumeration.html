@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iron Hulk – Process Enumeration</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0f172a] text-white font-sans min-h-screen">
+  <!-- Header -->
+  <header class="bg-[#1e293b] p-4 shadow flex items-center justify-between gap-4">
+    <div>
+      <h1 class="text-xl font-bold text-blue-400">Process Enumeration</h1>
+      <small id="reading-time" class="text-xs text-gray-400"></small>
+    </div>
+    <a href="../index.html" class="text-gray-300 text-sm hover:underline">← Back to Dashboard</a>
+  </header>
+
+  <!-- Article -->
+  <main id="article" class="p-6 space-y-6">
+    <section class="bg-[#1f2937] p-6 rounded-xl shadow-md">
+        <h2 class="text-[17px] font-bold text-blue-400">What Is Process Enumeration?</h2>
+        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
+            Imagine you’re a detective walking into a busy office building. So your first move is to scope out who’s working there, like their names, roles, and what they’re doing.
+            Process enumeration is the digital version of that, it’s the technique of listing every active process (programs, apps, services) running on a computer, along
+            with details like:
+            <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
+                <li>Process names (e.g., chrome.exe, avp.exe)</li>
+                <li>Unique IDs (PIDs) </li>
+                <li>Memory usage </li>
+                <li>Parent/child relationships </li>
+                <li>and so many other things, depending on what the developer wants to know</li>
+            </ol><br>
+            <p class="font-bold pl-2">For penetration testers, understanding process enumeration is critical for:</p>
+            <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
+                <li>Identifying high-value targets (e.g., lsass.exe for credential dumping).</li>
+                <li>Evading detection by security tools (EDR/AV).</li>
+                <li>Executing post-exploitation tactics like process injection or lateral movement.</li>
+            </ol>
+        </p><br>
+        <h2 class="text-[17px] font-bold text-blue-400">Why Do Malware Developers Enumerate Processes?</h2>
+        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
+            Malware doesn’t blindly attack. It reconnaissances first. Here’s why hackers lean on process enumeration:
+            <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
+                <li><strong>Hunting Security Tools:</strong> Malware scans for processes like <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">msmpeng.exe</code> (Windows Defender) or <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">egui.exe</code> (ESET) or <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CrowdStrike</code>. Spot one? It’ll try to kill the process, evade detection, or disable the service.</li>
+                <li><strong>Finding Injection Targets:</strong> To hide, malware often injects malicious code into legitimate processes (Ex: <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">explorer.exe</code>). Enumeration identifies trusted, long-running targets—making the attack invisible.</li>
+                <li><strong>Privilege Escalation:</strong> Processes running as <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">SYSTEM or Administrator</code> are jackpots. Malware hijacks them to gain high-level access, install rootkits, or steal credentials.</li>
+                <li><strong>Avoiding Analysis Environments:</strong> Malware checks for processes tied to sandboxes (<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">vmtoolsd.exe</code>) or debuggers (<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">x32dbg.exe</code>). If detected, it shuts down to avoid analysis.</li>
+                <li><strong>Data Theft & Espionage:</strong> Targeting specific apps? Banking trojans hunt for <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">chrome.exe</code> (to steal logins) or cryptocurrency wallets like <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">Electrum.exe</code>.</li>
+                <li><strong>Privilege matching and architecture alignment:</strong> The loader has to guarantee bitness compatibility (x86 vs x64), integrity level, and sometimes specific token privileges.</li>
+                <li><strong>Thread Enumeration:</strong> A malware may enumerate threads within a process to hijack execution flow or inject shellcode into a running thread</li>
+            </ol><br>
+            <p class="font-bold pl-2">I just named few, and there are so many reasons behind that activity</p>
+        </p><br>
+        <h2 class="text-[17px] font-bold text-blue-400">Before or After the Breach?</h2>
+        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
+            The timing depends on the attacker’s goals:
+            <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
+                <li><strong>Before the Attack (Recon Phase)</strong> </li>
+                <ol class="list-[decimal] list-outside pl-4 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
+                    <li><strong>Knowledge is power, malware starts by enumerating processes to:</strong> </li>
+                    <ol class="list-disc list-outside pl-4 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
+                        <li><strong>Environment Profiling:</strong> What AV is installed?</li>
+                        <li><strong>Identify weak spots: </strong> Which process runs as SYSTEM?</li>
+                        <li><strong>Sandbox/VM Detection:</strong> Malware may enumerate processes early to check for analysis environments (Ex: <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">vmtoolsd.exe</code> in VMware).</li>
+                        <li><strong>Example:</strong> Ransomware like LockBit enumerates processes first to terminate backup services (Ex: <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">sqlagent.exe</code>) before encrypting files.</li>
+                    </ol>
+                </ol><br>
+                <li><strong>During the Attack (Execution Phase)</strong> </li>
+                <ol class="list-[decimal] list-outside pl-4 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
+                    <li><strong>Real-time adaptation. Malware may re-enumerate to:</strong> </li>
+                    <ol class="list-disc list-outside pl-4 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
+                        <li>Inject into newly launched processes (Ex: a user opening <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">calc.exe</code>).</li>
+                        <li>Check if security tools were restarted.</li>
+                        <li>Finding Privilege Escalation vulnerable processes (Ex: unpatched <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">spoolsv.exe "PrintNightmare")</code></li>
+                        <li>Injecting into a long-running process (Ex: <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">svchost.exe</code>) for persistence.</li>
+                        <li>Targeting <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">lsass.exe</code> after gaining initial access for credential dumping </li>
+                    </ol>
+                </ol><br>
+                <li><strong>After the Attack (Persistence/Cleanup/Lateral Movement)</strong> </li>
+                <ol class="list-disc list-outside pl-4 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
+                    <li>Using tools like <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">psExec or WMI</code> to find processes on other machines in the network.</li>
+                </ol>
+            </ol>
+        </p><br>
+        <h2 class="text-[17px] font-bold text-blue-400">The Bottom Line:</h2>
+        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
+            Process enumeration is the Swiss Army knife in a hacker’s toolkit and it is used before, during, and after attacks to gather intel, exploit weaknesses, and evade consequences.
+            For defenders, spotting suspicious enumeration (Ex: mass <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">OpenProcess</code> calls) is a red flag. 
+            Understanding this cat-and-mouse game isn’t just technical, it’s critical for building resilient systems. Moreover, process enumeration is not inherently malicious, sysadmins and EDRs use it too
+        </p><br>
+        <h2 class="text-[17px] font-bold text-blue-400">Methods for process enumeration:</h2>
+        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
+          In Windows, there are several APIs and methods to enumerate processes, each with its own advantages and use cases. Below is a detailed breakdown of the most common techniques, including WinAPI functions, command-line tools, and scripting methods. 
+        </p>
+        <style>
+          pre 
+          {
+            background-color: #334155;
+            color: #dcdcdc;
+            font-family: Consolas, monospace;
+            overflow-x: auto;
+            position: relative;
+          }              
+          .copy-button 
+          {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background-color: #1e293b;
+            color: #f8fafc;
+            border: none;
+            padding: 5px 10px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            z-index: 2;
+          }              
+          .copy-button:hover 
+          {
+            background-color: #3b82f6;
+          }              
+          summary    
+          {
+          font-size: 1.1em;
+          font-weight: bold;
+          cursor: pointer;
+          padding: 0.4rem 0.6rem;  /* reduce padding here */
+          }         
+          details 
+          {
+            position: relative;
+            margin-bottom: 0.25rem;  /* or 0 */
+          }
+        </style>
+        <script>
+          function copyCode(button) {
+            const codeBlock = button.parentElement.querySelector('code');
+            const text = codeBlock.textContent;
+        
+            navigator.clipboard.writeText(text).then(() => {
+              button.textContent = 'Copied!';
+              setTimeout(() => {
+                button.textContent = 'Copy';
+              }, 1500);
+            });
+          }
+        </script>                 
+      <details>
+        <summary class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">Using: EnumProcesses </summary>
+        <pre>
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <code class="language-csharp">                    
+          using System;
+          using System.Runtime.InteropServices;
+          using System.Text;
+          
+          class Program
+          {
+              [DllImport("psapi.dll", SetLastError = true)]
+              static extern bool EnumProcesses(
+                  [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U4)] uint[] processIds,
+                  uint arraySizeBytes,
+                  out uint bytesCopied
+              );
+          
+              [DllImport("psapi.dll", SetLastError = true)]
+              static extern uint GetModuleFileNameEx(
+                  IntPtr hProcess,
+                  IntPtr hModule,
+                  [Out] StringBuilder lpFilename,
+                  uint nSize
+              );
+          
+              static void Main()
+              {
+                  uint[] processIds = new uint[1024];
+                  uint bytesCopied;
+          
+                  if (!EnumProcesses(processIds, (uint)(processIds.Length * sizeof(uint)), out bytesCopied))
+                  {
+                      Console.WriteLine($"EnumProcesses failed: {Marshal.GetLastWin32Error()}");
+                      return;
+                  }
+          
+                  int numProcesses = (int)(bytesCopied / sizeof(uint));
+                  Console.WriteLine("PID\tProcess Name\tExecutable Path");
+                  Console.WriteLine("-----------------------------------------------");
+          
+                  for (int i = 0; i < numProcesses; i++)
+                  {
+                      uint pid = processIds[i];
+                      if (pid == 0) continue; // Skip Idle process
+          
+                      try
+                      {
+                          IntPtr hProcess = System.Diagnostics.Process.GetProcessById((int)pid).Handle;
+                          var sb = new StringBuilder(1024);
+                          if (GetModuleFileNameEx(hProcess, IntPtr.Zero, sb, (uint)sb.Capacity) != 0)
+                          {
+                              Console.WriteLine($"{pid}\t{System.Diagnostics.Process.GetProcessById((int)pid).ProcessName}\t{sb}");
+                          }
+                      }
+                      catch { } // Skip inaccessible processes
+                  }
+              }
+          }
+        </code></pre>
+      </details>
+      <details>
+        <summary class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">Using: WTSEnumerateProcesses</summary>
+        <pre>
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <code class="language-csharp">                    
+          using System;
+          using System.Runtime.InteropServices;
+
+          class Program
+          {
+              [DllImport("wtsapi32.dll", SetLastError = true)]
+              static extern bool WTSEnumerateProcesses(
+                  IntPtr hServer,
+                  int Reserved,
+                  int Version,
+                  ref IntPtr ppProcessInfo,
+                  ref int pCount
+              );
+
+              [DllImport("wtsapi32.dll", SetLastError = true)]
+              static extern void WTSFreeMemory(IntPtr pMemory);
+
+              [StructLayout(LayoutKind.Sequential)]
+              struct WTS_PROCESS_INFO
+              {
+                  public int SessionId;
+                  public int ProcessId;
+                  public IntPtr pProcessName;
+                  public IntPtr pUserSid;
+              }
+
+              static void Main()
+              {
+                  IntPtr ppProcessInfo = IntPtr.Zero;
+                  int pCount = 0;
+
+                  if (!WTSEnumerateProcesses(IntPtr.Zero, 0, 1, ref ppProcessInfo, ref pCount))
+                  {
+                      Console.WriteLine($"WTSEnumerateProcesses failed: {Marshal.GetLastWin32Error()}");
+                      return;
+                  }
+
+                  Console.WriteLine("PID\tProcess Name");
+                  Console.WriteLine("----------------------");
+
+                  for (int i = 0; i < pCount; i++)
+                  {
+                      IntPtr ptr = (IntPtr)((long)ppProcessInfo + i * Marshal.SizeOf(typeof(WTS_PROCESS_INFO)));
+                      var info = (WTS_PROCESS_INFO)Marshal.PtrToStructure(ptr, typeof(WTS_PROCESS_INFO));
+
+                      string processName = Marshal.PtrToStringAnsi(info.pProcessName) ?? "(Unknown)";
+                      Console.WriteLine($"{info.ProcessId}\t{processName}");
+                  }
+
+                  WTSFreeMemory(ppProcessInfo);
+              }
+          }
+
+        </code></pre>
+      </details>
+      <details> 
+        <summary class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">Using: NtQuerySystemInformation</summary>
+        <pre>
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <code class="language-csharp">                    
+          using System;
+          using System.Collections.Generic;
+          using System.Runtime.InteropServices;
+          
+          internal static class Program
+          {
+              static void Main()
+              {
+                  foreach (var p in NtEnum())
+                      Console.WriteLine($"{p.pid,6} → {p.name}");
+              }
+              private static IEnumerable<(int pid, string name)> NtEnum()
+              {
+                  const int SystemProcessInformation = 5;
+                  const int STATUS_INFO_LENGTH_MISMATCH = unchecked((int)0xC0000004);
+          
+                  int len = 0x100000;
+                  IntPtr buf = Marshal.AllocHGlobal(len);
+                  try
+                  {
+                      int status;
+                      int need;
+                      while ((status = NtQuerySystemInformation(
+                                  SystemProcessInformation, buf, len, out need))
+                             == STATUS_INFO_LENGTH_MISMATCH)
+                      {
+                          len = need;
+                          Marshal.FreeHGlobal(buf);
+                          buf = Marshal.AllocHGlobal(len);
+                      }
+                      if (status < 0) yield break;        // call failed
+                      IntPtr ptr = buf;
+                      for (; ; )
+                      {
+                          var spi = (SYSTEM_PROCESS_INFORMATION)
+                                    Marshal.PtrToStructure(ptr,
+                                        typeof(SYSTEM_PROCESS_INFORMATION));
+          
+                          string image;
+                          if (spi.ImageName.Length > 0 && spi.ImageName.Buffer != IntPtr.Zero)
+                              image = Marshal.PtrToStringUni(
+                                          spi.ImageName.Buffer, spi.ImageName.Length / 2);
+                          else
+                              image = "System Idle Process";
+          
+                          yield return ((int)spi.UniqueProcessId, image);
+          
+                          if (spi.NextEntryOffset == 0) break;
+                          ptr = IntPtr.Add(ptr, (int)spi.NextEntryOffset);
+                      }
+                  }
+                  finally { Marshal.FreeHGlobal(buf); }
+              }
+              // ---------------- P/Invoke & structs ----------------
+              [DllImport("ntdll.dll")]
+              private static extern int NtQuerySystemInformation(
+                  int systemInformationClass,
+                  IntPtr systemInformation,
+                  int systemInformationLength,
+                  out int returnLength);
+          
+              [StructLayout(LayoutKind.Sequential)]
+              private struct UNICODE_STRING
+              {
+                  public ushort Length;
+                  public ushort MaximumLength;
+                  public IntPtr Buffer;
+              }
+              [StructLayout(LayoutKind.Sequential)]
+              private struct SYSTEM_PROCESS_INFORMATION
+              {
+                  public uint NextEntryOffset;
+                  public uint NumberOfThreads;
+                  private long Reserved1, Reserved2, Reserved3;
+                  public long CreateTime, UserTime, KernelTime;
+                  public UNICODE_STRING ImageName;
+                  public int BasePriority;
+                  public IntPtr UniqueProcessId;
+                  public IntPtr InheritedFromUniqueProcessId;
+              }
+          }          
+        </code></pre>
+      </details>
+      <details>
+        <summary class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">Using: Powershell command line </summary>
+        <pre>
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <code class="language-powershell">                    
+          Get-CimInstance Win32_Process | Select @{n='PID';e={$_.ProcessId}}, @{n='PPID';e={$_.ParentProcessId}}, @{n='Threads';e={$_.ThreadCount}}, @{n='Name';e={$_.Name}} | ft -a
+        </code></pre>
+      </details><br>
+      <h2 class="text-[17px] font-bold text-blue-400">Extra Mile:</h2>
+        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
+          We've built a process-enumeration project; now adapt it for the pre-attack reconnaissance stage, and modify the code so it logs the results to a file and exfiltrates that file back to you.</p>
+    </section>
+  </main>
+  <!-- Footer -->
+  <footer class="flex items-center justify-center py-6">
+    <a href="../index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">← Back to Dashboard</a>
+  </footer>
+
+  <!-- Reading-time logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const dateWritten = '15/Jan/2025';
+      const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
+      const minutes = Math.max(1, Math.ceil(words / 230));
+      document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
+    });
+  </script>
+</body>
+</html>
