@@ -25,7 +25,7 @@
             Process enumeration is the digital version of that, it’s the technique of listing every active process (programs, apps, services) running on a computer, along
             with details like:
             <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                <li>Process names (e.g., chrome.exe, avp.exe)</li>
+                <li>Process names (Ex: <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">chrome.exe, avp.exe</code>)</li>
                 <li>Unique IDs (PIDs) </li>
                 <li>Memory usage </li>
                 <li>Parent/child relationships </li>
@@ -33,7 +33,7 @@
             </ol><br>
             <p class="font-bold pl-2">For penetration testers, understanding process enumeration is critical for:</p>
             <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                <li>Identifying high-value targets (e.g., lsass.exe for credential dumping).</li>
+                <li>Identifying high-value targets (Ex: <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">lsass.exe</code> for credential dumping).</li>
                 <li>Evading detection by security tools (EDR/AV).</li>
                 <li>Executing post-exploitation tactics like process injection or lateral movement.</li>
             </ol>
@@ -361,11 +361,23 @@
         <button class="copy-button" onclick="copyCode(this)">Copy</button>
         <code class="language-powershell">                    
           Get-CimInstance Win32_Process | Select @{n='PID';e={$_.ProcessId}}, @{n='PPID';e={$_.ParentProcessId}}, @{n='Threads';e={$_.ThreadCount}}, @{n='Name';e={$_.Name}} | ft -a
-        </code></pre>
-      </details><br>
-      <h2 class="text-[17px] font-bold text-blue-400">Extra Mile:</h2>
-        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
-          We've built a process-enumeration project; now adapt it for the pre-attack reconnaissance stage, and modify the code so it logs the results to a file and exfiltrates that file back to you.</p>
+        </code>
+      </details>
+      <div class="boxed-inline">
+        Extra Mile:<br>We've built a process-enumeration project; now adapt it for the pre-attack reconnaissance stage, and modify the code so it logs the results to a file and exfiltrates that file back to you.</p>
+      </div>
+      <style>
+          .boxed-inline
+          {
+              display:inline-block;
+              border:5px solid #555;
+              background:#334155;
+              padding:14px 18px;
+              margin:20px 0;
+              border-radius:6px;
+              line-height:1.45;
+          }
+      </style>  
     </section>
   </main>
   <!-- Footer -->
