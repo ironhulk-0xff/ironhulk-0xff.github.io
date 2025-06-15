@@ -40,7 +40,7 @@
         </p><br>
         <h2 class="text-[17px] font-bold text-blue-400">Why Do Malware Developers Enumerate Processes?</h2>
         <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
-            Malware doesn’t blindly attack. It reconnaissances first. Here’s why hackers lean on process enumeration:
+          Attackers don’t blindly attack, they gather information first, then weaponize then attack. Here’s why hackers lean on process enumeration:
             <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
                 <li><strong>Hunting Security Tools:</strong> Malware scans for processes like <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">msmpeng.exe</code> (Windows Defender) or <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">egui.exe</code> (ESET) or <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CrowdStrike</code>. Spot one? It’ll try to kill the process, evade detection, or disable the service.</li>
                 <li><strong>Finding Injection Targets:</strong> To hide, malware often injects malicious code into legitimate processes (Ex: <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">explorer.exe</code>). Enumeration identifies trusted, long-running targets—making the attack invisible.</li>
