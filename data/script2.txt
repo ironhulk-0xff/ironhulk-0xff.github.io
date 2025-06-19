@@ -4,7 +4,12 @@ $ whoami
 IronHulk
 
 $ ls
-about.txt  tools/  blog/  certs/
+about.txt  human_mistake.txt  tools/  blog/  certs/
+
+$ cat human_mistake.txt
+I’m human; slip-ups happen. If you spot anything wrong or off-topic details in my post, reach out so I can correct them promptly.
+
+“Enjoy the read!
 
 $ cat about.txt
 This space is where I share thoughts, tools, and techniques from my journey in cybersecurity.
@@ -17,3 +22,4 @@ or raises a question, reach out — I’m always open to talk, troubleshoot, or 
 
 Yours
 Iron Hulk
+
