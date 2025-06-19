@@ -24,7 +24,7 @@
 
     <div class="flex flex-1 overflow-hidden">
       <!-- Sidebar Navigation (desktop only) -->
-      <aside class="hidden md:flex md:w-64 bg-[#1e293b] p-5 flex-col overflow-y-auto">
+      <aside class="hidden md:flex md:w-100 bg-[#1e293b] p-5 flex-col overflow-y-auto">
         <img src="images/iron.png" alt="Iron Hulk" class="w-[200px] h-auto rounded-lg shadow-lg mx-auto" />
         <nav class="space-y-2 text-blue-400 mt-2">
           <a href="aboutme.html" class="block text-left w-full hover:underline">About Me</a>
@@ -34,33 +34,25 @@
             <div>
               <button onclick="toggleBlogDropdown('desktop')" class="block text-left w-full hover:underline">Blogs</button>
               <div id="desktopBlogDropdown" class="ml-4 mt-2 flex-col space-y-2 hidden">
-                <div>
-                  <a>Red Team</a>
-                  <div class="ml-4 mt-1 space-y-1 text-sm">
-                  
-                  </div>
-                </div>
-                <div>
-                  <a>Blue Team</a>
-                  <div class="ml-4 mt-1 space-y-1 text-sm">
-                    
-                  </div>
-                </div>
-                <div>
-                  <a>Malware Development</a>
-                  <div class="ml-4 mt-1 space-y-1 text-sm">
-                    <a href="MalDev/Detection.html" class="hover:underline text-white">- Detection Mechanisms</a><br>
-                    <a href="MalDev/PEB.html" class="hover:underline text-white">- Process Environment Block</a><br>
-                    <a href="MalDev/Payload_Placement.html" class="hover:underline text-white">- Payload Placement</a><br>
-                    <a href="MalDev/PayloadEncryption.html" class="hover:underline text-white">- Payload Encryption</a><br>
-                    <a href="MalDev/PayloadObfuscation.html" class="hover:underline text-white">- Payload Obfuscation</a><br>
-                    <a href="MalDev/ProcessEnumeration.html" class="hover:underline text-white">- Process Enumeration</a><br>
-                  </div>
-                </div>
+                <!-- ▼ Malware Development ▼ -->
+                <details class="mt-4 group">
+                  <summary class="text-blue-400 font-semibold cursor-pointer list-none flex items-center">
+                    <span class="mr-1 transition-transform duration-200 group-open:rotate-90">▸</span>
+                    Malware Development
+                  </summary>
+                    <div>
+                      <a href="MalDev/Detection.html"           class="block hover:underline text-white pl-3">- Detection Mechanisms</a>
+                      <a href="MalDev/PEB.html"                 class="block hover:underline text-white pl-3">- Process Environment Block</a>
+                      <a href="MalDev/Payload_Placement.html"   class="block hover:underline text-white pl-3">- Payload Placement</a>
+                      <a href="MalDev/PayloadEncryption.html"   class="block hover:underline text-white pl-3">- Payload Encryption</a>
+                      <a href="MalDev/PayloadObfuscation.html"  class="block hover:underline text-white pl-3">- Payload Obfuscation</a>
+                      <a href="MalDev/ProcessEnumeration.html"  class="block hover:underline text-white pl-3">- Process Enumeration</a>
+                    </div>
+                </details>
+                <!-- ▲ end Malware Development ▲ -->     
               </div>
             </div>
-          <!-- RoadMap End-->
-
+          <!-- Blog End -->
           <!-- RoadMap Start-->
             <div>
               <button onclick="toggleRoadMapDropdown('desktop')" class="block text-left w-full hover:underline">Courses</button>
@@ -144,27 +136,29 @@
           }        
           runTerminalAnimation();
         </script>       
-            
         <!-- Blog Section Start -->
-          <div id="blogSection" class="hidden space-y-6">
-            <div class="bg-[#1f2937] p-6 rounded-xl shadow-md text-white">
-              <div>
-                <h3 class="text-blue-400 font-semibold">Red Team</h3>
+        <div id="blogSection" class="hidden space-y-6">
+          <div class="bg-[#1f2937] p-6 rounded-xl shadow-md text-white">
+            <!-- ▼ Malware-Dev dropdown ▼ -->
+            <details class="mt-4 group">
+              <!-- header -->
+              <summary class="text-blue-400 font-semibold cursor-pointer list-none flex items-center">
+                <span class="mr-1 transition-transform duration-200 group-open:rotate-90">▸</span>
+                Malware Development
+              </summary>
+              <div class="mt-2 ml-4 space-y-1">
+                <a href="MalDev/Detection.html"           class="block hover:underline">- Detection Mechanisms</a>
+                <a href="MalDev/PEB.html"                 class="block hover:underline">- Process Environment Block</a>
+                <a href="MalDev/Payload_Placement.html"   class="block hover:underline">- Payload Placement</a>
+                <a href="MalDev/PayloadEncryption.html"   class="block hover:underline">- Payload Encryption</a>
+                <a href="MalDev/PayloadObfuscation.html"  class="block hover:underline">- Payload Obfuscation</a>
+                <a href="MalDev/ProcessEnumeration.html"  class="block hover:underline">- Process Enumeration</a>
+                <a href="MalDev/CallbackAbuse.html"       class="block hover:underline">- Callback Abuse</a>
               </div>
-              <div class="mt-4">
-                <h3 class="text-blue-400 font-semibold">Blue Team</h3>
-              </div>
-              <div class="mt-4">
-                <h3 class="text-blue-400 font-semibold">Maldev</h3>
-                <a href="MalDev/Detection.html" class="block ml-4 hover:underline">- Detection Mechanisms</a>
-                <a href="MalDev/PEB.html" class="block ml-4 hover:underline">- Process Environment Block </a>
-                <a href="MalDev/Payload_Placement.html" class="block ml-4 hover:underline">- Payload Placement </a>
-                <a href="MalDev/PayloadEncryption.html" class="block ml-4 hover:underline">- Payload Encryption</a>
-                <a href="MalDev/PayloadObfuscation.html" class="block ml-4 hover:underline">- Payload Obfuscation</a>
-                <a href="MalDev/ProcessEnumeration.html" class="block ml-4 hover:underline">- Process Enumeration</a><br>
-              </div>
-            </div>
+            </details>
+            <!-- ▲ end Malware-Dev dropdown ▲ -->
           </div>
+        </div>
         <!-- Blog Section End -->
         <!-- Courses Section Start -->
           <div id="RoadMapSection" class="hidden space-y-6">
