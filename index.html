@@ -34,6 +34,17 @@
             <div>
               <button onclick="toggleBlogDropdown('desktop')" class="block text-left w-full hover:underline">Blogs</button>
               <div id="desktopBlogDropdown" class="ml-4 mt-2 flex-col space-y-2 hidden">
+                <!-- ▼ General Info ▼ -->
+                <details class="mt-4 group">
+                  <summary class="text-blue-400 font-semibold cursor-pointer list-none flex items-center">
+                    <span class="mr-1 transition-transform duration-200 group-open:rotate-90">▸</span>
+                    General Info
+                  </summary>
+                    <div>
+                      <a href="MalDev/Detection.html"           class="block hover:underline text-white pl-3">- What is Firewall</a>
+                    </div>
+                </details>
+                <!-- ▲ end General Info ▲ -->     
                 <!-- ▼ Malware Development ▼ -->
                 <details class="mt-4 group">
                   <summary class="text-blue-400 font-semibold cursor-pointer list-none flex items-center">
@@ -153,7 +164,6 @@
                 <a href="MalDev/PayloadEncryption.html"   class="block hover:underline">- Payload Encryption</a>
                 <a href="MalDev/PayloadObfuscation.html"  class="block hover:underline">- Payload Obfuscation</a>
                 <a href="MalDev/ProcessEnumeration.html"  class="block hover:underline">- Process Enumeration</a>
-                <a href="MalDev/CallbackAbuse.html"       class="block hover:underline">- Callback Abuse</a>
               </div>
             </details>
             <!-- ▲ end Malware-Dev dropdown ▲ -->
