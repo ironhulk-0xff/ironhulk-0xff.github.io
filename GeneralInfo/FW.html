@@ -238,76 +238,80 @@
         </div>
 
         <h2 class="text-[17px] font-bold text-blue-400 mb-1">Default-Deny vs Default-Allow Policies:</h2>
-        <table class="table-auto w-full border-collapse text-sm md:text-base">
-          <thead class="bg-gray-800 text-white">
-            <tr>
-              <th class="px-4 py-2 border border-gray-600 font-semibold text-center">Policy Type</th>
-              <th class="px-4 py-2 border border-gray-600 font-semibold text-center">Approach</th>
-              <th class="px-4 py-2 border border-gray-600 font-semibold text-center">Advantages</th>
-              <th class="px-4 py-2 border border-gray-600 font-semibold text-center">Disadvantages</th>
-              <th class="px-4 py-2 border border-gray-600 font-semibold text-center">Best For</th>
-            </tr>
-          </thead>
-          <tbody class="bg-gray-900 text-gray-100">
-            <tr>
-              <td class="px-4 py-3 border border-gray-700 font-semibold">Default-Deny</td>
-              <td class="px-4 py-3 border border-gray-700">Blocks all traffic except explicitly allowed</td>
-              <td class="px-4 py-3 border border-gray-700">Most secure approach, minimizes attack surface</td>
-              <td class="px-4 py-3 border border-gray-700">Higher admin overhead, can break legitimate apps</td>
-              <td class="px-4 py-3 border border-gray-700">High-security environments, regulated industries</td>
-            </tr>
-            <tr>
-              <td class="px-4 py-3 border border-gray-700 font-semibold">Default-Allow</td>
-              <td class="px-4 py-3 border border-gray-700">Permits all traffic except explicitly blocked</td>
-              <td class="px-4 py-3 border border-gray-700">Easier to implement, fewer user complaints</td>
-              <td class="px-4 py-3 border border-gray-700">Security risks from overlooked threats</td>
-              <td class="px-4 py-3 border border-gray-700">Internal test networks, legacy environments</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="overflow-x-auto rounded-md border border-gray-700">
+          <table class="table-auto w-full border-collapse text-sm md:text-base">
+            <thead class="bg-gray-800 text-white">
+              <tr>
+                <th class="px-4 py-2 border border-gray-600 font-semibold text-center">Policy Type</th>
+                <th class="px-4 py-2 border border-gray-600 font-semibold text-center">Approach</th>
+                <th class="px-4 py-2 border border-gray-600 font-semibold text-center">Advantages</th>
+                <th class="px-4 py-2 border border-gray-600 font-semibold text-center">Disadvantages</th>
+                <th class="px-4 py-2 border border-gray-600 font-semibold text-center">Best For</th>
+              </tr>
+            </thead>
+            <tbody class="bg-gray-900 text-gray-100">
+              <tr>
+                <td class="px-4 py-3 border border-gray-700 font-semibold">Default-Deny</td>
+                <td class="px-4 py-3 border border-gray-700">Blocks all traffic except explicitly allowed</td>
+                <td class="px-4 py-3 border border-gray-700">Most secure approach, minimizes attack surface</td>
+                <td class="px-4 py-3 border border-gray-700">Higher admin overhead, can break legitimate apps</td>
+                <td class="px-4 py-3 border border-gray-700">High-security environments, regulated industries</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 border border-gray-700 font-semibold">Default-Allow</td>
+                <td class="px-4 py-3 border border-gray-700">Permits all traffic except explicitly blocked</td>
+                <td class="px-4 py-3 border border-gray-700">Easier to implement, fewer user complaints</td>
+                <td class="px-4 py-3 border border-gray-700">Security risks from overlooked threats</td>
+                <td class="px-4 py-3 border border-gray-700">Internal test networks, legacy environments</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <br>
         <h2 class="text-[17px] font-bold text-blue-400 mb-1">Firewall Types Quick-Reference:</h2>
-        <table class="table-auto w-full border-collapse text-sm md:text-base">
-          <thead class="bg-gray-800 text-white">
-            <tr>
-              <th class="px-4 py-2 border border-gray-600 font-semibold text-center">Type</th>
-              <th class="px-4 py-2 border border-gray-600 font-semibold text-center">OSI Layer</th>
-              <th class="px-4 py-2 border border-gray-600 font-semibold text-center">Inspection Level</th>
-              <th class="px-4 py-2 border border-gray-600 font-semibold text-center">Best For</th>
-              <th class="px-4 py-2 border border-gray-600 font-semibold text-center">Example Products</th>
-            </tr>
-          </thead>
-          <tbody class="bg-gray-900 text-gray-100">
-            <tr>
-              <td class="px-4 py-3 border border-gray-700 font-semibold">Packet Filter</td>
-              <td class="px-4 py-3 border border-gray-700">L3-L4</td>
-              <td class="px-4 py-3 border border-gray-700">Headers only</td>
-              <td class="px-4 py-3 border border-gray-700">Basic segmentation, ISPs</td>
-              <td class="px-4 py-3 border border-gray-700">Router ACLs, iptables</td>
-            </tr>
-            <tr>
-              <td class="px-4 py-3 border border-gray-700 font-semibold">Stateful</td>
-              <td class="px-4 py-3 border border-gray-700">L4</td>
-              <td class="px-4 py-3 border border-gray-700">Connection state</td>
-              <td class="px-4 py-3 border border-gray-700">Enterprise perimeters</td>
-              <td class="px-4 py-3 border border-gray-700">Cisco ASA, Juniper SRX</td>
-            </tr>
-            <tr>
-              <td class="px-4 py-3 border border-gray-700 font-semibold">Proxy</td>
-              <td class="px-4 py-3 border border-gray-700">L7</td>
-              <td class="px-4 py-3 border border-gray-700">Full content</td>
-              <td class="px-4 py-3 border border-gray-700">Web/app protection</td>
-              <td class="px-4 py-3 border border-gray-700">Blue Coat, Squid</td>
-            </tr>
-            <tr>
-              <td class="px-4 py-3 border border-gray-700 font-semibold">NGFW</td>
-              <td class="px-4 py-3 border border-gray-700">L2-L7</td>
-              <td class="px-4 py-3 border border-gray-700">Apps/users/content</td>
-              <td class="px-4 py-3 border border-gray-700">Modern enterprises</td>
-              <td class="px-4 py-3 border border-gray-700">Palo Alto, FortiGate</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="overflow-x-auto rounded-md border border-gray-700">
+          <table class="table-auto w-full border-collapse text-sm md:text-base">
+            <thead class="bg-gray-800 text-white">
+              <tr>
+                <th class="px-4 py-2 border border-gray-600 font-semibold text-center">Type</th>
+                <th class="px-4 py-2 border border-gray-600 font-semibold text-center">OSI Layer</th>
+                <th class="px-4 py-2 border border-gray-600 font-semibold text-center">Inspection Level</th>
+                <th class="px-4 py-2 border border-gray-600 font-semibold text-center">Best For</th>
+                <th class="px-4 py-2 border border-gray-600 font-semibold text-center">Example Products</th>
+              </tr>
+            </thead>
+            <tbody class="bg-gray-900 text-gray-100">
+              <tr>
+                <td class="px-4 py-3 border border-gray-700 font-semibold">Packet Filter</td>
+                <td class="px-4 py-3 border border-gray-700">L3-L4</td>
+                <td class="px-4 py-3 border border-gray-700">Headers only</td>
+                <td class="px-4 py-3 border border-gray-700">Basic segmentation, ISPs</td>
+                <td class="px-4 py-3 border border-gray-700">Router ACLs, iptables</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 border border-gray-700 font-semibold">Stateful</td>
+                <td class="px-4 py-3 border border-gray-700">L4</td>
+                <td class="px-4 py-3 border border-gray-700">Connection state</td>
+                <td class="px-4 py-3 border border-gray-700">Enterprise perimeters</td>
+                <td class="px-4 py-3 border border-gray-700">Cisco ASA, Juniper SRX</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 border border-gray-700 font-semibold">Proxy</td>
+                <td class="px-4 py-3 border border-gray-700">L7</td>
+                <td class="px-4 py-3 border border-gray-700">Full content</td>
+                <td class="px-4 py-3 border border-gray-700">Web/app protection</td>
+                <td class="px-4 py-3 border border-gray-700">Blue Coat, Squid</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 border border-gray-700 font-semibold">NGFW</td>
+                <td class="px-4 py-3 border border-gray-700">L2-L7</td>
+                <td class="px-4 py-3 border border-gray-700">Apps/users/content</td>
+                <td class="px-4 py-3 border border-gray-700">Modern enterprises</td>
+                <td class="px-4 py-3 border border-gray-700">Palo Alto, FortiGate</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <br>
         <h2 class="text-[17px] font-bold text-blue-400 mb-1">Evolution of Firewall Technology:</h2>
         <div class="flex justify-Left pl-6">
