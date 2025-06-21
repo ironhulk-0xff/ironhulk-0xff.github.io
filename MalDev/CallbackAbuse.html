@@ -80,7 +80,7 @@
             Encryptor.cpp automates:
             <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
                 <li><strong>Encrypt the payload:</strong></li>
-                <ol class="list-[disck] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
+                <ol class="list-[disck] list-outside pl-4 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
                     <li>It copies your raw shellcode into a resizable buffer large enough for AES-CBC padding.</li>
                     <li>It derives an AES-256 key from a hard-coded 32-byte seed using SHA-256 (<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CryptDeriveKey</code>).</li>
                     <li>It sets an IV (initialisation vector) and calls<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CryptEncrypt</code>, which adds PKCS-7 padding and returns the exact ciphertext length.</li>
@@ -95,22 +95,22 @@
             Callback-Loader.cpp is the partner stage. Its workflow:
             <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
                 <li><strong>Decrypt on the fly:</strong></li>
-                <ol class="list-[disck] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
+                <ol class="list-[disck] list-outside pl-4 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
                     <li>It reads <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">sizeof(encryptedShellcode)</code> to get the ciphertext length, allocates a temporary RW buffer, copies the blob, and runs <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CryptDecrypt</code>.</li>
                     <li><code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CryptDecrypt</code> returns <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">plainLen</code>, the true length of the original shellcode (PKCS padding removed).</li>
                 </ol>
                 <li><strong>Move to executable class="table-auto w-full border border-gray-500 border-collapse" memory:</strong></li>
-                <ol class="list-[disck] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
+                <ol class="list-[disck] list-outside pl-4 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
                     <li>It allocates exactly <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">plainLen</code> bytes with <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">VirtualAlloc</code> using <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">PAGE_EXECUTE_READWRITE</code> and copies the plaintext shellcode there.</li>
                     <li>A quick <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">FlushInstructionCache</code> ensures the CPU sees fresh instructions.</li>
                 </ol>
                 <li><strong>Register a timer-queue callback:</strong></li>
-                <ol class="list-[disck] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
+                <ol class="list-[disck] list-outside pl-4 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
                     <li>It calls <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CreateTimerQueueTimer</code>, passing the address of <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">Trampoline</code> as the callback and a Ex: <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">2000-millisecond</code> due time.</li>
                     <li><code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">Trampoline</code> is a tiny stub with the required signature; all it does is cast the global shellcode pointer to <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">void(*)()</code> and jump.</li>
                 </ol>
                 <li><strong>Execution path:</strong></li>
-                <ol class="list-[disck] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
+                <ol class="list-[disck] list-outside pl-4 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
                     <li>When the timer fires, the OS chooses (or spins up) a thread-pool thread and invokes <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">Trampoline</code>.</li>
                     <li>No <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CreateThread</code>, no DLL injection, no obvious entry point—the payload runs completely inside an OS-managed thread.</li>
                 </ol>
@@ -134,11 +134,11 @@
         <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">Note: this was after 100 times testing 😎</p>
         <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2 font-bold">1. Encrypt your payload:</p>
         <div class="flex justify-Left pl-6">
-            <img src="../MalDev/images/Enc.png" class="w-90px h-auto" />
+            <img src="../MalDev/images/Enc.png" class="w-[1500px] h-auto" />
         </div><br>
         <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2 font-bold">2. Run using CreateTimerQueueTimer API:</p>
         <div class="flex justify-Left pl-6">
-            <img src="../MalDev/images/Run.png" class="w-90px h-auto" />
+            <img src="../MalDev/images/Run.png" class="w-[1500px] h-auto" />
         </div><br>
         <div class="boxed-inline">
             This is just the first milestone, and we have a long, gritty road lies ahead before we can bypass every security layer and
