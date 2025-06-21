@@ -3,116 +3,112 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Iron Hulk – About</title>
+  <title>Iron Hulk — AboutMe</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-[#0f172a] text-white font-sans min-h-screen">
-  <!-- Header -->
-  <header class="bg-[#1e293b] p-4 shadow flex items-center justify-between gap-4">
-    <div>
-      <h1 class="text-xl font-bold text-blue-400">About Me</h1>
-      <small id="reading-time" class="text-xs text-gray-400"></small>
-    </div>
-    <a href="../index.html" class="text-gray-300 text-sm hover:underline">← Back to Dashboard</a>
+<body class="min-h-screen bg-[#0f172a] font-sans text-gray-100 flex flex-col">
+  <!-- Header → gradient strip & back link -->
+  <header class="bg-[#1e293b] shadow flex items-center justify-between px-6 py-4">
+    <h1 class="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-sky-400 to-indigo-400">About Me</h1>
+    <a href="index.html" class="text-gray-300 hover:text-blue-400 text-sm">
+      ← Back to Dashboard
+    </a>
   </header>
-
-  <!-- Article -->
-  <main id="article" class="p-6 space-y-6">
-    <section class="bg-[#1f2937] p-6 rounded-xl shadow-md">
-      <h2 class="text-2xl font-bold text-blue-400">Introduction</h2>
-      <p class="text-1xl text-gray-300 leading-relaxed text-justify pl-2">
+  <main class="flex-1 p-6 space-y-12">
+    <!-- Intro card (placeholder paragraph) -->
+    <section class="rounded-2xl border border-blue-500/40 bg-gray-800/80 p-8 shadow-xl ring-1 ring-blue-500/20">
+      <h2 class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-sky-400 to-indigo-400 mb-4">Introduction</h2>
+      <p class="text-[15px] leading-relaxed text-gray-300 text-justify">
+        <!-- Put your intro text here -->
         I am a seasoned cybersecurity strategist with more than eight years of hands-on experience in network security, offensive operations, and enterprise cyber-defense architecture. My work spans malware development, red and purple team engagements, and enterprise-level security management, underpinned by CISM certification.
         On the blue team front, I build and maintain resilient defensive infrastructures: deploying and tuning EDR platforms, configuring firewalls, establishing IPsec tunnels, designing and hardening Active Directory, managing certificate lifecycles, automating patch management, and driving enterprise vulnerability scanning and reporting. These efforts keep preventive and detective controls sharp while ensuring compliance and operational resilience.
         As a malware developer and custom Command-and-Control server engineer, I craft bespoke offensive toolsets for simulation, red teaming, and post-exploitation workflows. My payloads operate stealthily in hardened environments, routinely bypassing state-of-the-art EDRs and network defense layers.
         During red team and pentesting operations, I specialize in adversary simulation, initial access, privilege escalation, and lateral movement across complex enterprise landscapes. In purple team engagements, I bridge red and blue efforts, closing visibility gaps, sharpening detection logic, and aligning threat modeling with incident-response playbooks.
         My expertise extends to firewall and encryption systems, PKI and certificate management, and holistic infrastructure security architecture. I ensure that security operations align with business objectives and regulatory mandates by blending strategic leadership with deep technical execution.  
-        </p>
-      <div class="mt-10">
-        <h2 class="text-2xl font-bold text-blue-400 mb-2">Technical Skill</h2>
-        <div id="skills" class="space-y-4 text-1xl pl-2">
-          <div data-skill="Web Pentesting" data-value="20"></div>
-          <div data-skill="Mobile Pentesting" data-value="0"></div>
-          <div data-skill="Active Directory Attack & Defense" data-value="70"></div>
-          <div data-skill="Red Team Activity (Cyber Kill Chain)" data-value="80"></div>
-          <div data-skill="Malware Development (AV/EDR bypass – Custom C2 Writer)" data-value="60"></div>
-          <div data-skill="Firewall Configuration (Routing – Policy – IPsec)" data-value="70"></div>
-          <div data-skill="EDR Configuration (Device Control – Application Control – Monitoring)" data-value="65"></div>
-          <div data-skill="AppLocker Configuration (White/Black List)" data-value="50"></div>
-          <div data-skill="Windows Internals (API/Kernel/User Mode)" data-value="60"></div>
-          <div data-skill="Process Injection & Code Execution Techniques" data-value="65"></div>
-          <div data-skill="Windows Privilege Escalation" data-value="60"></div>
-          <div data-skill="Persistence Mechanisms (Registry/Services/COM)" data-value="65"></div>
-          <div data-skill="Shellcode Obfuscation & Evasion" data-value="80"></div>
-          <div data-skill="PowerShell & C# Offensive Scripting" data-value="75"></div>
-          <div data-skill="Shellcode Encryption & Loader Development" data-value="65"></div>
+      </p>
+    </section>
+
+    <!-- Skill grids -->
+    <section class="grid gap-8 md:grid-cols-2">
+      <!-- Technical skills -->
+      <div class="rounded-2xl border border-cyan-500/40 bg-gray-800/80 p-8 shadow-xl ring-1 ring-cyan-500/20">
+        <h2 class="mb-6 flex items-center gap-2 text-2xl font-bold text-cyan-300">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 20l9-5-9-5-9 5 9 5z"/></svg>
+          Technical Skills
+        </h2>
+        <div class="space-y-4" id="tech-skills">
+          <!-- Skill bars injected by JS -->
         </div>
       </div>
-      <div class="mt-10">
-        <h2 class="text-2xl font-bold text-blue-400 mb-2">Non-Technical Skill</h2>
-        <div id="skills" class="space-y-4 text-1xl pl-2">
-          <div data-skill="Time Management" data-value="70"></div>
-          <div data-skill="Leadership & Work With Team" data-value="85"></div>
-          <div data-skill="Report Writing and Job Accuracy" data-value="70"></div>
-          <div data-skill="Calm Under Pressure" data-value="75"></div>
-          <div data-skill="Critical Thinking & Problem Solving" data-value="85"></div>
-          <div data-skill="Decision Making" data-value="80"></div>
-          <div data-skill="Presentation Skills" data-value="90"></div>
-          <div data-skill="Mentoring and Coaching" data-value="75"></div>
-          <div data-skill="Continuous Learning" data-value="95"></div>
-          <div data-skill="Strategic Planning & Vision" data-value="75"></div>
-          <div data-skill="Professional Ethics & Integrity" data-value="95"></div>
+
+      <!-- Non‑technical skills -->
+      <div class="rounded-2xl border border-emerald-500/40 bg-gray-800/80 p-8 shadow-xl ring-1 ring-emerald-500/20">
+        <h2 class="mb-6 flex items-center gap-2 text-2xl font-bold text-emerald-300">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          Soft Skills
+        </h2>
+        <div class="space-y-4" id="soft-skills">
+          <!-- Skill bars injected by JS -->
         </div>
       </div>
     </section>
   </main>
 
-  <script>
-    function getBarColor(percent) {
-      if (percent <= 25) return "bg-red-400";
-      if (percent <= 50) return "bg-orange-400";
-      if (percent <= 75) return "bg-yellow-400";
-      return "bg-green-500";
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const skillSections = document.querySelectorAll("div[id='skills']");
-
-      skillSections.forEach(section => {
-        section.querySelectorAll("div[data-skill]").forEach(el => {
-          const skill = el.dataset.skill;
-          const value = parseInt(el.dataset.value);
-          const colorClass = getBarColor(value);
-
-          el.innerHTML = `
-            <div class="flex justify-between">
-              <span>${skill}</span><span>${value}%</span>
-            </div>
-            <div class="bg-gray-700 h-3 rounded-full">
-              <div class="h-3 rounded-full ${colorClass}" style="width:${value}%"></div>
-            </div>
-          `;
-        });
-      });
-    });
-  </script>
-
   <!-- Footer -->
-  <footer class="flex items-center justify-center py-6">
-    <a href="../index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">← Back to Dashboard</a>
+  <footer class="py-6 text-center">
+    <a href="../index.html" class="inline-block rounded-lg bg-blue-600 px-5 py-2 text-sm font-semibold text-white hover:bg-blue-500 transition">← Back to Dashboard</a>
   </footer>
 
-  <!-- Reading-time logic -->
+  <!-- JS for skill bars & reading time -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const dateWritten = new Date()
-        .toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
-        .replace(/ /g, '/');           // e.g., "08/Jun/2025"
-  
-      const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
-      const minutes = Math.max(1, Math.ceil(words / 230));
-      document.getElementById('reading-time').textContent = `Date: ${dateWritten} – ${minutes} min reading`;
-    });
+    const tech = {
+      "Web Pentesting":20,
+      "Mobile Pentesting":0,
+      "Active Directory Attack & Defense":70,
+      "Red Team Activity (Cyber Kill Chain)":80,
+      "Malware Development (AV/EDR bypass – Custom C2 Writer)":60,
+      "Firewall Configuration (Routing – Policy – IPsec)":70,
+      "EDR Configuration":65,
+      "AppLocker Configuration":50,
+      "Windows Internals":60,
+      "Process Injection & Code Execution":65,
+      "Windows Privilege Escalation":60,
+      "Persistence Mechanisms":65,
+      "Shellcode Obfuscation & Evasion":80,
+      "PowerShell & C# Offensive Scripting":75,
+      "Shellcode Encryption & Loader":65
+    };
+
+    const soft = {
+      "Time Management":70,
+      "Leadership & Teamwork":85,
+      "Report Writing":70,
+      "Calm Under Pressure":75,
+      "Critical Thinking":85,
+      "Decision Making":80,
+      "Presentation":90,
+      "Mentoring":75,
+      "Continuous Learning":95,
+      "Strategic Planning":75,
+      "Ethics & Integrity":95
+    };
+
+    function barColor(v){return v<25?'bg-red-500':v<50?'bg-orange-500':v<75?'bg-yellow-400':'bg-green-500'}
+
+    function render(map,wrapper){
+      Object.entries(map).forEach(([k,v])=>{
+        wrapper.insertAdjacentHTML('beforeend',`
+          <div>
+            <div class="flex justify-between mb-1"><span>${k}</span><span>${v}%</span></div>
+            <div class="h-3 rounded-full bg-gray-700 overflow-hidden">
+              <div class="h-full ${barColor(v)}" style="width:${v}%"></div>
+            </div>
+          </div>`)
+      })
+    }
+
+    render(tech,document.getElementById('tech-skills'));
+    render(soft,document.getElementById('soft-skills'));
   </script>
-  
 </body>
 </html>
