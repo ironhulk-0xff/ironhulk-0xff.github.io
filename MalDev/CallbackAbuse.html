@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iron Hulk – Callback Abuse</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0f172a] text-white font-sans min-h-screen">
+  <!-- Header -->
+  <header class="bg-[#1e293b] p-4 shadow flex items-center justify-between gap-4">
+    <div>
+      <h1 class="text-xl font-bold text-blue-400">Callback Abuse</h1>
+      <small id="reading-time" class="text-xs text-gray-400"></small>
+    </div>
+    <a href="../index.html" class="text-gray-300 text-sm hover:underline">← Back to Dashboard</a>
+  </header>
+
+  <!-- Article -->
+  <main id="article" class="p-6 space-y-6">
+    <section class="bg-[#1f2937] p-6 rounded-xl shadow-md">
+        <h2 class="text-[17px] font-bold text-blue-400">Callback Functions, Concept and Purpose:</h2>
+        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
+            A callback function is simply a block of code whose address you hand to another routine so that routine can “call back” into your logic whenever a particular event 
+            or condition occurs. The controlling routine stores the pointer, and later, often on a worker thread of its own, it invokes that pointer exactly like any other 
+            function. This inversion of control is what makes callbacks so powerful:
+            <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
+                <li><strong>Event-driven flow:</strong> Your code runs only when it matters (Ex: a timer fires, a window receives a message, an I/O completes).</li>
+                <li><strong>Thread re-use:</strong> Because the operating system or library already owns a pool of threads, you rarely need to create one yourself.</li>
+                <li><strong>Stealth (in offensive work):</strong> Since no explicit <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CreateThread</code> call appears in your code, detection logic that keys off thread creation often misses the execution entirely.</li>
+            </ol><br>
+        </p>
+        <h2 class="text-[17px] font-bold text-blue-400">Common Windows Callback Vectors:</h2>
+        <table class="table-auto w-full border border-gray-500 border-collapse">
+            <thead>
+                <tr>
+                    <th class="px-4 py-2 border border-gray-500 font-semibold">API &amp; Signature</th>
+                    <th class="px-4 py-2 border border-gray-500 font-semibold">Legitimate Use</th>
+                    <th class="px-4 py-2 border border-gray-500 font-semibold">Off-Sec Angle</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="px-4 py-3 border border-gray-500">
+                        <code>CreateTimerQueueTimer</code><br>
+                        <code>VOID CALLBACK WaitOrTimer(PVOID, BOOLEAN)</code>
+                    </td>
+                    <td class="px-4 py-3 border border-gray-500">Periodic housekeeping on a pool thread.</td>
+                    <td class="px-4 py-3 border border-gray-500">Delay payload launch; blend with normal timers.</td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-3 border border-gray-500">
+                        <code>EnumWindows</code><br>
+                        <code>BOOL CALLBACK EnumProc(HWND, LPARAM)</code>
+                    </td>
+                    <td class="px-4 py-3 border border-gray-500">Enumerate top-level windows for UI tasks.</td>
+                    <td class="px-4 py-3 border border-gray-500">Invoke shellcode immediately during enumeration.</td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-3 border border-gray-500">
+                        <code>QueueUserAPC</code><br>
+                        <code>VOID NTAPI ApcProc(ULONG_PTR dwParam)</code>
+                    </td>
+                    <td class="px-4 py-3 border border-gray-500">Alertable I/O completions.</td>
+                    <td class="px-4 py-3 border border-gray-500">Execute in existing thread context without spawning.</td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-3 border border-gray-500">
+                        <code>SetWinEventHook</code><br>
+                        <code>VOID CALLBACK WinEvent(HWINEVENTHOOK, …)</code>
+                    </td>
+                    <td class="px-4 py-3 border border-gray-500">Accessibility and window-focus notifications.</td>
+                    <td class="px-4 py-3 border border-gray-500">Persistent execution whenever user changes focus.</td>
+                </tr>
+            </tbody>
+        </table class="table-auto w-full border border-gray-500 border-collapse">
+        <br>
+        <h2 class="text-[17px] font-bold text-blue-400">Encryptor.cpp – One-Click AES Packing:</h2>
+        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
+            Encryptor.cpp automates:
+            <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
+                <li><strong>Encrypt the payload:</strong></li>
+                <ol class="list-[disck] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
+                    <li>It copies your raw shellcode into a resizable buffer large enough for AES-CBC padding.</li>
+                    <li>It derives an AES-256 key from a hard-coded 32-byte seed using SHA-256 (<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CryptDeriveKey</code>).</li>
+                    <li>It sets an IV (initialisation vector) and calls<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CryptEncrypt</code>, which adds PKCS-7 padding and returns the exact ciphertext length.</li>
+                </ol>
+            </ol>
+            <div class="boxed-inline">
+                In effect, Encryptor.cpp is a mini-packer that hides the payload’s byte pattern, increases entropy, and hands you code you can drop directly into any loader.
+            </div>
+        </p>
+        <h2 class="text-[17px] font-bold text-blue-400">Callback-Loader.cpp – Decrypt-and-Run Without Creating a Thread:</h2>
+        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
+            Callback-Loader.cpp is the partner stage. Its workflow:
+            <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
+                <li><strong>Decrypt on the fly:</strong></li>
+                <ol class="list-[disck] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
+                    <li>It reads <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">sizeof(encryptedShellcode)</code> to get the ciphertext length, allocates a temporary RW buffer, copies the blob, and runs <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CryptDecrypt</code>.</li>
+                    <li><code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CryptDecrypt</code> returns <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">plainLen</code>, the true length of the original shellcode (PKCS padding removed).</li>
+                </ol>
+                <li><strong>Move to executable class="table-auto w-full border border-gray-500 border-collapse" memory:</strong></li>
+                <ol class="list-[disck] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
+                    <li>It allocates exactly <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">plainLen</code> bytes with <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">VirtualAlloc</code> using <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">PAGE_EXECUTE_READWRITE</code> and copies the plaintext shellcode there.</li>
+                    <li>A quick <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">FlushInstructionCache</code> ensures the CPU sees fresh instructions.</li>
+                </ol>
+                <li><strong>Register a timer-queue callback:</strong></li>
+                <ol class="list-[disck] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
+                    <li>It calls <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CreateTimerQueueTimer</code>, passing the address of <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">Trampoline</code> as the callback and a Ex: <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">2000-millisecond</code> due time.</li>
+                    <li><code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">Trampoline</code> is a tiny stub with the required signature; all it does is cast the global shellcode pointer to <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">void(*)()</code> and jump.</li>
+                </ol>
+                <li><strong>Execution path:</strong></li>
+                <ol class="list-[disck] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
+                    <li>When the timer fires, the OS chooses (or spins up) a thread-pool thread and invokes <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">Trampoline</code>.</li>
+                    <li>No <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CreateThread</code>, no DLL injection, no obvious entry point—the payload runs completely inside an OS-managed thread.</li>
+                </ol>
+            </ol>
+            <div class="boxed-inline">
+                Because the loader always allocates buffers to the exact lengths returned by the Crypto API, 
+                it has no hard-coded size assumptions. You can feed it a 32-byte PoC or a multi-kilobyte 
+                stageless implant and it behaves identically.
+            </div>
+        </p>
+        <h2 class="text-[17px] font-bold text-blue-400">Closing Thoughts:</h2>
+        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
+            Callback-based execution is not new, but coupling it with runtime AES decryption creates a loader that:
+            <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
+                <li>Delays launch long enough to skirt many sandbox “first-few-seconds” rules.</li>
+                <li>Hides the opcode pattern from static scanners until the moment of execution.</li>
+                <li>Avoids tell-tale thread-creation events that most EDRs weigh heavily.</li>
+            </ol>
+        </p><br>
+        <h2 class="text-[17px] font-bold text-blue-400">My Project:</h2>
+        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">Note: this was after 100 times testing 😎</p>
+        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2 font-bold">1. Encrypt your payload:</p>
+        <div class="flex justify-Left pl-6">
+            <img src="../MalDev/images/Enc.png" class="w-90px h-auto" />
+        </div><br>
+        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2 font-bold">2. Run using CreateTimerQueueTimer API:</p>
+        <div class="flex justify-Left pl-6">
+            <img src="../MalDev/images/Run.png" class="w-90px h-auto" />
+        </div><br>
+        <div class="boxed-inline">
+            This is just the first milestone, and we have a long, gritty road lies ahead before we can bypass every security layer and
+        </div>
+        <style>
+            .boxed-inline{
+                display:inline-block;
+                border:5px solid #555;
+                background:#334155;
+                padding:14px 18px;
+                margin:20px 0;
+                border-radius:6px;
+                line-height:1.45;
+            }
+        </style>
+    </section>
+  </main>
+  <!-- Footer -->
+  <footer class="flex items-center justify-center py-6">
+    <a href="../index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">← Back to Dashboard</a>
+  </footer>
+  <!-- Reading-time logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const dateWritten = '20/Jan/2025';
+      const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
+      const minutes = Math.max(1, Math.ceil(words / 230));
+      document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
+    });
+  </script>
+</body>
+</html>
