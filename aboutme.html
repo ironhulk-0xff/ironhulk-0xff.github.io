@@ -3,16 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Iron Hulk — AboutMe</title>
+  <title>Iron Hulk – AboutMe</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="min-h-screen bg-[#0f172a] font-sans text-gray-100 flex flex-col">
-  <!-- Header → gradient strip & back link -->
-  <header class="bg-[#1e293b] shadow flex items-center justify-between px-6 py-4">
-    <h1 class="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-sky-400 to-indigo-400">About Me</h1>
-    <a href="index.html" class="text-gray-300 hover:text-blue-400 text-sm">
-      ← Back to Dashboard
-    </a>
+<body class="bg-[#0f172a] text-white font-sans min-h-screen">
+  <!-- Header -->
+  <header class="bg-[#1e293b] p-4 shadow flex items-center justify-between gap-4">
+    <div>
+      <h1 class="text-xl font-bold text-blue-400">About Me</h1>
+      <small id="reading-time" class="text-xs text-gray-400"></small>
+    </div>
+    <a href="../index.html" class="text-gray-300 text-sm hover:underline">← Back to Dashboard</a>
   </header>
   <main class="flex-1 p-6 space-y-12">
     <!-- Intro card (placeholder paragraph) -->
