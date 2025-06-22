@@ -23,9 +23,9 @@
               Introduction
             </h2>
             <div class="flex flex-col md:flex-row gap-6 items-start">
-              <div class=" w-[650px] md:w-1/2 overflow-hidden rounded-xl shadow-lg border border-sky-700/40 ring-1 ring-sky-700/10">
+              <div class=" w-[650px] overflow-hidden rounded-xl shadow-lg border border-sky-700/40 ring-1 ring-sky-700/10">
                 <img src="../MalDev/images/avedr.png" alt="AV and EDR Concept" class="w-[650px] h-auto object-cover hover:scale-105 duration-500">
-              </div>
+            </div>
           
               <!-- Text Content -->
               <div class=" w-full space-y-6 text-[15px] text-gray-300 leading-relaxed sm:text-justify">
@@ -253,58 +253,55 @@
         </section>
         <br>
         <section class="relative group rounded-2xl border border-cyan-400/40 bg-gradient-to-br from-[#102a2e] via-[#0a1c1f] to-[#081316] p-8 shadow-xl ring-1 ring-cyan-400/20 transition duration-500 hover:shadow-cyan-500/30 hover:-translate-y-1">
-            <h2 class="text-2xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-teal-400 to-emerald-500 drop-shadow-md mb-4">
-                5. Summary: Layered Defense and the Role of Each Detection Method</h2>
-            <p class="text-[15.5px] text-gray-300 leading-relaxed sm:text-justify">
+            <h2 class="text-2xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-teal-400 to-emerald-500 drop-shadow-md mb-6">
+              5. Summary: Layered Defense and the Role of Each Detection Method
+            </h2>
+            <p class="text-[15.5px] text-gray-300 leading-relaxed sm:text-justify mb-6">
                 Modern AV and EDR solutions don’t rely on just one detection method, they layer them together to form a defense-in-depth approach. Each layer catches what the others 
                 might miss. Signature-based detection is fast and reliable for known threats. Heuristics add flexibility by identifying code that “looks” suspicious. Behavioral 
                 monitoring tracks what programs do in real time, while anomaly detection provides adaptive insight based on past activity. Sandboxing isolates execution for safe 
-                analysis, revealing behaviors that can’t be seen through static inspection. No single method is perfect, but together they create a much more resilient security posture.            </p>
-            <div class="overflow-x-auto mt-6 rounded-md border border-gray-700">
-                <table class="table-auto w-full border-collapse text-sm md:text-base">
-                <thead class="bg-gray-800 text-white">
-                    <tr>
-                    <th class="px-4 py-2 border border-gray-600 font-semibold text-left">Detection Method</th>
-                    <th class="px-4 py-2 border border-gray-600 font-semibold text-left">Strengths</th>
-                    <th class="px-4 py-2 border border-gray-600 font-semibold text-left">Weaknesses</th>
-                    <th class="px-4 py-2 border border-gray-600 font-semibold text-left">Typical Use Case</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-gray-900 text-gray-100">
-                    <tr>
-                    <td class="px-4 py-3 border border-gray-700 font-semibold">Signature-Based</td>
-                    <td class="px-4 py-3 border border-gray-700">Fast, low false positives</td>
-                    <td class="px-4 py-3 border border-gray-700">Ineffective against new or obfuscated malware</td>
-                    <td class="px-4 py-3 border border-gray-700">Detecting known malware variants</td>
-                    </tr>
-                    <tr>
-                    <td class="px-4 py-3 border border-gray-700 font-semibold">Heuristic-Based</td>
-                    <td class="px-4 py-3 border border-gray-700">Catches slightly altered threats</td>
-                    <td class="px-4 py-3 border border-gray-700">Can cause false positives if overly broad</td>
-                    <td class="px-4 py-3 border border-gray-700">Identifying polymorphic or packed malware</td>
-                    </tr>
-                    <tr>
-                    <td class="px-4 py-3 border border-gray-700 font-semibold">Behavioral Monitoring</td>
-                    <td class="px-4 py-3 border border-gray-700">Real-time insight into execution behavior</td>
-                    <td class="px-4 py-3 border border-gray-700">May detect too late; resource intensive</td>
-                    <td class="px-4 py-3 border border-gray-700">Stopping ransomware or process injection</td>
-                    </tr>
-                    <tr>
-                    <td class="px-4 py-3 border border-gray-700 font-semibold">Anomaly-Based Detection</td>
-                    <td class="px-4 py-3 border border-gray-700">Adaptive to new threats and behaviors</td>
-                    <td class="px-4 py-3 border border-gray-700">Requires time to train; difficult to explain verdicts</td>
-                    <td class="px-4 py-3 border border-gray-700">Detecting insider threats, rare behaviors</td>
-                    </tr>
-                    <tr>
-                    <td class="px-4 py-3 border border-gray-700 font-semibold">Sandboxing</td>
-                    <td class="px-4 py-3 border border-gray-700">Exposes actual runtime behavior safely</td>
-                    <td class="px-4 py-3 border border-gray-700">Resource-heavy; can be evaded by sandbox-aware malware</td>
-                    <td class="px-4 py-3 border border-gray-700">Validating suspicious executables or scripts</td>
-                    </tr>
-                </tbody>
-                </table>
+                analysis, revealing behaviors that can’t be seen through static inspection. No single method is perfect, but together they create a much more resilient security posture.
+            </p>            </p>
+          
+            <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              <!-- Detection Method Card -->
+              <div class="rounded-xl border border-cyan-500/30 p-5 bg-gradient-to-br from-[#0f1e23] via-[#0b161a] to-[#081216] shadow-md hover:shadow-cyan-400/10 transition duration-300">
+                <h3 class="text-cyan-300 text-lg font-bold mb-2">Signature-Based</h3>
+                <p class="text-gray-400 text-sm mb-1"><span class="font-semibold text-teal-300">Strength:</span> Fast, low false positives</p>
+                <p class="text-gray-400 text-sm mb-1"><span class="font-semibold text-red-300">Weakness:</span> <br>- Misses unknown or obfuscated malware<br>- Ineffective against new or obfuscated malware</p>
+                <p class="text-gray-300 text-sm italic">Use: Detecting known malware variants</p>
+              </div>
+          
+              <div class="rounded-xl border border-cyan-500/30 p-5 bg-gradient-to-br from-[#0f1e23] via-[#0b161a] to-[#081216] shadow-md hover:shadow-cyan-400/10 transition duration-300">
+                <h3 class="text-cyan-300 text-lg font-bold mb-2">Heuristic-Based</h3>
+                <p class="text-gray-400 text-sm mb-1"><span class="font-semibold text-teal-300">Strength:</span> Catches slightly altered threats</p>
+                <p class="text-gray-400 text-sm mb-1"><span class="font-semibold text-red-300">Weakness:</span> <br>- False positives if too aggressive<br>- Can cause false positives if overly broad</p>
+                <p class="text-gray-300 text-sm italic">Use: Detecting polymorphic or packed malware</p>
+              </div>
+          
+              <div class="rounded-xl border border-cyan-500/30 p-5 bg-gradient-to-br from-[#0f1e23] via-[#0b161a] to-[#081216] shadow-md hover:shadow-cyan-400/10 transition duration-300">
+                <h3 class="text-cyan-300 text-lg font-bold mb-2">Behavioral Monitoring</h3>
+                <p class="text-gray-400 text-sm mb-1"><span class="font-semibold text-teal-300">Strength:</span> Real-time execution insights</p>
+                <p class="text-gray-400 text-sm mb-1"><span class="font-semibold text-red-300">Weakness:</span> <br>May detect too late<br>- Resource intensive</p>
+                <p class="text-gray-300 text-sm italic">Use: Stopping ransomware or process injection</p>
+              </div>
+          
+              <div class="rounded-xl border border-cyan-500/30 p-5 bg-gradient-to-br from-[#0f1e23] via-[#0b161a] to-[#081216] shadow-md hover:shadow-cyan-400/10 transition duration-300">
+                <h3 class="text-cyan-300 text-lg font-bold mb-2">Anomaly Detection</h3>
+                <p class="text-gray-400 text-sm mb-1"><span class="font-semibold text-teal-300">Strength:</span> Adaptive to new threats</p>
+                <p class="text-gray-400 text-sm mb-1"><span class="font-semibold text-red-300">Weakness:</span> <br>- Hard to explain results<br>- Training time needed</p>
+                <p class="text-gray-300 text-sm italic">Use: Detecting insider threats, rare behaviors</p>
+              </div>
+          
+              <div class="rounded-xl border border-cyan-500/30 p-5 bg-gradient-to-br from-[#0f1e23] via-[#0b161a] to-[#081216] shadow-md hover:shadow-cyan-400/10 transition duration-300">
+                <h3 class="text-cyan-300 text-lg font-bold mb-2">Sandboxing</h3>
+                <p class="text-gray-400 text-sm mb-1"><span class="font-semibold text-teal-300">Strength:</span> Observes real behavior in safe space</p>
+                <p class="text-gray-400 text-sm mb-1"><span class="font-semibold text-red-300">Weakness:</span> <br>- Resource-heavy<br>- Can be evaded by sandbox-aware malware</p>
+                <p class="text-gray-300 text-sm italic">Use: Validating suspicious files or scripts</p>
+              </div>
             </div>
-        </section>
+          </section>
+          
         <footer class="flex flex-col items-center justify-center gap-4 py-6 bg-[#0f172a] text-gray-200">
             <p class="text-center">2025 Iron Hulk — No rights reserved.</p>
             <a href="../index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">← Back to Dashboard</a>
