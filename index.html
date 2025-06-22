@@ -1,216 +1,249 @@
-<!-- Redesigned Dashboard page (Iron Hulk) with cleaned markup, responsive nav, and tailwind polish -->
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Iron Hulk — Dashboard</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="min-h-screen bg-[#0f172a] font-sans text-gray-100 flex flex-col">
-  <!-- ===== Mobile Header ( ≤ md ) ===== -->
-  <header class="md:hidden bg-[#1e293b] shadow-lg">
-    <div class="py-4 flex flex-col items-center">
-      <img src="images/iron.png" alt="Iron Hulk" class="w-40 rounded-lg shadow" />
-      <!-- inline nav for mobile -->
-      <nav class="mt-4 flex flex-wrap justify-center gap-4 text-sm text-blue-400">
-        <a href="aboutme.html"          class="hover:underline">About Me</a>
-        <a href="certifications.html"   class="hover:underline">Certifications</a>
-        <a href="projects.html"         class="hover:underline">Projects</a>
-        <button onclick="showBlogSection()"     class="hover:underline">Blogs</button>
-        <button onclick="showRoadMapSection()"  class="hover:underline">Courses</button>
-        <a href="contact.html"          class="hover:underline">Contact</a>
-      </nav>
-    </div>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Iron Hulk – Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-[#0f172a] text-white font-sans min-h-screen flex flex-col">
+    <!-- Mobile Top Bar Start -->
+      <header class="md:hidden bg-[#1e293b] text-blue-400 p-4 shadow-lg">
+        <img src="images/iron.png" alt="Iron Hulk" class="w-[200px] h-auto rounded-lg shadow-lg mx-auto" />
+        <!-- Always visible mobile nav -->
+        <nav class="mt-4 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm relative">
+          <a href="aboutme.html" class="hover:underline">About Me</a>
+          <a href="certifications.html" class="hover:underline">Certifications</a>
+          <a href="projects.html" class="hover:underline">My Projects</a>
+          <button onclick="showBlogSection()" class="hover:underline">Blogs</button>
+          <button onclick="showRoadMapSection()" class="hover:underline">Courses</button>
+          <a href="contact.html" class="hover:underline">Contact</a>
+        </nav>
+      </header>
+    <!-- Mobile Top Bar End -->
 
-  <div class="flex flex-1 overflow-hidden">
-    <!-- ===== Desktop Sidebar ( ≥ md ) ===== -->
-    <aside class="hidden md:flex md:w-64 lg:w-72 bg-[#1e293b] p-6 flex-col overflow-y-auto gap-6">
-      <img src="images/iron.png" alt="Iron Hulk" class="w-40 mx-auto rounded-lg shadow" />
+    <div class="flex flex-1 overflow-hidden">
+      <!-- Sidebar Navigation (desktop only) -->
+      <aside class="hidden md:flex md:w-100 bg-[#1e293b] p-5 flex-col overflow-y-auto">
+        <img src="images/iron.png" alt="Iron Hulk" class="w-[200px] h-auto rounded-lg shadow-lg mx-auto" />
+        <nav class="space-y-2 text-blue-400 mt-2">
+          <a href="aboutme.html" class="block text-left w-full hover:underline">About Me</a>
+          <a href="certifications.html" class="block text-left w-full hover:underline">Certifications</a>
+          <a href="projects.html" class="block text-left w-full hover:underline">My Projects</a>
+          <!-- Blog Start -->
+            <div>
+              <button onclick="toggleBlogDropdown('desktop')" class="block text-left w-full hover:underline">Blogs</button>
+              <div id="desktopBlogDropdown" class="ml-4 mt-2 flex-col space-y-2 hidden">
+                <!-- ▼ General Info ▼ -->
+                <details class="mt-4 group">
+                  <summary class="text-blue-400 font-semibold cursor-pointer list-none flex items-center">
+                    <span class="mr-1 transition-transform duration-200 group-open:rotate-90">▸</span>
+                    General Info
+                  </summary>
+                    <div>
+                      <a href="GeneralInfo/FW.html" class="block hover:underline text-white pl-3">- What is Firewall</a>
+                      <a href="GeneralInfo/AD.html" class="block hover:underline text-white pl-3">- Active Directory</a>
+                    </div>
+                </details>
+                <!-- ▲ end General Info ▲ -->     
+                <!-- ▼ Malware Development ▼ -->
+                <details class="mt-4 group">
+                  <summary class="text-blue-400 font-semibold cursor-pointer list-none flex items-center">
+                    <span class="mr-1 transition-transform duration-200 group-open:rotate-90">▸</span>
+                    Malware Development
+                  </summary>
+                    <div>
+                      <a href="MalDev/RoadMap.html"             class="block hover:underline text-white pl-3">- Road Map</a>
+                      <a href="MalDev/Detection.html"           class="block hover:underline text-white pl-3">- Detection Mechanisms</a>
+                      <a href="MalDev/PEB.html"                 class="block hover:underline text-white pl-3">- Process Environment Block</a>
+                      <a href="MalDev/Payload_Placement.html"   class="block hover:underline text-white pl-3">- Payload Placement</a>
+                      <a href="MalDev/PayloadEncryption.html"   class="block hover:underline text-white pl-3">- Payload Encryption</a>
+                      <a href="MalDev/PayloadObfuscation.html"  class="block hover:underline text-white pl-3">- Payload Obfuscation</a>
+                      <a href="MalDev/ProcessEnumeration.html"  class="block hover:underline text-white pl-3">- Process Enumeration</a>
+                      <a href="MalDev/CallbackAbuse.html"       class="block hover:underline text-white pl-3">- Callback Abuse</a>
+                    </div>
+                </details>
+                <!-- ▲ end Malware Development ▲ -->     
+              </div>
+            </div>
+          <!-- Blog End -->
+          <!-- RoadMap Start-->
+            <div>
+              <button onclick="toggleRoadMapDropdown('desktop')" class="block text-left w-full hover:underline">Courses</button>
+              <div id="desktopRoadMapDropdown" class="ml-4 mt-2 flex-col space-y-2 hidden">
+                <div>
+                  <a>Red Team</a>
+                  <div class="ml-4 mt-1 space-y-1 text-sm">
+                    <a href="/RedTeam/OSCP.html" class="hover:underline text-white">- OSCP</a><br>
+                  </div>
+                </div>
+                <div>
+                  <a>Custom C2</a>
+                  <div class="ml-4 mt-1 space-y-1 text-sm">
+                  </div>
+                </div>
+                <div>
+                  <a>Malware Development</a>
+                  <div class="ml-4 mt-1 space-y-1 text-sm">
+                  </div>
+                </div>
+              </div>
+            </div>
+          <!-- RoadMap End-->
+          <a href="contact.html" class="block text-left w-full hover:underline">Contact</a>
+        </nav>
+      </aside>
 
-      <nav class="space-y-1 text-blue-400">
-        <a href="aboutme.html"        class="block hover:underline">About Me</a>
-        <a href="certifications.html" class="block hover:underline">Certifications</a>
-        <a href="projects.html"       class="block hover:underline">Projects</a>
-
-        <!-- ▼ Blogs dropdown ▼ -->
-        <details class="group">
-          <summary class="flex items-center gap-1 cursor-pointer hover:underline">
-            <span class="transition-transform group-open:rotate-90">▸</span>
-            Blogs
-          </summary>
-          <div class="ml-4 mt-2 space-y-1">
-            <!-- General Info -->
-            <details class="group">
-              <summary class="flex items-center gap-1 cursor-pointer hover:underline">
-                <span class="transition-transform group-open:rotate-90">▸</span>
+      <!-- Main Content Area -->
+      <main class="flex-1 p-6 overflow-y-auto space-y-6">
+        <!-- Main Dashboard -->
+        <div id="mainDashboard" class="space-y-6">
+          <div class="bg-[#1f2937] p-6 rounded-xl flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 shadow-md">
+            <div>
+              <h2 class="text-1xl font-bold text-blue-400"> Hello Everyone 👋</h2>
+            </div>
+          </div>
+        </div>
+        <!-- Wrap the terminal in its own identifiable div -->
+        <div id="terminalSection">
+          <div id="terminal-container" class="bg-black text-green-400 font-mono text-sm p-4 rounded-lg shadow-md mt-6 w-full h-[500px] overflow-auto">
+            <pre id="terminal-output" class="whitespace-pre-wrap leading-relaxed">&gt;_</pre>
+          </div>
+        </div>
+        
+        <script>
+          const files = ["/data/script1.txt", "/data/script2.txt"];         
+          function runTerminalAnimation() {
+            const selectedFile = files[Math.floor(Math.random() * files.length)];
+            const output = document.getElementById("terminal-output");
+            const container = document.getElementById("terminal-container");        
+            output.textContent = ">_";         
+            fetch(`${selectedFile}?_=${Date.now()}`)
+              .then(response => response.text())
+              .then(text => {
+                const lines = text.split("\n");
+                let lineIndex = 0;
+        
+                function typeLine(line, i = 0, callback) {
+                  if (i < line.length) {
+                    output.textContent += line[i];
+                    container.scrollTop = container.scrollHeight;
+                    setTimeout(() => typeLine(line, i + 1, callback), 30);
+                  } else {
+                    output.textContent += "\n";
+                    container.scrollTop = container.scrollHeight;
+                    callback();
+                  }
+                }        
+                function nextLine() {
+                  if (lineIndex < lines.length) {
+                    typeLine(lines[lineIndex], 0, () => {
+                      lineIndex++;
+                      setTimeout(nextLine, 500);
+                    });
+                  } else {
+                    setTimeout(runTerminalAnimation, 20000);
+                  }
+                }        
+                nextLine();
+              });
+          }        
+          runTerminalAnimation();
+        </script>       
+        <!-- Blog Section Start -->
+        <div id="blogSection" class="hidden space-y-6">
+          <div class="bg-[#1f2937] p-6 rounded-xl shadow-md text-white">
+            <!-- ▼ General Info dropdown ▼ -->
+            <details class="mt-4 group">
+              <!-- header -->
+              <summary class="text-blue-400 font-semibold cursor-pointer list-none flex items-center">
+                <span class="mr-1 transition-transform duration-200 group-open:rotate-90">▸</span>
                 General Info
               </summary>
-              <div class="ml-4 mt-1 space-y-1 text-sm">
-                <a href="GeneralInfo/FW.html" class="block hover:underline text-white">Firewall</a>
-                <a href="GeneralInfo/AD.html" class="block hover:underline text-white">Active Directory</a>
+              <div class="mt-2 ml-4 space-y-1">
+                <a href="GeneralInfo/FW.html"           class="block hover:underline">- What is Firewall</a>
+                <a href="GeneralInfo/AD.html"           class="block hover:underline">- Active Directory</a>
               </div>
             </details>
-
-            <!-- Malware Dev -->
-            <details class="group">
-              <summary class="flex items-center gap-1 cursor-pointer hover:underline">
-                <span class="transition-transform group-open:rotate-90">▸</span>
-                Malware Development
+            <!-- ▲ end General Info dropdown ▲ -->
+            <!-- ▼ Malware-Dev dropdown ▼ -->
+            <details class="mt-4 group">
+              <!-- header -->
+              <summary class="text-blue-400 font-semibold cursor-pointer list-none flex items-center">
+                <span class="mr-1 transition-transform duration-200 group-open:rotate-90">▸</span>
+                Malware Development
               </summary>
-              <div class="ml-4 mt-1 space-y-1 text-sm">
-                <a href="MalDev/RoadMap.html"            class="block hover:underline text-white">Road Map</a>
-                <a href="MalDev/Detection.html"          class="block hover:underline text-white">Detection</a>
-                <a href="MalDev/Payload_Placement.html"  class="block hover:underline text-white">Payload Placement</a>
-                <a href="MalDev/PayloadEncryption.html"  class="block hover:underline text-white">Payload Encryption</a>
-                <a href="MalDev/PayloadObfuscation.html" class="block hover:underline text-white">Payload Obfuscation</a>
-                <a href="MalDev/ProcessEnumeration.html" class="block hover:underline text-white">Process Enumeration</a>
-                <a href="MalDev/CallbackAbuse.html"      class="block hover:underline text-white">Callback Abuse</a>
+              <div class="mt-2 ml-4 space-y-1">
+                <a href="MalDev/RoadMap.html"           class="block hover:underline">- Road Map</a>
+                <a href="MalDev/Detection.html"           class="block hover:underline">- Detection Mechanisms</a>
+                <a href="MalDev/PEB.html"                 class="block hover:underline">- Process Environment Block</a>
+                <a href="MalDev/Payload_Placement.html"   class="block hover:underline">- Payload Placement</a>
+                <a href="MalDev/PayloadEncryption.html"   class="block hover:underline">- Payload Encryption</a>
+                <a href="MalDev/PayloadObfuscation.html"  class="block hover:underline">- Payload Obfuscation</a>
+                <a href="MalDev/ProcessEnumeration.html"  class="block hover:underline">- Process Enumeration</a>
+                <a href="MalDev/CallbackAbuse.html"  class="block hover:underline">- Callback Abuse</a>
               </div>
             </details>
+            <!-- ▲ end Malware-Dev dropdown ▲ -->
           </div>
-        </details>
-        <!-- ▲ end Blogs ▲ -->
-
-        <!-- ▼ Courses dropdown ▼ -->
-        <details class="group">
-          <summary class="flex items-center gap-1 cursor-pointer hover:underline">
-            <span class="transition-transform group-open:rotate-90">▸</span>
-            Courses
-          </summary>
-          <div class="ml-4 mt-2 space-y-1 text-sm">
-            <a href="/RedTeam/OSCP.html" class="block hover:underline text-white">Red Team — OSCP</a>
-            <!-- add more links here -->
+        </div>
+        <!-- Blog Section End -->
+        <!-- Courses Section Start -->
+          <div id="RoadMapSection" class="hidden space-y-6">
+            <div class="bg-[#1f2937] p-6 rounded-xl shadow-md text-white">
+              <div>
+                <h3 class="text-blue-400 font-semibold">Red Team</h3>
+                <a href="/RedTeam/OSCP.html" class="block ml-4 hover:underline">- OSCP</a>
+              </div>
+              <div class="mt-4">
+                <h3 class="text-blue-400 font-semibold">Custom C2</h3>
+              </div>
+              <div class="mt-4">
+                <h3 class="text-blue-400 font-semibold">Malware Development</h3>
+              </div>
+            </div>
           </div>
-        </details>
-        <!-- ▲ end Courses ▲ -->
+        <!-- Courses Section End -->
+      </main>
+    </div>
+    
+      <script>
+        function toggleBlogDropdown(view)
+        {
+          const dropdownId = view === 'mobile' ? 'mobileBlogDropdown' : 'desktopBlogDropdown';
+          const dropdown = document.getElementById(dropdownId);
+          dropdown.classList.toggle('hidden');
+        }
 
-        <a href="contact.html" class="block hover:underline">Contact</a>
-      </nav>
-    </aside>
+        function showBlogSection() 
+        {
+          document.getElementById("mainDashboard").classList.add("hidden");
+          document.getElementById("blogSection").classList.remove("hidden");
+          document.getElementById("RoadMapSection").classList.add("hidden");
+          document.getElementById("terminalSection").classList.add("hidden");
+        }
 
-    <!-- ===== Main Content ===== -->
-    <main class="flex-1 overflow-y-auto p-6 space-y-6">
-      <!-- Dashboard intro block -->
-      <section id="mainDashboard" class="space-y-6">
-        <div class="bg-[#1f2937] p-6 rounded-xl shadow-md flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <h2 class="text-xl font-bold text-blue-400">Hello Everyone 👋</h2>
-        </div>
-      </section>
+        function toggleRoadMapDropdown(view)
+        {
+          const dropdownId = view === 'mobile' ? 'mobileRoadMapDropdown' : 'desktopRoadMapDropdown';
+          const dropdown = document.getElementById(dropdownId);
+          dropdown.classList.toggle('hidden');
+        }
 
-      <!-- Terminal animation section -->
-      <section id="terminalSection">
-        <div id="terminal-container" class="h-80 w-full overflow-auto rounded-lg bg-black p-4 font-mono text-sm text-green-400 shadow-md">
-          <pre id="terminal-output" class="whitespace-pre-wrap leading-relaxed">&gt;_</pre>
-        </div>
-      </section>
-
-      <!-- Blog accordion wrapper -->
-      <section id="blogSection" class="hidden">
-        <div class="space-y-4 bg-[#1f2937] p-6 rounded-xl shadow-md">
-          <!-- General Info -->
-          <details class="group">
-            <summary class="flex cursor-pointer items-center font-semibold text-blue-400">
-              <span class="mr-1 transition-transform group-open:rotate-90">▸</span>
-              General Info
-            </summary>
-            <div class="ml-4 mt-1 space-y-1">
-              <a href="GeneralInfo/FW.html" class="block hover:underline">Firewall</a>
-              <a href="GeneralInfo/AD.html" class="block hover:underline">Active Directory</a>
-            </div>
-          </details>
-
-          <!-- Malware Development -->
-          <details class="group">
-            <summary class="flex cursor-pointer items-center font-semibold text-blue-400">
-              <span class="mr-1 transition-transform group-open:rotate-90">▸</span>
-              Malware Development
-            </summary>
-            <div class="ml-4 mt-1 space-y-1">
-              <a href="MalDev/RoadMap.html"            class="block hover:underline">Road Map</a>
-              <a href="MalDev/Detection.html"          class="block hover:underline">Detection Mechanisms</a>
-              <a href="MalDev/Payload_Placement.html"  class="block hover:underline">Payload Placement</a>
-              <a href="MalDev/PayloadEncryption.html"  class="block hover:underline">Payload Encryption</a>
-              <a href="MalDev/PayloadObfuscation.html" class="block hover:underline">Payload Obfuscation</a>
-              <a href="MalDev/ProcessEnumeration.html" class="block hover:underline">Process Enumeration</a>
-              <a href="MalDev/CallbackAbuse.html"      class="block hover:underline">Callback Abuse</a>
-            </div>
-          </details>
-        </div>
-      </section>
-
-      <!-- Courses accordion -->
-      <section id="RoadMapSection" class="hidden">
-        <div class="space-y-4 bg-[#1f2937] p-6 rounded-xl shadow-md text-white">
-          <details class="group">
-            <summary class="flex cursor-pointer items-center font-semibold text-blue-400">
-              <span class="mr-1 transition-transform group-open:rotate-90">▸</span>
-              Red Team
-            </summary>
-            <div class="ml-4 mt-1 space-y-1 text-sm">
-              <a href="/RedTeam/OSCP.html" class="block hover:underline">OSCP</a>
-            </div>
-          </details>
-          <!-- Add more course categories similarly -->
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <!-- ===== JS ===== -->
-  <script>
-    // tiny helper
-    const $ = (id) => document.getElementById(id);
-
-    // Terminal typing effect (unchanged)
-    const files = ["/data/script1.txt", "/data/script2.txt"];
-    function runTerminalAnimation() {
-      const selectedFile = files[Math.floor(Math.random() * files.length)];
-      const output = $("terminal-output");
-      const container = $("terminal-container");
-      output.textContent = ">_";
-
-      fetch(`${selectedFile}?_=${Date.now()}`)
-        .then((r) => r.text())
-        .then((text) => {
-          const lines = text.split("\n");
-          let i = 0;
-          const type = (line, idx = 0, cb) => {
-            if (idx < line.length) {
-              output.textContent += line[idx];
-              container.scrollTop = container.scrollHeight;
-              setTimeout(() => type(line, idx + 1, cb), 25);
-            } else {
-              output.textContent += "\n";
-              cb();
-            }
-          };
-          const next = () => {
-            if (i < lines.length) {
-              type(lines[i], 0, () => {
-                i++;
-                setTimeout(next, 300);
-              });
-            } else {
-              setTimeout(runTerminalAnimation, 20000);
-            }
-          };
-          next();
-        });
-    }
-    runTerminalAnimation();
-
-    // View switching helpers
-    function showSection(id) {
-      ["mainDashboard", "blogSection", "RoadMapSection", "terminalSection"].forEach((sec) => {
-        $(sec).classList.toggle("hidden", sec !== id);
-      });
-    }
-    function showBlogSection()  { showSection("blogSection"); }
-    function showRoadMapSection(){ showSection("RoadMapSection"); }
-    function showDashboardSection(){ showSection("mainDashboard"); $("terminalSection").classList.remove("hidden"); }
-  </script>
-</body>
+        function showRoadMapSection() 
+        {
+          document.getElementById("mainDashboard").classList.add("hidden");
+          document.getElementById("RoadMapSection").classList.remove("hidden");
+          document.getElementById("blogSection").classList.add("hidden");
+          document.getElementById("terminalSection").classList.add("hidden");
+        }
+        function showDashboardSection() 
+        {
+          document.getElementById("mainDashboard").classList.remove("hidden");
+          document.getElementById("blogSection").classList.add("hidden");
+          document.getElementById("RoadMapSection").classList.add("hidden");
+          document.getElementById("terminalSection").classList.remove("hidden");
+        }
+      </script>
+    </body>
 </html>
