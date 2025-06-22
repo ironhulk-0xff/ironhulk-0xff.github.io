@@ -20,48 +20,45 @@
     <section class="bg-[#1f2937] p-6 rounded-xl shadow-md">
         <section class="relative group rounded-2xl border border-sky-400/50 bg-gradient-to-br from-[#0f172a] via-[#0b1120] to-[#0a0f1a] p-8 shadow-2xl ring-1 ring-sky-400/20 transition duration-500 hover:shadow-sky-500/20 hover:-translate-y-1">
             <h2 class="text-3xl font-black tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 drop-shadow-md mb-6 ">
-              Introduction
+                Introduction
             </h2>
             <div class="flex flex-col md:flex-row gap-6 items-start">
-              <div class=" w-[650px] overflow-hidden rounded-xl shadow-lg border border-sky-700/40 ring-1 ring-sky-700/10">
-                <img src="../MalDev/images/avedr.png" alt="AV and EDR Concept" class="w-[650px] h-auto object-cover hover:scale-105 duration-500">
+                <div class=" w-full overflow-hidden rounded-xl shadow-lg border border-sky-700/40 ring-1 ring-sky-700/10">
+                <img src="../MalDev/images/avedr.png" alt="AV and EDR Concept" class="w-full h-auto object-cover hover:scale-105 duration-500">
             </div>
-          
-              <!-- Text Content -->
-              <div class=" w-full space-y-6 text-[15px] text-gray-300 leading-relaxed sm:text-justify">
+                <!-- Text Content -->
+                <div class=" w-full space-y-6 text-[15px] text-gray-300 leading-relaxed sm:text-justify">
                 <p>
                     When you install an antivirus or an endpoint detection and response (EDR) on your machine, you probably don’t give much thought to what’s happening behind the 
                     scenes. Most people see a green checkmark, maybe a few scan notifications, and assume their system is safe. But underneath that simple interface lies a complex 
                     engine built to detect and stop some of the most advanced threats on the planet.
                 </p>
-          
+
                 <div class="bg-[#0f172a] p-4 rounded-xl border border-sky-500/20 shadow-inner">
-                  <p class="first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-5xl first-letter:font-extrabold first-letter:text-blue-400">
+                    <p class="first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-5xl first-letter:font-extrabold first-letter:text-blue-400">
                     Antivirus (AV) software was originally designed to identify and remove known malicious programs by scanning files for specific signatures, unique patterns, of bytes 
                     that reveal the presence of malware. Over time, AV has evolved to include heuristic analysis and limited behavioral detection, but its focus remains largely on 
                     preventing infections through signature matching and lightweight file analysis.
                 </p>
                 </div>
-          
+
                 <div class="bg-[#0f172a] p-4 rounded-xl border border-sky-500/20 shadow-inner">
-                  <p class="first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-5xl first-letter:font-extrabold first-letter:text-blue-400">
-                    Endpoint Detection and Response (EDR) picks up where traditional antivirus leaves off. Instead of just scanning files, EDR continuously monitors system behavior, 
-                    tracks processes, collects telemetry data, and allows security teams to detect, investigate, and respond to threats in real time. EDRs are built for visibility 
-                    and response, not just prevention.
+                    <p class="first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-5xl first-letter:font-extrabold first-letter:text-blue-400">
+                        Endpoint Detection and Response (EDR) picks up where traditional antivirus leaves off. Instead of just scanning files, EDR continuously monitors system behavior, 
+                        tracks processes, collects telemetry data, and allows security teams to detect, investigate, and respond to threats in real time. EDRs are built for visibility 
+                        and response, not just prevention.
+                    </p>
+                </div>
+                <p class="text-[15.5px] text-gray-300 leading-relaxed sm:text-justify">
+                    In this post, we’re going to pull back the curtain on both AV and EDR. We’ll walk through the major categories of detection: starting with static analysis, where 
+                    the software inspects files on disk for known signatures; moving into heuristic detection, which looks for suspicious traits and behaviors inside code; then into 
+                    behavioral monitoring, where actions are tracked in real time as the program runs; followed by anomaly-based detection, which flags deviations from normal system 
+                    or user behavior; and finally sandboxing, where suspicious files are safely detonated in isolated environments to observe their true intent. Each layer plays a 
+                    critical role in how modern security tools detect and respond to threats.
                 </p>
                 </div>
-              </div>
             </div>
-            <br>
-            <p class="text-[15.5px] text-gray-300 leading-relaxed sm:text-justify">
-                In this post, we’re going to pull back the curtain on both AV and EDR. We’ll walk through the major categories of detection: starting with static analysis, where 
-                the software inspects files on disk for known signatures; moving into heuristic detection, which looks for suspicious traits and behaviors inside code; then into 
-                behavioral monitoring, where actions are tracked in real time as the program runs; followed by anomaly-based detection, which flags deviations from normal system 
-                or user behavior; and finally sandboxing, where suspicious files are safely detonated in isolated environments to observe their true intent. Each layer plays a 
-                critical role in how modern security tools detect and respond to threats.
-            </p>
-          </section>
-          
+        </section>
         <br>
         <section class="relative group rounded-2xl border border-purple-500/40 bg-gradient-to-br from-[#1e1b2f] via-[#181825] to-[#111318] p-8 shadow-xl ring-1 ring-purple-500/20 transition duration-500 hover:shadow-purple-500/20 hover:-translate-y-1">
             <h2 class="text-2xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-500 drop-shadow-md mb-4">
@@ -282,7 +279,7 @@
               <div class="rounded-xl border border-cyan-500/30 p-5 bg-gradient-to-br from-[#0f1e23] via-[#0b161a] to-[#081216] shadow-md hover:shadow-cyan-400/10 transition duration-300">
                 <h3 class="text-cyan-300 text-lg font-bold mb-2">Behavioral Monitoring</h3>
                 <p class="text-gray-400 text-sm mb-1"><span class="font-semibold text-teal-300">Strength:</span> Real-time execution insights</p>
-                <p class="text-gray-400 text-sm mb-1"><span class="font-semibold text-red-300">Weakness:</span> <br>May detect too late<br>- Resource intensive</p>
+                <p class="text-gray-400 text-sm mb-1"><span class="font-semibold text-red-300">Weakness:</span> <br>- May detect too late<br>- Resource intensive</p>
                 <p class="text-gray-300 text-sm italic">Use: Stopping ransomware or process injection</p>
               </div>
           
