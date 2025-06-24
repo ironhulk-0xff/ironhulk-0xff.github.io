@@ -7,96 +7,215 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-[#0f172a] text-white font-sans min-h-screen">
-  <!-- Header -->
-  <header class="bg-[#1e293b] p-4 shadow flex items-center justify-between gap-4">
-    <div>
-      <h1 class="text-xl font-bold text-blue-400">Payload Obfuscation </h1>
-      <small id="reading-time" class="text-xs text-gray-400"></small>
+<header class="bg-[#1e293b] p-4 shadow flex items-center justify-between">
+  <div>
+    <h1 class="text-xl font-bold text-blue-400">Payload Obfuscation </h1>
+    <small id="reading-time" class="text-xs text-gray-400 sm:text-justify"></small>
+  </div>
+  <a href="../index.html" class="text-gray-300  hover:underline">← Back to Dashboard</a>
+</header>
+<main id="article" class="p-6 space-y-2">
+  <section class="relative w-full my-10 overflow-hidden rounded-3xl bg-gradient-to-br from-slate-800 via-slate-900 to-black shadow-2xl ring-1 ring-cyan-400/30">
+    <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_1%,rgba(255,255,255,0.04)_1%)] [background-size:22px_22px]"></div>
+    <div class="relative z-10 flex flex-col  px-10 py-10 sm:gap-10 md:flex-row md:items-center">
+      <div class="w-full md:w-2/3">
+        <h2 class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400">
+          What Is Payload Obfuscation? </h2>
+        <p class="mt-6 text-base md:text-lg leading-relaxed text-gray-300 sm:text-justify">
+          Payload obfuscation is the deliberate transformation of malicious code so that it no longer resembles its original, recognisable form while still executing 
+          exactly the same behaviour at run time. Instead of shipping a plainly readable sequence of opcodes, strings, and API calls, the attacker applies layers such 
+          as encryption or encoding, control-flow flattening, dead-code insertion, dynamic unpacking, steganography, or even full-scale virtualization. The result looks 
+          incoherent to static scanners, reverse engineers, and signature engines, yet the moment the payload reaches its target environment it self-decodes (or is externally
+          decoded) and proceeds as if nothing had been altered. Modern campaigns rotate several obfuscators in a single infection chain, PowerShell DOSfuscation for initial 
+          execution, a crypter that unwraps a loader, and finally an in-memory DLL hidden inside a bitmap resource, creating a moving target that traditional detection logic 
+          finds difficult to pin down
+        </p>
+      </div>
+      <div class="w-full md:w-1/3">
+        <img src="../MalDev/images/PayObs.png" alt="payload obfuscation" class="mx-auto rounded-2xl shadow-lg ring-1 ring-cyan-400/20 max-h-64 md:max-h-72 object-contain" />
+      </div>
     </div>
-    <a href="../index.html" class="text-gray-300 text-sm hover:underline">← Back to Dashboard</a>
-  </header>
-
-  <!-- Article -->
-  <main id="article" class="p-6 space-y-6">
-    <section class="bg-[#1f2937] p-6 rounded-xl shadow-md">
-        <h2 class="text-[17px] font-bold text-blue-400">What Is Payload Obfuscation?</h2>
-        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
-            Payload obfuscation is the deliberate transformation of malicious code so that it no longer resembles its original, recognisable form while still executing 
-            exactly the same behaviour at run time. Instead of shipping a plainly readable sequence of opcodes, strings, and API calls, the attacker applies layers such 
-            as encryption or encoding, control-flow flattening, dead-code insertion, dynamic unpacking, steganography, or even full-scale virtualization. The result looks 
-            incoherent to static scanners, reverse engineers, and signature engines, yet the moment the payload reaches its target environment it self-decodes (or is externally
-            decoded) and proceeds as if nothing had been altered. Modern campaigns rotate several obfuscators in a single infection chain, PowerShell DOSfuscation for initial 
-            execution, a crypter that unwraps a loader, and finally an in-memory DLL hidden inside a bitmap resource, creating a moving target that traditional detection logic 
-            finds difficult to pin down
+  </section>
+  <section class="relative w-full px-6">
+    <h2 class="mb-16 text-center text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400 drop-shadow-lg">
+      Why Malware Developers Rely on Obfuscation</h2>
+      <div class="grid gap-12 sm:grid-cols-2 xl:grid-cols-2">
+        <article class="group relative rounded-3xl bg-slate-900/60 p-8 ring-1 ring-slate-700/60 shadow-xl transition-transform duration-300 hover:scale-[1.04] hover:ring-cyan-400/50">
+          <h3 class="mb-4 flex items-center gap-3 text-lg font-semibold text-cyan-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-400/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M12 3l7.5 4v5c0 5-3.5 9.6-7.5 10-4-0.4-7.5-5-7.5-10V7l7.5-4zm4.95 4.95L7.05 17.85" />
+            </svg>
+            Bypassing Static Detection</h3>
+          <p class=" leading-relaxed text-gray-400 sm:text-justify">
+            Signature scanners, YARA rules, and reputation systems depend on predictable byte sequences; obfuscation reshapes those sequences so thoroughly that the hash, the entropy 
+            profile, and even the printable strings lose their diagnostic value. Agent Tesla, XWorm, and FormBook variants routinely achieve multiday detection gaps by rotating fresh 
+            encryption keys and junk instructions.
+          </p>
+        </article>
+        <article class="group relative rounded-3xl bg-slate-900/60 p-8 ring-1 ring-slate-700/60 shadow-xl transition-transform duration-300 hover:scale-[1.04] hover:ring-cyan-400/50">
+          <h3 class="mb-4 flex items-center gap-3 text-lg font-semibold text-cyan-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-400/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M6 3h12M6 21h12M17 3v3.5a4.5 4.5 0 01-2 3.75l-3 2-3-2A4.5 4.5 0 017 6.5V3m10 18v-3.5a4.5 4.5 0 00-2-3.75l-3-2-3 2a4.5 4.5 0 00-2 3.75V21" />
+            </svg>
+            Slowing Reverse-Engineering </h3>
+          <p class=" leading-relaxed text-gray-400 sm:text-justify">
+            Human analysts work against the clock; every hour spent disentangling opaque control flow or decrypting strings is time the attacker can use to harvest data or pivot. 
+            Black Hat research on DOSfuscation showed that even simple command-line payloads can expand into multi-kilobyte, character-inserted tangles that frustrate quick triage.
+          </p>
+        </article>
+      </div>
+      <br>
+      <div class="grid gap-12 sm:grid-cols-2 xl:grid-cols-2">
+        <article class="group relative rounded-3xl bg-slate-900/60 p-8 ring-1 ring-slate-700/60 shadow-xl transition-transform duration-300 hover:scale-[1.04] hover:ring-cyan-400/50">
+          <h3 class="mb-4 flex items-center gap-3 text-lg font-semibold text-cyan-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-400/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M21 8l-9-5-9 5 9 5 9-5zm0 0v6m-18-6v6m9 5v-6m0-5l-9 5m9-5l9 5" />
+            </svg>
+            Defeating Automated Sandboxes</h3>
+          <p class=" leading-relaxed text-gray-400 sm:text-justify">
+            Many sandboxes impose tight execution windows and limited emulation depth. Obfuscated samples embed stalling loops, environment checks, or staged decryptors that withhold 
+            the real code until the sandbox gives up, allowing the file to look inert during automated scoring yet detonate on a live host.
+          </p>
+        </article>
+        <article class="group relative rounded-3xl bg-slate-900/60 p-8 ring-1 ring-slate-700/60 shadow-xl transition-transform duration-300 hover:scale-[1.04] hover:ring-cyan-400/50">
+          <h3 class="mb-4 flex items-center gap-3 text-lg font-semibold text-cyan-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-400/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M3 7l9-4 9 4-9 4-9-4zm0 6l9 4 9-4m-18 6l9 4 9-4" />
+            </svg>
+            Layered Defence in Depth</h3>
+          <p class=" leading-relaxed text-gray-400 sm:text-justify sm:text-justify">
+            If any single layer like packer, loader, dropper is caught, the upstream layers can be swapped without touching core functionality, giving threat actors an agile way to iterate 
+            faster than defenders can blacklist. Recent steganographic loaders that stash AES-encrypted DLLs inside bitmaps exemplify this modular approach.
+          </p>
+        </article>
+      </div>
+  </section>
+  <br>
+  <section class="px-6 relative w-full my-20  overflow-hidden rounded-3xl bg-gradient-to-br from-slate-800 via-slate-900 to-black shadow-2xl ring-1 ring-cyan-400/30">
+    <div class="w-full flex justify-center">
+      <h2 class="relative z-10 flex flex-col px-2 md:flex-row md:items-start md:py-10 text-center text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400 drop-shadow-lg">
+        My Private PhoneScator Project </h2>
+    </div>
+    <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-2">
+      <figure class="group relative overflow-hidden rounded-2xl bg-slate-900/60 ring-1 ring-slate-700/60 shadow-xl">
+        <figcaption class="mt-3 text-center  text-white">1- Create a Shellcode</figcaption>
+        <img src="../MalDev/PaOb/1.png" alt="Describe image" class="w-full object-cover transition-transform " />
+      </figure>
+      <figure class="group relative overflow-hidden rounded-2xl bg-slate-900/60 ring-1 ring-slate-700/60 shadow-xl">
+        <figcaption class="mt-3 text-center  text-white">2- Create PhoneScator Project</figcaption>
+        <img src="../MalDev/PaOb/2.png" alt="Describe image" class="w-full object-cover transition-transform " />
+      </figure>
+    </div>
+    <br>
+    <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-2">
+      <figure class="group relative overflow-hidden rounded-2xl bg-slate-900/60 ring-1 ring-slate-700/60 shadow-xl">
+        <figcaption class="mt-3 text-center  text-white">3- The Result</figcaption>
+        <img src="../MalDev/PaOb/3.png" alt="Describe image" class="w-full object-cover transition-transform " />
+      </figure>
+      <figure class="group relative overflow-hidden rounded-2xl bg-slate-900/60 ring-1 ring-slate-700/60 shadow-xl">
+        <figcaption class="mt-3 text-center  text-white">4- Create PhoneDescator Project</figcaption>
+        <img src="../MalDev/PaOb/4.png" alt="Describe image" class="w-full object-cover transition-transform " />
+      </figure>
+    </div>
+    <br>
+    <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-2">
+      <figure class="group relative overflow-hidden rounded-2xl bg-slate-900/60 ring-1 ring-slate-700/60 shadow-xl">
+        <figcaption class="mt-3 text-center  text-white">5- Final Result</figcaption>
+        <img src="../MalDev/PaOb/5.png" alt="Describe image" class="w-full object-cover transition-transform " />
+      </figure>
+      <figure class="group relative overflow-hidden rounded-2xl bg-slate-900/60 ring-1 ring-slate-700/60 shadow-xl">
+        <figcaption class="mt-3 text-center  text-white">6- Confirm they match</figcaption>
+        <img src="../MalDev/PaOb/6.png" alt="Describe image" class="w-full object-cover transition-transform " />
+      </figure>
+    </div>
+    <br>
+    <section class="relative w-full overflow-hidden rounded-3xl bg-gradient-to-br from-slate-800 via-slate-900 to-black shadow-2xl ring-1 ring-cyan-400/30">
+      <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_1%,rgba(255,255,255,0.04)_1%)] [background-size:22px_22px]"></div>
+      <header class="relative z-10 px-8 pt-12 text-center">
+        <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400">
+          Click-and-Craft Obfuscators </h2>
+        <p class="mt-4 text-gray-300 md:text-lg">
+          When you need a quick transform without firing up a local tool-chain, these
+          web apps deliver instant, script-ready obfuscation.
         </p>
-        <br>
-        <h2 class="text-[17px] font-bold text-blue-400">Why malware developers rely on it?</h2>
-        <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-            <li><strong>Bypassing static detection:</strong> Signature scanners, YARA rules, and reputation systems depend on predictable byte sequences; obfuscation reshapes those sequences so thoroughly that the hash, the entropy profile, and even the printable strings lose their diagnostic value. Agent Tesla, XWorm, and FormBook variants routinely achieve multiday detection gaps by rotating fresh encryption keys and junk instructions.</li>
-            <li><strong>Slowing reverse-engineering and analysis:</strong> Human analysts work against the clock; every hour spent disentangling opaque control flow or decrypting strings is time the attacker can use to harvest data or pivot. Black Hat research on DOSfuscation showed that even simple command-line payloads can expand into multi-kilobyte, character-inserted tangles that frustrate quick triage.</li>
-            <li><strong>Defeating automated sandboxes:</strong> Many sandboxes impose tight execution windows and limited emulation depth. Obfuscated samples embed stalling loops, environment checks, or staged decryptors that withhold the real code until the sandbox gives up, allowing the file to look inert during automated scoring yet detonate on a live host.</li>
-            <li><strong>Layered defence in depth for the attacker:</strong> If any single layer like packer, loader, dropper is caught, the upstream layers can be swapped without touching core functionality, giving threat actors an agile way to iterate faster than defenders can blacklist. Recent steganographic loaders that stash AES-encrypted DLLs inside bitmaps exemplify this modular approach.</li>
-        </ol>
-        <br>
-        <h2 class="text-[17px] font-bold text-blue-400">My Project</h2>
-        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
-            Before diving in, a big Thank You to my friend <a href="https://x.com/BenaliGait79114?t=NXyIypgJUgm68F1-BDkn2Q&s=09" class="hover:underline font-bold">MR.G</a>, his encouragement kept the late-night tests rolling. 
-            While absorbing MalDevAcademy’s modules on IPv4/IPv6 Fuscation, MAC Fuscation, and UUID Fuscation, I set out to push beyond the textbook. After dozens of scraped attempts 
-            and back-to-back recompiles, a fresh idea took shape: disguise raw shellcode as a string of perfectly ordinary phone numbers. It took countless iterations and more coffee 
-            than I’ll admit, but the method is now solid and repeatable. Here’s the core workflow we’ll explore together:
-            <ul class="list-disc list-outside pl-6 text-gray-300">
-                <li><strong>The idea:</strong> 
-                <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify"> - Get the RAW shellcode: 0xFC, 0x48, 0x83, 0xE4, 0xF0</p>
-                <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify"> - Convert: hex -> decimal</p>
-                <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify"> - Pad every value to three digits so the entire stream looks like a legitimate phone-number block. 72 → 072, 229 → 229, … </p>
-                <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify"> - Put everything together</p>
-                </li>
+      </header>
+      <div class="relative z-10 grid gap-8 px-8 pb-12 pt-10 sm:grid-cols-2 lg:grid-cols-2">
+        <a href="https://gchq.github.io/CyberChef/" target="_blank" rel="noopener"
+          class="group rounded-2xl bg-slate-800/60 p-6 shadow-lg ring-1 ring-cyan-400/10 hover:ring-cyan-400/40 transition">
+          <h3 class="text-xl font-semibold text-cyan-300 group-hover:text-cyan-400">
+            CyberChef </h3>
+          <ul class="mt-3 space-y-1 text-gray-300 text-sm leading-relaxed">
+            <li>Drag-&-drop “recipes”: XOR, Base-n, gzip, AES, gzip → Hex</li>
+            <li>Live previews with entropy histogram</li>
+            <li>Great for layering multiple encoders in seconds</li>
           </ul>
-        </p>
-        <br>
-        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2 font-bold">1. Create a Shellcode:</p>
-        <div class="flex justify-Left pl-6">
-            <img src="../MalDev/PaOb/1.png" class="w-90px h-auto" />
-        </div><br>
-        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2 font-bold">2. Create PhoneScator Project:</p>
-        <div class="flex justify-Left pl-6">
-            <img src="../MalDev/PaOb/2.png" class="w-90px h-auto" />
-        </div><br>
-        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2 font-bold">3. The Result:</p>
-        <div class="flex justify-Left pl-6">
-            <img src="../MalDev/PaOb/3.png" class="w-90px h-auto" />
-        </div><br>
-        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2 font-bold">4. Create PhoneDescator Project:</p>
-        <div class="flex justify-Left pl-6">
-            <img src="../MalDev/PaOb/4.png" class="w-90px h-auto" />
-        </div><br>
-        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2 font-bold">5. Final Result:</p>
-        <div class="flex justify-Left pl-6">
-            <img src="../MalDev/PaOb/5.png" class="w-90px h-auto" />
-        </div><br>
-        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2 font-bold">6. Confirm they match:</p>
-        <div class="flex justify-Left pl-6">
-            <img src="../MalDev/PaOb/6.png" class="w-90px h-auto" />
-        </div><br>
-        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
-            This is just the first milestone, we’ve beaten a static scanner, but a long, gritty road lies ahead before we can bypass every security layer and
-            trigger our payload in the wild. "Keep learning"
-        </p>
+        </a>
+        <a href="https://enkhee-osiris.github.io/Decoder-JSFuck/" target="_blank"
+          class="group rounded-2xl bg-slate-800/60 p-6 shadow-lg ring-1 ring-cyan-400/10 hover:ring-cyan-400/40 transition">
+          <h3 class="text-xl font-semibold text-cyan-300 group-hover:text-cyan-400">
+            JSFuck Playground </h3>
+          <ul class="mt-3 space-y-1 text-gray-300 text-sm leading-relaxed">
+            <li>Turn any JavaScript into six-character alphabet (`[]()+!`) only</li>
+            <li>Fun drop-in for phishing or MSHTA stagers</li>
+            <li>Decoder tab helps verify output pre-deployment</li>
+          </ul>
+        </a>
+        <a href="https://obfuscator.io/" target="_blank" rel="noopener"
+          class="group rounded-2xl bg-slate-800/60 p-6 shadow-lg ring-1 ring-cyan-400/10 hover:ring-cyan-400/40 transition">
+          <h3 class="text-xl font-semibold text-cyan-300 group-hover:text-cyan-400">
+            Obfuscator.io </h3>
+          <ul class="mt-3 space-y-1 text-gray-300 text-sm leading-relaxed">
+            <li>Transforms client-side JS: control-flow flattening, string array
+                rotation, dead-code injection</li>
+            <li>One-click minify + mangling for web implants</li>
+            <li>Downloadable JSON config for reproducible builds</li>
+          </ul>
+        </a>
+        <a href="https://www.base64encode.org/" target="_blank" rel="noopener"
+          class="group rounded-2xl bg-slate-800/60 p-6 shadow-lg ring-1 ring-cyan-400/10 hover:ring-cyan-400/40 transition">
+          <h3 class="text-xl font-semibold text-cyan-300 group-hover:text-cyan-400">
+            Quick Base64 Lab</h3>
+          <ul class="mt-3 space-y-1 text-gray-300 text-sm leading-relaxed">
+            <li>Instant Base64 ↔ text conversion, optional URL-safe alphabet</li>
+            <li>Handy for embedding PS1 or VBA macro chunks</li>
+            <li>“Copy-to-clipboard” button speeds payload assembly</li>
+          </ul>
+        </a>
+      </div>
     </section>
-  </main>
-  <!-- Footer -->
-  <footer class="flex items-center justify-center py-6">
-    <a href="../index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">← Back to Dashboard</a>
-  </footer>
+    <br>
+    <div class="flex items-start gap-4 rounded-2xl bg-slate-800/60 p-6 ring-1 ring-cyan-400/20">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-10 w-10 flex-none text-cyan-400">
+        <path fill="currentColor" d="M12 2a7 7 0 00-7 7c0 3 1.9 5.5 4.6 6.4L10 18h4l.4-2.6A7 7 0 0019 9a7 7 0 00-7-7z"/>
+        <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9 21h6M12 18v3"/>
+      </svg>
+      <div class="text-gray-300">
+        <h3 class="text-lg font-semibold text-cyan-300">Keep in mind</h3>
+        <p class="mt-1 text-sm leading-relaxed">
+          Obfuscation is just one layer. Combine it with injection, direct syscalls,
+          and sandbox evasion to stay ahead of blue-team analytics.
+        </p>
+      </div>
+    </div>
+    <br>
+  </section>
+<footer class="flex flex-col items-center sm:text-justify gap-4 py-6 bg-[#0f172a] text-gray-200">
+  <p class="text-center">2025 Iron Hulk — No rights reserved.</p>
+  <a href="../index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">← Back to Dashboard</a>
+</footer>
+</main>
 
-  <!-- Reading-time logic -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const dateWritten = '11/Jan/2025';
-      const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
-      const minutes = Math.max(1, Math.ceil(words / 230));
-      document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
-    });
-  </script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const dateWritten = '11/Jan/2025';
+    const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
+    const minutes = Math.max(1, Math.ceil(words / 230));
+    document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
+  });
+</script>
 </body>
 </html>
