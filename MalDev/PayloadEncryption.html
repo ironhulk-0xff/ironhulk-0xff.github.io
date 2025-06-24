@@ -71,7 +71,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
           <div class="bg-gray-800 bg-opacity-60 p-6 rounded-xl transform hover:scale-105 transition-transform duration-300">
             <div class="flex items-center mb-4">
-              <span class="w-8 h-8 bg-green-400 rounded-full flex items-center justify-center text-white font-bold">✓</span>
+              <span class="w-8 h-8 bg-green-400 rounded-full flex items-center sm:text-justify text-white font-bold">✓</span>
               <h3 class="ml-3 text-xl font-semibold text-green-300">Pros</h3>
             </div>
             <ul class=" text-gray-100 pl-4 list-disc">
@@ -82,7 +82,7 @@
           </div>
           <div class="bg-gray-800 bg-opacity-60 p-6 rounded-xl transform hover:scale-105 transition-transform duration-300 animation-delay-500">
             <div class="flex items-center mb-4">
-              <span class="w-8 h-8 bg-red-400 rounded-full flex items-center justify-center text-white font-bold">✕</span>
+              <span class="w-8 h-8 bg-red-400 rounded-full flex items-center sm:text-justify text-white font-bold">✕</span>
               <h3 class="ml-3 text-xl font-semibold text-red-300">Cons</h3>
             </div>
             <ul class="text-gray-100 pl-4 list-disc">
@@ -99,7 +99,7 @@
           <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3"></path></svg>
           Detection and Defensive Considerations</span>
         </h2>
-        <p class="text-gray-300 leading-relaxed text-justify pl-1 ">
+        <p class="text-gray-300 leading-relaxed sm:text-justify pl-1 ">
           Static <span class="text-blue-300 font-mono ">YARA</span> signatures can still flag decryptor stubs like API import patterns for <code class="bg-gray-800 text-green-300 rounded px-1">CryptEncrypt</code>, <code class="bg-gray-800 text-green-300 rounded px-1">VirtualProtect</code>, or self-modifying loops. Memory scanners hunt 
           for freshly committed <code class="bg-gray-800 text-green-300 rounded px-1">RWX</code> pages whose entropy suddenly drops after write-and-execute pivots. Behavioural analytics look for the hallmark sequence: 
           <code class="bg-gray-800 text-green-300 rounded px-1">allocate → write high-entropy buffer → change protection → create thread</code>. Yet, environmental keying and just-in-time key delivery force defenders to instrument the process context network, registry, VM introspection rather than rely solely on byte patterns.                     </p>
@@ -110,7 +110,7 @@
           <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3"></path></svg>
           Defending Against Security-Side Brute-Force:</span>
         </h2>
-        <p class="text-gray-300 leading-relaxed text-justify pl-1">
+        <p class="text-gray-300 leading-relaxed sm:text-justify pl-1">
           When a threat-actor ships an encrypted payload, the real battle is no longer whether defenders will capture the ciphertext, sooner or later they will, but whether
           anyone can crack it before the campaign is finished. Seasoned operators therefore harden the key itself, add layers of misdirection, and make brute-forcing financially or computationally irrational.
           <br><br>
@@ -315,35 +315,35 @@
               <div class="absolute top-0 left-5 h-full border-l-2 border-indigo-400"></div>
               <ul class="space-y-5">
                 <li class="relative">
-                  <div class="absolute -left-7 top-0 w-6 h-6 bg-indigo-400 rounded-full flex items-center justify-center text-gray-900 font-bold">1</div>
+                  <div class="absolute -left-7 top-0 w-6 h-6 bg-indigo-400 rounded-full flex items-center sm:text-justify text-gray-900 font-bold">1</div>
                   <h3 class="text-xl font-semibold text-white">Decrypt the payload</h3>
                   <p class="text-gray-300 leading-relaxed">
                     <code class="bg-gray-800 text-green-300 rounded px-1">SmokeScreen()</code> derives a 256-bit key &amp; IV via PBKDF2, then AES-CBC-decrypts <code class="bg-gray-800 text-green-300 rounded px-1">Enc</code> to raw shellcode.
                   </p>
                 </li>
                 <li class="relative">
-                  <div class="absolute -left-7 top-0 w-6 h-6 bg-indigo-400 rounded-full flex items-center justify-center text-gray-900 font-bold">2</div>
+                  <div class="absolute -left-7 top-0 w-6 h-6 bg-indigo-400 rounded-full flex items-center sm:text-justify text-gray-900 font-bold">2</div>
                   <h3 class="text-xl font-semibold text-white">Allocate memory</h3>
                   <p class="text-gray-300 leading-relaxed">
                     <code class="bg-gray-800 text-green-300 rounded px-1">VirtualAlloc(..., MEM_COMMIT|MEM_RESERVE, PAGE_EXECUTE_READWRITE)</code> returns <code class="bg-gray-800 text-green-300 rounded px-1">barrel</code>, marked RWX.
                   </p>
                 </li>
                 <li class="relative">
-                  <div class="absolute -left-7 top-0 w-6 h-6 bg-indigo-400 rounded-full flex items-center justify-center text-gray-900 font-bold">3</div>
+                  <div class="absolute -left-7 top-0 w-6 h-6 bg-indigo-400 rounded-full flex items-center sm:text-justify text-gray-900 font-bold">3</div>
                   <h3 class="text-xl font-semibold text-white">Inject shellcode</h3>
                   <p class="text-gray-300 leading-relaxed">
                     <code class="bg-gray-800 text-green-300 rounded px-1">Marshal.Copy()</code> moves the decrypted bytes into <code class="bg-gray-800 text-green-300 rounded px-1">barrel</code>.
                   </p>
                 </li>
                 <li class="relative">
-                  <div class="absolute -left-7 top-0 w-6 h-6 bg-indigo-400 rounded-full flex items-center justify-center text-gray-900 font-bold">4</div>
+                  <div class="absolute -left-7 top-0 w-6 h-6 bg-indigo-400 rounded-full flex items-center sm:text-justify text-gray-900 font-bold">4</div>
                   <h3 class="text-xl font-semibold text-white">Launch thread</h3>
                   <p class="text-gray-300 leading-relaxed">
                     <code class="bg-gray-800 text-green-300 rounded px-1">CreateThread()</code> starts at <code class="bg-gray-800 text-green-300 rounded px-1">barrel</code>, and <code class="bg-gray-800 text-green-300 rounded px-1">WaitForSingleObject()</code> waits for completion.
                   </p>
                 </li>
                 <li class="relative">
-                  <div class="absolute -left-7 top-0 w-6 h-6 bg-indigo-400 rounded-full flex items-center justify-center text-gray-900 font-bold">5</div>
+                  <div class="absolute -left-7 top-0 w-6 h-6 bg-indigo-400 rounded-full flex items-center sm:text-justify text-gray-900 font-bold">5</div>
                   <h3 class="text-xl font-semibold text-white">Stealth mode</h3>
                   <p class="text-gray-300 leading-relaxed">
                     <code class="bg-gray-800 text-green-300 rounded px-1">GetConsoleWindow() + ShowWindow()</code> hides the console before decryption.
@@ -359,13 +359,13 @@
           <div class="relative group overflow-hidden rounded-2xl shadow-lg">
             <code class="bg-gray-800 text-green-300 rounded px-1">Before</code> 
             <img src="../MalDev/images/b4enc.png" alt="Before" class="w-full h-auto transition-transform ">
-              <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 ">
+              <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center sm:text-justify opacity-0 ">
               </div>
             </div>
             <div class="relative group overflow-hidden rounded-2xl shadow-lg">
               <code class="bg-gray-800 text-green-300 rounded px-1">After</code> 
               <img src="../MalDev/images/afenc.png" alt="After" class="w-full h-auto transition-transform ">
-              <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 ">
+              <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center sm:text-justify opacity-0 ">
               </div>
             </div>
           </div>
@@ -617,7 +617,7 @@
       }
     </script>     
   </section>
-  <footer class="flex flex-col items-center justify-center gap-4 py-6 bg-[#0f172a] text-gray-200">
+  <footer class="flex flex-col items-center sm:text-justify gap-4 py-6 bg-[#0f172a] text-gray-200">
     <p class="text-center">2025 Iron Hulk — No rights reserved.</p>
     <a href="../index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">← Back to Dashboard</a>
   </footer>
