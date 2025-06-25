@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Iron Hulk – Process Enumeration</title>
+  <title>Iron Hulk - Process Enumeration</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-[#0f172a] text-white font-sans min-h-screen">
@@ -15,383 +15,656 @@
     </div>
     <a href="../index.html" class="text-gray-300 text-sm hover:underline">← Back to Dashboard</a>
   </header>
-
   <!-- Article -->
-  <main id="article" class="p-6 space-y-6">
-    <section class="bg-[#1f2937] p-6 rounded-xl shadow-md">
-        <h2 class="text-[17px] font-bold text-blue-400">What Is Process Enumeration?</h2>
-        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
-            Imagine you’re a detective walking into a busy office building. So your first move is to scope out who’s working there, like their names, roles, and what they’re doing.
-            Process enumeration is the digital version of that, it’s the technique of listing every active process (programs, apps, services) running on a computer, along
-            with details like:
-            <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                <li>Process names (Ex: <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">chrome.exe, avp.exe</code>)</li>
-                <li>Unique IDs (PIDs) </li>
-                <li>Memory usage </li>
-                <li>Parent/child relationships </li>
-                <li>and so many other things, depending on what the developer wants to know</li>
-            </ol><br>
-            <p class="font-bold pl-2">For penetration testers, understanding process enumeration is critical for:</p>
-            <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                <li>Identifying high-value targets (Ex: <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">lsass.exe</code> for credential dumping).</li>
-                <li>Evading detection by security tools (EDR/AV).</li>
-                <li>Executing post-exploitation tactics like process injection or lateral movement.</li>
-            </ol>
-        </p><br>
-        <h2 class="text-[17px] font-bold text-blue-400">Why Do Malware Developers Enumerate Processes?</h2>
-        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
-          Attackers don’t blindly attack, they gather information first, then weaponize then attack. Here’s why hackers lean on process enumeration:
-            <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                <li><strong>Hunting Security Tools:</strong> Malware scans for processes like <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">msmpeng.exe</code> (Windows Defender) or <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">egui.exe</code> (ESET) or <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CrowdStrike</code>. Spot one? It’ll try to kill the process, evade detection, or disable the service.</li>
-                <li><strong>Finding Injection Targets:</strong> To hide, malware often injects malicious code into legitimate processes (Ex: <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">explorer.exe</code>). Enumeration identifies trusted, long-running targets—making the attack invisible.</li>
-                <li><strong>Privilege Escalation:</strong> Processes running as <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">SYSTEM or Administrator</code> are jackpots. Malware hijacks them to gain high-level access, install rootkits, or steal credentials.</li>
-                <li><strong>Avoiding Analysis Environments:</strong> Malware checks for processes tied to sandboxes (<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">vmtoolsd.exe</code>) or debuggers (<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">x32dbg.exe</code>). If detected, it shuts down to avoid analysis.</li>
-                <li><strong>Data Theft & Espionage:</strong> Targeting specific apps? Banking trojans hunt for <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">chrome.exe</code> (to steal logins) or cryptocurrency wallets like <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">Electrum.exe</code>.</li>
-                <li><strong>Privilege matching and architecture alignment:</strong> The loader has to guarantee bitness compatibility (x86 vs x64), integrity level, and sometimes specific token privileges.</li>
-                <li><strong>Thread Enumeration:</strong> A malware may enumerate threads within a process to hijack execution flow or inject shellcode into a running thread</li>
-            </ol><br>
-            <p class="font-bold pl-2">I just named few, and there are so many reasons behind that activity</p>
-        </p><br>
-        <h2 class="text-[17px] font-bold text-blue-400">Before or After the Breach?</h2>
-        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
-            The timing depends on the attacker’s goals:
-            <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                <li><strong>Before the Attack (Recon Phase)</strong> </li>
-                <ol class="list-[decimal] list-outside pl-4 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                    <li><strong>Knowledge is power, malware starts by enumerating processes to:</strong> </li>
-                    <ol class="list-disc list-outside pl-4 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                        <li><strong>Environment Profiling:</strong> What AV is installed?</li>
-                        <li><strong>Identify weak spots: </strong> Which process runs as SYSTEM?</li>
-                        <li><strong>Sandbox/VM Detection:</strong> Malware may enumerate processes early to check for analysis environments (Ex: <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">vmtoolsd.exe</code> in VMware).</li>
-                        <li><strong>Example:</strong> Ransomware like LockBit enumerates processes first to terminate backup services (Ex: <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">sqlagent.exe</code>) before encrypting files.</li>
-                    </ol>
-                </ol><br>
-                <li><strong>During the Attack (Execution Phase)</strong> </li>
-                <ol class="list-[decimal] list-outside pl-4 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                    <li><strong>Real-time adaptation. Malware may re-enumerate to:</strong> </li>
-                    <ol class="list-disc list-outside pl-4 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                        <li>Inject into newly launched processes (Ex: a user opening <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">calc.exe</code>).</li>
-                        <li>Check if security tools were restarted.</li>
-                        <li>Finding Privilege Escalation vulnerable processes (Ex: unpatched <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">spoolsv.exe "PrintNightmare")</code></li>
-                        <li>Injecting into a long-running process (Ex: <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">svchost.exe</code>) for persistence.</li>
-                        <li>Targeting <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">lsass.exe</code> after gaining initial access for credential dumping </li>
-                    </ol>
-                </ol><br>
-                <li><strong>After the Attack (Persistence/Cleanup/Lateral Movement)</strong> </li>
-                <ol class="list-disc list-outside pl-4 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                    <li>Using tools like <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">psExec or WMI</code> to find processes on other machines in the network.</li>
-                </ol>
-            </ol>
-        </p><br>
-        <h2 class="text-[17px] font-bold text-blue-400">The Bottom Line:</h2>
-        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
-            Process enumeration is the Swiss Army knife in a hacker’s toolkit and it is used before, during, and after attacks to gather intel, exploit weaknesses, and evade consequences.
-            For defenders, spotting suspicious enumeration (Ex: mass <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">OpenProcess</code> calls) is a red flag. 
-            Understanding this cat-and-mouse game isn’t just technical, it’s critical for building resilient systems. Moreover, process enumeration is not inherently malicious, sysadmins and EDRs use it too
-        </p><br>
-        <h2 class="text-[17px] font-bold text-blue-400">Methods for process enumeration:</h2>
-        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
-          In Windows, there are several APIs and methods to enumerate processes, each with its own advantages and use cases. Below is a detailed breakdown of the most common techniques, including WinAPI functions, command-line tools, and scripting methods. 
-        </p>
-        <style>
-          pre 
-          {
-            background-color: #334155;
-            color: #dcdcdc;
-            font-family: Consolas, monospace;
-            overflow-x: auto;
-            position: relative;
-          }              
-          .copy-button 
-          {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            background-color: #1e293b;
-            color: #f8fafc;
-            border: none;
-            padding: 5px 10px;
-            font-size: 18px;
-            cursor: pointer;
-            border-radius: 5px;
-            z-index: 2;
-          }              
-          .copy-button:hover 
-          {
-            background-color: #3b82f6;
-          }              
-          summary    
-          {
-          font-size: 1.1em;
-          font-weight: bold;
-          cursor: pointer;
-          padding: 0.4rem 0.6rem;  /* reduce padding here */
-          }         
-          details 
-          {
-            position: relative;
-            margin-bottom: 0.25rem;  /* or 0 */
-          }
-        </style>
-        <script>
-          function copyCode(button) {
-            const codeBlock = button.parentElement.querySelector('code');
-            const text = codeBlock.textContent;
-        
-            navigator.clipboard.writeText(text).then(() => {
-              button.textContent = 'Copied!';
-              setTimeout(() => {
-                button.textContent = 'Copy';
-              }, 1500);
-            });
-          }
-        </script>                 
-      <details>
-        <summary class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">Using: EnumProcesses </summary>
-        <pre>
-        <button class="copy-button" onclick="copyCode(this)">Copy</button>
-        <code class="language-csharp">                    
-          using System;
-          using System.Runtime.InteropServices;
-          using System.Text;
-          
-          class Program
-          {
-              [DllImport("psapi.dll", SetLastError = true)]
-              static extern bool EnumProcesses(
-                  [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U4)] uint[] processIds,
-                  uint arraySizeBytes,
-                  out uint bytesCopied
-              );
-          
-              [DllImport("psapi.dll", SetLastError = true)]
-              static extern uint GetModuleFileNameEx(
-                  IntPtr hProcess,
-                  IntPtr hModule,
-                  [Out] StringBuilder lpFilename,
-                  uint nSize
-              );
-          
-              static void Main()
-              {
-                  uint[] processIds = new uint[1024];
-                  uint bytesCopied;
-          
-                  if (!EnumProcesses(processIds, (uint)(processIds.Length * sizeof(uint)), out bytesCopied))
-                  {
-                      Console.WriteLine($"EnumProcesses failed: {Marshal.GetLastWin32Error()}");
-                      return;
-                  }
-          
-                  int numProcesses = (int)(bytesCopied / sizeof(uint));
-                  Console.WriteLine("PID\tProcess Name\tExecutable Path");
-                  Console.WriteLine("-----------------------------------------------");
-          
-                  for (int i = 0; i < numProcesses; i++)
-                  {
-                      uint pid = processIds[i];
-                      if (pid == 0) continue; // Skip Idle process
-          
-                      try
-                      {
-                          IntPtr hProcess = System.Diagnostics.Process.GetProcessById((int)pid).Handle;
-                          var sb = new StringBuilder(1024);
-                          if (GetModuleFileNameEx(hProcess, IntPtr.Zero, sb, (uint)sb.Capacity) != 0)
-                          {
-                              Console.WriteLine($"{pid}\t{System.Diagnostics.Process.GetProcessById((int)pid).ProcessName}\t{sb}");
-                          }
-                      }
-                      catch { } // Skip inaccessible processes
-                  }
-              }
-          }
-        </code></pre>
-      </details>
-      <details>
-        <summary class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">Using: WTSEnumerateProcesses</summary>
-        <pre>
-        <button class="copy-button" onclick="copyCode(this)">Copy</button>
-        <code class="language-csharp">                    
-          using System;
-          using System.Runtime.InteropServices;
-
-          class Program
-          {
-              [DllImport("wtsapi32.dll", SetLastError = true)]
-              static extern bool WTSEnumerateProcesses(
-                  IntPtr hServer,
-                  int Reserved,
-                  int Version,
-                  ref IntPtr ppProcessInfo,
-                  ref int pCount
-              );
-
-              [DllImport("wtsapi32.dll", SetLastError = true)]
-              static extern void WTSFreeMemory(IntPtr pMemory);
-
-              [StructLayout(LayoutKind.Sequential)]
-              struct WTS_PROCESS_INFO
-              {
-                  public int SessionId;
-                  public int ProcessId;
-                  public IntPtr pProcessName;
-                  public IntPtr pUserSid;
-              }
-
-              static void Main()
-              {
-                  IntPtr ppProcessInfo = IntPtr.Zero;
-                  int pCount = 0;
-
-                  if (!WTSEnumerateProcesses(IntPtr.Zero, 0, 1, ref ppProcessInfo, ref pCount))
-                  {
-                      Console.WriteLine($"WTSEnumerateProcesses failed: {Marshal.GetLastWin32Error()}");
-                      return;
-                  }
-
-                  Console.WriteLine("PID\tProcess Name");
-                  Console.WriteLine("----------------------");
-
-                  for (int i = 0; i < pCount; i++)
-                  {
-                      IntPtr ptr = (IntPtr)((long)ppProcessInfo + i * Marshal.SizeOf(typeof(WTS_PROCESS_INFO)));
-                      var info = (WTS_PROCESS_INFO)Marshal.PtrToStructure(ptr, typeof(WTS_PROCESS_INFO));
-
-                      string processName = Marshal.PtrToStringAnsi(info.pProcessName) ?? "(Unknown)";
-                      Console.WriteLine($"{info.ProcessId}\t{processName}");
-                  }
-
-                  WTSFreeMemory(ppProcessInfo);
-              }
-          }
-
-        </code></pre>
-      </details>
-      <details> 
-        <summary class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">Using: NtQuerySystemInformation</summary>
-        <pre>
-        <button class="copy-button" onclick="copyCode(this)">Copy</button>
-        <code class="language-csharp">                    
-          using System;
-          using System.Collections.Generic;
-          using System.Runtime.InteropServices;
-          
-          internal static class Program
-          {
-              static void Main()
-              {
-                  foreach (var p in NtEnum())
-                      Console.WriteLine($"{p.pid,6} → {p.name}");
-              }
-              private static IEnumerable<(int pid, string name)> NtEnum()
-              {
-                  const int SystemProcessInformation = 5;
-                  const int STATUS_INFO_LENGTH_MISMATCH = unchecked((int)0xC0000004);
-          
-                  int len = 0x100000;
-                  IntPtr buf = Marshal.AllocHGlobal(len);
-                  try
-                  {
-                      int status;
-                      int need;
-                      while ((status = NtQuerySystemInformation(
-                                  SystemProcessInformation, buf, len, out need))
-                             == STATUS_INFO_LENGTH_MISMATCH)
-                      {
-                          len = need;
-                          Marshal.FreeHGlobal(buf);
-                          buf = Marshal.AllocHGlobal(len);
-                      }
-                      if (status < 0) yield break;        // call failed
-                      IntPtr ptr = buf;
-                      for (; ; )
-                      {
-                          var spi = (SYSTEM_PROCESS_INFORMATION)
-                                    Marshal.PtrToStructure(ptr,
-                                        typeof(SYSTEM_PROCESS_INFORMATION));
-          
-                          string image;
-                          if (spi.ImageName.Length > 0 && spi.ImageName.Buffer != IntPtr.Zero)
-                              image = Marshal.PtrToStringUni(
-                                          spi.ImageName.Buffer, spi.ImageName.Length / 2);
-                          else
-                              image = "System Idle Process";
-          
-                          yield return ((int)spi.UniqueProcessId, image);
-          
-                          if (spi.NextEntryOffset == 0) break;
-                          ptr = IntPtr.Add(ptr, (int)spi.NextEntryOffset);
-                      }
-                  }
-                  finally { Marshal.FreeHGlobal(buf); }
-              }
-              // ---------------- P/Invoke & structs ----------------
-              [DllImport("ntdll.dll")]
-              private static extern int NtQuerySystemInformation(
-                  int systemInformationClass,
-                  IntPtr systemInformation,
-                  int systemInformationLength,
-                  out int returnLength);
-          
-              [StructLayout(LayoutKind.Sequential)]
-              private struct UNICODE_STRING
-              {
-                  public ushort Length;
-                  public ushort MaximumLength;
-                  public IntPtr Buffer;
-              }
-              [StructLayout(LayoutKind.Sequential)]
-              private struct SYSTEM_PROCESS_INFORMATION
-              {
-                  public uint NextEntryOffset;
-                  public uint NumberOfThreads;
-                  private long Reserved1, Reserved2, Reserved3;
-                  public long CreateTime, UserTime, KernelTime;
-                  public UNICODE_STRING ImageName;
-                  public int BasePriority;
-                  public IntPtr UniqueProcessId;
-                  public IntPtr InheritedFromUniqueProcessId;
-              }
-          }          
-        </code></pre>
-      </details>
-      <details>
-        <summary class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">Using: Powershell command line </summary>
-        <pre>
-        <button class="copy-button" onclick="copyCode(this)">Copy</button>
-        <code class="language-powershell">                    
-          Get-CimInstance Win32_Process | Select @{n='PID';e={$_.ProcessId}}, @{n='PPID';e={$_.ParentProcessId}}, @{n='Threads';e={$_.ThreadCount}}, @{n='Name';e={$_.Name}} | ft -a
-        </code>
-      </details>
-      <div class="boxed-inline">
-        Extra Mile:<br>We've built a process-enumeration project; now adapt it for the pre-attack reconnaissance stage, and modify the code so it logs the results to a file and exfiltrates that file back to you.</p>
+<main id="article" class="p-6 space-y-6">
+  <section class="relative rounded-3xl bg-gradient-to-br from-slate-800/80 to-slate-900/95 p-10 shadow-2xl ring-1 ring-cyan-500/30 overflow-hidden isolate">
+    <div class="pointer-events-none absolute inset-0 bg-[url('https://www.toptal.com/designers/subtlepatterns/uploads/dots.png')] opacity-20 mix-blend-soft-light"></div>
+      <h2 class="relative  text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400 text-center mb-8 drop-shadow-md">
+        Process Enumeration: Recon Before the Raid</h2>
+    <p class="relative prose prose-invert text-gray-200 max-w-7xl mx-auto mb-12 sm:text-justify">
+      Imagine you’re a detective walking into a busy office building. So your first move is to scope out who’s working there, like their names, roles, and what they’re doing.
+      Process enumeration is the digital version of that, it’s the technique of listing every active process (programs, apps, services) running on a computer, along
+      with details. Process enumeration is a versatile technique used by attackers, pentesters, administrators, and security systems alike to gather critical system information 
+      on local machines and networked environments. Performed before, during, and after attacks or as part of routine maintenance, it serves purposes ranging from exploitation and 
+      evasion to monitoring and troubleshooting. Understanding its role and recognizing unusual activity is essential for both leveraging it responsibly and defending against its 
+      misuse
+    </p>
+    <div class="relative  grid gap-10 md:grid-cols-3">
+      <!-- Column 1: Data points -->
+      <div class="group rounded-xl bg-gray-900/60 p-6 border border-cyan-400/20 shadow-xl hover:border-cyan-300/40 hover:shadow-cyan-500/30 transition duration-300">
+        <h3 class="text-xl font-semibold text-cyan-300 mb-3 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a4 4 0 10-4-4 4 4 0 004 4V7m3 0v10"/></svg> Intel We Collect</h3>
+        <ul class="list-disc pl-5 space-y-2 text-gray-300 text-[15px] leading-relaxed">
+          <li>Process names <code class="bg-[#334155] text-blue-300 rounded px-1">chrome.exe, avp.exe</code></li>
+          <li>Unique identifiers (PID)</li>
+          <li>Memory & CPU footprint</li>
+          <li>Parent ⇄ child lineage</li>
+          <li>Session, integrity, security context</li>
+        </ul>
       </div>
-      <style>
-          .boxed-inline
-          {
-              display:inline-block;
-              border:5px solid #555;
-              background:#334155;
-              padding:14px 18px;
-              margin:20px 0;
-              border-radius:6px;
-              line-height:1.45;
-          }
-      </style>  
-    </section>
-  </main>
-  <!-- Footer -->
-  <footer class="flex items-center justify-center py-6">
+      <!-- Column 2: Pentester value -->
+      <div class="group rounded-xl bg-gray-900/60 p-6 border border-cyan-400/20 shadow-xl hover:border-cyan-300/40 hover:shadow-cyan-500/30 transition duration-300">
+        <h3 class="text-xl font-semibold text-cyan-300 mb-3 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> Why It Matters</h3>
+        <ul class="list-disc pl-5 space-y-2 text-gray-300 text-[15px] leading-relaxed">
+          <li>Tag crown‑jewel targets like <code class="bg-[#334155] text-blue-300 rounded px-1">lsass.exe</code></li>
+          <li>Camouflage inside legitimate traffic to skirt EDR/AV watchlists</li>
+          <li>Stage vectors for <span class="text-cyan-400 font-medium">process injection</span>, hollowing, or token theft</li>
+        </ul>
+      </div>
+      <!-- Column 3: Cheatsheet & tips -->
+      <div class="group rounded-xl bg-gray-900/60 p-6 border border-cyan-400/20 shadow-xl hover:border-cyan-300/40 hover:shadow-cyan-500/30 transition duration-300">
+        <h3 class="text-xl font-semibold text-cyan-300 mb-3 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"/></svg> Quick Recon Commands</h3>
+        <ul class="list-disc pl-5 space-y-2 text-gray-300 text-[15px] leading-relaxed">
+          <li>Windows CLI:<code> tasklist /v</code></li>
+          <li>PowerShell:<code> Get-Process | ft -AutoSize</code></li>
+          <li>Unix/Linux:<code> ps aux</code></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <!-- Custom slow spin animation -->
+  <style>
+  @keyframes spin-slow { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  .animate-spin-slow { animation: spin-slow 18s linear infinite; }
+  </style>
+  <section class="sm:text-justify relative rounded-3xl bg-gradient-to-br from-slate-800/85 to-slate-900/95 p-12 shadow-2xl ring-1 ring-cyan-500/30 overflow-hidden isolate">
+    <div class="pointer-events-none absolute inset-0 bg-[url('https://www.toptal.com/designers/subtlepatterns/uploads/dots.png')] opacity-15 mix-blend-soft-light"></div>
+    <h2 class="relative  text-4xl md:text-5xl font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400 drop-shadow-sm mb-12">
+      Why Malware Developers Enumerate Processes</h2>
+    <div class="relative  grid gap-8 sm:grid-cols-2 lg:grid-cols-3 max-w-8xl mx-auto">
+      <div class="group rounded-2xl bg-gray-900/60 p-6 ring-1 ring-cyan-400/15 shadow-lg backdrop-blur-sm hover:ring-cyan-300/30 hover:shadow-cyan-500/30 transition">
+        <div class="flex items-center gap-3 mb-3">
+          <svg class="h-6 w-6 text-cyan-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5 1a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <h3 class="text-lg font-semibold text-cyan-300">Hunt Security Tools</h3>
+        </div>
+        <p class="text-[15px] text-gray-300 leading-relaxed">
+          Malware scans for processes like <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">msmpeng.exe</code> (Windows Defender) or <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">egui.exe</code> (ESET) or <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CrowdStrike</code>. Spot one? It’ll try to kill the process, evade detection, or disable the service.
+        </p>
+      </div>
+      <div class="group rounded-2xl bg-gray-900/60 p-6 ring-1 ring-cyan-400/15 shadow-lg backdrop-blur-sm hover:ring-cyan-300/30 hover:shadow-cyan-500/30 transition">
+        <div class="flex items-center gap-3 mb-3">
+          <svg class="h-6 w-6 text-cyan-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          <h3 class="text-lg font-semibold text-cyan-300">Find Injection Hosts</h3>
+        </div>
+        <p class="text-[15px] text-gray-300 leading-relaxed">
+          To hide, malware often injects malicious code into legitimate processes (Ex: <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">explorer.exe</code>). Enumeration identifies trusted, long-running targets—making the attack invisible.
+        </p>
+      </div>
+      <div class="group rounded-2xl bg-gray-900/60 p-6 ring-1 ring-cyan-400/15 shadow-lg backdrop-blur-sm hover:ring-cyan-300/30 hover:shadow-cyan-500/30 transition">
+        <div class="flex items-center gap-3 mb-3">
+          <svg class="h-6 w-6 text-cyan-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          <h3 class="text-lg font-semibold text-cyan-300">Privilege Escalation</h3>
+        </div>
+        <p class="text-[15px] text-gray-300 leading-relaxed">
+          Processes running as <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">SYSTEM or Administrator</code> are jackpots. Malware hijacks them to gain high-level access, install rootkits, or steal credentials.
+        </p>
+      </div>
+      <div class="group rounded-2xl bg-gray-900/60 p-6 ring-1 ring-cyan-400/15 shadow-lg backdrop-blur-sm hover:ring-cyan-300/30 hover:shadow-cyan-500/30 transition">
+        <div class="flex items-center gap-3 mb-3">
+          <svg class="h-6 w-6 text-cyan-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 00-9.33-4.897"/></svg>
+          <h3 class="text-lg font-semibold text-cyan-300">Avoiding Analysis Environments (Sandboxes)</h3>
+        </div>
+        <p class="text-[15px] text-gray-300 leading-relaxed">
+          Malware checks for processes tied to sandboxes (<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">vmtoolsd.exe</code>) or debuggers (<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">x32dbg.exe</code>). If detected, it shuts down to avoid analysis.
+        </p>
+      </div>
+      <div class="group rounded-2xl bg-gray-900/60 p-6 ring-1 ring-cyan-400/15 shadow-lg backdrop-blur-sm hover:ring-cyan-300/30 hover:shadow-cyan-500/30 transition">
+        <div class="flex items-center gap-3 mb-3">
+          <svg class="h-6 w-6 text-cyan-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1 0h1m0 0V9h1m-2 0H9m0 0V5m0 4h4"/></svg>
+          <h3 class="text-lg font-semibold text-cyan-300">Data-Theft Recon</h3>
+        </div>
+        <p class="text-[15px] text-gray-300 leading-relaxed">
+          Targeting specific apps? Banking trojans hunt for <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">chrome.exe</code> (to steal logins) or cryptocurrency wallets like <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">Electrum.exe</code>.
+        </p>
+      </div>
+      <div class="group rounded-2xl bg-gray-900/60 p-6 ring-1 ring-cyan-400/15 shadow-lg backdrop-blur-sm hover:ring-cyan-300/30 hover:shadow-cyan-500/30 transition">
+        <div class="flex items-center gap-3 mb-3">
+          <svg class="h-6 w-6 text-cyan-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 13h6m-3-3v6m-1 8a9 9 0 110-18 9 9 0 010 18z"/></svg>
+          <h3 class="text-lg font-semibold text-cyan-300">Thread Enumeration</h3>
+        </div>
+        <p class="text-[15px] text-gray-300 leading-relaxed">
+          A malware may enumerate threads within a process to hijack execution flow or inject shellcode into a running thread.
+        </p>
+      </div>
+    </div>
+    <p class="relative  mt-14 text-center font-semibold text-cyan-300">
+      Enumeration is the compass that guides every modern attack.
+    </p>
+  </section>
+  <section class="sm:text-justify rounded-3xl bg-gradient-to-br from-slate-800/85 to-slate-900/95 p-10 shadow-2xl ring-1 ring-cyan-500/30 space-y-8">
+    <h2 class="text-center text-4xl md:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400">
+      Before or After the Breach? </h2>
+    <!-- PHASE A – BEFORE -->
+    <div class="flex flex-col md:flex-row bg-gray-900/60 ring-1 ring-cyan-400/15 rounded-2xl shadow-lg">
+      <div class="flex items-center justify-center md:w-6 bg-gradient-to-br from-cyan-400 to-indigo-500 rounded-t-2xl md:rounded-tr-none md:rounded-l-2xl">
+        <span class="text-2xl font-bold text-gray-900">A</span>
+      </div>
+      <div class="p-6 space-y-2 text-[15px] text-gray-300 leading-relaxed">
+        <h3 class="text-lg font-semibold text-cyan-300">Before the Attack (Recon Phase)</h3>
+        <ul class="list-disc pl-5 space-y-1">
+          <li><strong>Environment Profiling:</strong> What AV/EDR is installed? or what other security features are enabled.</li>
+          <li><strong>Identify weak spots:</strong> Which process runs as <code class="bg-[#334155] text-blue-300 px-1 rounded">SYSTEM</code> processes.</li>
+          <li><strong>Sandbox/VM Detection:</strong> Malware may enumerate processes early to check for analysis environments (<code class="bg-[#334155] text-blue-300 px-1 rounded">vmtoolsd.exe</code>).</li>
+          <li><strong>Example:</strong> Ransomware like LockBit enumerates processes first to terminate backup services <code class="bg-[#334155] text-blue-300 px-1 rounded">sqlagent.exe</code> before encryption.</li>
+        </ul>
+      </div>
+    </div>
+    <!-- PHASE B – DURING -->
+    <div class="flex flex-col md:flex-row bg-gray-900/60 ring-1 ring-cyan-400/15 rounded-2xl shadow-lg">
+      <div class="flex items-center justify-center md:w-6 bg-gradient-to-br from-cyan-400 to-indigo-500 rounded-t-2xl md:rounded-tr-none md:rounded-l-2xl">
+        <span class="text-2xl font-bold text-gray-900">B</span>
+      </div>
+      <div class="p-6 space-y-2 text-[15px] text-gray-300 leading-relaxed">
+        <h3 class="text-lg font-semibold text-cyan-300">During the Attack (Execution Phase)</h3>
+        <ul class="list-disc pl-5 space-y-1">
+          <li>Inject into newly launched processes like <code class="bg-[#334155] text-blue-300 px-1 rounded">calc.exe</code>.</li>
+          <li>Check if security tools were/are restarted..</li>
+          <li>Finding Privilege Escalation vulnerable processes <code class="bg-[#334155] text-blue-300 px-1 rounded">spoolsv.exe</code> (PrintNightmare).</li>
+          <li>Injecting into a long-running process <code class="bg-[#334155] text-blue-300 px-1 rounded">svchost.exe</code>; dump <code class="bg-[#334155] text-blue-300 px-1 rounded">lsass.exe</code>.</li>
+        </ul>
+      </div>
+    </div>
+    <!-- PHASE C – AFTER -->
+    <div class="flex flex-col md:flex-row bg-gray-900/60 ring-1 ring-cyan-400/15 rounded-2xl shadow-lg">
+      <div class="flex items-center justify-center md:w-6 bg-gradient-to-br from-cyan-400 to-indigo-500 rounded-t-2xl md:rounded-tr-none md:rounded-l-2xl">
+        <span class="text-2xl font-bold text-gray-900">C</span>
+      </div>
+      <div class="p-6 space-y-2 text-[15px] text-gray-300 leading-relaxed">
+        <h3 class="text-lg font-semibold text-cyan-300">After the Attack (Persistence/Cleanup/Lateral Movement)</h3>
+        <p>Enumerate across the network with <code class="bg-[#334155] text-blue-300 px-1 rounded">PsExec</code>, WMI, or similar tools, then pivot into remote processes for long-term access.</p>
+      </div>
+    </div>
+    <p class="relative z-10 mt-12 text-center font-semibold text-violet-300">
+      Enumerate early, adapt mid-attack, maintain footholds after the fact.
+    </p>
+  </section>
+  <div class="relative  grid gap-8 max-w-8xl mx-auto">
+    <div class="group rounded-2xl bg-gray-900/60 p-6 ring-1 ring-cyan-400/15 shadow-lg backdrop-blur-sm hover:ring-cyan-300/30 hover:shadow-cyan-500/30 transition">
+      <div class="flex items-center gap-3 mb-3">
+        <svg class="h-6 w-6 text-cyan-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5 1a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <h3 class="text-lg font-semibold text-cyan-300">The Bottom Line</h3>
+      </div>
+      <p class="text-[15px] text-gray-300 p-6 leading-relaxed sm:text-justify">
+        Process enumeration is the Swiss Army knife in a hacker’s toolkit and it is used before, during, and after attacks to gather intel, exploit weaknesses, and evade consequences.
+        For defenders, spotting suspicious enumeration (Ex: mass <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">OpenProcess</code> calls) is a red flag. 
+        Understanding this cat-and-mouse game isn’t just technical, it’s critical for building resilient systems. Moreover, process enumeration is not inherently malicious, sysadmins and EDRs use it too
+      </p>
+    </div>
+  </div>
+  <section class="relative rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/90 p-8 shadow-2xl ring-1 ring-cyan-500/20 overflow-hidden">
+    <div aria-hidden="true" class="absolute -top-16 -left-16 h-64 w-64 rounded-full "></div>
+    <h2 class="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-sky-400 to-indigo-400 mb-6 drop-shadow-lg">
+      Why Defenders&nbsp;Must Watch&nbsp;the&nbsp;Process&nbsp;List
+    </h2>
+    <p class=" text-gray-300 mb-8 leading-relaxed">
+      Attack chains almost always surface in process telemetry <em>before</em> they touch disk or siphon data. Rogue <code>cmd.exe</code> spawning
+      <code>rundll32.exe</code> under the wrong parent? A silent driver installer kicked off by <code>svchost.exe</code>? Spotting these anomalies
+      in real time turns response from cleanup to prevention.
+    </p>
+    <div class="grid gap-6 md:grid-cols-3">
+      <div class="group rounded-xl bg-gray-900/60 p-6 border border-cyan-400/20 shadow-xl hover:shadow-cyan-600/30 transition-shadow">
+        <div class="flex items-center mb-4">
+          <svg class="h-7 w-7 text-cyan-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" stroke-width="2"
+              viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 12l2 2 4-4"></path>
+            <path d="M21 12a9 9 0 11-9-9"></path>
+          </svg>
+          <h3 class="ml-3 text-lg font-semibold text-gray-100">Catch Precursors</h3>
+        </div>
+        <p class="text-[15px] text-gray-300 leading-relaxed">
+          Lateral-movement frameworks enumerate and inject long before ransomware detonates. Early alerts shut doors <em>before</em> the blast.
+        </p>
+      </div>
+      <div class="group rounded-xl bg-gray-900/60 p-6 border border-cyan-400/20 shadow-xl hover:shadow-cyan-600/30 transition-shadow">
+        <div class="flex items-center mb-4">
+          <svg class="h-7 w-7 text-cyan-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" stroke-width="2"
+              viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 9v4l2 2"></path>
+            <circle cx="12" cy="12" r="10"></circle>
+          </svg>
+          <h3 class="ml-3 text-lg font-semibold text-gray-100">Verify Controls</h3>
+        </div>
+        <p class="text-[15px] text-gray-300 leading-relaxed">
+          If EDR blocks unsigned injections, <code>NtCreateThreadEx → lsass.exe</code> should never appear. Process logs keep policy honest.
+        </p>
+      </div>
+      <div class="group rounded-xl bg-gray-900/60 p-6 border border-cyan-400/20 shadow-xl hover:shadow-cyan-600/30 transition-shadow">
+        <div class="flex items-center mb-4">
+          <svg class="h-7 w-7 text-cyan-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" stroke-width="2"
+              viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 18v-6a9 9 0 019-9h6"></path>
+            <path d="M21 6l-6 6"></path>
+          </svg>
+          <h3 class="ml-3 text-lg font-semibold text-gray-100">Baseline Normal</h3>
+        </div>
+        <p class="text-[15px] text-gray-300 leading-relaxed">
+          Finance servers run daylight batch jobs; identity servers hum 24/7. Process-mix drift flags misconfigurations as fast as intrusions.
+        </p>
+      </div>
+    </div>
+  </section>
+  <section class="relative rounded-2xl bg-gradient-to-br from-blue-950/70 via-slate-900/80 to-gray-900/90 p-10 shadow-2xl ring-1 ring-blue-500/30 overflow-hidden">
+    <div aria-hidden="true" class="absolute -top-10 -left-10 w-80 h-80 bg-cyan-500 opacity-20 blur-3xl rounded-full"
+    ></div>
+    <div aria-hidden="true" class="absolute -bottom-16 -right-16 w-96 h-96 bg-indigo-600 opacity-20 blur-3xl rounded-full"></div>
+
+    <h2 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400 text-center mb-10 tracking-wide">
+      Tooling that makes&nbsp;Monitoring&nbsp;Practical</h2>
+    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="relative group rounded-xl bg-gray-800/60 p-6 shadow-lg ring-1 ring-white/10 hover:ring-cyan-400/30 transition">
+        <div class="flex items-center mb-4">
+          <svg class="w-8 h-8 text-cyan-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4h16v16H4z" />
+          </svg>
+          <h3 class="ml-3 text-lg font-semibold text-white">Native&nbsp;OS Hooks</h3>
+        </div>
+        <p class="text-sm text-gray-300 leading-relaxed">
+          ETW (<span class="text-cyan-300">Microsoft-Windows-Kernel-Process</span>,
+          <span class="text-cyan-300">Threat-Intelligence</span>), Sysmon
+          (<span class="text-cyan-300">1</span>, <span class="text-cyan-300">10</span>,
+          <span class="text-cyan-300">11</span>), <span class="text-cyan-300">auditd</span>,
+          <span class="text-cyan-300">systemd-journald</span>, and macOS Unified Logging provide the raw
+          feed.
+        </p>
+      </div>
+
+      <div class="relative group rounded-xl bg-gray-800/60 p-6 shadow-lg ring-1 ring-white/10 hover:ring-cyan-400/30 transition" >
+        <div class="flex items-center mb-4">
+          <svg class="w-8 h-8 text-teal-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
+          </svg>
+          <h3 class="ml-3 text-lg font-semibold text-white">Query Engines</h3>
+        </div>
+        <p class="text-sm text-gray-300 leading-relaxed">
+          <span class="text-teal-300">osquery</span>, PSReadProcess, WMIC/WMI, PowerShell’s
+          <span class="text-teal-300">Get-CimInstance</span> craft ad-hoc views without extra agents.
+        </p>
+      </div>
+      <div class="relative group rounded-xl bg-gray-800/60 p-6 shadow-lg ring-1 ring-white/10 hover:ring-cyan-400/30 transition">
+        <div class="flex items-center mb-4">
+          <svg class="w-8 h-8 text-violet-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18M3 12h18M3 17h18" />
+          </svg>
+          <h3 class="ml-3 text-lg font-semibold text-white">Detection Stacks</h3>
+        </div>
+        <p class="text-sm text-gray-300 leading-relaxed">
+          Sigma, Splunk/ELK, Elastic Endpoint, Wazuh, CrowdStrike, Defender for Endpoint, SentinelOne
+          transform events into enriched alerts.
+        </p>
+      </div>
+      <div class="relative group rounded-xl bg-gray-800/60 p-6 shadow-lg ring-1 ring-white/10 hover:ring-cyan-400/30 transition" >
+        <div class="flex items-center mb-4">
+          <svg class="w-8 h-8 text-orange-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6-1a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <h3 class="ml-3 text-lg font-semibold text-white">
+            Container&nbsp;&amp;&nbsp;Cloud Sensors</h3>
+        </div>
+        <p class="text-sm text-gray-300 leading-relaxed">
+          <span class="text-orange-300">Falco</span> (eBPF), GKE Audit Policy, AWS GuardDuty EKS,
+          Azure Defender for Containers keep pods honest across clusters.
+        </p>
+      </div>
+      <div class="relative group rounded-xl bg-gray-800/60 p-6 shadow-lg ring-1 ring-white/10 hover:ring-cyan-400/30 transition">
+        <div class="flex items-center mb-4">
+          <svg class="w-8 h-8 text-rose-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" stroke-width="2"viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c4.418 0 8 1.79 8 4v2a8 8 0 11-16 0v-2c0-2.21 3.582-4 8-4z"/>
+          </svg>
+          <h3 class="ml-3 text-lg font-semibold text-white">
+            Memory Forensics &amp; IR Kits</h3>
+        </div>
+        <p class="text-sm text-gray-300 leading-relaxed">
+          Velociraptor, Rekall, Volatility pull process tables straight from RAM or dumps when
+          malware tampers with APIs.
+        </p>
+      </div>
+    </div>
+  </section>
+  <section class="relative rounded-2xl bg-gradient-to-br from-gray-800/70 to-gray-900/90 p-8 shadow-2xl ring-1 ring-cyan-300/20 overflow-hidden">
+  <div class="absolute -top-16 -left-24 h-60 w-60 rounded-full bg-cyan-500/20 blur-3xl pointer-events-none"></div>
+  <h2 class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-sky-400 to-indigo-400 mb-6 text-center">
+    High-Value Analytics in Action </h2>
+  <div class="grid gap-10 ">
+    <div class="md:col-span-2 space-y-6">
+      <div class="group relative rounded-xl bg-gray-800/50 p-6 ring-1 ring-gray-700/50 hover:shadow-lg transition" >
+        <h3 class="text-lg font-semibold text-cyan-300 mb-2">
+          Parent-Child Lineage Scoring</h3>
+        <p class="text-gray-300 leading-relaxed">
+          Flag execution chains like
+          <span class="text-cyan-400">Word → wscript → certutil</span>.
+        </p>
+      </div>
+      <div class="group relative rounded-xl bg-gray-800/50 p-6 ring-1 ring-gray-700/50 hover:shadow-lg transition">
+        <h3 class="text-lg font-semibold text-cyan-300 mb-2">
+          Token &amp; Integrity Shifts</h3>
+        <p class="text-gray-300 leading-relaxed">
+          Alert when a medium-IL user suddenly spawns a
+          <span class="text-cyan-400">SYSTEM</span> helper.
+        </p>
+      </div>
+      <div class="group relative rounded-xl bg-gray-800/50 p-6 ring-1 ring-gray-700/50 hover:shadow-lg transition" >
+        <h3 class="text-lg font-semibold text-cyan-300 mb-2">
+          Module Whitelisting</h3>
+        <p class="text-gray-300 leading-relaxed">
+          Detect unsigned or rarely-seen DLLs loaded inside critical hosts.
+        </p>
+      </div>
+      <div class="group relative rounded-xl bg-gray-800/50 p-6 ring-1 ring-gray-700/50 hover:shadow-lg transition">
+        <h3 class="text-lg font-semibold text-cyan-300 mb-2">
+          Burst Frequency Detection</h3>
+        <p class="text-gray-300 leading-relaxed">
+          Catch brute-force loops reading every PID in milliseconds.
+        </p>
+      </div>
+      <div class="group relative rounded-xl bg-gray-800/50 p-6 ring-1 ring-gray-700/50 hover:shadow-lg transition">
+        <h3 class="text-lg font-semibold text-cyan-300 mb-2">
+          Drift &amp; Absence Monitoring
+        </h3>
+        <p class="text-gray-300 leading-relaxed">
+          Silence from an EDR sensor can warn as loudly as a new binary.
+        </p>
+      </div>
+    </div>
+  </section>
+  <section class="relative rounded-2xl border border-cyan-500/60 bg-gradient-to-br from-gray-800/70 to-gray-900/90 p-8 shadow-2xl ring-1 ring-cyan-500/20 space-y-8">
+    <h2 class="text-3xl md:text-4xl font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-sky-400 to-blue-400">
+      Methods for Process Enumeration</h2>
+    <div id="recoAccordion" class="space-y-4">
+      <!-- EnumProcesses -->
+      <details class="group rounded-lg border border-cyan-600/40 bg-gray-800/60 p-4 hover:border-cyan-400 transition-colors">
+        <summary class="flex items-center justify-between cursor-pointer text-lg font-semibold text-cyan-300">
+          <span class="flex items-center gap-2">
+            Using: <code class="text-blue-300">EnumProcesses</code>
+          </span>
+          <svg class="w-4 h-4 text-cyan-400 group-open:rotate-180 transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </summary>
+        <div class="mt-4 relative">
+          <button class="copy-button absolute top-2 right-2 px-2 py-1 text-xs font-medium text-cyan-300 bg-slate-800/80 rounded hover:bg-slate-700/80" data-copy="#code-enum-1">
+            Copy</button>
+          <pre class="overflow-x-auto rounded-lg bg-gray-900/70 p-4 ring-1 ring-cyan-500/10">
+          <code id="code-enum-1" class="language-csharp">
+            using System;
+            using System.Runtime.InteropServices;
+            using System.Text;
+            
+            class Program
+            {
+                [DllImport("psapi.dll", SetLastError = true)]
+                static extern bool EnumProcesses(
+                    [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U4)] uint[] processIds,
+                    uint arraySizeBytes,
+                    out uint bytesCopied
+                );
+            
+                [DllImport("psapi.dll", SetLastError = true)]
+                static extern uint GetModuleFileNameEx(
+                    IntPtr hProcess,
+                    IntPtr hModule,
+                    [Out] StringBuilder lpFilename,
+                    uint nSize
+                );
+            
+                static void Main()
+                {
+                    uint[] processIds = new uint[1024];
+                    uint bytesCopied;
+            
+                    if (!EnumProcesses(processIds, (uint)(processIds.Length * sizeof(uint)), out bytesCopied))
+                    {
+                        Console.WriteLine($"EnumProcesses failed: {Marshal.GetLastWin32Error()}");
+                        return;
+                    }
+            
+                    int numProcesses = (int)(bytesCopied / sizeof(uint));
+                    Console.WriteLine("PID\tProcess Name\tExecutable Path");
+                    Console.WriteLine("-----------------------------------------------");
+            
+                    for (int i = 0; i < numProcesses; i++)
+                    {
+                        uint pid = processIds[i];
+                        if (pid == 0) continue; // Skip Idle process
+            
+                        try
+                        {
+                            IntPtr hProcess = System.Diagnostics.Process.GetProcessById((int)pid).Handle;
+                            var sb = new StringBuilder(1024);
+                            if (GetModuleFileNameEx(hProcess, IntPtr.Zero, sb, (uint)sb.Capacity) != 0)
+                            {
+                                Console.WriteLine($"{pid}\t{System.Diagnostics.Process.GetProcessById((int)pid).ProcessName}\t{sb}");
+                            }
+                        }
+                        catch { } // Skip inaccessible processes
+                    }
+                }
+            }
+          </code></pre>
+        </div>
+      </details>
+    </div>
+    <div id="recoAccordion" class="space-y-4">
+      <!-- WTSEnumerateProcesses -->
+      <details class="group rounded-lg border border-cyan-600/40 bg-gray-800/60 p-4 hover:border-cyan-400 transition-colors">
+        <summary class="flex items-center justify-between cursor-pointer text-lg font-semibold text-cyan-300">
+          <span class="flex items-center gap-2">
+            Using: <code class="text-blue-300">WTSEnumerateProcesses</code>
+          </span>
+          <svg class="w-4 h-4 text-cyan-400 group-open:rotate-180 transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </summary>
+        <div class="mt-4 relative">
+          <button class="copy-button absolute top-2 right-2 px-2 py-1 text-xs font-medium text-cyan-300 bg-slate-800/80 rounded hover:bg-slate-700/80" data-copy="#code-enum-2">
+            Copy</button>
+          <pre class="overflow-x-auto rounded-lg bg-gray-900/70 p-4 ring-1 ring-cyan-500/10">
+          <code id="code-enum-2" class="language-csharp">
+            using System;
+            using System.Runtime.InteropServices;
+  
+            class Program
+            {
+                [DllImport("wtsapi32.dll", SetLastError = true)]
+                static extern bool WTSEnumerateProcesses(
+                    IntPtr hServer,
+                    int Reserved,
+                    int Version,
+                    ref IntPtr ppProcessInfo,
+                    ref int pCount
+                );
+  
+                [DllImport("wtsapi32.dll", SetLastError = true)]
+                static extern void WTSFreeMemory(IntPtr pMemory);
+  
+                [StructLayout(LayoutKind.Sequential)]
+                struct WTS_PROCESS_INFO
+                {
+                    public int SessionId;
+                    public int ProcessId;
+                    public IntPtr pProcessName;
+                    public IntPtr pUserSid;
+                }
+  
+                static void Main()
+                {
+                    IntPtr ppProcessInfo = IntPtr.Zero;
+                    int pCount = 0;
+  
+                    if (!WTSEnumerateProcesses(IntPtr.Zero, 0, 1, ref ppProcessInfo, ref pCount))
+                    {
+                        Console.WriteLine($"WTSEnumerateProcesses failed: {Marshal.GetLastWin32Error()}");
+                        return;
+                    }
+  
+                    Console.WriteLine("PID\tProcess Name");
+                    Console.WriteLine("----------------------");
+  
+                    for (int i = 0; i < pCount; i++)
+                    {
+                        IntPtr ptr = (IntPtr)((long)ppProcessInfo + i * Marshal.SizeOf(typeof(WTS_PROCESS_INFO)));
+                        var info = (WTS_PROCESS_INFO)Marshal.PtrToStructure(ptr, typeof(WTS_PROCESS_INFO));
+  
+                        string processName = Marshal.PtrToStringAnsi(info.pProcessName) ?? "(Unknown)";
+                        Console.WriteLine($"{info.ProcessId}\t{processName}");
+                    }
+  
+                    WTSFreeMemory(ppProcessInfo);
+                }
+            }
+          </code></pre>
+        </div>
+      </details>
+    </div>
+    <div id="recoAccordion" class="space-y-4">
+      <!-- NtQuerySystemInformation -->
+      <details class="group rounded-lg border border-cyan-600/40 bg-gray-800/60 p-4 hover:border-cyan-400 transition-colors">
+        <summary class="flex items-center justify-between cursor-pointer text-lg font-semibold text-cyan-300">
+          <span class="flex items-center gap-2">
+            Using: <code class="text-blue-300">NtQuerySystemInformation</code>
+          </span>
+          <svg class="w-4 h-4 text-cyan-400 group-open:rotate-180 transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </summary>
+        <div class="mt-4 relative">
+          <button class="copy-button absolute top-2 right-2 px-2 py-1 text-xs font-medium text-cyan-300 bg-slate-800/80 rounded hover:bg-slate-700/80" data-copy="#code-enum-3">
+            Copy</button>
+          <pre class="overflow-x-auto rounded-lg bg-gray-900/70 p-4 ring-1 ring-cyan-500/10">
+          <code id="code-enum-3" class="language-csharp">
+            using System;
+            using System.Collections.Generic;
+            using System.Runtime.InteropServices;
+            
+            internal static class Program
+            {
+                static void Main()
+                {
+                    foreach (var p in NtEnum())
+                        Console.WriteLine($"{p.pid,6} → {p.name}");
+                }
+                private static IEnumerable<(int pid, string name)> NtEnum()
+                {
+                    const int SystemProcessInformation = 5;
+                    const int STATUS_INFO_LENGTH_MISMATCH = unchecked((int)0xC0000004);
+            
+                    int len = 0x100000;
+                    IntPtr buf = Marshal.AllocHGlobal(len);
+                    try
+                    {
+                        int status;
+                        int need;
+                        while ((status = NtQuerySystemInformation(
+                                    SystemProcessInformation, buf, len, out need))
+                               == STATUS_INFO_LENGTH_MISMATCH)
+                        {
+                            len = need;
+                            Marshal.FreeHGlobal(buf);
+                            buf = Marshal.AllocHGlobal(len);
+                        }
+                        if (status < 0) yield break;        // call failed
+                        IntPtr ptr = buf;
+                        for (; ; )
+                        {
+                            var spi = (SYSTEM_PROCESS_INFORMATION)
+                                      Marshal.PtrToStructure(ptr,
+                                          typeof(SYSTEM_PROCESS_INFORMATION));
+            
+                            string image;
+                            if (spi.ImageName.Length > 0 && spi.ImageName.Buffer != IntPtr.Zero)
+                                image = Marshal.PtrToStringUni(
+                                            spi.ImageName.Buffer, spi.ImageName.Length / 2);
+                            else
+                                image = "System Idle Process";
+            
+                            yield return ((int)spi.UniqueProcessId, image);
+            
+                            if (spi.NextEntryOffset == 0) break;
+                            ptr = IntPtr.Add(ptr, (int)spi.NextEntryOffset);
+                        }
+                    }
+                    finally { Marshal.FreeHGlobal(buf); }
+                }
+                // ---------------- P/Invoke & structs ----------------
+                [DllImport("ntdll.dll")]
+                private static extern int NtQuerySystemInformation(
+                    int systemInformationClass,
+                    IntPtr systemInformation,
+                    int systemInformationLength,
+                    out int returnLength);
+            
+                [StructLayout(LayoutKind.Sequential)]
+                private struct UNICODE_STRING
+                {
+                    public ushort Length;
+                    public ushort MaximumLength;
+                    public IntPtr Buffer;
+                }
+                [StructLayout(LayoutKind.Sequential)]
+                private struct SYSTEM_PROCESS_INFORMATION
+                {
+                    public uint NextEntryOffset;
+                    public uint NumberOfThreads;
+                    private long Reserved1, Reserved2, Reserved3;
+                    public long CreateTime, UserTime, KernelTime;
+                    public UNICODE_STRING ImageName;
+                    public int BasePriority;
+                    public IntPtr UniqueProcessId;
+                    public IntPtr InheritedFromUniqueProcessId;
+                }
+            }       
+          </code></pre>
+        </div>
+      </details>
+    </div>
+    <div id="recoAccordion" class="space-y-4">
+      <!-- Powershell command line -->
+      <details class="group rounded-lg border border-cyan-600/40 bg-gray-800/60 p-4 hover:border-cyan-400 transition-colors">
+        <summary class="flex items-center justify-between cursor-pointer text-lg font-semibold text-cyan-300">
+          <span class="flex items-center gap-2">
+            Using: <code class="text-blue-300">Powershell command line </code>
+          </span>
+          <svg class="w-4 h-4 text-cyan-400 group-open:rotate-180 transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </summary>
+        <div class="mt-4 relative">
+          <button class="copy-button absolute top-2 right-2 px-2 py-1 text-xs font-medium text-cyan-300 bg-slate-800/80 rounded hover:bg-slate-700/80" data-copy="#code-enum-4">
+            Copy</button>
+          <pre class="overflow-x-auto rounded-lg bg-gray-900/70 p-4 ring-1 ring-cyan-500/10">
+          <code id="code-enum-4" class="language-csharp">
+            Get-CimInstance Win32_Process | Select @{n='PID';e={$_.ProcessId}}, @{n='PPID';e={$_.ParentProcessId}}, @{n='Threads';e={$_.ThreadCount}}, @{n='Name';e={$_.Name}} | ft -a
+          </code></pre>
+        </div>
+      </details>
+    </div>
+  </section>
+  <script>
+    document.querySelectorAll('.copy-button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        // find the closest <code> inside the same container
+        const code = btn.parentElement.querySelector('code');
+        if (!code) return;
+  
+        navigator.clipboard.writeText(code.textContent.trim())
+          .then(() => {
+            btn.textContent = 'Copied!';
+            setTimeout(() => (btn.textContent = 'Copy'), 1500);
+          })
+          .catch(() => alert('Clipboard copy failed.'));
+      });
+    });
+  </script>
+  <footer class="flex flex-col items-center justify-center gap-4 py-6 bg-[#0f172a] text-gray-200">
+    <p class="text-center">2025 Iron Hulk — No rights reserved.</p>
     <a href="../index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">← Back to Dashboard</a>
   </footer>
-
+</main>
   <!-- Reading-time logic -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const dateWritten = '15/Jan/2025';
       const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
       const minutes = Math.max(1, Math.ceil(words / 230));
-      document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
+      document.getElementById('reading-time').textContent = `Written: ${dateWritten} - ${minutes} min reading`;
     });
   </script>
 </body>
