@@ -1,247 +1,121 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Iron Hulk – Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body class="bg-[#0f172a] text-white font-sans min-h-screen flex flex-col">
-    <!-- Mobile Top Bar Start -->
-      <header class="md:hidden bg-[#1e293b] text-blue-400 p-4 shadow-lg">
-        <img src="images/iron.png" alt="Iron Hulk" class="w-[200px] h-auto rounded-lg shadow-lg mx-auto" />
-        <!-- Always visible mobile nav -->
-        <nav class="mt-4 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm relative">
-          <a href="aboutme.html" class="hover:underline">About Me</a>
-          <a href="certifications.html" class="hover:underline">Certifications</a>
-          <a href="projects.html" class="hover:underline">My Projects</a>
-          <button onclick="showBlogSection()" class="hover:underline">Blogs</button>
-          <button onclick="showRoadMapSection()" class="hover:underline">Courses</button>
-          <a href="contact.html" class="hover:underline">Contact</a>
-        </nav>
-      </header>
-    <!-- Mobile Top Bar End -->
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iron Hulk – Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="min-h-screen font-sans bg-[#0f172a] text-gray-100 selection:bg-cyan-400/40 selection:text-white">
 
-    <div class="flex flex-1 overflow-hidden">
-      <!-- Sidebar Navigation (desktop only) -->
-      <aside class="hidden md:flex md:w-100 bg-[#1e293b] p-5 flex-col overflow-y-auto">
-        <img src="images/iron.png" alt="Iron Hulk" class="w-[200px] h-auto rounded-lg shadow-lg mx-auto" />
-        <nav class="space-y-2 text-blue-400 mt-2">
-          <a href="aboutme.html" class="block text-left w-full hover:underline">About Me</a>
-          <a href="certifications.html" class="block text-left w-full hover:underline">Certifications</a>
-          <a href="projects.html" class="block text-left w-full hover:underline">My Projects</a>
-          <!-- Blog Start -->
-            <div>
-              <button onclick="toggleBlogDropdown('desktop')" class="block text-left w-full hover:underline">Blogs</button>
-              <div id="desktopBlogDropdown" class="ml-4 mt-2 flex-col space-y-2 hidden">
-                <!-- ▼ General Info ▼ -->
-                <details class="mt-4 group">
-                  <summary class="text-blue-400 font-semibold cursor-pointer list-none flex items-center">
-                    <span class="mr-1 transition-transform duration-200 group-open:rotate-90">▸</span>
-                    General Info
-                  </summary>
-                    <div>
-                      <a href="GeneralInfo/FW.html" class="block hover:underline text-white pl-3">- What is Firewall</a>
-                      <a href="GeneralInfo/AD.html" class="block hover:underline text-white pl-3">- Active Directory</a>
-                    </div>
-                </details>
-                <!-- ▲ end General Info ▲ -->     
-                <!-- ▼ Malware Development ▼ -->
-                <details class="mt-4 group">
-                  <summary class="text-blue-400 font-semibold cursor-pointer list-none flex items-center">
-                    <span class="mr-1 transition-transform duration-200 group-open:rotate-90">▸</span>
-                    Malware Development
-                  </summary>
-                    <div>
-                      <a href="MalDev/RoadMap.html"             class="block hover:underline text-white pl-3">- Road Map</a>
-                      <a href="MalDev/Detection.html"           class="block hover:underline text-white pl-3">- Detection Mechanisms</a>
-                      <a href="MalDev/Payload_Placement.html"   class="block hover:underline text-white pl-3">- Payload Placement</a>
-                      <a href="MalDev/PayloadEncryption.html"   class="block hover:underline text-white pl-3">- Payload Encryption</a>
-                      <a href="MalDev/PayloadObfuscation.html"  class="block hover:underline text-white pl-3">- Payload Obfuscation</a>
-                      <a href="MalDev/ProcessEnumeration.html"  class="block hover:underline text-white pl-3">- Process Enumeration</a>
-                      <a href="MalDev/CallbackAbuse.html"       class="block hover:underline text-white pl-3">- Callback Abuse</a>
-                    </div>
-                </details>
-                <!-- ▲ end Malware Development ▲ -->     
-              </div>
-            </div>
-          <!-- Blog End -->
-          <!-- RoadMap Start-->
-            <div>
-              <button onclick="toggleRoadMapDropdown('desktop')" class="block text-left w-full hover:underline">Courses</button>
-              <div id="desktopRoadMapDropdown" class="ml-4 mt-2 flex-col space-y-2 hidden">
-                <div>
-                  <a>Red Team</a>
-                  <div class="ml-4 mt-1 space-y-1 text-sm">
-                    <a href="/RedTeam/OSCP.html" class="hover:underline text-white">- OSCP</a><br>
-                  </div>
-                </div>
-                <div>
-                  <a>Custom C2</a>
-                  <div class="ml-4 mt-1 space-y-1 text-sm">
-                  </div>
-                </div>
-                <div>
-                  <a>Malware Development</a>
-                  <div class="ml-4 mt-1 space-y-1 text-sm">
-                  </div>
-                </div>
-              </div>
-            </div>
-          <!-- RoadMap End-->
-          <a href="contact.html" class="block text-left w-full hover:underline">Contact</a>
-        </nav>
-      </aside>
-
-      <!-- Main Content Area -->
-      <main class="flex-1 p-6 overflow-y-auto space-y-6">
-        <!-- Main Dashboard -->
-        <div id="mainDashboard" class="space-y-6">
-          <div class="bg-[#1f2937] p-6 rounded-xl flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 shadow-md">
-            <div>
-              <h2 class="text-1xl font-bold text-blue-400"> Hello Everyone 👋</h2>
-            </div>
+<main id="article" class="p-6">
+  <div class="relative flex flex-col items-center w-full h-full">
+      <div class="flex flex-col md:flex-row items-center md:items-start gap-8 max-w-4xl mx-auto text-center md:text-left">
+          <img src="images/iron.png" alt="Hacker at terminal" class="w-48 h-auto md:w-56 lg:w-64 rounded-lg shadow-lg" />
+          <div>
+              <h1 class="sm:mt-20 text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400 drop-shadow-lg mb-4 md:mb-6">
+                Where Security Meets Creativity</h1>
+          </div>
+      </div>
+  </div>
+  <div class="mx-auto w-full max-w-7xl grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2">
+    <a href="aboutme.html" class="group relative rounded-2xl p-6 bg-[#1e293b] border border-white/10 shadow-xl overflow-hidden hover:-translate-y-1 transition">
+      <div class="absolute inset-0 bg-gradient-to-br from-cyan-400/20 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+      <div class="flex items-center ">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A2.992 2.992 0 016 16V8a2 2 0 012-2h8a2 2 0 012 2v8c0 .828-.336 1.578-.879 2.121M15 10l-3 3m0 0l-3-3m3 3V4"/></svg>
+        <h3 class="text-lg font-semibold text-blue-400">About Me</h3>
+      </div>
+      <p class="mt-3 sm:text-justify text-gray-400">Get to know the person behind Iron Hulk.</p>
+    </a>
+    <a href="certifications.html" class="group relative rounded-2xl p-6 bg-[#1e293b] border border-white/10 shadow-xl overflow-hidden hover:-translate-y-1 transition">
+      <div class="absolute inset-0 bg-gradient-to-br from-purple-400/20 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+      <div class="flex items-center ">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m4 0a8 8 0 11-16 0 8 8 0 0116 0z" /> </svg>
+          <h3 class="text-lg font-semibold text-purple-400">Certificates</h3>
+      </div>
+      <p class="mt-3 sm:text-justify text-gray-400">Browse the badges and credentials I’ve earned along my security journey.</p>
+    </a>
+    <!-- Project -->
+    <a href="projects.html" class="group relative rounded-2xl p-6 bg-[#1e293b] border border-white/10 shadow-xl overflow-hidden hover:-translate-y-1 transition">
+      <div class="absolute inset-0 bg-gradient-to-br from-green-400/20 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+      <div class="flex items-center ">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 01-8 0M12 8v4"/></svg>
+        <h3 class="text-lg font-semibold text-green-400">Projects</h3>
+      </div>
+      <p class="mt-3 sm:text-justify text-gray-400">Hands-on tools & repos forged for red team operations.</p>
+    </a>
+    <!-- Blogs -->
+    <details class="group relative rounded-2xl p-6 bg-[#1e293b] border border-white/10 shadow-xl overflow-hidden transition">
+      <summary class="flex flex-col sm:flex-row sm:items-center  cursor-pointer list-none p-0">
+        <div class="relative inset-0 bg-gradient-to-br from-pink-400/20 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+        <div class="flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" />
+          </svg>
+          <div>
+            <h3 class="text-lg font-semibold text-pink-400">Blogs</h3>
+            <p class="mt-3 sm:text-justify text-gray-400">In‑depth write‑ups on different topics.</p>
           </div>
         </div>
-        <!-- Wrap the terminal in its own identifiable div -->
-        <div id="terminalSection">
-          <div id="terminal-container" class="bg-black text-green-400 font-mono text-sm p-4 rounded-lg shadow-md mt-6 w-full h-[500px] overflow-auto">
-            <pre id="terminal-output" class="whitespace-pre-wrap leading-relaxed">&gt;_</pre>
+      </summary>
+      <!-- Nested categories -->
+      <div class="pt-4 space-y-4">
+        <!-- General Info -->
+        <details class="group">
+          <summary class="text-blue-400 font-semibold cursor-pointer list-none flex items-center">
+            <span class="mr-2 transition-transform duration-200 group-open:rotate-90">▸</span>
+            General Info
+          </summary>
+          <div class="ml-6 mt-1 space-y-1">
+            <a href="GeneralInfo/FW.html" class="block hover:underline text-white">- What is Firewall</a>
+            <a href="GeneralInfo/AD.html" class="block hover:underline text-white">- Active Directory</a>
           </div>
+        </details>
+        <!-- Malware Development -->
+        <details class="group">
+          <summary class="text-blue-400 font-semibold cursor-pointer list-none flex items-center">
+            <span class="mr-2 transition-transform duration-200 group-open:rotate-90">▸</span>
+            Malware Development
+          </summary>
+          <div class="ml-6 mt-1 space-y-1">
+            <a href="MalDev/RoadMap.html"             class="block hover:underline text-white">- Road Map</a>
+            <a href="MalDev/Detection.html"           class="block hover:underline text-white">- Detection Mechanisms</a>
+            <a href="MalDev/Payload_Placement.html"   class="block hover:underline text-white">- Payload Placement</a>
+            <a href="MalDev/PayloadEncryption.html"   class="block hover:underline text-white">- Payload Encryption</a>
+            <a href="MalDev/PayloadObfuscation.html"  class="block hover:underline text-white">- Payload Obfuscation</a>
+            <a href="MalDev/ProcessEnumeration.html"  class="block hover:underline text-white">- Process Enumeration</a>
+            <a href="MalDev/CallbackAbuse.html"       class="block hover:underline text-white">- Callback Abuse</a>
+          </div>
+        </details>
         </div>
-        
-        <script>
-          const files = ["/data/script1.txt", "/data/script2.txt"];         
-          function runTerminalAnimation() {
-            const selectedFile = files[Math.floor(Math.random() * files.length)];
-            const output = document.getElementById("terminal-output");
-            const container = document.getElementById("terminal-container");        
-            output.textContent = ">_";         
-            fetch(`${selectedFile}?_=${Date.now()}`)
-              .then(response => response.text())
-              .then(text => {
-                const lines = text.split("\n");
-                let lineIndex = 0;
-        
-                function typeLine(line, i = 0, callback) {
-                  if (i < line.length) {
-                    output.textContent += line[i];
-                    container.scrollTop = container.scrollHeight;
-                    setTimeout(() => typeLine(line, i + 1, callback), 30);
-                  } else {
-                    output.textContent += "\n";
-                    container.scrollTop = container.scrollHeight;
-                    callback();
-                  }
-                }        
-                function nextLine() {
-                  if (lineIndex < lines.length) {
-                    typeLine(lines[lineIndex], 0, () => {
-                      lineIndex++;
-                      setTimeout(nextLine, 500);
-                    });
-                  } else {
-                    setTimeout(runTerminalAnimation, 20000);
-                  }
-                }        
-                nextLine();
-              });
-          }        
-          runTerminalAnimation();
-        </script>       
-        <!-- Blog Section Start -->
-        <div id="blogSection" class="hidden space-y-6">
-          <div class="bg-[#1f2937] p-6 rounded-xl shadow-md text-white">
-            <!-- ▼ General Info dropdown ▼ -->
-            <details class="mt-4 group">
-              <!-- header -->
-              <summary class="text-blue-400 font-semibold cursor-pointer list-none flex items-center">
-                <span class="mr-1 transition-transform duration-200 group-open:rotate-90">▸</span>
-                General Info
-              </summary>
-              <div class="mt-2 ml-4 space-y-1">
-                <a href="GeneralInfo/FW.html"           class="block hover:underline">- What is Firewall</a>
-                <a href="GeneralInfo/AD.html"           class="block hover:underline">- Active Directory</a>
-              </div>
-            </details>
-            <!-- ▲ end General Info dropdown ▲ -->
-            <!-- ▼ Malware-Dev dropdown ▼ -->
-            <details class="mt-4 group">
-              <!-- header -->
-              <summary class="text-blue-400 font-semibold cursor-pointer list-none flex items-center">
-                <span class="mr-1 transition-transform duration-200 group-open:rotate-90">▸</span>
-                Malware Development
-              </summary>
-              <div class="mt-2 ml-4 space-y-1">
-                <a href="MalDev/RoadMap.html"           class="block hover:underline">- Road Map</a>
-                <a href="MalDev/Detection.html"           class="block hover:underline">- Detection Mechanisms</a>
-                <a href="MalDev/Payload_Placement.html"   class="block hover:underline">- Payload Placement</a>
-                <a href="MalDev/PayloadEncryption.html"   class="block hover:underline">- Payload Encryption</a>
-                <a href="MalDev/PayloadObfuscation.html"  class="block hover:underline">- Payload Obfuscation</a>
-                <a href="MalDev/ProcessEnumeration.html"  class="block hover:underline">- Process Enumeration</a>
-                <a href="MalDev/CallbackAbuse.html"  class="block hover:underline">- Callback Abuse</a>
-              </div>
-            </details>
-            <!-- ▲ end Malware-Dev dropdown ▲ -->
-          </div>
-        </div>
-        <!-- Blog Section End -->
-        <!-- Courses Section Start -->
-          <div id="RoadMapSection" class="hidden space-y-6">
-            <div class="bg-[#1f2937] p-6 rounded-xl shadow-md text-white">
-              <div>
-                <h3 class="text-blue-400 font-semibold">Red Team</h3>
-                <a href="/RedTeam/OSCP.html" class="block ml-4 hover:underline">- OSCP</a>
-              </div>
-              <div class="mt-4">
-                <h3 class="text-blue-400 font-semibold">Custom C2</h3>
-              </div>
-              <div class="mt-4">
-                <h3 class="text-blue-400 font-semibold">Malware Development</h3>
-              </div>
-            </div>
-          </div>
-        <!-- Courses Section End -->
-      </main>
-    </div>
-    
-      <script>
-        function toggleBlogDropdown(view)
-        {
-          const dropdownId = view === 'mobile' ? 'mobileBlogDropdown' : 'desktopBlogDropdown';
-          const dropdown = document.getElementById(dropdownId);
-          dropdown.classList.toggle('hidden');
-        }
+    </details>
+    <!-- Courses -->
+    <a href="#courses" class="group relative rounded-2xl p-6 bg-[#1e293b] border border-white/10 shadow-xl overflow-hidden hover:-translate-y-1 transition">
+      <div class="absolute inset-0 bg-gradient-to-br from-amber-400/20 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+      <div class="flex items-center ">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422A12.083 12.083 0 0112 21.943 12.083 12.083 0 015.84 10.578L12 14z"/></svg>
+        <h3 class="text-lg font-semibold text-amber-400">Courses</h3>
+      </div>
+      <p class="mt-3 sm:text-justify text-gray-400">Structured roadmaps to master your way in Cyber Security.</p>
+    </a>
+    <!-- Contact -->
+    <a href="contact.html" class="group relative rounded-2xl p-6 bg-[#1e293b] border border-white/10 shadow-xl overflow-hidden hover:-translate-y-1 transition">
+      <div class="absolute inset-0 bg-gradient-to-br from-indigo-400/20 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+      <div class="flex items-center ">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7l9 6 9-6-9-6-9 6z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 7v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7" /></svg>
+        <h3 class="text-lg font-semibold text-indigo-400">Contact Me</h3>
+      </div>
+      <p class="mt-3 sm:text-justify text-gray-400">Have a question or an idea? Let’s chat.</p>
+    </a>
+  </div>
+  <br>
+  <footer class="flex flex-col items-center sm:text-justify gap-4 py-6 bg-[#0f172a] text-gray-200">
+    <p class="text-center">2025 Iron Hulk — No rights reserved.</p>
+  </footer>
+</main>
 
-        function showBlogSection() 
-        {
-          document.getElementById("mainDashboard").classList.add("hidden");
-          document.getElementById("blogSection").classList.remove("hidden");
-          document.getElementById("RoadMapSection").classList.add("hidden");
-          document.getElementById("terminalSection").classList.add("hidden");
-        }
-
-        function toggleRoadMapDropdown(view)
-        {
-          const dropdownId = view === 'mobile' ? 'mobileRoadMapDropdown' : 'desktopRoadMapDropdown';
-          const dropdown = document.getElementById(dropdownId);
-          dropdown.classList.toggle('hidden');
-        }
-
-        function showRoadMapSection() 
-        {
-          document.getElementById("mainDashboard").classList.add("hidden");
-          document.getElementById("RoadMapSection").classList.remove("hidden");
-          document.getElementById("blogSection").classList.add("hidden");
-          document.getElementById("terminalSection").classList.add("hidden");
-        }
-        function showDashboardSection() 
-        {
-          document.getElementById("mainDashboard").classList.remove("hidden");
-          document.getElementById("blogSection").classList.add("hidden");
-          document.getElementById("RoadMapSection").classList.add("hidden");
-          document.getElementById("terminalSection").classList.remove("hidden");
-        }
-      </script>
-    </body>
+</body>
 </html>
