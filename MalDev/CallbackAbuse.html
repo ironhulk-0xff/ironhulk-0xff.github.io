@@ -13,154 +13,360 @@
       <h1 class="text-xl font-bold text-blue-400">Callback Abuse</h1>
       <small id="reading-time" class="text-xs text-gray-400"></small>
     </div>
-    <a href="../index.html" class="text-gray-300 text-sm hover:underline">← Back to Dashboard</a>
+    <a href="../index.html" class="text-gray-200  hover:underline">← Back to Dashboard</a>
   </header>
-
-  <!-- Article -->
-  <main id="article" class="p-6 space-y-6">
-    <section class="bg-[#1f2937] p-6 rounded-xl shadow-md">
-        <h2 class="text-[17px] font-bold text-blue-400">Callback Functions, Concept and Purpose:</h2>
-        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
-            A callback function is simply a block of code whose address you hand to another routine so that routine can “call back” into your logic whenever a particular event 
-            or condition occurs. The controlling routine stores the pointer, and later, often on a worker thread of its own, it invokes that pointer exactly like any other 
-            function. This inversion of control is what makes callbacks so powerful:
-            <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                <li><strong>Event-driven flow:</strong> Your code runs only when it matters (Ex: a timer fires, a window receives a message, an I/O completes).</li>
-                <li><strong>Thread re-use:</strong> Because the operating system or library already owns a pool of threads, you rarely need to create one yourself.</li>
-                <li><strong>Stealth (in offensive work):</strong> Since no explicit <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CreateThread</code> call appears in your code, detection logic that keys off thread creation often misses the execution entirely.</li>
-            </ol><br>
-        </p>
-        <h2 class="text-[17px] font-bold text-blue-400">Common Windows Callback Vectors:</h2>
-        <table class="table-auto w-full border border-gray-500 border-collapse">
-            <thead>
-                <tr>
-                    <th class="px-4 py-2 border border-gray-500 font-semibold">API &amp; Signature</th>
-                    <th class="px-4 py-2 border border-gray-500 font-semibold">Legitimate Use</th>
-                    <th class="px-4 py-2 border border-gray-500 font-semibold">Off-Sec Angle</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="px-4 py-3 border border-gray-500">
-                        <code>CreateTimerQueueTimer</code><br>
-                        <code>VOID CALLBACK WaitOrTimer(PVOID, BOOLEAN)</code>
-                    </td>
-                    <td class="px-4 py-3 border border-gray-500">Periodic housekeeping on a pool thread.</td>
-                    <td class="px-4 py-3 border border-gray-500">Delay payload launch; blend with normal timers.</td>
-                </tr>
-                <tr>
-                    <td class="px-4 py-3 border border-gray-500">
-                        <code>EnumWindows</code><br>
-                        <code>BOOL CALLBACK EnumProc(HWND, LPARAM)</code>
-                    </td>
-                    <td class="px-4 py-3 border border-gray-500">Enumerate top-level windows for UI tasks.</td>
-                    <td class="px-4 py-3 border border-gray-500">Invoke shellcode immediately during enumeration.</td>
-                </tr>
-                <tr>
-                    <td class="px-4 py-3 border border-gray-500">
-                        <code>QueueUserAPC</code><br>
-                        <code>VOID NTAPI ApcProc(ULONG_PTR dwParam)</code>
-                    </td>
-                    <td class="px-4 py-3 border border-gray-500">Alertable I/O completions.</td>
-                    <td class="px-4 py-3 border border-gray-500">Execute in existing thread context without spawning.</td>
-                </tr>
-                <tr>
-                    <td class="px-4 py-3 border border-gray-500">
-                        <code>SetWinEventHook</code><br>
-                        <code>VOID CALLBACK WinEvent(HWINEVENTHOOK, …)</code>
-                    </td>
-                    <td class="px-4 py-3 border border-gray-500">Accessibility and window-focus notifications.</td>
-                    <td class="px-4 py-3 border border-gray-500">Persistent execution whenever user changes focus.</td>
-                </tr>
-            </tbody>
-        </table class="table-auto w-full border border-gray-500 border-collapse">
-        <br>
-        <h2 class="text-[17px] font-bold text-blue-400">Encryptor.cpp – One-Click AES Packing:</h2>
-        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
-            Encryptor.cpp automates:
-            <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                <li><strong>Encrypt the payload:</strong></li>
-                <ol class="list-[disck] list-outside pl-4 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                    <li>It copies your raw shellcode into a resizable buffer large enough for AES-CBC padding.</li>
-                    <li>It derives an AES-256 key from a hard-coded 32-byte seed using SHA-256 (<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CryptDeriveKey</code>).</li>
-                    <li>It sets an IV (initialisation vector) and calls<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CryptEncrypt</code>, which adds PKCS-7 padding and returns the exact ciphertext length.</li>
-                </ol>
-            </ol>
-            <div class="boxed-inline">
-                In effect, Encryptor.cpp is a mini-packer that hides the payload’s byte pattern, increases entropy, and hands you code you can drop directly into any loader.
-            </div>
-        </p>
-        <h2 class="text-[17px] font-bold text-blue-400">Callback-Loader.cpp – Decrypt-and-Run Without Creating a Thread:</h2>
-        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
-            Callback-Loader.cpp is the partner stage. Its workflow:
-            <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                <li><strong>Decrypt on the fly:</strong></li>
-                <ol class="list-[disck] list-outside pl-4 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                    <li>It reads <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">sizeof(encryptedShellcode)</code> to get the ciphertext length, allocates a temporary RW buffer, copies the blob, and runs <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CryptDecrypt</code>.</li>
-                    <li><code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CryptDecrypt</code> returns <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">plainLen</code>, the true length of the original shellcode (PKCS padding removed).</li>
-                </ol>
-                <li><strong>Move to executable class="table-auto w-full border border-gray-500 border-collapse" memory:</strong></li>
-                <ol class="list-[disck] list-outside pl-4 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                    <li>It allocates exactly <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">plainLen</code> bytes with <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">VirtualAlloc</code> using <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">PAGE_EXECUTE_READWRITE</code> and copies the plaintext shellcode there.</li>
-                    <li>A quick <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">FlushInstructionCache</code> ensures the CPU sees fresh instructions.</li>
-                </ol>
-                <li><strong>Register a timer-queue callback:</strong></li>
-                <ol class="list-[disck] list-outside pl-4 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                    <li>It calls <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CreateTimerQueueTimer</code>, passing the address of <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">Trampoline</code> as the callback and a Ex: <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">2000-millisecond</code> due time.</li>
-                    <li><code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">Trampoline</code> is a tiny stub with the required signature; all it does is cast the global shellcode pointer to <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">void(*)()</code> and jump.</li>
-                </ol>
-                <li><strong>Execution path:</strong></li>
-                <ol class="list-[disck] list-outside pl-4 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                    <li>When the timer fires, the OS chooses (or spins up) a thread-pool thread and invokes <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">Trampoline</code>.</li>
-                    <li>No <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CreateThread</code>, no DLL injection, no obvious entry point—the payload runs completely inside an OS-managed thread.</li>
-                </ol>
-            </ol>
-            <div class="boxed-inline">
-                Because the loader always allocates buffers to the exact lengths returned by the Crypto API, 
-                it has no hard-coded size assumptions. You can feed it a 32-byte PoC or a multi-kilobyte 
-                stageless implant and it behaves identically.
-            </div>
-        </p>
-        <h2 class="text-[17px] font-bold text-blue-400">Closing Thoughts:</h2>
-        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">
-            Callback-based execution is not new, but coupling it with runtime AES decryption creates a loader that:
-            <ol class="list-[upper-alpha] list-outside pl-8 text-gray-300 text-[15px] leading-relaxed sm:text-justify">
-                <li>Delays launch long enough to skirt many sandbox “first-few-seconds” rules.</li>
-                <li>Hides the opcode pattern from static scanners until the moment of execution.</li>
-                <li>Avoids tell-tale thread-creation events that most EDRs weigh heavily.</li>
-            </ol>
-        </p><br>
-        <h2 class="text-[17px] font-bold text-blue-400">My Project:</h2>
-        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2">Note: this was after 100 times testing 😎</p>
-        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2 font-bold">1. Encrypt your payload:</p>
-        <div class="flex justify-Left pl-6">
-            <img src="../MalDev/images/Enc.png" class="w-[1500px] h-auto" />
-        </div><br>
-        <p class="text-[15px] text-gray-300 leading-relaxed sm:text-justify pl-2 font-bold">2. Run using CreateTimerQueueTimer API:</p>
-        <div class="flex justify-Left pl-6">
-            <img src="../MalDev/images/Run.png" class="w-[1500px] h-auto" />
-        </div><br>
-        <div class="boxed-inline">
-            This is just the first milestone, and we have a long, gritty road lies ahead before we can bypass every security layer and
+<main id="article" class="p-6 space-y-6 sm:text-justify ">
+  <section class="relative mx-auto overflow-hidden rounded-3xl bg-gradient-to-br from-slate-800/90 via-slate-900 to-black p-10 ring-1 ring-cyan-500/20">
+    <div class="pointer-events-none absolute -top-24 -left-24 h-64 w-64 rounded-full bg-cyan-500/20 blur-3xl"></div>
+      <div class="pointer-events-none absolute -bottom-28 -right-28 h-72 w-72 rounded-full bg-indigo-600/20 blur-3xl"></div>
+      <article class="space-y-6">
+        <h2 class="text-center text-3xl font-extrabold tracking-tight text-transparent bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400 bg-clip-text">
+          Callback Functions, Concept and Purpose:</h2>
+        <div class="rounded-xl border border-cyan-400/20 bg-gray-900/60 p-6 shadow-xl backdrop-blur-md">
+          <p class=" leading-relaxed text-gray-200">
+            <strong>Callback abuse</strong> is the technique of handing a pointer to your own code (the “callback”) into a legitimate system or library function so that, when a normal event or 
+            condition occurs, that function unwittingly “calls back” into your malicious logic. By doing so you piggy-back on trusted infrastructure, timers, GUI loops, I/O 
+            completions, exception handlers, so your code runs under the guise of normal behavior. This avoids creating new threads or processes and dramatically reduces the 
+            noise defenders see, making your payload far stealthier. <br><br>
+            This inversion of control is what makes callbacks so powerful:
+            <ul class="text-gray-200">
+              <li class="flex items-start gap-3">
+                <span class="mt-1 inline-block h-2.5 w-2.5 flex-none rounded-full bg-cyan-400"></span>
+                <span><strong>Event-driven flow:</strong> Your code runs only when it matters (Ex: a timer fires, a window receives a message, an I/O completes).</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="mt-1 inline-block h-2.5 w-2.5 flex-none rounded-full bg-cyan-400"></span>
+                <span><strong>Thread reuse:</strong> Because the operating system or library already owns a pool of threads, you rarely need to create one yourself.</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="mt-1 inline-block h-2.5 w-2.5 flex-none rounded-full bg-cyan-400"></span>
+                <span><strong>Stealth:</strong> Since no explicit <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CreateThread</code> call appears in your code, detection logic that keys off thread creation often misses the execution entirely.</span>
+              </li>
+            </ul>
+          </p>
         </div>
-        <style>
-            .boxed-inline{
-                display:inline-block;
-                border:5px solid #555;
-                background:#334155;
-                padding:14px 18px;
-                margin:20px 0;
-                border-radius:6px;
-                line-height:1.45;
-            }
-        </style>
+      </article>
+      <br>
+      <section class="relative rounded-2xl bg-gradient-to-br from-gray-800/70 to-gray-900/90 p-8 shadow-2xl ring-1 ring-blue-500/20 overflow-hidden">
+        <div class="pointer-events-none absolute -top-24 -left-24 h-64 w-64 rounded-full "></div>
+        <h2 class="text-3xl font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-sky-400 to-indigo-400 mb-10">
+          Callback Abuse Cheat-Sheet</h2>
+        <div class="space-y-4">
+          <details class="group rounded-xl bg-gray-800/60 ring-1 ring-gray-700/60 overflow-hidden">
+            <summary class="flex items-center justify-between px-6 py-4 cursor-pointer select-none">
+              <span class="font-semibold text-sky-300">CreateTimerQueueTimer</span>
+              <svg class="w-5 h-5 text-gray-400 group-open:rotate-90 transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </summary>
+            <div class="px-6 pb-6 pt-2  text-gray-200 space-y-1">
+              <p><span class="font-bold text-cyan-500">Definition:</span> Is a Windows API that lets you schedule a function (your “callback”) to run once after a delay you choose or to repeat at a regular interval.</p>
+              <p><span class="font-bold text-cyan-500">When it fires:</span> After a delay you set, then repeatedly on a built-in thread-pool timer</p>
+              <p><span class="font-bold text-cyan-500">Where it runs:</span> A background worker thread inside the same process</p>
+              <p><span class="font-bold text-cyan-500">Why attackers use it:</span> Easy “sleep-then-wake” for payloads without creating a new thread</p>
+              <p><span class="font-bold text-cyan-500">Attack process:</span> </p>
+                <ol class="list-[disck] list-outside pl-8 text-gray-200 text-[15px] leading-relaxed sm:text-justify">
+                  <li>Allocate RWX or RX memory and copy your shellcode or stub there</li>
+                  <li>Call <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CreateTimerQueueTimer(&hTimer, NULL, MyCallbackFunction, myContextPointer, dueTime, period, 0)</code>.</li>
+                  <li><code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">myContextPointer</code> is optional data you pass in.</li>
+                </ol>
+              <p>
+              <span class="font-bold text-cyan-500">What defenders can spot:</span> ETW <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">ThreadPoolTimer</code> events or periodic CPU bursts.</p>
+              <br>
+              <p><span class="font-bold text-cyan-500"><code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CreateTimerQueueTimer</code> by itself is a perfectly legitimate Windows API and won’t trip AV or EDR just because you called it. What gets flagged is how you use it:</span> </p>
+                <ol class="list-[disck] list-outside pl-8 text-gray-200 text-[15px] leading-relaxed sm:text-justify">
+                  <li><strong>Callback in non-image memory:</strong> If the function pointer you registered lives in heap/RWX memory rather than inside a signed DLL or EXE image, EDRs will log “callback into executable heap.”</li>
+                  <li><strong>Heap/RWX allocations beforehand:</strong> VirtualAlloc’ing a large RWX region, writing shellcode there, then immediately scheduling it via <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CreateTimerQueueTimer</code> looks very suspicious.</li>
+                  <li><strong>Unusual timer patterns:</strong> Rapid, high-frequency timers or timers set far in the future and never reset can trigger heuristic rules.</li>
+                  <li><strong>ETW/Telemetry anomalies:</strong> Defenders monitor the ThreadPoolTimer ETW provider; if callback addresses jump around or point into non-standard regions, that’s a red flag.</li>
+                </ol>
+              <p>
+            </div>
+          </details>
+          <details class="group rounded-xl bg-gray-800/60 ring-1 ring-gray-700/60 overflow-hidden">
+            <summary class="flex items-center justify-between px-6 py-4 cursor-pointer select-none">
+              <span class="font-semibold text-sky-300">EnumWindows/EnumChildWindows</span>
+              <svg class="w-5 h-5 text-gray-400 group-open:rotate-90 transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </summary>
+            <div class="px-6 pb-6 pt-2  text-gray-200 space-y-1">
+              <p><span class="font-bold text-cyan-500">Definition:</span> Is a Windows API function that lets a program discover all top-level desktop windows or child windows currently open on the system.</p>
+              <p><span class="font-bold text-cyan-500">When it fires:</span> Each time Windows loops through open windows (Ex: a GUI refresh).</p>
+              <p><span class="font-bold text-cyan-500">Where it runs:</span> The application’s main GUI thread during that loop.</p>
+              <p><span class="font-bold text-cyan-500">Why attackers use it:</span> Blends into real GUI activity; defenders see “<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">EnumWindows</code>” on the call stack, which is common in UI tools.</p>
+              <p><span class="font-bold text-cyan-500">Attack process:</span> </p>
+                <ol class="list-[disck] list-outside pl-8 text-gray-200 text-[15px] leading-relaxed sm:text-justify">
+                  <li>Inject a DLL into the target process, Ex: via <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CreateRemoteThread</code> + <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">LoadLibrary</code>.</li>
+                  <li>In that DLL, call <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">EnumWindows (MyEnumProc, param)</code> where <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">MyEnumProc</code> points into your code.</li>
+                  <li>Inside <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">MyEnumProc</code>, locate a writable region or perform your malicious action.</li>
+                </ol>
+              <p>
+                <span class="font-bold text-cyan-500">What defenders can spot:</span> Unusual call stacks in <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">user32!EnumWindows</code> carrying RX pages.</p>
+                <br>
+                <p><span class="font-bold text-cyan-500">EDR and AV products generally don’t block or flag a plain <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">EnumWindows</code> call, by itself it’s a perfectly normal GUI API. What they look for are anomalies around how you use it:</span> </p>
+                <ol class="list-[disck] list-outside pl-8 text-gray-200 text-[15px] leading-relaxed sm:text-justify">
+                  <li><strong>Callback address in non-standard memory:</strong> If your <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">WNDENUMPROC</code> pointer lives in RWX or heap memory instead of a legit module, EDRs will surface that as a “callback into non-image region.”</li>
+                  <li><strong>Tight, repeated loops:</strong> Calling <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">EnumWindows</code> hundreds or thousands of times per second or in rapid succession across many processes can trip heuristic rate-based rules.</li>
+                  <li><strong>DLL injection and reflective loading:</strong> Most malicious uses of <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">EnumWindows</code> follow a DLL-inject → LoadLibrary or reflective loader chain. The injection and memory protections (noperms, RWX) are higher-confidence signals than the enumeration itself.</li>
+                  <li><strong>Suspicious call-stack sequences:</strong> EDRs can detect <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">user32!EnumWindows</code> → your callback → VirtualProtect+CreateThread” patterns. Correlating GUI enumeration with memory-allocation APIs spikes the alert priority.</li>
+                  <li><strong>Combined behaviors:</strong> <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">EnumWindows</code> used alongside process enumeration (CreateToolhelp32Snapshot), module dumping (DbgHelp), or registry reads in the same timeframe often forms a kill chain that gets flagged.</li>
+                </ol>
+              <p>
+              <br>
+              <blockquote class="border-l-4 border-blue-400 pl-4 italic">Bottom line: a single, infrequent <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">EnumWindows</code> in a signed DLL isn’t enough to trip modern EDR. But if your callback lives in RX heap, fires in a tight loop, or immediately unrolls into reflective loading, detection engines will notice the behavioral context, not the API name alone.                </blockquote>              </div>
+          </details>
+          <details class="group rounded-xl bg-gray-800/60 ring-1 ring-gray-700/60 overflow-hidden">
+            <summary class="flex items-center justify-between px-6 py-4 cursor-pointer select-none">
+              <span class="font-semibold text-sky-300">QueueUserAPC/NtQueueApcThread</span>
+              <svg class="w-5 h-5 text-gray-400 group-open:rotate-90 transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </summary>
+            <div class="px-6 pb-6 pt-2  text-gray-200 space-y-1">
+              <p><span class="font-bold text-cyan-500">Definition:</span> Queues an “asynchronous procedure call” to run in a target thread when it next enters an alertable wait state.</p>
+              <p><span class="font-bold text-cyan-500">When it fires:</span> As soon as a chosen thread enters an alertable wait <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">SleepEx</code>.</p>
+              <p><span class="font-bold text-cyan-500">Where it runs:</span> Inside that already-running thread—no new threads needed</p>
+              <p><span class="font-bold text-cyan-500">Why attackers use it:</span> Blends into existing threads and dodges thread-creation alerts</p>
+              <p><span class="font-bold text-cyan-500">Attack process:</span> </p>
+                <ol class="list-[disck] list-outside pl-8 text-gray-200 text-[15px] leading-relaxed sm:text-justify">
+                  <li>Open a handle to a thread in the target process with <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">THREAD_SET_CONTEXT</code>.</li>
+                  <li>Allocate memory for your shellcode and copy it into the target.</li>
+                  <li>Call <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">QueueUserAPC(MyApcFunc, hThread, param)</code>.</li>
+                  <li>Force or wait for an alertable wait in that thread, and when that thread calls <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">SleepEx(..., TRUE)</code> or <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">WaitForSingleObjectEx(..., TRUE)</code>, the OS suspends its wait and invokes <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">MyApcFunc(myParameter);</code></li>
+                </ol>
+              <p>
+              <span class="font-bold text-cyan-500">What defenders can spot:</span> APC injections logged by EDR or a big jump in queued APCs.</p>
+              <br>
+              <p><span class="font-bold text-cyan-500">Calling <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">QueueUserAPC</code> or the underlying syscall <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">NtQueueApcThread</code>, isn’t malicious and won’t trip AV/EDR signatures—but defenders do watch for the broader “APC injection” pattern. They flag when:</span> </p>
+              <ol class="list-[disck] list-outside pl-8 text-gray-200 text-[15px] leading-relaxed sm:text-justify">
+                <li><strong>Your APC address lives in non-image memory:</strong> Pointing the callback into a freshly-allocated RWX heap or the writeable section of a reflective DLL looks suspicious.</li>
+                <li><strong>You open a remote thread handle & queue APCs:</strong> Repeated calls to <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">OpenThread</code> + <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">QueueUserAPC</code> into another process mean thread-hijacking.</li>
+                <li><strong>The target thread never enters a legit alertable wait:</strong> Continuously poking APCs without real <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">SleepEx/WaitFor…Ex</code> usage rings alarms.</li>
+                <li><strong>Suspicious call-stack sequences:</strong> <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">VirtualAlloc</code> + <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">WriteProcessMemory</code> then immediate APC queueing is a high-confidence indicator of shellcode injection.</li>
+              </ol>
+              <p>
+            </div>
+          </details>
+          <details class="group rounded-xl bg-gray-800/60 ring-1 ring-gray-700/60 overflow-hidden">
+            <summary class="flex items-center justify-between px-6 py-4 cursor-pointer select-none">
+              <span class="font-semibold text-sky-300">SetWinEventHook</span>
+              <svg class="w-5 h-5 text-gray-400 group-open:rotate-90 transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </summary>
+            <div class="px-6 pb-6 pt-2  text-gray-200 space-y-1">
+              <p><span class="font-bold text-cyan-500">Definition:</span> Is a Windows API that lets an application subscribe to system-level or process-level UI events, things like window creation, focus changes, minimize/restore, or object events (menu open, scrollbar move). You provide a function pointer <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">WINEVENTPROC</code> and flags defining which events you want. Whenever one of those events occurs, Windows “calls back” into your function.</p>
+              <p><span class="font-bold text-cyan-500">When it fires:</span> On focus changes, minimize/restore, or other user-interface events.</p>
+              <p><span class="font-bold text-cyan-500">Where it runs:</span> Callback on almost any GUI activity while the hook is set.</p>
+              <p><span class="font-bold text-cyan-500">Why attackers use it:</span> Provides long-lived, low-CPU persistence tied to user actions.</p>
+              <p><span class="font-bold text-cyan-500">Attack process:</span> </p>
+                <ol class="list-[disck] list-outside pl-8 text-gray-200 text-[15px] leading-relaxed sm:text-justify">
+                  <li>Call <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_MINIMIZEEND, NULL, MyWinEventProc, 0, 0, WINEVENT_OUTOFCONTEXT)</code>.</li>
+                  <li>In <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">MyWinEventProc</code>, perform your payload action or inject further code.</li>
+                </ol>
+              <p>
+              <span class="font-bold text-cyan-500">What defenders can spot:</span> Extra window-event hooks and unfamiliar DLLs kept loaded.</p>
+              <br>
+              <p><span class="font-bold text-cyan-500">Why EDR/AV don’t flag the API itself:</span> </p>
+              <ol class="list-[disck] list-outside pl-8 text-gray-200 text-[15px] leading-relaxed sm:text-justify">
+                <li><strong>Legitimate, built-in use:</strong> Accessibility tools, screen readers, UI-automation frameworks, and testing suites rely on SetWinEventHook to know when UI state changes. It’s a core part of the Windows accessibility and automation model.</li>
+                <li><strong>No overt injection:</strong> Simply registering a hook doesn’t require injecting code into other processes or creating remote threads, everything operates in your own process’s context unless you deliberately request out-of-context hooks.</li>
+                <li><strong>High false-positive risk:</strong> Blocking or alerting on every SetWinEventHook call would break countless legitimate applications, so EDR/AV focus on how it’s used hook flags, callback address regions, accompanying suspicious behaviors, rather than on the function name alone.</li>
+              </ol>
+              <p>
+            </div>
+          </details>
+          <details class="group rounded-xl bg-gray-800/60 ring-1 ring-gray-700/60 overflow-hidden">
+            <summary class="flex items-center justify-between px-6 py-4 cursor-pointer select-none">
+              <span class="font-semibold text-sky-300">RegisterWaitForSingleObject</span>
+              <svg class="w-5 h-5 text-gray-400 group-open:rotate-90 transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </summary>
+            <div class="px-6 pb-6 pt-2  text-gray-200 space-y-1">
+              <p><span class="font-bold text-cyan-500">Definition:</span> This API lets you tell Windows “watch this handle (event, mutex, process, timer) and when it’s signaled or after a timeout call my function on a thread-pool thread.” It’s a convenient way to schedule work without blocking your main thread or spinning in a loop.</p>
+              <p><span class="font-bold text-cyan-500">When it fires:</span> When a handle you watch (event, mutex, process, etc.) is signaled or times out</p>
+              <p><span class="font-bold text-cyan-500">Where it runs:</span> A thread-pool worker thread.</p>
+              <p><span class="font-bold text-cyan-500">Why attackers use it:</span> Lets payload trigger only after a specific condition (Ex: service starts).</p>
+              <p><span class="font-bold text-cyan-500">Attack process:</span> </p>
+                <ol class="list-[disck] list-outside pl-8 text-gray-200 text-[15px] leading-relaxed sm:text-justify">
+                  <li>Create or open a synchronization object (Ex: named event).</li>
+                  <li>Call <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">RegisterWaitForSingleObject(&waitHandle, hObject, MyCallback, param, INFINITE, WT_EXECUTEDEFAULT)</code>.</li>
+                  <li>In <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">MyCallback</code>, move to next stage or drop a payload.</li>
+                </ol>
+              <p>
+              <span class="font-bold text-cyan-500">What defenders can spot:</span> New wait objects listed by <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">NtQueryObject</code> or ETW <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">ThreadPoolWait</code> events.</p>
+              <br>
+              <p><span class="font-bold text-cyan-500">EDR/AV will flag it if:</span> </p>
+              <ol class="list-[disck] list-outside pl-8 text-gray-200 text-[15px] leading-relaxed sm:text-justify">
+                <li><strong>Callback pointer in non-image memory:</strong> Registering a wait whose callback lives in RWX heap or a reflective DLL triggers “callback into non-image region” alerts.</li>
+                <li><strong>Suspicious memory patterns:</strong> Allocating a big RWX region immediately before calling RegisterWaitForSingleObject—the combo looks like shellcode staging.</li>
+                <li><strong>High-volume or out-of-context waits:</strong> Spawning hundreds of wait registrations on handles you created (instead of reusing a single wait or timer) can hit rate-based heuristics.</li>
+                <li><strong>ETW telemetry:</strong> The Microsoft-Windows-ThreadPool/Operational provider logs ThreadPoolWait events; unusual callback addresses or too many concurrent waits stand out.</li>
+              </ol>
+              <p>
+            </div>
+          </details>
+          <details class="group rounded-xl bg-gray-800/60 ring-1 ring-gray-700/60 overflow-hidden">
+            <summary class="flex items-center justify-between px-6 py-4 cursor-pointer select-none">
+              <span class="font-semibold text-sky-300">RtlInstallFunctionTableCallback</span>
+              <svg class="w-5 h-5 text-gray-400 group-open:rotate-90 transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </summary>
+            <div class="px-6 pb-6 pt-2  text-gray-200 space-y-1">
+              <p><span class="font-bold text-cyan-500">Definition:</span> lets code register its own unwind-information provider for a given memory range so the OS can correctly walk your stack and handle exceptions in that range.</p>
+              <p><span class="font-bold text-cyan-500">When it fires:</span> First time the system tries to unwind an exception in a chosen memory range.</p>
+              <p><span class="font-bold text-cyan-500">Where it runs:</span> In the thread that just crashed or triggered an exception.</p>
+              <p><span class="font-bold text-cyan-500">Why attackers use it:</span> Turns a “controlled crash” into execution without direct API calls.</p>
+              <p><span class="font-bold text-cyan-500">Attack process:</span> </p>
+                <ol class="list-[disck] list-outside pl-8 text-gray-200 text-[15px] leading-relaxed sm:text-justify">
+                  <li>Allocate a memory region marked RX and copy your payload there.</li>
+                  <li>Call <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">RtlInstallFunctionTableCallback(address, size, MyUnwindCallback, Context)</code>.</li>
+                  <li>Deliberately cause an exception in that range—OS calls your unwind callback, which jumps into payload.</li>
+                </ol>
+              <p>
+              <span class="font-bold text-cyan-500">What defenders can spot:</span> Dynamic function tables pointing to writable/executable memory.</p>
+            </div>
+          </details>
+          <details class="group rounded-xl bg-gray-800/60 ring-1 ring-gray-700/60 overflow-hidden">
+            <summary class="flex items-center justify-between px-6 py-4 cursor-pointer select-none">
+              <span class="font-semibold text-sky-300">CreateThreadpoolIo</span>
+              <svg class="w-5 h-5 text-gray-400 group-open:rotate-90 transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </summary>
+            <div class="px-6 pb-6 pt-2 text-gray-200 space-y-1">
+              <p><span class="font-bold text-cyan-500">Definition:</span> lets an application offload asynchronous I/O operations (files, sockets, pipes) to a managed thread-pool. </p>
+              <p><span class="font-bold text-cyan-500">When it fires:</span> After an asynchronous file, socket, or pipe I/O completes</p>
+              <p><span class="font-bold text-cyan-500">Where it runs:</span> A thread-pool I/O worker.</p>
+              <p><span class="font-bold text-cyan-500">Why attackers use it:</span> Hides payload inside normal async I/O flow (Ex: network traffic).</p>
+              <p><span class="font-bold text-cyan-500">Attack process:</span> </p>
+                <ol class="list-[disck] list-outside pl-8 text-gray-200 text-[15px] leading-relaxed sm:text-justify">
+                  <li>Call <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CreateThreadpoolIo(hFile, MyIoCallback, Context, NULL)</code>.</li>
+                  <li>Start an overlapped read/write on that handle.</li>
+                  <li>When data arrives or write completes, <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">MyIoCallback</code> will executes your code.</li>
+                </ol>
+              <p>
+              <span class="font-bold text-cyan-500">What defenders can spot:</span> I/O callbacks to non-image memory and mismatched I/O patterns.</p>
+            </div>
+          </details>
+        </div>
+      </section>
+      <br>
+      <section class="relative rounded-2xl bg-gradient-to-br from-gray-800/70 to-gray-900/90 p-8 shadow-2xl ring-1 ring-blue-500/20 overflow-hidden">
+        <article class="space-y-6">
+          <h2 class="text-center text-3xl font-extrabold tracking-tight text-transparent bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400 bg-clip-text">
+            Example: Create Timer Queue Timer </h2>
+          <div class="rounded-xl border border-cyan-400/20 bg-gray-900/60 p-6 shadow-xl">
+            <p class="mb-2 font-semibold text-indigo-300">→ AES Packing:</p>
+            <ul class="space-y-3 text-gray-200">
+              <li class="flex items-start gap-3">
+                <span class="mt-1 inline-block h-2.5 w-2.5 flex-none rounded-full bg-indigo-400"></span>
+                Copies raw shellcode into a resizable buffer for AES-CBC padding.  </li>
+              <li class="flex items-start gap-3">
+                <span class="mt-1 inline-block h-2.5 w-2.5 flex-none rounded-full bg-indigo-400"></span>
+                Derives an AES-256 key from a 32-byte seed via SHA-256 + CryptDeriveKey.</li>
+              <li class="flex items-start gap-3">
+                <span class="mt-1 inline-block h-2.5 w-2.5 flex-none rounded-full bg-indigo-400"></span>
+                Sets an IV and calls CryptEncrypt, returning exact ciphertext length.</li>
+            </ul>
+            <br>
+            <blockquote class="border-l-4 border-blue-400 pl-4 italic">
+              Encryptor.cpp is a mini-packer: hides byte patterns, boosts entropy, and outputs code ready for any loader.
+            </blockquote>
+          </div>
+        </article>
+        <article class="space-y-6 pt-4">
+          <div class="rounded-xl border border-cyan-400/20 bg-gray-900/60 p-6 shadow-xl">
+            <ol class="space-y-6 text-gray-200">
+              <li>
+                <p class="mb-2 font-semibold text-indigo-300">→ Decrypt on the fly:</p>
+                <ul class="space-y-3">
+                  <li>Copy ciphertext, call <code class="rounded bg-slate-700 px-1 text-blue-300">CryptDecrypt</code>, and get <code class="rounded bg-slate-700 px-1 text-blue-300">plainLen</code>.</li>
+                </ul>
+              </li>
+              <li>
+                <p class="mb-2 font-semibold text-indigo-300">Move to <em>RX</em> memory</p>
+                <ul class="space-y-3">
+                  <li>Allocate exact <code class="rounded bg-slate-700 px-1 text-blue-300">plainLen</code> via <code class="rounded bg-slate-700 px-1 text-blue-300">VirtualAlloc</code> with<code class="rounded bg-slate-700 px-1 text-blue-300">PAGE_EXECUTE_READWRITE</code>.</li>
+                </ul>
+              </li>
+              <li>
+                <p class="mb-2 font-semibold text-indigo-300">Timer-queue callback</p>
+                <ul class="space-y-3">
+                  <li>Register <code class="rounded bg-slate-700 px-1 text-blue-300">Trampoline</code> with <code class="rounded bg-slate-700 px-1 text-blue-300">CreateTimerQueueTimer</code> (Ex: 2000 ms).
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <p class="mb-2 font-semibold text-indigo-300">Execution path</p>
+                <ul class="space-y-3">
+                  <li>OS pool thread fires the timer, no <code class="rounded bg-slate-700 px-1 text-blue-300">CreateThread</code>, no obvious entry point.</li>
+                </ul>
+              </li>
+            </ol>
+            <br>
+            <blockquote class="border-l-4 border-blue-400 pl-4 italic">
+              Buffers are sized dynamically via CryptoAPI, handling PoCs or kilobyte-sized implants with identical logic.
+            </blockquote>
+          </div>
+        </article>
+      </section>
+      <article class="space-y-6 pt-12">
+        <div class="rounded-xl border border-cyan-400/20 bg-gray-900/60 p-6 shadow-xl">
+          <h2 class="text-center text-3xl font-extrabold tracking-tight text-transparent bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400 bg-clip-text">
+            Closing Thoughts</h2>
+          <ul class="space-y-3 text-gray-200">
+            <li class="flex items-start gap-3">
+              <span class="mt-1 inline-block h-2.5 w-2.5 flex-none rounded-full bg-sky-400"></span>
+              Delays launch to dodge “first-few-seconds” sandbox rules.
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="mt-1 inline-block h-2.5 w-2.5 flex-none rounded-full bg-sky-400"></span>
+              Keeps opcode patterns hidden until runtime.
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="mt-1 inline-block h-2.5 w-2.5 flex-none rounded-full bg-sky-400"></span>
+              Avoids thread-creation events most EDRs prioritise.
+            </li>
+          </ul>
+        </div>
+      </article>
+      <section class="px-6 relative w-full my-10  overflow-hidden rounded-3xl bg-gradient-to-br from-slate-800 via-slate-900 to-black shadow-2xl ring-1 ring-cyan-400/30">
+        <div class="w-full flex justify-center">
+          <h2 class="relative z-10 flex flex-col px-2 md:flex-row md:items-start md:py-10 text-center text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400 drop-shadow-lg">
+            My Proof of Concept </h2>
+        </div>
+        <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-2">
+          <figure class="group relative overflow-hidden rounded-2xl bg-slate-900/60 ring-1 ring-slate-700/60 shadow-xl">
+            <figcaption class="mt-3 text-center  text-white">1- AES Packing</figcaption>
+            <img src="../MalDev/images/Enc.png" alt="Describe image" class="w-full object-cover transition-transform " />
+          </figure>
+          <figure class="group relative overflow-hidden rounded-2xl bg-slate-900/60 ring-1 ring-slate-700/60 shadow-xl">
+            <figcaption class="mt-3 text-center  text-white">2- Decrypt on the fly</figcaption>
+            <img src="../MalDev/images/Run.png" alt="Describe image" class="w-full object-cover transition-transform " />
+          </figure>
+          <br>
+      </div>
     </section>
-  </main>
-  <!-- Footer -->
-  <footer class="flex items-center justify-center py-6">
+    <blockquote class="border-l-4 border-blue-400 pl-4 italic">
+      First milestone down—there’s a long, gritty road ahead before we skirt every security layer.
+    </blockquote>
+  </section>
+  <footer class="flex flex-col items-center justify-center gap-4 py-6 bg-[#0f172a] text-gray-200">
+    <p class="text-center">2025 Iron Hulk — No rights reserved.</p>
     <a href="../index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">← Back to Dashboard</a>
   </footer>
-  <!-- Reading-time logic -->
+</main>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const dateWritten = '20/Jan/2025';
