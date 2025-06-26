@@ -274,14 +274,14 @@
                 Copies raw shellcode into a resizable buffer for AES-CBC padding.  </li>
               <li class="flex items-start gap-3">
                 <span class="mt-1 inline-block h-2.5 w-2.5 flex-none rounded-full bg-indigo-400"></span>
-                Derives an AES-256 key from a 32-byte seed via SHA-256 + CryptDeriveKey.</li>
+                Derives an AES-256, 32-byte key.</li>
               <li class="flex items-start gap-3">
                 <span class="mt-1 inline-block h-2.5 w-2.5 flex-none rounded-full bg-indigo-400"></span>
                 Sets an IV and calls CryptEncrypt, returning exact ciphertext length.</li>
             </ul>
             <br>
             <blockquote class="border-l-4 border-blue-400 pl-4 italic">
-              Encryptor.cpp is a mini-packer: hides byte patterns, boosts entropy, and outputs code ready for any loader.
+              Encryptor: is a mini-packer, it hides byte patterns, boosts entropy, and outputs code ready for any loader.
             </blockquote>
           </div>
         </article>
@@ -344,7 +344,7 @@
       <section class="px-6 relative w-full my-10  overflow-hidden rounded-3xl bg-gradient-to-br from-slate-800 via-slate-900 to-black shadow-2xl ring-1 ring-cyan-400/30">
         <div class="w-full flex justify-center">
           <h2 class="relative z-10 flex flex-col px-2 md:flex-row md:items-start md:py-10 text-center text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400 drop-shadow-lg">
-            My Proof of Concept </h2>
+            Proof of Concept </h2>
         </div>
         <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-2">
           <figure class="group relative overflow-hidden rounded-2xl bg-slate-900/60 ring-1 ring-slate-700/60 shadow-xl">
