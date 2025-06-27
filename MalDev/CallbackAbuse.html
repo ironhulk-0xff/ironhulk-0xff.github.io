@@ -185,7 +185,11 @@
                 <li><strong>High false-positive risk:</strong> Blocking or alerting on every SetWinEventHook call would break countless legitimate applications, so EDR/AV focus on how it’s used hook flags, callback address regions, accompanying suspicious behaviors, rather than on the function name alone.</li>
               </ol>
               <p>
-            </div>
+                <blockquote class="border-l-4 border-blue-400 pl-4 italic">
+                  Bottom line: This console application installs a <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">WinEvent</code> hook to catch when the foreground window changes, runs a lightweight message loop so the hook can fire, 
+                  pops up a MessageBox once on the first focus shift, then automatically unhooks and exits.
+                </blockquote>
+              </div>
           </details>
           <details class="group rounded-xl bg-gray-800/60 ring-1 ring-gray-700/60 overflow-hidden">
             <summary class="flex items-center justify-between px-6 py-4 cursor-pointer select-none">
@@ -310,7 +314,7 @@
       <div class="relative space-y-6">
         <div class="w-full flex justify-center">
           <h2 class="relative z-10 flex flex-col px-2 md:flex-row md:items-start md:py-10 text-center text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400 drop-shadow-lg">
-            C# Project </h2>
+            My C# Project </h2>
         </div>
         <details class="bg-gray-800 bg-opacity-50 p-4 rounded-lg group">
           <summary class="flex items-center justify-between text-xl font-semibold text-cyan-500 cursor-pointer ">
@@ -464,10 +468,237 @@
             </pre>
           </div>
         </details>
+        <details class="bg-gray-800 bg-opacity-50 p-4 rounded-lg group">
+          <summary class="flex items-center justify-between text-xl font-semibold text-cyan-500 cursor-pointer ">
+            <span>QueueUserAPC/NtQueueApcThread Abuse</span>
+            <svg class="w-6 h-6 transform transition-transform duration-200 group-open:rotate-180 text-cyan-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </summary>
+          <div class="mt-4 relative ">
+            <button class="absolute top-2 right-2 bg-indigo-500 text-white px-3 py-1 rounded text-sm" onclick="copyCode(this)">Copy</button>
+            <pre class="mt-8 overflow-x-auto bg-gray-900 p-4 rounded-lg shadow-inner ">
+              <code class="language-csharp text-green-300">
+                using System;
+                using System.Runtime.InteropServices;
+                class Program
+                {
+                    // APC callback signature
+                    private delegate void ApcProc(UIntPtr dwParam);
+
+                    [DllImport("kernel32.dll", SetLastError = true)]
+                    private static extern IntPtr OpenThread(
+                        uint dwDesiredAccess,
+                        bool bInheritHandle,
+                        uint dwThreadId
+                    );
+
+                    [DllImport("kernel32.dll", SetLastError = true)]
+                    private static extern uint QueueUserAPC(
+                        ApcProc pfnAPC,
+                        IntPtr hThread,
+                        UIntPtr dwData
+                    );
+
+                    [DllImport("kernel32.dll")]
+                    private static extern uint SleepEx(
+                        uint dwMilliseconds,
+                        bool bAlertable
+                    );
+
+                    [DllImport("kernel32.dll")]
+                    private static extern uint GetCurrentThreadId();
+
+                    [DllImport("user32.dll", CharSet = CharSet.Auto)]
+                    private static extern int MessageBox(
+                        IntPtr hWnd,
+                        string text,
+                        string caption,
+                        uint type
+                    );
+
+                    static void Main()
+                    {
+                        Console.WriteLine("Opening current thread handle...");
+                        uint tid = GetCurrentThreadId();
+                        IntPtr hThread = OpenThread(0x0010, false, tid);
+
+                        Console.WriteLine("Queueing APC to ourselves...");
+                        QueueUserAPC(ApcCallback, hThread, UIntPtr.Zero);
+
+                        Console.WriteLine("Entering alertable wait (SleepEx 5s)...");
+                        SleepEx(5000, true);
+
+                        Console.WriteLine("Finished. If APC fired, you saw a MessageBox.");
+                    }
+
+                    // Runs when SleepEx is in alertable state
+                    private static void ApcCallback(UIntPtr dwParam)
+                    {
+                        MessageBox(IntPtr.Zero, "Hello from APC callback!", "APC Abuse", 0);
+                    }
+                }
+              </code>
+            </pre>
+          </div>
+        </details>
+        <details class="bg-gray-800 bg-opacity-50 p-4 rounded-lg group">
+          <summary class="flex items-center justify-between text-xl font-semibold text-cyan-500 cursor-pointer ">
+            <span>QueueUserAPC/NtQueueApcThread Abuse</span>
+            <svg class="w-6 h-6 transform transition-transform duration-200 group-open:rotate-180 text-cyan-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </summary>
+          <div class="mt-4 relative ">
+            <button class="absolute top-2 right-2 bg-indigo-500 text-white px-3 py-1 rounded text-sm" onclick="copyCode(this)">Copy</button>
+            <pre class="mt-8 overflow-x-auto bg-gray-900 p-4 rounded-lg shadow-inner ">
+              <code class="language-csharp text-green-300">
+                using System;
+                using System.Runtime.InteropServices;
+                using System.Threading;
+                
+                class Program
+                {
+                    // Flag to ensure we only fire once
+                    private static bool _fired;
+                
+                    // WinEvent hook callback signature
+                    private delegate void WinEventDelegate(
+                        IntPtr hWinEventHook,
+                        uint eventType,
+                        IntPtr hWnd,
+                        int idObject,
+                        int idChild,
+                        uint dwEventThread,
+                        uint dwmsEventTime
+                    );
+                
+                    // POINT & MSG for message loop
+                    [StructLayout(LayoutKind.Sequential)]
+                    private struct POINT { public int X, Y; }
+                
+                    [StructLayout(LayoutKind.Sequential)]
+                    private struct MSG
+                    {
+                        public IntPtr hwnd;
+                        public uint message;
+                        public UIntPtr wParam;
+                        public IntPtr lParam;
+                        public uint time;
+                        public POINT pt;
+                    }
+                
+                    private const uint PM_REMOVE = 0x0001;
+                    private const uint EVENT_SYSTEM_FOREGROUND = 0x0003;
+                    private const uint WINEVENT_OUTOFCONTEXT = 0;
+                
+                    [DllImport("user32.dll", SetLastError = true)]
+                    private static extern IntPtr SetWinEventHook(
+                        uint eventMin,
+                        uint eventMax,
+                        IntPtr hmodWinEventProc,
+                        WinEventDelegate lpfnWinEventProc,
+                        uint idProcess,
+                        uint idThread,
+                        uint dwFlags
+                    );
+                
+                    [DllImport("user32.dll")]
+                    private static extern bool UnhookWinEvent(IntPtr hWinEventHook);
+                
+                    [DllImport("user32.dll", CharSet = CharSet.Auto)]
+                    private static extern int MessageBox(
+                        IntPtr hWnd,
+                        string text,
+                        string caption,
+                        uint type
+                    );
+                
+                    [DllImport("user32.dll")]
+                    private static extern bool PeekMessage(
+                        out MSG lpMsg,
+                        IntPtr hWnd,
+                        uint wMsgFilterMin,
+                        uint wMsgFilterMax,
+                        uint wRemoveMsg
+                    );
+                
+                    [DllImport("user32.dll")]
+                    private static extern bool TranslateMessage([In] ref MSG lpMsg);
+                
+                    [DllImport("user32.dll")]
+                    private static extern IntPtr DispatchMessage([In] ref MSG lpMsg);
+                
+                    static void Main()
+                    {
+                        Console.WriteLine("Registering foreground-change hook (EVENT_SYSTEM_FOREGROUND)...");
+                        WinEventDelegate callback = WinEventProc;
+                        IntPtr hook = SetWinEventHook(
+                            EVENT_SYSTEM_FOREGROUND,
+                            EVENT_SYSTEM_FOREGROUND,
+                            IntPtr.Zero,
+                            callback,
+                            0,
+                            0,
+                            WINEVENT_OUTOFCONTEXT
+                        );
+                
+                        if (hook == IntPtr.Zero)
+                        {
+                            Console.WriteLine("SetWinEventHook failed: " + Marshal.GetLastWin32Error());
+                            return;
+                        }
+                
+                        Console.WriteLine("Hook installed. Switch windows (e.g., Alt+Tab) to trigger once.");
+                        Console.WriteLine("Press Enter to exit at any time.");
+                
+                        // Pump messages until our callback fires or user presses Enter
+                        while (!_fired)
+                        {
+                            if (PeekMessage(out MSG msg, IntPtr.Zero, 0, 0, PM_REMOVE))
+                            {
+                                TranslateMessage(ref msg);
+                                DispatchMessage(ref msg);
+                            }
+                            if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Enter)
+                                break;
+                            Thread.Sleep(10);
+                        }
+                
+                        UnhookWinEvent(hook);
+                        Console.WriteLine("Hook removed; exiting.");
+                    }
+                
+                    private static void WinEventProc(
+                        IntPtr hWinEventHook,
+                        uint eventType,
+                        IntPtr hWnd,
+                        int idObject,
+                        int idChild,
+                        uint dwEventThread,
+                        uint dwmsEventTime
+                    )
+                    {
+                        if (_fired)
+                            return;
+                
+                        _fired = true;
+                        MessageBox(
+                            IntPtr.Zero,
+                            $"Foreground changed to hWnd=0x{hWnd.ToInt64():X}",
+                            "WinEvent Abuse",
+                            0
+                        );
+                    }
+                }                
+              </code>
+            </pre>
+          </div>
+        </details>
       </div>
-      <br>
-      <blockquote class="border-l-4 border-blue-400 pl-4 italic">
-        Extra mile: Improve your attacke
+      <br><br>
+      <blockquote class="border-l-4 border-blue-400 pl-4">
+        <strong>Assignment:</strong> Enhance this proof-of-concept to execute a different payload; the remaining callback techniques are yours to explore, enjoy the experimentation 🫡
       </blockquote>
       <br>
     </section>
