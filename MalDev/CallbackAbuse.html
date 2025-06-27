@@ -117,7 +117,12 @@
                 </ol>
               <p>
               <br>
-              <blockquote class="border-l-4 border-blue-400 pl-4 italic">Bottom line: a single, infrequent <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">EnumWindows</code> in a signed DLL isn’t enough to trip modern EDR. But if your callback lives in RX heap, fires in a tight loop, or immediately unrolls into reflective loading, detection engines will notice the behavioral context, not the API name alone.                </blockquote>              </div>
+              <blockquote class="border-l-4 border-blue-400 pl-4 italic">
+                Bottom line: a single, infrequent <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">EnumWindows</code> in a signed DLL isn’t enough to trip modern EDR. However, if your callback lives in RX heap, fires in a tight loop 
+                (you’ll see rapidly changing hWnd values each invocation), or immediately unrolls into reflective loading, detection engines will key on that behavioral context, not 
+                the API name alone.
+              </blockquote>
+            </div>
           </details>
           <details class="group rounded-xl bg-gray-800/60 ring-1 ring-gray-700/60 overflow-hidden">
             <summary class="flex items-center justify-between px-6 py-4 cursor-pointer select-none">
@@ -369,6 +374,90 @@
                     {
                         MessageBox(IntPtr.Zero, "Hello from a timer callback!", "Callback Abuse", 0);
                         Environment.Exit(0);
+                    }
+                }
+              </code>
+            </pre>
+          </div>
+        </details>
+        <details class="bg-gray-800 bg-opacity-50 p-4 rounded-lg group">
+          <summary class="flex items-center justify-between text-xl font-semibold text-cyan-500 cursor-pointer ">
+            <span>EnumWindows/EnumChildWindows Abuse</span>
+            <svg class="w-6 h-6 transform transition-transform duration-200 group-open:rotate-180 text-cyan-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </summary>
+          <div class="mt-4 relative ">
+            <button class="absolute top-2 right-2 bg-indigo-500 text-white px-3 py-1 rounded text-sm" onclick="copyCode(this)">Copy</button>
+            <pre class="mt-8 overflow-x-auto bg-gray-900 p-4 rounded-lg shadow-inner ">
+              <code class="language-csharp text-green-300">
+                using System;
+                using System.Runtime.InteropServices;
+                using System.Text;
+                class Program
+                {
+                    // Flag to ensure only one callback fires for child windows
+                    private static bool _childShown;
+
+                    // Delegate for the window‐enumeration callbacks
+                    private delegate bool WndEnumProc(IntPtr hWnd, IntPtr lParam);
+
+                    [DllImport("user32.dll", SetLastError = true)]
+                    private static extern bool EnumWindows(WndEnumProc lpEnumFunc, IntPtr lParam);
+
+                    [DllImport("user32.dll", SetLastError = true)]
+                    private static extern bool EnumChildWindows(IntPtr hWndParent, WndEnumProc lpEnumFunc, IntPtr lParam);
+
+                    [DllImport("user32.dll")]
+                    private static extern IntPtr GetDesktopWindow();
+
+                    [DllImport("user32.dll", CharSet = CharSet.Auto)]
+                    private static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);
+
+                    static void Main()
+                    {
+                        Console.WriteLine("Calling EnumWindows…");
+                        EnumWindows(EnumWindowsCallback, IntPtr.Zero);
+
+                        Console.WriteLine("Calling EnumChildWindows on desktop…");
+                        EnumChildWindows(GetDesktopWindow(), EnumChildWindowsCallback, IntPtr.Zero);
+
+                        Console.WriteLine("Done. Press any key to exit.");
+                        Console.ReadKey();
+                    }
+
+                    private static bool EnumWindowsCallback(IntPtr hWnd, IntPtr lParam)
+                    {
+                        // Show a MessageBox once, then stop enumeration
+                        MessageBox(IntPtr.Zero,
+                            $"EnumWindows callback fired for hWnd=0x{hWnd:X}",
+                            "EnumWindows Abuse", 0);
+                        return false;  // halt after first callback
+                    }
+
+                    // This will stop for all EnumChildWindowsCallback
+                    /*
+                    private static bool EnumChildWindowsCallback(IntPtr hWnd, IntPtr lParam)
+                    {
+                        // Show a MessageBox for each child (you can return true to continue)
+                        MessageBox(IntPtr.Zero, $"EnumChildWindows callback for child hWnd=0x{hWnd:X}",
+                                  "EnumChildWindows Abuse", 0);
+                        return true;   // return true to continue through all children
+                    }
+                    */
+                    // This will stop for one EnumChildWindowsCallback
+                    
+                    private static bool EnumChildWindowsCallback(IntPtr hWnd, IntPtr lParam)
+                    {
+                        if (_childShown)
+                            return false;  // already shown, stop enumeration
+
+                        _childShown = true;
+                        MessageBox(IntPtr.Zero,
+                            $"EnumChildWindows callback fired for child hWnd=0x{hWnd:X}",
+                            "EnumChildWindows Abuse", 0);
+
+                        return false;  // stop after first child callback
                     }
                 }
               </code>
