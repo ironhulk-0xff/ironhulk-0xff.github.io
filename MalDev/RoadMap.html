@@ -208,7 +208,7 @@
         <span class="font-semibold text-cyan-300">Note:</span> These PDFs may be dated, yet the core techniques remain fundamental. Focus on understanding detection logic, evasion basics, and how each control differs.
         </div>
     </section>
-        <section class="relative rounded-2xl border border-rose-500/60 bg-gradient-to-br from-gray-800/70 to-gray-900/90 p-8 shadow-2xl ring-1 ring-rose-500/20 space-y-8">
+    <section class="relative rounded-2xl border border-rose-500/60 bg-gradient-to-br from-gray-800/70 to-gray-900/90 p-8 shadow-2xl ring-1 ring-rose-500/20 space-y-8">
         <h2 class="text-3xl md:text-4xl font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-r from-rose-400 via-pink-400 to-fuchsia-400">
             Malware Development — Course Path</h2>
         <div class="space-y-4" x-data="{ open:null }">
@@ -266,6 +266,68 @@
         💡  Final Notes: <br>
         <strong>Legal disclaimer:</strong> Understanding malware’s mechanics isn’t just for offense, it’s the foundation of modern defense.<br>
         Turn these skills toward strengthening security and responsible disclosure and what separates an ethical hacker from a cyber-criminal isn’t talent but principles
+        </div>
+    </section>
+    <section class="relative rounded-2xl border border-rose-500/60 bg-gradient-to-br from-gray-800/70 to-gray-900/90 p-8 shadow-2xl ring-1 ring-rose-500/20 space-y-8">
+        <h2 class="text-3xl md:text-4xl font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-r from-rose-400 via-pink-400 to-fuchsia-400">
+            Malware Reports and Sample</h2>
+        <div class="space-y-4" x-data="{ open:null }">
+            <div class="border border-emerald-500/40 rounded-xl overflow-hidden">
+                <button @click="open === 1 ? open = null : open = 1" class="w-full flex justify-between items-center px-5 py-3 bg-emerald-600/20 hover:bg-emerald-600/30 transition-colors text-left font-semibold text-emerald-200">
+                    <span class="flex items-center gap-2">
+                        <!-- Report icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6M9 16h4M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M14 2v6h6"/>
+                        </svg>
+                        Reports
+                      </span>
+                      <svg xmlns="http://www.w3.org/2000/svg" :class="open===1 ? 'rotate-180' : ''" class="h-5 w-5 transform transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                      </svg>
+                                      </button>
+                <div x-show="open===1" x-collapse class="bg-gray-800/60 px-6 py-4 text-gray-300 space-y-3">
+                    <ul class="list-disc pl-4 space-y-2 text-[15px] leading-relaxed">
+                        <li><a href="https://www.crowdstrike.com/en-us/global-threat-report/" target="_blank" class="underline text-emerald-300 hover:text-emerald-200">CrowdStrike Logo</a></li>
+                        <li><a href="https://securelist.com/" target="_blank" class="underline text-emerald-300 hover:text-emerald-200">SecureList by Kaspersky</a> </li>
+                        <li><a href="https://bazaar.abuse.ch/" target="_blank" class="underline text-emerald-300 hover:text-emerald-200">MalwareBazaar</a></li>
+                        <li><a href="https://www.malwarepatrol.net/malware-patrol-blog/" target="_blank" class="underline text-emerald-300 hover:text-emerald-200">Malware Portal</a></li>
+                        <li><a href="https://feodotracker.abuse.ch/browse/" target="_blank" class="underline text-emerald-300 hover:text-emerald-200">Browse Botnet C&Cs</a></li>
+                        <li><a href="https://vx-underground.org/" target="_blank" class="underline text-emerald-300 hover:text-emerald-200">vx-underground</a></li>
+                        <li><a href="https://www.group-ib.com/tools/malware-reports/" target="_blank" class="underline text-emerald-300 hover:text-emerald-200">Group-IB</a></li>
+                        <li><a href="https://www.malware-traffic-analysis.net/" target="_blank" class="underline text-emerald-300 hover:text-emerald-200">malware-traffic-analysis</a></li>
+                        <li><a href="https://www.malwarepatrol.net/malware-patrol-blog/" target="_blank" class="underline text-emerald-300 hover:text-emerald-200">Malware Portal</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border border-red-500/40 rounded-xl overflow-hidden">
+                <button @click="open === 3 ? open = null : open = 3" class="w-full flex justify-between items-center px-5 py-3 bg-red-600/20 hover:bg-red-600/30 transition-colors text-left font-semibold text-red-200">
+                    <span class="flex items-center gap-2">
+                        <!-- Sample icon (beaker) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M4.5 2.25h15a.75.75 0 01.75.75v1.5c0 1.19-.372 2.365-1.07 3.333L13.5 17.25V21h-3v-3.75L4.82 7.833A6.244 6.244 0 013.75 4.5v-1.5a.75.75 0 01.75-.75z"/>
+                        </svg>
+                        samples
+                      </span>
+                      <svg xmlns="http://www.w3.org/2000/svg" :class="open===3 ? 'rotate-180' : ''" class="h-5 w-5 transform transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                      </svg>
+                </button>
+                <div x-show="open===3" x-collapse class="bg-gray-800/60 px-6 py-4 text-gray-300 space-y-3">
+                    <ul class="list-disc pl-4 space-y-2 text-[15px] leading-relaxed">
+                    <li><a href="https://zeltser.com/malware-sample-sources/" target="_blank" class="underline text-red-300 hover:text-red-200">Lenny Zeltser</a></li>
+                    <li><a href="https://github.com/ytisf/theZoo" target="_blank" class="underline text-red-300 hover:text-red-200">theZoo</a></li>
+                    <li><a href="https://github.com/Cryakl/Ultimate-RAT-Collection" target="_blank" class="underline text-red-300 hover:text-red-200">Ultimate-RAT-Collection</a></li>
+                    <li><a href="https://github.com/Da2dalus/The-MALWARE-Repo" target="_blank" class="underline text-red-300 hover:text-red-200">The-MALWARE-Repo</a></li>
+                    <li><a href="https://github.com/MalwareSamples/Malware-Feed" target="_blank" class="underline text-red-300 hover:text-red-200">Malware-Feed</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="mt-6 rounded-lg border-l-4 border-red-600 bg-red-900/60 p-4 text-[15px] text-red-200">
+            ⚠️ <strong>WARNING:</strong> <br>
+            Downloading and handling malware samples is entirely at your own risk. Perform all analysis only within a secure, isolated environment (e.g., air-gapped VM or sandbox). The author assumes no liability; you bear full responsibility for any actions or consequences.
         </div>
     </section>
   </main>
