@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iron Hulk – EDR</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0f172a] text-white font-sans min-h-screen">
+  <!-- Header -->
+    <header class="bg-[#1e293b] p-4 shadow flex items-center justify-between gap-4">
+        <div>
+            <h1 class="text-xl font-bold text-blue-400">Endpoint Detection & Response</h1>
+            <small id="reading-time" class="text-xs text-gray-400"></small>
+        </div>
+        <a href="../index.html" class="text-gray-300 text-sm hover:underline">← Back to Dashboard</a>
+    </header>
+    <!-- Article -->
+    <main id="article" class="p-6 space-y-6 sm:text-justify">
+        <section class="relative overflow-hidden rounded-2xl shadow-lg gradient-banner ring-1 ring-slate-700">
+            <div class="p-10 md:p-10 text-center backdrop-blur-sm">
+                <h2 class="text-4xl md:text-5xl font-extrabold mb-4">Beyond Antivirus, securing the last mile</h2>
+                <p class="max-w-3xl mx-auto text-lg  text-slate-300">
+                    Signature-based antivirus fails against fileless ransomware, supply chain attacks, APT, and zero-days. EDR is the evolved defense.
+                </p>
+            </div>
+            <svg class="absolute inset-0 w-full h-full opacity-20" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 800 600">
+                <defs><lineargradient id="grad" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#0891b2"/><stop offset="100%" stop-color="#7c3aed"/> </lineargradient></defs><rect width="800" height="600" fill="url(#grad)"/>
+            </svg>
+        </section>
+        <!-- Introduction -->
+        <section id="intro" class="bg-[#142031] rounded-2xl p-8 md:p-7 shadow-lg ring-1 ring-slate-800/60">
+            <div class="relative space-y-8 md:space-y-0 md:grid md:grid-cols-2 md:gap-10">
+                <div class="space-y-4 md:pr-6">
+                    <h3 class="text-3xl font-bold text-blue-300">What Is Endpoint Detection & Response?</h3>
+                    <p class=" text-slate-300 text-lg leading-relaxed">
+                        <span class="font-semibold text-blue-200">Endpoint Detection & Response (EDR):</span>
+                        is essentially a sophisticated security system designed to protect the devices at the edge of your network such as laptops, desktops, servers, and even mobile devices. 
+                        Unlike traditional antivirus software that just sits there waiting to block known threats, EDR provides continuous, automated surveillance of endpoints that's always on patrol. It continuously 
+                        monitors endpoints for suspicious activity, collects data, and helps you respond to incidents in real-time. EDR tools are now a staple in enterprise security, with companies 
+                        like CrowdStrike, Microsoft, Kaspersky, Bitdefender, Carbon Black and many other solutions. They're particularly popular in industries like finance, healthcare, and government, where data breaches can 
+                        have massive consequences. In short, EDR isn't just about prevention, it's about detection, response, and learning from attacks to strengthen your defenses over time.
+                    </p>
+                </div>
+                <!-- ▸ Compact “stat-pills” strip -->
+                <div class="flex flex-wrap justify-center gap-6">
+                    <style>
+                    .stat-pill{
+                        min-width:7.5rem;
+                        padding:1.15rem 1.25rem;
+                        border-radius:9999px;
+                        display:flex;
+                        flex-direction:column;
+                        align-items:center;
+                        justify-content:center;
+                        position:relative;
+                        overflow:hidden;
+                        transition:transform .25s;
+                    }
+                    .stat-pill:hover{transform:translateY(-4px);}
+                    .stat-pill::after{
+                        content:'';
+                        position:absolute;inset:0;border-radius:inherit;
+                        background:radial-gradient(circle at 30% 30%,#ffffff22 0%,transparent 60%);
+                        z-index:0;
+                    }
+                    .stat-pill span{position:relative;z-index:1;}
+                    </style>
+                    <div class="stat-pill bg-gradient-to-br from-sky-700 via-sky-600/80 to-sky-500/70 ring-1 ring-white/10">
+                    <span class="text-xl font-extrabold text-white">24/7</span>
+                    <span class="text-[10px] uppercase tracking-wide text-white/80">Monitoring</span>
+                    </div>
+                    <div class="stat-pill bg-gradient-to-br from-emerald-700 via-emerald-600/80 to-emerald-500/70 ring-1 ring-white/10">
+                    <span class="text-xl font-extrabold text-white">&lt;60 s</span>
+                    <span class="text-[10px] uppercase tracking-wide text-white/80">Detection</span>
+                    </div>
+                    <div class="stat-pill bg-gradient-to-br from-purple-700 via-purple-600/80 to-purple-500/70 ring-1 ring-white/10">
+                    <span class="text-xl font-extrabold text-white">90 d</span>
+                    <span class="text-[10px] uppercase tracking-wide text-white/80">Telemetry</span>
+                    </div>
+                    <div class="stat-pill bg-gradient-to-br from-rose-700 via-rose-600/80 to-rose-500/70 ring-1 ring-white/10">
+                    <span class="text-xl font-extrabold text-white">1-click</span>
+                    <span class="text-[10px] uppercase tracking-wide text-white/80">Isolation</span>
+                    </div>
+                    <div class="stat-pill bg-gradient-to-br from-amber-600 via-amber-500/80 to-amber-400/70 ring-1 ring-white/10">
+                    <span class="text-xl font-extrabold text-white">&lt;20 m</span>
+                    <span class="text-[10px] uppercase tracking-wide text-white/80">Containment</span>
+                    </div>
+                    <div class="stat-pill bg-gradient-to-br from-cyan-600 via-cyan-500/80 to-cyan-400/70 ring-1 ring-white/10">
+                    <span class="text-xl font-extrabold text-white">500 k+</span>
+                    <span class="text-[10px] uppercase tracking-wide text-white/80">IoCs a Day</span>
+                    </div>
+                </div>
+            </div>
+            <script>
+                (function(){
+                const io = new IntersectionObserver((entries)=>{
+                    entries.forEach(ent=>{
+                    if(ent.isIntersecting){
+                        ent.target.querySelectorAll('[data-count]').forEach(el=>{
+                        const end = parseInt(el.dataset.count,10) || 0;
+                        const inc = end / 40;
+                        let cur = 0;
+                        const step = ()=>{
+                            cur += inc;
+                            if(cur >= end){ cur = end; }
+                            el.textContent = end>10 ? Math.round(cur) : cur.toFixed(0);
+                            if(cur < end) requestAnimationFrame(step);
+                        };
+                        step();
+                        });
+                        io.disconnect();
+                    }
+                    });
+                },{threshold:0.4});
+                const section = document.getElementById('intro');
+                if(section) io.observe(section);
+                })();
+            </script>
+        </section>
+        <!-- ▸ What Does EDR Actually Do? -->
+        <section id="edr-functions" class="bg-[#142031] rounded-2xl p-8 md:p-7 shadow-lg ring-1 ring-slate-800/60">
+            <h3 class="text-2xl md:text-3xl font-bold text-blue-300 mb-4"> What Does EDR Actually Do?</h3>
+            <p class=" text-slate-300 text-lg leading-relaxed">
+                It does a lot more than just scan for viruses; it's a multifaceted system that handles several key tasks to keep your endpoints secure. Here's a rundown of its main functions:
+            </p>
+            <br>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <article class="flex flex-col gap-3 bg-[#0f172a] border border-slate-700/60 rounded-xl p-6">
+                    <div class="flex items-center gap-3">
+                    <svg class="w-6 h-6 text-cyan-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                        <h4 class="font-semibold text-slate-100">Continuous Monitoring and Data Collection</h4>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        EDR agents, a small software programs installed on endpoints, keeps a close eye on everything happening on the device. This includes file activities, network connections, 
+                        user behaviors, and system processes. EDR agents collect granular telemetry from process trees, network connections, registry changes, file modifications, and memory artifacts, 
+                        then sent to a central console for analysis, allowing security teams to spot anomalies that could indicate a threat.
+                    </p>
+                </article>
+                <article class="flex flex-col gap-3 bg-[#0f172a] border border-slate-700/60 rounded-xl p-6">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-6 h-6 text-cyan-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                        <h4 class="font-semibold text-slate-100">Real-time Threat Detection and Alerting</h4>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Once data is collected, EDR uses advanced algorithms to flag potential issues. For example, if an unusual process starts running or if there's a spike in network traffic, 
+                        it can trigger an alert. This isn't just about reacting to known threats; EDR often uses machine learning to identify new, unknown dangers. The goal is to catch threats
+                        early, minimizing damage.
+                    </p>
+                </article>
+                <article class="flex flex-col gap-3 bg-[#0f172a] border border-slate-700/60 rounded-xl p-6">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-6 h-6 text-cyan-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-3-3v6m-9 0h18" />
+                        </svg>
+                        <h4 class="font-semibold text-slate-100">Incident Response and Investigation</h4>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        This is where EDR really shines. When a threat is detected, EDR provides tools for quick response, such as isolating the affected endpoint, quarantining files, or even 
+                        rolling back changes to a safe state. It also offers forensic capabilities, like timeline reconstructions, which help investigators piece together what happened during 
+                        an attack.
+                    </p>
+                </article>
+                <article class="flex flex-col gap-3 bg-[#0f172a] border border-slate-700/60 rounded-xl p-6">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-6 h-6 text-cyan-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M11 4a7 7 0 110 14 7 7 0 010-14z" />
+                        </svg>
+                        <h4 class="font-semibold text-slate-100">Threat Hunting & Forensics</h4>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        EDR stores weeks, often months, of high-fidelity telemetry, so investigators aren’t limited to “what’s happening now”; they can rewind the tape. Analysts can pivot from one 
+                        alert to every process spawned by the same parent, trace a file hash across thousands of endpoints, or rebuild an entire kill chain in a visual timeline. Each event is enriched 
+                        with MITRE ATT&CK technique tags, reputation scores, and even sandbox detonation links, letting hunters stack-filter on criteria like “all unsigned binaries that created outbound 
+                        SMB sessions in the last 48 hours.”
+                    </p>
+                </article>
+                <article class="flex flex-col gap-3 bg-[#0f172a] border border-slate-700/60 rounded-xl p-6">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-6 h-6 text-cyan-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 17v-6m0-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <h4 class="font-semibold text-slate-100">Reporting & Compliance Evidence</h4>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        EDR does more than react, it also records. The platform continuously produces rich reports on endpoint health, active threats, infected assets, and past incidents, providing the 
+                        evidence auditors expect for frameworks such as GDPR and HIPAA. Those same datasets fuel proactive threat-hunting, letting analysts uncover lurking adversaries before damage is 
+                        done.
+                    </p>
+                </article>
+                <article class="flex flex-col gap-3 bg-[#0f172a] border border-slate-700/60 rounded-xl p-6">
+                    <div class="flex items-center gap-3">
+                    <svg class="w-6 h-6 text-yellow-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" />
+                    </svg>
+                    <h4 class="font-semibold text-slate-100">Automated&nbsp;Response&nbsp;Playbooks</h4>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        High-confidence alerts trigger kill-process, host-isolation, and rollback
+                        actions in seconds, reducing dwell time without waiting for human clicks.
+                    </p>
+                </article>
+                <article class="flex flex-col gap-3 bg-[#0f172a] border border-slate-700/60 rounded-xl p-6">
+                    <div class="flex items-center gap-3">
+                    <svg class="w-6 h-6 text-emerald-300" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 11c1.657 0 3 1.343 3 3v4a3 3 0 11-6 0v-4c0-1.657 1.343-3 3-3z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 11V7a5 5 0 00-10 0v4" />
+                    </svg>
+                    <h4 class="font-semibold text-slate-100">Device&nbsp;&amp;&nbsp;Application Control</h4>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Built-in policies lock USB storage, block unsigned drivers, and throttle Office macros,
+                        no extra agent required, enforcement tied to user identity and location.
+                    </p>
+                </article>
+                <article class="flex flex-col gap-3 bg-[#0f172a] border border-slate-700/60 rounded-xl p-6">
+                    <div class="flex items-center gap-3">
+                    <svg class="w-6 h-6 text-orange-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 7l-4 4m0 0l-4-4m4 4V3" />
+                        <circle cx="12" cy="12" r="9" />
+                    </svg>
+                    <h4 class="font-semibold text-slate-100">Vulnerability&nbsp;&amp;&nbsp;Patch Prioritization</h4>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Correlates missing patches with active exploit telemetry, spotlighting which CVEs
+                        attackers are probing so ops teams patch what matters first.
+                    </p>
+                </article>
+                <article class="flex flex-col gap-3 bg-[#0f172a] border border-slate-700/60 rounded-xl p-6">
+                    <div class="flex items-center gap-3">
+                    <svg class="w-6 h-6 text-purple-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 17h4m0 0V9m0 8l4-4m4 4V5m0 12h4" />
+                    </svg>
+                    <h4 class="font-semibold text-slate-100">Risk&nbsp;&amp;&nbsp;Exposure Scoring</h4>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Rolls up endpoint telemetry into executive dashboards that rank devices by breach
+                        likelihood, guiding hardening efforts and cutting cyber-insurance premiums.
+                    </p>
+                </article>
+            </div>
+        </section>
+        <!-- ▸ How Does EDR Detect Malware? -->
+        <section id="edr-detection" class="bg-[#142031] rounded-2xl p-8 md:p-7 shadow-lg ring-1 ring-slate-800/60">
+            <h3 class="text-2xl md:text-3xl font-bold text-blue-300 mb-4"> How Does EDR Detect Malware? </h3>
+            <p class=" text-slate-300 text-lg leading-relaxed">
+                let's get into the mechanics and learn how does EDR actually spot malware? It's not magic, it's a combination of smart techniques that work together to identify and neutralize threats. 
+                EDR uses several detection methods, often layered for better accuracy. Here's a closer look:
+            </p>
+            <br>
+            <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+                <!-- Behavioral analytics -->
+                <article class="relative overflow-hidden rounded-2xl bg-[#11152b] p-6 ring-1 ring-white/10">
+                    <span class="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-purple-500 to-indigo-500"></span>
+                    <header class="flex items-center gap-3">
+                        <svg class="w-8 h-8 text-purple-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <h4 class="text-lg font-semibold text-white"> Behavior-Based Detection </h4>
+                    </header>
+                    <p class="mt-4 text-slate-400 leading-relaxed">
+                        To handle unknown threats, EDR analyzes the behavior of processes and files in real-time. For instance, if a program starts encrypting files rapidly, a common ransomware tactic,
+                        or makes unusual network calls, EDR can raise an alarm. This method uses heuristics and machine learning models to spot deviations from normal activity. It's like watching 
+                        someone act suspiciously in a crowd, even if you've never seen them before, their actions give them away.
+                    </p>
+                </article>
+                <!-- ML anomaly scoring -->
+                <article class="relative overflow-hidden rounded-2xl bg-[#11152b] p-6 ring-1 ring-white/10">
+                    <span class="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-teal-400 to-emerald-500"></span>
+                    <header class="flex items-center gap-3">
+                        <svg class="w-8 h-8 text-teal-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16M4 12h16" />
+                        </svg>
+                        <h4 class="text-lg font-semibold text-white"> Machine Learning (ML) & AI </h4>
+                    </header>
+                    <p class="mt-4 text-slate-400 leading-relaxed">
+                        EDR solutions ingest massive amounts of data. ML models learn what "normal" endpoint behavior looks like for your specific environment. They then flag significant deviations 
+                        from this baseline as potential threats. AI helps correlate events and identify subtle, complex attack patterns that humans might miss.
+                    </p>
+                </article>
+                <!-- Threat-intel correlation -->
+                <article class="relative overflow-hidden rounded-2xl bg-[#11152b] p-6 ring-1 ring-white/10">
+                    <span class="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-rose-500 to-pink-500"></span>
+                    <header class="flex items-center gap-3">
+                        <svg class="w-8 h-8 text-rose-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4h16v16H4z" />
+                        </svg>
+                        <h4 class="text-lg font-semibold text-white"> Indicator of Compromise (IOC) and Threat Intelligence Integration </h4>
+                    </header>
+                    <p class="mt-4 text-slate-400 leading-relaxed">
+                        EDR often pulls in external threat intelligence feeds, which provide lists of known bad IPs, domains, or file hashes. By cross-referencing this with endpoint data, EDR can
+                        detect compromises faster. For example, if a device communicates with a command-and-control server listed in a threat feed, it's a red flag.
+                    </p>
+                </article>
+                <!-- Fileless Malware  -->
+                <article class="relative overflow-hidden rounded-2xl bg-[#11152b] p-6 ring-1 ring-white/10">
+                    <span class="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-amber-400 to-orange-500"></span>
+                    <header class="flex items-center gap-3">
+                        <svg class="w-8 h-8 text-amber-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5.5 2h7l6 6v13.5A1.5 1.5 0 0117 23H7A1.5 1.5 0 015.5 21.5V2z"/>
+                        <polyline stroke-linecap="round" stroke-linejoin="round" points="12 2 12 8 18 8"/>
+                        </svg>
+                        <h4 class="text-lg font-semibold text-white">Fileless Malware Detection</h4>
+                    </header>
+                    <p class="mt-4 text-slate-400 leading-relaxed">
+                        Fileless malware never drops an executable to disk; it runs straight from memory via PowerShell, WMI, exploit-loaded shellcode, or any other posible ways, leaving traditional 
+                        AV blind. EDR watches script engines and memory allocations in real time, so when a process spawns unusual, in-RAM code, the agent can flag, capture, and stop it before a 
+                        reboot wipes the evidence.
+                    </p>
+                </article>
+                <!-- Heuristic Analysis -->
+                <article class="relative overflow-hidden rounded-2xl bg-[#11152b] p-6 ring-1 ring-white/10">
+                    <span class="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-violet-400 to-indigo-500"></span>
+                    <header class="flex items-center gap-3">
+                        <svg class="w-8 h-8 text-violet-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h3m3 0h3m3 0h3M5 8.5l2 7M10 8.5l2 7m4-7l2 7m4-7l2 7" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 2a9 9 0 019 9c0 4.97-4.03 9-9 9S3 15.97 3 11a9 9 0 019-9z" />
+                        </svg>
+                        <h4 class="text-lg font-semibold text-white">Heuristic Analysis</h4>
+                    </header>
+                    <p class="mt-4 text-slate-400 leading-relaxed">
+                        Using rules and algorithms to identify suspicious characteristics or patterns in code or behavior that are commonly associated with malware, even if it's a new variant.
+                    </p>
+                </article>
+                <!-- Kernel- & Memory-Level Instrumentation -->
+                <article class="relative overflow-hidden rounded-2xl bg-[#11152b] p-6 ring-1 ring-white/10">
+                    <span class="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-cyan-400 to-blue-500"></span>
+                    <header class="flex items-center gap-3">
+                        <svg class="w-8 h-8 text-cyan-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 9h6v6H9zM9 1v2m6-2v2m8 8h-2m2 6h-2m-6 6v-2m-6 2v-2M1 15h2M1 9h2" />
+                        </svg>
+                        <h4 class="text-lg font-semibold text-white">Kernel and Memory Level Instrumentation</h4>
+                    </header>
+                    <p class="mt-4 text-slate-400 leading-relaxed">
+                        Hooks system calls, monitors stack traces, and taps ETW providers to expose direct syscalls, unhooking attempts, reflective DLL injection, and APC abuse, surfacing 
+                        stealthy in-memory loaders and rootkits even inside protected user-mode sandboxes.
+                    </p>
+                </article>
+            </div>
+            <br>
+            <blockquote class="text-slate-400 pl-4">
+                💡 There are other ways how EDR detect malware, I just named few of them.
+              </blockquote>
+        </section>
+        <!-- ▸ User-Mode vs Kernel-Mode Hooks -->
+        <section id="hook-layers" class="bg-[#142031] rounded-2xl p-8 md:p-7 shadow-lg ring-1 ring-slate-800/60">
+            <h3 class="text-2xl md:text-3xl font-bold text-blue-300 mb-4">User-Mode Hook vs Kernel-Mode Hook</h3>
+            <p class=" text-slate-300 text-lg leading-relaxed">
+                As we dive deeper into how EDR spots malware, it's worth talking about hooks, those clever and sometimes nefarious ways software intercepts and alters system behavior. 
+                Hooks are like wiretaps in the digital world; they're used to eavesdrop on or manipulate code execution. Malware often employs them to hide its tracks, while EDR systems 
+                use similar tactics to detect and disrupt threats. Let's break this down: what are user-mode hooks and kernel-mode hooks, and how do they differ?
+            </p>
+            <br>
+            <div class="space-y-2">
+                <span class="flex items-center gap-3">
+                    <svg class="w-6 h-6 text-sky-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5-4h4m-4 4h4" />
+                    </svg>
+                    <span class="font-semibold text-white">What Is Hooking?</span>
+                </span>
+                <div class="px-6 pb-6 text-slate-300 leading-relaxed">
+                    EDR hooking is the specific practice of intercepting operating system or application execution paths so an Endpoint Detection & Response sensor can record, analyze, or block what 
+                    happens next. In effect, the EDR agent wedges a tiny detour into code that every process relies on, filesystem, registry, network, process-creation, even low-level syscalls, so the 
+                    agent gains a privileged vantage point without rewriting the protected program itself.
+                </div>
+                <br>
+            </div>
+            <div class="relative grid lg:grid-cols-[1fr_auto_1fr] gap-8 items-start">
+                <article class="relative bg-gradient-to-br from-sky-800/20 via-sky-700/10 to-transparent p-[1px] rounded-2xl">
+                    <div class="bg-[#101e33] rounded-2xl p-6 flex flex-col h-full">
+                        <header class="flex items-center gap-3 mb-4">
+                        <svg class="w-8 h-8 text-sky-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h8m-8 6h16" />
+                        </svg>
+                        <h4 class="text-lg font-semibold text-white">User-Mode Hook</h4>
+                        </header>
+                        <p class="text-slate-300 leading-relaxed grow mb-14">
+                            A user-mode hook operates at the application level, in the part of the operating system where user programs run. Think of it as tinkering with the software you're using 
+                            every day like modifying a web browser to log keystrokes or altering a program's function to redirect traffic. This is done in "user space," which is less privileged and 
+                            isolated from the core system operations. For example, a user-mode hook might target a specific API call in an application. Say you're running a word processor, and 
+                            malware hooks into the function that handles file saving. It could then stealthily copy your documents to a remote server without you noticing. This technique is common 
+                            in spyware or data theft tools because it's relatively easy to implement and doesn't require deep system access. EDR detects these by monitoring application behavior and 
+                            looking for unauthorized changes to code or memory.
+                        </p>
+                        <span class="flex items-center gap-3 mb-2">
+                            <svg class="w-6 h-6 text-sky-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                                <circle cx="8" cy="7" r="3" />
+                                <path d="M11 7v6a4 4 0 104 4" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <span class="font-semibold text-white">How User-Hooking Works?</span>
+                        </span>
+                        <p class="text-slate-300 text-sm leading-relaxed pl-8">
+                            <span class="font-semibold text-sky-300">Identify the Target Function:</span>
+                            The process starts by selecting a specific function in a user-mode library or application, such as an API in a Dynamic Link Library (DLL) like <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">user32.dll</code> in 
+                            Windows Ex: the <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">SendMessage</code> function for handling window events. This is done by analyzing the application's code or using tools to find the function's 
+                            address in memory.
+                        </p>
+                        <p class="text-slate-300 text-sm leading-relaxed pl-8">
+                            <span class="font-semibold text-sky-300 ">Gain Access to the Process:</span>
+                            user-mode hooking doesn't require system-level privileges. It can be performed by injecting code into the target process or loading a DLL that contains the 
+                            hooking mechanism. For example, malware might use process injection techniques to run its code within the application's memory space.
+                        </p>
+                        <p class="text-slate-300 text-sm leading-relaxed pl-8">
+                            <span class="font-semibold text-sky-300">Implement the Hook:</span>
+                            The hook is set up by altering the way the function is called. Common methods include:
+                            <ul class="list-disc list-inside text-slate-300 text-sm leading-relaxed ml-4 space-y-1 pl-8">
+                                <li><strong class="text-sky-300">Inline Hooking: </strong> Overwriting the first few instructions of the target function with a jump to custom code. </li>
+                                <li><strong class="text-sky-300">IAT Hooking:</strong> Modifying the table that stores addresses of imported functions, redirecting calls to a hooked version.</li>
+                                <li><strong class="text-sky-300">Detouring:</strong> Creating a detour by changing jump tables or using API wrappers to intercept calls.</li>
+                            </ul>
+                        </p>
+                        <p class="text-slate-300 text-sm leading-relaxed pl-8">
+                            <span class="font-semibold text-sky-300">Execute Custom Code:</span>
+                            When the hooked function is invoked, the custom code runs first. This could involve logging inputs (Ex: keystrokes), modifying outputs, or performing 
+                            additional actions. For instance, spyware might hook a web browser's URL loading function to redirect traffic or capture credentials.
+                        </p>
+                        <footer class="mt-4 text-xs text-slate-400">
+                            • Lives in Ring 3<br>
+                            • Easy to update, low crash risk
+                        </footer>
+                        <br><br>
+                    </div>
+                </article>
+                <div class="relative flex items-center justify-center">
+                <span class="inline-block px-4 py-2 rounded-full bg-gradient-to-r from-sky-600 to-indigo-600 text-white font-bold shadow-lg">VS</span>
+                </div>
+                <article class="relative bg-gradient-to-br from-indigo-800/25 via-indigo-700/15 to-transparent p-[1px] rounded-2xl">
+                    <div class="bg-[#101e33] rounded-2xl p-6 flex flex-col h-full">
+                        <header class="flex items-center gap-3 mb-4">
+                        <svg class="w-8 h-8 text-indigo-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 3v18M3 8h18" />
+                        </svg>
+                        <h4 class="text-lg font-semibold text-white">Kernel-Mode Hook</h4>
+                        </header>
+                        <p class="text-slate-300 leading-relaxed grow mb-9">
+                            Kernel-mode hooks, on the other hand, go straight to the heart of the system. The kernel is the core part of the operating system that manages hardware, memory, and processes, 
+                            it's like the brain of your computer. A kernel-mode hook intercepts system calls or driver functions at this level, giving the attacker full control. Imagine a burglar who 
+                            doesn't just break into your house but rewires the entire security system to ignore alarms. For instance, malware might hook into the Windows kernel to hide files or processes 
+                            from antivirus scans, or to monitor all network activity across the machine. This is often seen in rootkits or advanced persistent threats (APTs), where the goal is to stay 
+                            hidden for as long as possible. Because kernel-mode operations have unrestricted access, these hooks are riskier and can cause system crashes if done poorly. EDR counters them 
+                            with kernel-level monitoring, using techniques like integrity checks or behavioral analysis to spot tampering.
+                        </p>
+                        <span class="flex items-center gap-3 mb-2">
+                            <svg class="w-6 h-6 text-sky-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                                <circle cx="8" cy="7" r="3" />
+                                <path d="M11 7v6a4 4 0 104 4" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <span class="font-semibold text-white">How Kernel-Hooking Works?</span>
+                        </span>
+                        <p class="text-slate-300 text-sm leading-relaxed pl-8">
+                            <span class="font-semibold text-sky-300">Identify the Target Function:</span>
+                            The process begins by selecting a specific kernel function or system call to intercept. These are critical routines in the OS kernel, such as <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">NtCreateFile</code> in 
+                            Windows, used for file creation, or similar functions in Linux kernels. The hooker, whether malware or a security tool, analyzes the system's API to find the 
+                            address of this function, often using debugging tools or reverse engineering.
+                        </p>
+                        <p class="text-slate-300 text-sm leading-relaxed pl-8">
+                            <span class="font-semibold text-sky-300">Gain Kernel Access:</span>
+                            To perform hooking, the code must run in kernel mode, which requires elevated privileges. This is typically achieved by loading a kernel-mode driver 
+                            (Ex: via Windows Driver Model in Windows or kernel modules in Linux). For malicious actors, this might involve exploiting a vulnerability to install the 
+                            driver, while legitimate tools like EDR use signed drivers for authorized access.
+                        </p>
+                        <p class="text-slate-300 text-sm leading-relaxed pl-8">
+                            <span class="font-semibold text-sky-300">Implement the Hook:</span>
+                            The hook is set up by modifying the function's entry point. Common methods include:
+                            <ul class="list-disc list-inside text-slate-300 text-sm leading-relaxed ml-4 space-y-1 pl-8">
+                                <li><strong class="text-sky-300">Inline Hooking:</strong> overwrite the
+                                    prologue with a jump to custom logic.</li>
+                                <li><strong class="text-sky-300">IAT Hooking:</strong> patch the Import Address
+                                    Table so calls resolve to your stub.</li>
+                                <li>This guarantees every invocation passes through the hook before the real routine.</li>
+                            </ul>
+                        </p>
+                        <p class="text-slate-300 text-sm leading-relaxed pl-8">
+                            <span class="font-semibold text-sky-300">Execute Custom Code:</span>
+                            Once hooked, any call to the original function is rerouted to the custom code. Here, the hooker can perform actions like:
+                            <ul class="list-disc list-inside text-slate-300 text-sm leading-relaxed ml-4 space-y-1 pl-8">
+                                <li>Log parameters, return values, stack traces for monitoring.</li>
+                                <li>Modify data, scrub paths, alter buffers, hide processes.</li>
+                                <li>Block or spoof the call entirely when behaviour is malicious.</li>
+                            </ul>
+                        </p>
+                        <footer class="mt-4 text-xs text-slate-400">
+                        • Lives in Ring 0<br>
+                        • Maximum visibility, higher risk
+                        </footer>
+                    </div>
+                </article>
+            </div>
+        </section>
+        <!-- ▸ Beyond Detection: Why EDR Matters More Than Ever -->
+        <section id="edr-value" class="bg-[#142031] rounded-2xl p-8 md:p-7 shadow-lg ring-1 ring-slate-800/60">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-sky-700/10 to-transparent [mask-image:radial-gradient(ellipse_at_center,white,transparent)] pointer-events-none"></div>
+            <h3 class="text-2xl md:text-3xl font-bold text-blue-300 mb-4"> Beyond Detection: Why EDR Matters More Than Ever </h3>
+            <div class="relative z-10 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+                <article class="bg-[#101e33] ring-1 ring-white/10 rounded-2xl p-5 flex flex-col">
+                    <header class="flex items-center gap-3 mb-4">
+                        <svg class="w-8 h-8 text-red-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12l-7.5 9-7.5-9 7.5-9 7.5 9z" />
+                        </svg>
+                        <h4 class="text-lg font-semibold text-white">Brutal Threat Landscape</h4>
+                    </header>
+                    <p class="text-slate-400 leading-relaxed">
+                        Ransomware, advanced persistent threats (APTs), fileless malware, and stealthy attackers demand more than signature-based defenses. 
+                        They exploit gaps EDR is designed to close.
+                    </p>
+                </article>
+                <article class="bg-[#101e33] ring-1 ring-white/10 rounded-2xl p-5 flex flex-col">
+                    <header class="flex items-center gap-3 mb-4">
+                        <svg class="w-8 h-8 text-yellow-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M12 19v2m6.364-1.636l-1.414-1.414M21 12h-2m-1.636-6.364l-1.414 1.414M12 4V2m-6.364 3.636l1.414 1.414M4 12H2m3.636 6.364l1.414-1.414" />
+                        </svg>
+                        <h4 class="text-lg font-semibold text-white">Speed</h4>
+                    </header>
+                    <p class="text-slate-400 leading-relaxed">
+                        The time between breach and detection is critical. EDR drastically reduces dwell time by spotting suspicious behavior quickly and enabling immediate containment, 
+                        minimizing damage.
+                    </p>
+                </article>
+                <article class="bg-[#101e33] ring-1 ring-white/10 rounded-2xl p-5 flex flex-col">
+                    <header class="flex items-center gap-3 mb-4">
+                        <svg class="w-8 h-8 text-teal-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-6a3 3 0 016 0v6m-6 0h6" />
+                            <circle cx="12" cy="5" r="3" />
+                        </svg>
+                        <h4 class="text-lg font-semibold text-white">Incident-Response Efficiency</h4>
+                    </header>
+                    <p class="text-slate-400 leading-relaxed">
+                        EDR provides the forensic data needed to investigate an incident thoroughly and quickly. No more weeks of manual log searching. You know the scope, you can 
+                        prove compliance, and you can remediate effectively.
+                    </p>
+                </article>
+                <article class="bg-[#101e33] ring-1 ring-white/10 rounded-2xl p-5 flex flex-col">
+                    <header class="flex items-center gap-3 mb-4">
+                        <svg class="w-8 h-8 text-purple-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <h4 class="text-lg font-semibold text-white">Proactive Threat Hunting</h4>
+                    </header>
+                    <p class="text-slate-400 leading-relaxed">
+                        Threat hunting capabilities allow you to find and eliminate threats before they cause a breach.
+                    </p>
+                </article>
+                <article class="bg-[#101e33] ring-1 ring-white/10 rounded-2xl p-5 flex flex-col sm:col-span-2 lg:col-span-1">
+                    <header class="flex items-center gap-3 mb-4">
+                        <svg class="w-8 h-8 text-cyan-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                            <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+                            <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+                            <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+                            <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+                        </svg>
+                        <h4 class="text-lg font-semibold text-white">Essential for Modern IT</h4>
+                    </header>
+                    <p class="text-slate-400 leading-relaxed">
+                        With cloud, remote work, and BYOD, endpoints are everywhere and vulnerable. EDR provides centralized visibility and control.
+                    </p>
+                </article>
+                <article class="bg-[#101e33] ring-1 ring-white/10 rounded-2xl p-5 flex flex-col sm:col-span-2 lg:col-span-1">
+                    <header class="flex items-center gap-3 mb-4">
+                    <svg class="w-8 h-8 text-amber-300" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3l2 2m4.24-1l1.06 1.84-1.42 1.42-1.84-1.06A5.5 5.5 0 0112 17.5a5.5 5.5 0 01-4.04-1.7l-1.84 1.06-1.42-1.42 1.06-1.84A5.5 5.5 0 016.5 12a5.5 5.5 0 011.7-4.04L7.14 6.12l1.42-1.42 1.84 1.06A5.5 5.5 0 0112 6.5c1.53 0 2.94.62 3.96 1.64l1.84-1.06 1.42 1.42-1.06 1.84A5.5 5.5 0 0117.5 12" />
+                    </svg>
+                    <h4 class="text-lg font-semibold text-white">Automation & Orchestration</h4>
+                    </header>
+                    <p class="text-slate-400 leading-relaxed">
+                        One-click playbooks kill ransomware, isolate hosts, and open a ServiceNow ticket in under 30 seconds, turning alerts into hands-free containment.
+                    </p>
+                </article>
+                <article class="bg-[#101e33] ring-1 ring-white/10 rounded-2xl p-5 flex flex-col sm:col-span-2 lg:col-span-1">
+                    <header class="flex items-center gap-3 mb-4">
+                    <svg class="w-8 h-8 text-green-300" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 2l7 4v6c0 5-3.5 9-7 10-3.5-1-7-5-7-10V6l7-4z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4" />
+                    </svg>
+                    <h4 class="text-lg font-semibold text-white">Audit & Compliance Proof</h4>
+                    </header>
+                    <p class="text-slate-400 leading-relaxed">
+                        Immutable timelines and chain-of-custody logs satisfy GDPR 72-hour notice, HIPAA breach reporting, and PCI DSS file-integrity mandates.
+                    </p>
+                </article>
+                <article class="bg-[#101e33] ring-1 ring-white/10 rounded-2xl p-5 flex flex-col sm:col-span-2 lg:col-span-1">
+                    <header class="flex items-center gap-3 mb-4">
+                    <svg class="w-8 h-8 text-yellow-300" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <circle cx="12" cy="12" r="9" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 7v5l3 3" />
+                    </svg>
+                    <h4 class="text-lg font-semibold text-white">Mean-Time Metrics</h4>
+                    </header>
+                    <p class="text-slate-400 leading-relaxed">
+                        Mature deployments cut Mean-Time-to-Detect to &lt;1 minute and Mean-Time-to-Respond to &lt;20 minutes (Gartner SOC Survey 2024).
+                    </p>
+                </article>
+                <!-- Insurance & Risk Posture -->
+                <article class="bg-[#101e33] ring-1 ring-white/10 rounded-2xl p-5 flex flex-col sm:col-span-2 lg:col-span-1">
+                    <header class="flex items-center gap-3 mb-4">
+                    <!-- dollar-shield icon -->
+                    <svg class="w-8 h-8 text-teal-300" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 2l7 4v5.5a9 9 0 01-7 8.5 9 9 0 01-7-8.5V6l7-4z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 11h3.5a2 2 0 010 4H11m0 0v2m0-6V9" />
+                    </svg>
+                    <h4 class="text-lg font-semibold text-white">Insurance & Risk Posture</h4>
+                    </header>
+                    <p class="text-slate-400 leading-relaxed">
+                    Cyber-insurance carriers now cut premiums when an organization proves 90-day EDR telemetry and
+                    one-click host isolation—turning security tooling into measurable risk-cost reduction.
+                    </p>
+                </article>
+            </div>
+        </section>
+        <!-- ▸ Antivirus vs EDR -->
+        <section id="av-edr" class="bg-[#142031] rounded-2xl p-8 md:p-7 shadow-lg ring-1 ring-slate-800/60">
+            <h3 class="text-2xl md:text-3xl font-bold text-blue-300 mb-6">Antivirus vs EDR</h3>
+            <div class="grid gap-10 sm:grid-cols-2">
+            <article class="relative overflow-hidden rounded-2xl bg-[#171f38] p-6 ring-1 ring-white/10">
+                <span class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-lime-400 via-lime-500 to-green-500"></span>
+                <header class="flex items-center gap-3 mb-3">
+                    <svg class="w-8 h-8 text-lime-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 2l8 4v6c0 5-3 9-8 10-5-1-8-5-8-10V6l8-4z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4"/>
+                    </svg>
+                    <h4 class="text-lg font-semibold text-white">Antivirus: Signatures & Scanning</h4>
+                </header>
+                <p class="text-slate-400  leading-relaxed">
+                    Stops known malware before it executes by matching file hashes, patterns, and heuristics.
+                </p>
+                <ul class="mt-4 space-y-1 text-slate-400 list-disc list-inside">
+                    <li><strong>Focus:</strong> <span class="text-lime-300">Pre-infection prevention</span></li>
+                    <li><strong>Visibility:</strong> Files at scan time</li>
+                    <li><strong>Response:</strong> Quarantine / delete only</li>
+                    <li><strong>Data retention:</strong> Minimal, seconds–minutes</li>
+                    <li><strong>Strength:</strong> Fast, lightweight, low skill required</li>
+                    <li><strong>Weakness:</strong> Blind to fileless & novel attacks</li>
+                </ul>
+            </article>
+            <!-- EDR card -->
+            <article class="relative overflow-hidden rounded-2xl bg-[#171f38] p-6 ring-1 ring-white/10">
+                <span class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500"></span>
+                <header class="flex items-center gap-3 mb-3">
+                <svg class="w-8 h-8 text-sky-400 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 9h16M9 4v16"/>
+                </svg>
+                <h4 class="text-lg font-semibold text-white">EDR: Post-Breach Visibility</h4>
+                </header>
+                <p class="text-slate-400 leading-relaxed">
+                    Continuously monitors processes, memory, registry, and network traffic, detecting suspicious
+                    behavior in real time.
+                </p>
+                <ul class="mt-4 space-y-1 text-slate-400 list-disc list-inside">
+                    <li><strong>Focus:</strong> <span class="text-sky-300">Detection, investigation, response</span></li>
+                    <li><strong>Visibility:</strong> Full telemetry, months retained</li>
+                    <li><strong>Response:</strong> Kill process, isolate host, roll-back files</li>
+                    <li><strong>Detects:</strong> Fileless, LOLBin, and zero-day behavior</li>
+                    <li><strong>Skill:</strong> Requires SOC analysts to tune & hunt</li>
+                    <li><strong>Integrates:</strong> Feeds SIEM/XDR for cross-layer correlation</li>
+                </ul>
+            </article>
+            </div>
+        </section>
+        <!-- ▸ Complete EDR Telemetry Landscape -->
+        <section id="edr-telemetry" class="bg-[#0c1728] rounded-3xl p-10 md:p-7 shadow-xl ring-1 ring-white/10">
+            <h3 class="text-2xl md:text-3xl font-bold text-blue-300 mb-4"> What an Enterprise-Grade EDR Collects</h3>
+            <div class="grid gap-8 md:grid-cols-2">
+                <div class="bg-[#0f172a] rounded-2xl p-6 ring-1 ring-slate-700/60">
+                    <h4 class="font-semibold text-sky-300 mb-2">1. Process & Execution</h4>
+                    <div class="text-slate-300 text-sm leading-relaxed space-y-1 pl-4">
+                    <div>• Process start/stop, command line, hashes, signer</div>
+                    <div>• DLL loads, thread injections, parent chain</div>
+                    <div>• Script engine launches (PowerShell, WMI, bash)</div>
+                    </div>
+                </div>
+                <div class="bg-[#0f172a] rounded-2xl p-6 ring-1 ring-slate-700/60">
+                    <h4 class="font-semibold text-sky-300 mb-2">2. File-System Activity</h4>
+                    <div class="text-slate-300 text-sm leading-relaxed space-y-1 pl-4">
+                    <div>• File create/read/write/delete, hashes</div>
+                    <div>• MFT/USN changes, ACL updates, ADS writes</div>
+                    <div>• Disk mount / unmount & share usage</div>
+                    </div>
+                </div>
+                <div class="bg-[#0f172a] rounded-2xl p-6 ring-1 ring-slate-700/60">
+                    <h4 class="font-semibold text-sky-300 mb-2">3. Registry & Config</h4>
+                    <div class="text-slate-300 text-sm leading-relaxed space-y-1 pl-4">
+                    <div>• Key/value create, modify, delete</div>
+                    <div>• Autoruns, services, scheduled tasks</div>
+                    <div>• GPO & hive diff snapshots</div>
+                    </div>
+                </div>
+                <div class="bg-[#0f172a] rounded-2xl p-6 ring-1 ring-slate-700/60">
+                    <h4 class="font-semibold text-sky-300 mb-2">4. Network & Connectivity</h4>
+                    <div class="text-slate-300 text-sm leading-relaxed space-y-1 pl-4">
+                    <div>• Socket opens, IP/port, owning PID</div>
+                    <div>• DNS queries, TLS SNI, JA3/JA4</div>
+                    <div>• VPN / proxy / Wi-Fi events</div>
+                    </div>
+                </div>
+                <div class="bg-[#0f172a] rounded-2xl p-6 ring-1 ring-slate-700/60">
+                    <h4 class="font-semibold text-sky-300 mb-2">5. Memory & Injection</h4>
+                    <div class="text-slate-300 text-sm leading-relaxed space-y-1 pl-4">
+                    <div>• RWX allocations, protection changes</div>
+                    <div>• <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">NtWriteVirtualMemory</code>, shellcode entropy</div>
+                    <div>• YARA in-memory scans & dumps</div>
+                    </div>
+                </div>
+                <div class="bg-[#0f172a] rounded-2xl p-6 ring-1 ring-slate-700/60">
+                    <h4 class="font-semibold text-sky-300 mb-2">6. User & Identity</h4>
+                    <div class="text-slate-300 text-sm leading-relaxed space-y-1 pl-4">
+                    <div>• Logon / logoff, RDP, SSH, sudo</div>
+                    <div>• Token privilege changes</div>
+                    <div>• LSASS handle accesses</div>
+                    </div>
+                </div>
+                <div class="bg-[#0f172a] rounded-2xl p-6 ring-1 ring-slate-700/60">
+                    <h4 class="font-semibold text-sky-300 mb-2">7. Script & Macro Engines</h4>
+                    <div class="text-slate-300 text-sm leading-relaxed space-y-1 pl-4">
+                    <div>• AMSI / ETW capture for PowerShell</div>
+                    <div>• Office VBA, WSH (JS/VB) telemetry</div>
+                    <div>• Python / Ruby interpreter runs</div>
+                    </div>
+                </div>
+                <div class="bg-[#0f172a] rounded-2xl p-6 ring-1 ring-slate-700/60">
+                    <h4 class="font-semibold text-sky-300 mb-2">8. OS Security Surface</h4>
+                    <div class="text-slate-300 text-sm leading-relaxed space-y-1 pl-4">
+                    <div>• Driver load/unload, image hashes</div>
+                    <div>• Kernel callbacks, ETW provider starts</div>
+                    <div>• Audit-policy or log-tamper events</div>
+                    </div>
+                </div>
+                <div class="bg-[#0f172a] rounded-2xl p-6 ring-1 ring-slate-700/60">
+                    <h4 class="font-semibold text-sky-300 mb-2">9. Hardware & Peripheral</h4>
+                    <div class="text-slate-300 text-sm leading-relaxed space-y-1 pl-4">
+                    <div>• USB insert/remove, VID/PID</div>
+                    <div>• Webcam / mic toggles</div>
+                    <div>• Clipboard & RDP shadow events</div>
+                    </div>
+                </div>
+                <div class="bg-[#0f172a] rounded-2xl p-6 ring-1 ring-slate-700/60">
+                    <h4 class="font-semibold text-sky-300 mb-2">10. App-Specific Hooks</h4>
+                    <div class="text-slate-300 text-sm leading-relaxed space-y-1 pl-4 ">
+                    <div>• Browser extension installs</div>
+                    <div>• Email rule creation, MAPI send</div>
+                    <div>• DB client connection strings</div>
+                    </div>
+                </div>
+                <div class="bg-[#0f172a] rounded-2xl p-6 ring-1 ring-slate-700/60">
+                    <h4 class="font-semibold text-sky-300 mb-2">11. Sensor Health</h4>
+                    <div class="text-slate-300 text-sm leading-relaxed space-y-1 pl-4">
+                    <div>• Agent & driver versions</div>
+                    <div>• Tamper status, backlog size</div>
+                    <div>• CPU / RAM spikes, dropped events</div>
+                    </div>
+                </div>
+                <div class="bg-[#0f172a] rounded-2xl p-6 ring-1 ring-slate-700/60">
+                    <h4 class="font-semibold text-sky-300 mb-2">12. Cloud & Container</h4>
+                    <div class="text-slate-300 text-sm leading-relaxed space-y-1 pl-4">
+                    <div>• Container start/stop & image hash</div>
+                    <div>• Cloud IMDS & IAM anomaly</div>
+                    <div>• eBPF audit for Linux hosts</div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <blockquote class="text-slate-400">
+                💡 <strong>Tip for evaluations:</strong> If an EDR vendor can’t surface at least the first five categories, and retain them for 30-90 days, keep shopping.
+              </blockquote>
+        </section>
+        <!-- ▸ Antivirus vs EDR — enhanced comparison table -->
+        <section id="av-edr-matrix" class="bg-[#0c1728] rounded-3xl p-10 md:p-7 shadow-xl ring-1 ring-white/10">
+            <h3 class="text-2xl md:text-3xl font-bold text-blue-300 mb-4"> Why Enterprises Choose EDR Over Traditional AV </h3>
+            <style>
+                /* zebra row + hover highlight */
+                .cmp-row:nth-child(even){background:#0f1e32aa}
+                .cmp-row:hover{background:#1b2c46aa}
+                /* subtle left ribbon for EDR column */
+                .edr-cell{position:relative;padding-left:1.25rem}
+                .edr-cell::before{
+                content:'';position:absolute;left:0;top:0;height:100%;width:.25rem;
+                background:linear-gradient(to bottom,#0ea5e9,#6366f1);border-radius:.25rem 0 0 .25rem;
+                opacity:.6
+                }
+                /* AV & EDR icons */
+                .ico{display:inline-flex;align-items:center;gap:.25rem}
+                .ico svg{width:.85rem;height:.85rem}
+                .ico-av svg{color:#f87171}
+                .ico-edr svg{color:#4ade80}
+            </style>
+            <div class="overflow-x-auto">
+                <table class="min-w-[640px] w-full text-sm text-left text-slate-300 border-collapse">
+                    <thead>
+                        <tr class="bg-gradient-to-r from-[#16426e] to-[#1d2e57] text-slate-100 text-xs uppercase">
+                        <th class="py-3 px-4 font-semibold w-48">Need</th>
+                        <th class="py-3 px-4 font-semibold w-56">Antivirus</th>
+                        <th class="py-3 px-4 font-semibold w-56">EDR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="cmp-row border-b border-slate-700/40">
+                        <td class="py-3 px-4">Central device management</td>
+                        <td class="py-3 px-4 edr-cell">
+                            <span class="ico ico-av">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6"/>
+                            </svg>
+                            Basic status panel
+                            </span>
+                        </td>
+                        <td class="py-3 px-4 edr-cell">
+                            <span class="ico ico-edr">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Full inventory & push-policy
+                            </span>
+                        </td>
+                        </tr>
+                        <tr class="cmp-row border-b border-slate-700/40">
+                        <td class="py-3 px-4">Application control</td>
+                        <td class="py-3 px-4 edr-cell">
+                            <span class="ico ico-av">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6"/>
+                            </svg>
+                            Static allow/deny lists
+                            </span>
+                        </td>
+                        <td class="py-3 px-4 edr-cell">
+                            <span class="ico ico-edr">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Adaptive allow-listing & macro throttling
+                            </span>
+                        </td>
+                        </tr>
+                        <tr class="cmp-row border-b border-slate-700/40">
+                        <td class="py-3 px-4">Device control (USB/Bluetooth)</td>
+                        <td class="py-3 px-4 edr-cell">
+                            <span class="ico ico-av">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6"/>
+                            </svg>
+                            Add-on agent
+                            </span>
+                        </td>
+                        <td class="py-3 px-4 edr-cell">
+                            <span class="ico ico-edr">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Native context-aware policies
+                            </span>
+                        </td>
+                        </tr>
+                        <tr class="cmp-row border-b border-slate-700/40">
+                        <td class="py-3 px-4">Update cadence</td>
+                        <td class="py-3 px-4 edr-cell">
+                            <span class="ico ico-av">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6"/>
+                            </svg>
+                            Daily sig downloads
+                            </span>
+                        </td>
+                        <td class="py-3 px-4 edr-cell">
+                            <span class="ico ico-edr">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Cloud rules every few minutes
+                            </span>
+                        </td>
+                        </tr>
+                        <tr class="cmp-row border-b border-slate-700/40">
+                        <td class="py-3 px-4">Threat visibility</td>
+                        <td class="py-3 px-4 edr-cell">
+                            <span class="ico ico-av">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6"/>
+                            </svg>
+                            Scans files at execution
+                            </span>
+                        </td>
+                        <td class="py-3 px-4 edr-cell">
+                            <span class="ico ico-edr">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Live telemetry: process, memory, network
+                            </span>
+                        </td>
+                        </tr>
+                        <tr class="cmp-row border-b border-slate-700/40">
+                        <td class="py-3 px-4">Response actions</td>
+                        <td class="py-3 px-4 edr-cell">
+                            <span class="ico ico-av">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6"/>
+                            </svg>
+                            Manual cleanup scripts / quarantine / delete file
+                            </span>
+                        </td> 
+                        <td class="py-3 px-4 edr-cell">
+                            <span class="ico ico-edr">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            One-click workflows: Kill process, isolate host, roll-back
+                            </span>
+                        </td>
+                        </tr>
+                        <tr class="cmp-row border-b border-slate-700/40">
+                        <td class="py-3 px-4">Compliance evidence</td>
+                        <td class="py-3 px-4 edr-cell">
+                            <span class="ico ico-av">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6"/>
+                            </svg>
+                            Malware log export
+                            </span>
+                        </td>
+                        <td class="py-3 px-4 edr-cell">
+                            <span class="ico ico-edr">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Forensic timeline compliant with GDPR/HIPAA
+                            </span>
+                        </td>
+                        </tr>
+                        <tr class="cmp-row">
+                        <td class="py-3 px-4">Reporting & analytics</td>
+                        <td class="py-3 px-4 edr-cell">
+                            <span class="ico ico-av">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6"/>
+                            </svg>
+                            Infection counts
+                            </span>
+                        </td>
+                        <td class="py-3 px-4 edr-cell">
+                            <span class="ico ico-edr">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            MITRE heat-maps & exec PDFs
+                            </span>
+                        </td>
+                        </tr>
+                        <tr class="cmp-row border-b border-slate-700/40">
+                            <td class="py-3 px-4">Proactive Threat Hunting</td>
+                            <td class="py-3 px-4 edr-cell">
+                                <span class="ico ico-av">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6"/>
+                                </svg>
+                                Relies on reactive scanning, no built-in hunting tools
+                                </span>
+                            </td>
+                            <td class="py-3 px-4 edr-cell">
+                                <span class="ico ico-edr">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                Supports active threat hunting with historical data queries and AI, allowing analysts to find and neutralize threats before they escalate                            </span>
+                            </td>
+                        </tr>
+                        <tr class="cmp-row">
+                            <td class="py-3 px-4">Integration and Ecosystem</td>
+                            <td class="py-3 px-4 edr-cell">
+                                <span class="ico ico-av">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6"/>
+                                </svg>
+                                Limited to standalone or basic integrations, often siloed
+                                </span>
+                            </td>
+                            <td class="py-3 px-4 edr-cell">
+                                <span class="ico ico-edr">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                Seamless integration with SIEM, XDR, and other tools for a unified security posture, enabling cross-domain threat correlation
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="mt-10 text-center text-slate-400 text-sm max-w-2xl mx-auto">
+                <span class="text-sky-300 font-semibold">Bottom line:</span>
+                Antivirus blocks yesterday’s threats; EDR sees, stops, and investigates today’s. At enterprise scale,
+                that visibility is table stakes.
+            </p>
+        </section>
+        <!-- ▸ Key Things to Remember (Human Perspective) — sticky-note collage -->
+        <section id="edr-human" class="bg-[#142031] rounded-2xl p-8 md:p-7 shadow-lg ring-1 ring-slate-800/60">
+            <h3 class="text-3xl font-extrabold text-amber-300 mb-14 text-center tracking-tight"> Key Things to Remember </h3>
+            <div class="flex flex-wrap justify-center sm:gap-40 gap-10">
+                <style>
+                    .note { width: 15rem; max-width: 90vw; }
+                    .pin::before {
+                    content:'📌';
+                    position:absolute; top:-0.8rem; left:50%; transform:translateX(-50%) rotate(2deg);
+                    }
+                </style>
+                <article class="note relative pin bg-yellow-200/90 text-gray-900 rounded-lg p-6 shadow-lg transform rotate-2">
+                    <h4 class="font-semibold mb-2">Not Set-and-Forget</h4>
+                    <p class="text-sm leading-relaxed">
+                        It requires skilled security analysts to interpret alerts, investigate incidents, and fine-tune the system. Too many false positives? Tune the rules. Missing something? 
+                        Adjust the detection logic. It's a tool, wielded by humans.
+                    </p>
+                </article>
+                <!-- 2: Deployment matters -->
+                <article class="note relative pin bg-teal-200/90 text-gray-900 rounded-lg p-6 shadow-lg transform -rotate-3">
+                    <h4 class="font-semibold mb-2">Deployment Matters</h4>
+                    <p class="text-sm leading-relaxed">
+                        Every endpoint needs an agent. A single unprotected laptop is a foothold. Coverage gaps = vulnerabilities.
+                    </p>
+                </article>
+                <!-- 3: Future integration -->
+                <article class="note relative pin bg-pink-200/90 text-gray-900 rounded-lg p-6 shadow-lg transform -rotate-2">
+                    <h4 class="font-semibold mb-2">Future Integration</h4>
+                    <p class="text-sm leading-relaxed">
+                        EDR is merging with NDR and SIEM into XDR, stitching signals together for
+                        environment-wide visibility.
+                    </p>
+                </article>
+            </div>
+        </section>
+        <!-- ▸ Limitations & Common Evasion Tactics -->
+        <section id="edr-evasion" class="bg-[#142031] rounded-2xl p-8 md:p-7 shadow-lg ring-1 ring-slate-800/60">
+            <h3 class="text-2xl md:text-3xl font-bold text-blue-300 mb-4"> Limitations & Common Evasion Tactics </h3>
+            <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                <figure class="relative rounded-2xl overflow-hidden bg-[#192630] p-6 ring-1 ring-white/10">
+                    <span class="absolute inset-0 bg-gradient-to-br from-sky-600/20 via-sky-500/10 to-transparent"></span>
+                    <figcaption class="relative flex flex-col gap-3">
+                        <header class="flex items-center gap-3">
+                            <svg class="w-7 h-7 text-sky-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3M12 3a9 9 0 100 18 9 9 0 000-18z"/>
+                            </svg>
+                            <h4 class="text-lg font-semibold text-white">Delayed Execution</h4>
+                        </header>
+                        <p class="text-slate-400 leading-relaxed">
+                            Malware sleeps for minutes or days to outrun sandbox and behavioral time-outs, emerging
+                            only when monitoring is lax.
+                        </p>
+                    </figcaption>
+                </figure>
+                <figure class="relative rounded-2xl overflow-hidden bg-[#192630] p-6 ring-1 ring-white/10">
+                    <span class="absolute inset-0 bg-gradient-to-br from-sky-600/20 via-sky-500/10 to-transparent"></span>
+                    <figcaption class="relative flex flex-col gap-3">
+                        <header class="flex items-center gap-3">
+                            <svg class="w-7 h-7 text-sky-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+                            </svg>
+                            <h4 class="text-lg font-semibold text-white">In-Memory Only</h4>
+                        </header>
+                        <p class="text-slate-400 leading-relaxed">
+                            Payloads execute from reflective DLLs or shellcode blobs—never touching disk, leaving
+                            minimal artifacts for EDR to hash.
+                        </p>
+                    </figcaption>
+                </figure>
+                <figure class="relative rounded-2xl overflow-hidden bg-[#192630] p-6 ring-1 ring-white/10">
+                    <span class="absolute inset-0 bg-gradient-to-br from-sky-600/20 via-sky-500/10 to-transparent"></span>
+                    <figcaption class="relative flex flex-col gap-3">
+                        <header class="flex items-center gap-3">
+                            <svg class="w-7 h-7 text-sky-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v8m0 4h.01M4.93 4.93l2.12 2.12m9.9-2.12l-2.12 2.12M4 12H2m20 0h-2m-1.07 5.07l-2.12-2.12m-9.9 2.12l2.12-2.12"/>
+                            </svg>
+                            <h4 class="text-lg font-semibold text-white">Encrypted C2 Traffic</h4>
+                        </header>
+                        <p class="text-slate-400 leading-relaxed">
+                            TLS, domain fronting, or covert channels hide command traffic, starving EDR’s
+                            packet-inspection of clear-text IOCs.
+                        </p>
+                    </figcaption>
+                </figure>
+                <figure class="relative rounded-2xl overflow-hidden bg-[#192630] p-6 ring-1 ring-white/10">
+                    <span class="absolute inset-0 bg-gradient-to-br from-sky-600/20 via-sky-500/10 to-transparent"></span>
+                    <figcaption class="relative flex flex-col gap-3">
+                        <header class="flex items-center gap-3">
+                            <svg class="w-7 h-7 text-sky-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3l18 18M12 5v14M5 12h14"/>
+                            </svg>
+                            <h4 class="text-lg font-semibold text-white">Living-off-the-Land</h4>
+                            </header>
+                        <p class="text-slate-400 leading-relaxed">
+                            Chains native tools (<code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">mshta</code>, <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">wmic</code>, <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">rundll32</code>) so logs
+                            resemble routine admin work.
+                        </p>
+                    </figcaption>
+                </figure>
+                <figure class="relative rounded-2xl overflow-hidden bg-[#192630] p-6 ring-1 ring-white/10">
+                    <span class="absolute inset-0 bg-gradient-to-br from-sky-600/20 via-sky-500/10 to-transparent"></span>
+                    <figcaption class="relative flex flex-col gap-3">
+                        <header class="flex items-center gap-3">
+                            <svg class="w-7 h-7 text-sky-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 6l3 6H9l3-6zm-3 6l3 6 3-6H9z"/>
+                            </svg>
+                            <h4 class="text-lg font-semibold text-white">Direct Syscalls & Unhooking</h4>
+                        </header>
+                        <p class="text-slate-400 leading-relaxed">
+                            Bypasses user-mode hooks, erasing the breadcrumbs EDR relies on for API tracking and
+                            stack-walking.
+                        </p>
+                    </figcaption>
+                </figure>
+                <figure class="relative rounded-2xl overflow-hidden bg-[#192630] p-6 ring-1 ring-white/10">
+                    <span class="absolute inset-0 bg-gradient-to-br from-sky-600/20 via-sky-500/10 to-transparent"></span>
+                    <figcaption class="relative flex flex-col gap-3">
+                        <header class="flex items-center gap-3">
+                            <svg class="w-7 h-7 text-sky-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                            <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+                            <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+                            <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+                            <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+                            </svg>
+                            <h4 class="text-lg font-semibold text-white">Micro-VM Evasion</h4>
+                        </header>
+                        <p class="text-slate-400 leading-relaxed">
+                            Malware runs inside hardware-assisted micro-VMs,
+                            confining suspicious behavior to a realm EDR can’t observe.
+                        </p>
+                    </figcaption>
+                </figure>
+            </div>
+            <br>
+            <blockquote class="text-slate-400 pl-6">
+                <strong>EDR</strong> isn't foolproof, attackers are always innovating to slip past defenses
+              </blockquote>
+        </section>
+    </main>
+    <!-- Footer -->
+    <footer class="flex flex-col items-center justify-center gap-4 py-6 bg-[#0f172a] text-gray-200">
+        <p class="text-center">Crafted with passion<br>2025 Iron Hulk — No rights reserved.</p>
+        <a href="../index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">← Back to Dashboard</a>
+    </footer>
+    <!-- Reading-time logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const dateWritten = '4/Jul/2025';
+            const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
+            const minutes = Math.max(1, Math.ceil(words / 230));
+            document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
+        });
+    </script>
+</body>
+</html>
