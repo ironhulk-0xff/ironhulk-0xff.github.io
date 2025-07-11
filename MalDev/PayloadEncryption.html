@@ -590,7 +590,8 @@
       <div>
         <p class="leading-relaxed text-gray-300 "> 
           ⚠️ Hard-coding a symmetric key in a binary is always recoverable by an analyst, he can dump the process or disassemble it, find a way to protect it. However, 
-          no protection is foolproof; advanced analyst can use memory forensics or debuggers to extract keys.
+          no protection is foolproof; advanced analyst can use memory forensics or debuggers to extract keys. The same goes for encrypted payloads, runtime scanners inspect 
+          what’s actually running, and at that point the code must be in clear text, making it fair game for extraction.
         </p>
       </div>
     </section>
