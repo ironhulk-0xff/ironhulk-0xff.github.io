@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Blogs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Alpine.js for accordion behavior -->
+  <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white min-h-screen p-6">
+  <h1 class="text-4xl font-extrabold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-indigo-400">Blogs</h1>
+
+  <!-- Accordion Container -->
+  <div x-data="{ open: null }" class="space-y-6">
+
+    <!-- General Info -->
+    <div class="group bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+      <h2 @click="open = (open === 0 ? null : 0)" class="flex items-center justify-between p-5 cursor-pointer">
+        <div class="flex items-center space-x-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-pink-400 transition-transform duration-300" :class="open === 0 ? 'rotate-12' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <div>
+            <h3 class="text-2xl font-semibold">General Info</h3>
+            <p class="text-gray-400 text-sm">Basics of core security concepts</p>
+          </div>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 transition-transform duration-200" :class="open === 0 ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </h2>
+      <ul x-show="open === 0" x-collapse class="px-8 pb-5 space-y-2 bg-gradient-to-t from-gray-700 to-gray-800">
+        <li><a href="GeneralInfo/FW.html" class="flex items-center hover:text-pink-400 transition"><span class="mr-2">🔒</span>What is Firewall</a></li>
+        <li><a href="GeneralInfo/AD.html" class="flex items-center hover:text-pink-400 transition"><span class="mr-2">🗂️</span>Active Directory</a></li>
+        <li><a href="GeneralInfo/EDR.html" class="flex items-center hover:text-pink-400 transition"><span class="mr-2">🛡️</span>What is EDR</a></li>
+      </ul>
+    </div>
+
+    <!-- Malware Development -->
+    <div class="group bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+      <h2 @click="open = (open === 1 ? null : 1)" class="flex items-center justify-between p-5 cursor-pointer">
+        <div class="flex items-center space-x-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-400 transition-transform duration-300" :class="open === 1 ? 'rotate-12' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2-1.343-2-3-2zM4 15v.01M12 15v.01M20 15v.01M12 17c4.418 0 8 .895 8 2v.5H4V19c0-1.105 3.582-2 8-2z" />
+          </svg>
+          <div>
+            <h3 class="text-2xl font-semibold">Malware Development</h3>
+            <p class="text-gray-400 text-sm">Tools & techniques for crafting payloads</p>
+          </div>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 transition-transform duration-200" :class="open === 1 ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </h2>
+      <ul x-show="open === 1" x-collapse class="px-8 pb-5 space-y-2 bg-gradient-to-t from-gray-700 to-gray-800">
+        <li><a href="MalDev/RoadMap.html" class="flex items-center hover:text-indigo-400 transition"><span class="mr-2">🗺️</span>Road Map</a></li>
+        <li><a href="MalDev/Detection.html" class="flex items-center hover:text-indigo-400 transition"><span class="mr-2">🔍</span>Detection Mechanisms</a></li>
+        <li><a href="MalDev/Payload_Placement.html" class="flex items-center hover:text-indigo-400 transition"><span class="mr-2">📦</span>Payload Placement</a></li>
+        <li><a href="MalDev/PayloadEncryption.html" class="flex items-center hover:text-indigo-400 transition"><span class="mr-2">🔒</span>Payload Encryption</a></li>
+        <li><a href="MalDev/PayloadObfuscation.html" class="flex items-center hover:text-indigo-400 transition"><span class="mr-2">🌀</span>Payload Obfuscation</a></li>
+        <li><a href="MalDev/ProcessEnumeration.html" class="flex items-center hover:text-indigo-400 transition"><span class="mr-2">📋</span>Process Enumeration</a></li>
+        <li><a href="MalDev/CallbackAbuse.html" class="flex items-center hover:text-indigo-400 transition"><span class="mr-2">☎️</span>Callback Abuse</a></li>
+        <li><a href="MalDev/Syscalls.html" class="flex items-center hover:text-indigo-400 transition"><span class="mr-2">🔧</span>System Calls</a></li>
+      </ul>
+    </div>
+
+    <!-- Management -->
+    <div class="group bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+      <h2 @click="open = (open === 2 ? null : 2)" class="flex items-center justify-between p-5 cursor-pointer">
+        <div class="flex items-center space-x-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-400 transition-transform duration-300" :class="open === 2 ? 'rotate-12' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M19 3v4m-2-2h4M5 21v-4M3 17h4m12 4v-4m-2 2h4M12 8v8m-3-3h6" />
+          </svg>
+          <div>
+            <h3 class="text-2xl font-semibold">Management</h3>
+            <p class="text-gray-400 text-sm">Best practices for security governance</p>
+          </div>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 transition-transform duration-200" :class="open === 2 ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </h2>
+      <ul x-show="open === 2" x-collapse class="px-8 pb-5 space-y-2 bg-gradient-to-t from-gray-700 to-gray-800">
+        <li><a href="Mgm/BeyondCIA.html" class="flex items-center hover:text-green-400 transition"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.105.672-2 2-2s2 .895 2 2-.672 2-2 2-2-.895-2-2z M4 17v-2a4 4 0 014-4h8a4 4 0 014 4v2"/></svg>Security Principles</a></li>
+      </ul>
+    </div>
+  </div>
+  <footer class="relative flex items-center justify-center text-[15px] text-slate-300 py-6">
+    <div class="text-center">
+      Crafted with Passion<br>
+      2025 Iron Hulk — Some Rights Reserved.
+      <br><br>
+      <a href="index.html" class="text-slate-300 text-sm px-4 py-2 rounded transition">← Back to Dashboard</a>
+    </div>
+  </footer>
+</body>
+</html>
