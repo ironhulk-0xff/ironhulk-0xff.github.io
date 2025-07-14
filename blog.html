@@ -9,10 +9,8 @@
 </head>
 <body class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white min-h-screen p-6">
   <h1 class="text-4xl font-extrabold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-indigo-400">Blogs</h1>
-
   <!-- Accordion Container -->
-  <div x-data="{ open: null }" class="space-y-6 mx-auto">
-
+  <div x-data="{ open: null }" class="space-y-6 mx-auto-md w-full ">
     <!-- General Info -->
     <div class="group bg-gray-800 rounded-xl shadow-lg overflow-hidden">
       <h2 @click="open = (open === 0 ? null : 0)" class="flex items-center justify-between p-5 cursor-pointer">
@@ -35,7 +33,6 @@
         <li><a href="GeneralInfo/EDR.html" class="flex items-center hover:text-pink-400 transition"><span class="mr-2">🛡️</span>What is EDR</a></li>
       </ul>
     </div>
-
     <!-- Malware Development -->
     <div class="group bg-gray-800 rounded-xl shadow-lg overflow-hidden">
       <h2 @click="open = (open === 1 ? null : 1)" class="flex items-center justify-between p-5 cursor-pointer">
@@ -63,7 +60,6 @@
         <li><a href="MalDev/Syscalls.html" class="flex items-center hover:text-indigo-400 transition"><span class="mr-2">🔧</span>System Calls</a></li>
       </ul>
     </div>
-
     <!-- Management -->
     <div class="group bg-gray-800 rounded-xl shadow-lg overflow-hidden">
       <h2 @click="open = (open === 2 ? null : 2)" class="flex items-center justify-between p-5 cursor-pointer">
