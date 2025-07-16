@@ -7,8 +7,9 @@
   <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </head>
 <body class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white min-h-screen p-6">
+<main id="article" class="p-6 space-y-6">
   <h1 class="text-4xl font-extrabold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-indigo-400">Blogs</h1>
-  <div x-data="{ open: null }" class="space-y-6 mx-auto w-full ">
+  <div x-data="{ open: null }" class="space-y-6 mx-auto w-full">
     <div class="group bg-gray-800 rounded-xl shadow-lg overflow-hidden">
       <h2 @click="open = (open === 0 ? null : 0)" class="flex items-center justify-between p-5 cursor-pointer">
         <div class="flex items-center space-x-3">
@@ -85,5 +86,6 @@
       <a href="index.html" class="text-slate-300 text-sm px-4 py-2 rounded transition">← Back to Dashboard</a>
     </div>
   </footer>
+</main>
 </body>
 </html>
