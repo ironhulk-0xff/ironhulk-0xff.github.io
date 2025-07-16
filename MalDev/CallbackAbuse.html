@@ -13,7 +13,7 @@
       <h1 class="text-xl font-bold text-blue-400">Callback Abuse</h1>
       <small id="reading-time" class="text-xs text-gray-400"></small>
     </div>
-    <a href="../index.html" class="text-gray-200  hover:underline">← Back to Dashboard</a>
+    <a href="../blog.html" class="text-gray-200  hover:underline">← Back to Blogs</a>
   </header>
   <!-- Article -->
 <main id="article" class="p-6 space-y-6 sm:text-justify ">
@@ -86,7 +86,7 @@
                   <li><strong>Unusual timer patterns:</strong> Rapid, high-frequency timers or timers set far in the future and never reset can trigger heuristic rules.</li>
                   <li><strong>ETW/Telemetry anomalies:</strong> Defenders monitor the ThreadPoolTimer ETW provider; if callback addresses jump around or point into non-standard regions, that’s a red flag.</li>
                 </ol>
-              <p><br>
+                <br>
               <p><span class="text-gray-500">Thank you, MalDev Academy, for imparting this knowledge.</span> </p>
             </div>
           </details>
@@ -124,7 +124,6 @@
                   <li><strong>Suspicious call-stack sequences:</strong> EDRs can detect <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">user32!EnumWindows</code> → your callback → VirtualProtect+CreateThread” patterns. Correlating GUI enumeration with memory-allocation APIs spikes the alert priority.</li>
                   <li><strong>Combined behaviors:</strong> <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">EnumWindows</code> used alongside process enumeration (CreateToolhelp32Snapshot), module dumping (DbgHelp), or registry reads in the same timeframe often forms a kill chain that gets flagged.</li>
                 </ol>
-              <p>
               <br>
               <blockquote class="border-l-4 border-blue-400 pl-4 italic">
                 Bottom line: a single, infrequent <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">EnumWindows</code> in a signed DLL isn’t enough to trip modern EDR. However, if your callback lives in RX heap, fires in a tight loop 
@@ -157,8 +156,7 @@
                   <li>Call <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">QueueUserAPC(MyApcFunc, hThread, param)</code>.</li>
                   <li>Force or wait for an alertable wait in that thread, and when that thread calls <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">SleepEx(..., TRUE)</code> or <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">WaitForSingleObjectEx(..., TRUE)</code>, the OS suspends its wait and invokes <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">MyApcFunc(myParameter);</code></li>
                 </ol>
-              <p>
-              <span class="font-bold text-cyan-500">What defenders can spot:</span> APC injections logged by EDR or a big jump in queued APCs.</p>
+              <p><span class="font-bold text-cyan-500">What defenders can spot:</span> APC injections logged by EDR or a big jump in queued APCs.</p>
               <br>
               <p><span class="font-bold text-cyan-500">Calling <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">QueueUserAPC</code> or the underlying syscall <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">NtQueueApcThread</code>, isn’t malicious and won’t trip AV/EDR signatures—but defenders do watch for the broader “APC injection” pattern. They flag when:</span> </p>
               <ol class="list-[disck] list-outside pl-8 text-gray-200 text-[15px] leading-relaxed sm:text-justify">
@@ -167,7 +165,6 @@
                 <li><strong>The target thread never enters a legit alertable wait:</strong> Continuously poking APCs without real <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">SleepEx/WaitFor…Ex</code> usage rings alarms.</li>
                 <li><strong>Suspicious call-stack sequences:</strong> <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">VirtualAlloc</code> + <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">WriteProcessMemory</code> then immediate APC queueing is a high-confidence indicator of shellcode injection.</li>
               </ol>
-              <p>
             </div>
           </details>
           <details class="group rounded-xl bg-gray-800/60 ring-1 ring-gray-700/60 overflow-hidden">
@@ -192,8 +189,7 @@
                   <li>Call <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_MINIMIZEEND, NULL, MyWinEventProc, 0, 0, WINEVENT_OUTOFCONTEXT)</code>.</li>
                   <li>In <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">MyWinEventProc</code>, perform your payload action or inject further code.</li>
                 </ol>
-              <p>
-              <span class="font-bold text-cyan-500">What defenders can spot:</span> Extra window-event hooks and unfamiliar DLLs kept loaded.</p>
+              <p><span class="font-bold text-cyan-500">What defenders can spot:</span> Extra window-event hooks and unfamiliar DLLs kept loaded.</p>
               <br>
               <p><span class="font-bold text-cyan-500">Why EDR/AV don’t flag the API itself:</span> </p>
               <ol class="list-[disck] list-outside pl-8 text-gray-200 text-[15px] leading-relaxed sm:text-justify">
@@ -201,7 +197,7 @@
                 <li><strong>No overt injection:</strong> Simply registering a hook doesn’t require injecting code into other processes or creating remote threads, everything operates in your own process’s context unless you deliberately request out-of-context hooks.</li>
                 <li><strong>High false-positive risk:</strong> Blocking or alerting on every SetWinEventHook call would break countless legitimate applications, so EDR/AV focus on how it’s used hook flags, callback address regions, accompanying suspicious behaviors, rather than on the function name alone.</li>
               </ol>
-              <p>
+
                 <blockquote class="border-l-4 border-blue-400 pl-4 italic">
                   Bottom line: This console application installs a <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">WinEvent</code> hook to catch when the foreground window changes, runs a lightweight message loop so the hook can fire, 
                   pops up a MessageBox once on the first focus shift, then automatically unhooks and exits.
@@ -231,8 +227,7 @@
                   <li>Call <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">RegisterWaitForSingleObject(&waitHandle, hObject, MyCallback, param, INFINITE, WT_EXECUTEDEFAULT)</code>.</li>
                   <li>In <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">MyCallback</code>, move to next stage or drop a payload.</li>
                 </ol>
-              <p>
-              <span class="font-bold text-cyan-500">What defenders can spot:</span> New wait objects listed by <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">NtQueryObject</code> or ETW <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">ThreadPoolWait</code> events.</p>
+              <p><span class="font-bold text-cyan-500">What defenders can spot:</span> New wait objects listed by <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">NtQueryObject</code> or ETW <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">ThreadPoolWait</code> events.</p>
               <br>
               <p><span class="font-bold text-cyan-500">EDR/AV will flag it if:</span> </p>
               <ol class="list-[disck] list-outside pl-8 text-gray-200 text-[15px] leading-relaxed sm:text-justify">
@@ -241,7 +236,7 @@
                 <li><strong>High-volume or out-of-context waits:</strong> Spawning hundreds of wait registrations on handles you created (instead of reusing a single wait or timer) can hit rate-based heuristics.</li>
                 <li><strong>ETW telemetry:</strong> The Microsoft-Windows-ThreadPool/Operational provider logs ThreadPoolWait events; unusual callback addresses or too many concurrent waits stand out.</li>
               </ol>
-              <p>
+
             </div>
           </details>
           <details class="group rounded-xl bg-gray-800/60 ring-1 ring-gray-700/60 overflow-hidden">
@@ -793,10 +788,20 @@
       }
     </script>     
   </section>
-  <footer class="flex flex-col items-center justify-center gap-4 py-6 bg-[#0f172a] text-gray-200">
-    <p class="text-center">Crafted with passion<br>2025 Iron Hulk — No rights reserved.</p>
-    <a href="../index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">← Back to Dashboard</a>
-</footer>
+  <!-- Footer -->
+  <footer class="relative flex items-center justify-center text-[15px] text-slate-300 py-6">
+    <div class="text-center">
+      Crafted with Passion<br>
+      2025 Iron Hulk — No Rights Reserved.
+      <br>
+      <a href="../blog.html" class="text-slate-300 text-sm px-4 py-2 rounded transition">← Back to Blogs</a>
+    </div>
+    <a href="#top" class="absolute right-6 top-1/2 transform -translate-y-1/2 text-slate-500 hover:text-slate-700">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M3.707 10.707a1 1 0 01-1.414-1.414l7-7a1 1 0 011.414 0l7 7a1 1 0 11-1.414 1.414L11 4.414V19a1 1 0 11-2 0V4.414L3.707 10.707z" clip-rule="evenodd" />
+      </svg>
+    </a>
+  </footer>
 </main>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
