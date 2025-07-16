@@ -7,15 +7,13 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-[#0f172a] text-white font-sans min-h-screen">
-  <!-- Header -->
   <header class="bg-[#1e293b] p-4 shadow flex items-center justify-between gap-4">
     <div>
       <h1 class=" text-[17px] font-bold text-blue-400">Detection Mechanisms</h1>
       <small id="reading-time" class="text-xs text-gray-400"></small>
     </div>
-    <a href="../index.html" class="text-gray-300 text-sm hover:underline">← Back to Dashboard</a>
+    <a href="../blog.html" class="text-gray-300 text-sm hover:underline">← Back to Blogs</a>
   </header>
-  <!-- Article -->
   <main id="article" class="p-6 space-y-6">
     <section class="bg-[#1f2937] p-6 rounded-xl shadow-md">
         <section class="relative group rounded-2xl border border-sky-400/50 bg-gradient-to-br from-[#0f172a] via-[#0b1120] to-[#0a0f1a] p-8 shadow-2xl ring-1 ring-sky-400/20 transition duration-500 hover:shadow-sky-500/20 hover:-translate-y-1">
@@ -26,7 +24,6 @@
                 <div class=" w-full overflow-hidden rounded-xl shadow-lg border border-sky-700/40 ring-1 ring-sky-700/10">
                 <img src="../MalDev/images/avedr.png" alt="AV and EDR Concept" class="w-full h-auto object-cover hover:scale-105 duration-500">
             </div>
-                <!-- Text Content -->
                 <div class=" w-full space-y-6 text-[15px] text-gray-300 leading-relaxed sm:text-justify">
                 <p>
                     When you install an antivirus or an endpoint detection and response (EDR) on your machine, you probably don’t give much thought to what’s happening behind the 
@@ -258,38 +255,32 @@
                 might miss. Signature-based detection is fast and reliable for known threats. Heuristics add flexibility by identifying code that “looks” suspicious. Behavioral 
                 monitoring tracks what programs do in real time, while anomaly detection provides adaptive insight based on past activity. Sandboxing isolates execution for safe 
                 analysis, revealing behaviors that can’t be seen through static inspection. No single method is perfect, but together they create a much more resilient security posture.
-            </p>            </p>
-          
+            </p>
             <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              <!-- Detection Method Card -->
               <div class="rounded-xl border border-cyan-500/30 p-5 bg-gradient-to-br from-[#0f1e23] via-[#0b161a] to-[#081216] shadow-md hover:shadow-cyan-400/10 transition duration-300">
                 <h3 class="text-cyan-300 text-lg font-bold mb-2">Signature-Based</h3>
                 <p class="text-gray-400 text-sm mb-1"><span class="font-semibold text-teal-300">Strength:</span> Fast, low false positives</p>
                 <p class="text-gray-400 text-sm mb-1"><span class="font-semibold text-red-300">Weakness:</span> <br>- Misses unknown or obfuscated malware<br>- Ineffective against new or obfuscated malware</p>
                 <p class="text-gray-300 text-sm italic">Use: Detecting known malware variants</p>
               </div>
-          
               <div class="rounded-xl border border-cyan-500/30 p-5 bg-gradient-to-br from-[#0f1e23] via-[#0b161a] to-[#081216] shadow-md hover:shadow-cyan-400/10 transition duration-300">
                 <h3 class="text-cyan-300 text-lg font-bold mb-2">Heuristic-Based</h3>
                 <p class="text-gray-400 text-sm mb-1"><span class="font-semibold text-teal-300">Strength:</span> Catches slightly altered threats</p>
                 <p class="text-gray-400 text-sm mb-1"><span class="font-semibold text-red-300">Weakness:</span> <br>- False positives if too aggressive<br>- Can cause false positives if overly broad</p>
                 <p class="text-gray-300 text-sm italic">Use: Detecting polymorphic or packed malware</p>
               </div>
-          
               <div class="rounded-xl border border-cyan-500/30 p-5 bg-gradient-to-br from-[#0f1e23] via-[#0b161a] to-[#081216] shadow-md hover:shadow-cyan-400/10 transition duration-300">
                 <h3 class="text-cyan-300 text-lg font-bold mb-2">Behavioral Monitoring</h3>
                 <p class="text-gray-400 text-sm mb-1"><span class="font-semibold text-teal-300">Strength:</span> Real-time execution insights</p>
                 <p class="text-gray-400 text-sm mb-1"><span class="font-semibold text-red-300">Weakness:</span> <br>- May detect too late<br>- Resource intensive</p>
                 <p class="text-gray-300 text-sm italic">Use: Stopping ransomware or process injection</p>
               </div>
-          
               <div class="rounded-xl border border-cyan-500/30 p-5 bg-gradient-to-br from-[#0f1e23] via-[#0b161a] to-[#081216] shadow-md hover:shadow-cyan-400/10 transition duration-300">
                 <h3 class="text-cyan-300 text-lg font-bold mb-2">Anomaly Detection</h3>
                 <p class="text-gray-400 text-sm mb-1"><span class="font-semibold text-teal-300">Strength:</span> Adaptive to new threats</p>
                 <p class="text-gray-400 text-sm mb-1"><span class="font-semibold text-red-300">Weakness:</span> <br>- Hard to explain results<br>- Training time needed</p>
                 <p class="text-gray-300 text-sm italic">Use: Detecting insider threats, rare behaviors</p>
               </div>
-          
               <div class="rounded-xl border border-cyan-500/30 p-5 bg-gradient-to-br from-[#0f1e23] via-[#0b161a] to-[#081216] shadow-md hover:shadow-cyan-400/10 transition duration-300">
                 <h3 class="text-cyan-300 text-lg font-bold mb-2">Sandboxing</h3>
                 <p class="text-gray-400 text-sm mb-1"><span class="font-semibold text-teal-300">Strength:</span> Observes real behavior in safe space</p>
@@ -299,10 +290,20 @@
             </div>
           </section>
     </section>
-    <footer class="flex flex-col items-center justify-center gap-4 py-6 bg-[#0f172a] text-gray-200">
-        <p class="text-center">Crafted with passion<br>2025 Iron Hulk — No rights reserved.</p>
-        <a href="../index.html" class="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition">← Back to Dashboard</a>
-    </footer>
+  <!-- Footer -->
+  <footer class="relative flex items-center justify-center text-[15px] text-slate-300 py-6">
+    <div class="text-center">
+      Crafted with Passion<br>
+      2025 Iron Hulk — No Rights Reserved.
+      <br>
+      <a href="../blog.html" class="text-slate-300 text-sm px-4 py-2 rounded transition">← Back to Blogs</a>
+    </div>
+    <a href="#top" class="absolute right-6 top-1/2 transform -translate-y-1/2 text-slate-500 hover:text-slate-700">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M3.707 10.707a1 1 0 01-1.414-1.414l7-7a1 1 0 011.414 0l7 7a1 1 0 11-1.414 1.414L11 4.414V19a1 1 0 11-2 0V4.414L3.707 10.707z" clip-rule="evenodd" />
+      </svg>
+    </a>
+  </footer>
   </main>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
