@@ -1,46 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Iron Hulk</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-[#0f172a] text-white font-sans min-h-screen">
-  <!-- Header -->
-  <header class="bg-[#1e293b] p-4 shadow flex items-center justify-between gap-4">
-    <div>
-      <h1 class="text-xl font-bold text-blue-400">My Projects</h1>
-      <small id="reading-time" class="text-xs text-gray-400"></small>
-    </div>
-    <a href="index.html" class="text-gray-300 text-sm hover:underline">← Back to Dashboard</a>
-  </header>
-
-  <!-- Article -->
-  <main id="article" class="p-6 space-y-6">
-    <section class="bg-[#1f2937] p-6 rounded-xl shadow-md">
-      <p><strong>Comming Soon...</strong></p>
-    </section>
-  </main>
-  <!-- Footer -->
-  <footer class="relative flex items-center justify-center text-[15px] text-slate-300 py-6">
-    <div class="text-center">
-      Crafted with Passion<br>
-      2025 Iron Hulk — No Rights Reserved.
-      <br>
-      <a href="index.html" class="text-slate-300 text-sm px-4 py-2 rounded transition">← Back to Dashboard</a>
-    </div>
-  </footer>
-
-  <!-- Reading-time logic -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const dateWritten = '1/Jan/2025';
-      const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
-      const minutes = Math.max(1, Math.ceil(words / 230));
-      document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
-    });
-  </script>
-
-</body>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iron Hulk - Projects</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  </head>  
+  <body class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white min-h-screen p-6">
+    <main id="article" class="p-6 space-y-6">
+      <h1 class="flex items-center justify-center text-4xl font-extrabold mb-8">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7a2 2 0 012-2h5l2 2h7a2 2 0 012 2v7a2 2 0 01-2 2H5a2 2 0 01-2-2V7z" />
+        </svg>
+        <span class="bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-green-500 to-green-600">
+           Projects
+        </span>
+      </h1>
+      <div x-data="{ open: null }" class="space-y-4 md:w-full">
+        <!-- Bypass Win defender -->
+        <div class="bg-gray-800 rounded-xl">
+          <h2 @click="open = (open === 0 ? null : 0)" class="flex items-center justify-between p-5 cursor-pointer">
+            <div class="flex items-center space-x-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yellow-400 transition-transform duration-300" :class="open === 0 ? 'rotate-12' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+              <div>
+                <h3 class="text-2xl font-semibold text-yellow-300">Bypass Win defender</h3>
+                <p class="text-gray-400 text-sm">Simple antivirus evasion techniques</p>
+              </div>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 transition-transform duration-200" :class="open === 0 ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </h2>
+          <ul x-show="open === 0" x-collapse class="px-8 pb-5 space-y-2 bg-gradient-to-t from-gray-700 to-gray-800">
+            <li>Coming Soon</li>
+          </ul>
+        </div>
+        <!-- Bypass Antivirus -->
+        <div class="bg-gray-800 rounded-xl">
+          <h2 @click="open = (open === 1 ? null : 1)" class="flex items-center justify-between p-5 cursor-pointer">
+            <div class="flex items-center space-x-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-400 transition-transform duration-300" :class="open === 1 ? 'rotate-12' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M5 12l7-7 7 7-7 7-7-7z"/>
+              </svg>
+              <div>
+                <h3 class="text-2xl font-semibold text-red-300">Bypass Antivirus</h3>
+                <p class="text-gray-400 text-sm">Techniques against traditional AV</p>
+              </div>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 transition-transform duration-200" :class="open === 1 ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </h2>
+          <ul x-show="open === 1" x-collapse class="px-8 pb-5 space-y-2 bg-gradient-to-t from-gray-700 to-gray-800">
+            <li>Coming Soon</li>
+          </ul>
+        </div>
+        <!-- Bypass Modern EDR -->
+        <div class="bg-gray-800 rounded-xl">
+          <h2 @click="open = (open === 2 ? null : 2)" class="flex items-center justify-between p-5 cursor-pointer">
+            <div class="flex items-center space-x-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-400 transition-transform duration-300" :class="open === 2 ? 'rotate-12' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 11a9 9 0 0118 0M12 2v4m0 12v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M2 12h4m12 0h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+              </svg>
+              <div>
+                <h3 class="text-2xl font-semibold text-indigo-300">Bypass Modern EDR</h3>
+                <p class="text-gray-400 text-sm">Evading next-gen endpoint defenses</p>
+              </div>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 transition-transform duration-200" :class="open === 2 ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </h2>
+          <ul x-show="open === 2" x-collapse class="px-8 pb-5 space-y-2 bg-gradient-to-t from-gray-700 to-gray-800">
+            <li>Coming Soon</li>
+          </ul>
+        </div>
+      </div>
+      <footer class="relative flex items-center justify-center text-[15px] text-slate-300 py-6">
+        <div class="text-center">
+          Crafted with Passion<br>
+          2025 Iron Hulk — All Rights Reserved.
+          <br>
+          <a href="index.html" class="text-slate-300 text-sm px-4 py-2 rounded transition">← Back to Dashboard</a>
+        </div>
+      </footer>
+    </main>
+  </body>
 </html>
