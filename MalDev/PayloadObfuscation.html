@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Iron Hulk – Payload Obfuscation </title>
+  <title>Iron Hulk – Payload/IP Obfuscation </title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-[#0f172a] text-white font-sans min-h-screen">
 <header class="bg-[#1e293b] p-4 shadow flex items-center justify-between">
   <div>
-    <h1 class="text-xl font-bold text-blue-400">Payload Obfuscation </h1>
+    <h1 class="text-xl font-bold text-blue-400">Payload/IP Obfuscation </h1>
     <small id="reading-time" class="text-xs text-gray-400 sm:text-justify"></small>
   </div>
   <a href="../blog.html" class="text-gray-300  hover:underline">← Back to Blogs</a>
@@ -20,9 +20,9 @@
     <div class="relative z-10 flex flex-col  px-10 py-10 sm:gap-10 md:flex-row md:items-center">
       <div class="w-full md:w-2/3">
         <h2 class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400">
-          What Is Payload Obfuscation? </h2>
+          What Is Payload/IP Obfuscation? </h2>
         <p class="mt-6 text-base md:text-lg leading-relaxed text-gray-300 sm:text-justify">
-          Payload obfuscation is the deliberate transformation of malicious code so that it no longer resembles its original, recognisable form while still executing 
+          Payload/IP Obfuscation is the deliberate transformation of malicious code so that it no longer resembles its original, recognisable form while still executing 
           exactly the same behaviour at run time. Instead of shipping a plainly readable sequence of opcodes, strings, and API calls, the attacker applies layers such 
           as encryption or encoding, control-flow flattening, dead-code insertion, dynamic unpacking, steganography, or even full-scale virtualization. The result looks 
           incoherent to static scanners, reverse engineers, and signature engines, yet the moment the payload reaches its target environment it self-decodes (or is externally
@@ -32,7 +32,7 @@
         </p>
       </div>
       <div class="w-full md:w-1/3">
-        <img src="../MalDev/images/PayObs.png" alt="payload obfuscation" class="mx-auto rounded-2xl shadow-lg ring-1 ring-cyan-400/20 max-h-64 md:max-h-72 object-contain" />
+        <img src="../MalDev/images/PayObs.png" class="mx-auto rounded-2xl shadow-lg ring-1 ring-cyan-400/20 max-h-64 md:max-h-72 object-contain" />
       </div>
     </div>
   </section>
