@@ -15,7 +15,6 @@
         </div>
         <a href="../blog.html" class="text-gray-300 text-sm hover:underline">← Back to Blogs</a>
     </header>
-    <!-- Article -->
     <main id="article" class="p-6 space-y-6 sm:text-justify">
         <section class="relative overflow-hidden rounded-2xl shadow-lg gradient-banner ring-1 ring-slate-700">
             <div class="p-10 md:p-10 text-center backdrop-blur-sm">
@@ -28,7 +27,6 @@
                 <defs><lineargradient id="grad" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#0891b2"/><stop offset="100%" stop-color="#7c3aed"/> </lineargradient></defs><rect width="800" height="600" fill="url(#grad)"/>
             </svg>
         </section>
-        <!-- Introduction -->
         <section id="intro" class="bg-[#142031] rounded-2xl p-8 md:p-7 shadow-lg ring-1 ring-slate-800/60">
             <div class="relative space-y-8 md:space-y-0 md:grid md:grid-cols-2 md:gap-10">
                 <div class="space-y-4 md:pr-6">
@@ -42,7 +40,6 @@
                         have massive consequences. In short, EDR isn't just about prevention, it's about detection, response, and learning from attacks to strengthen your defenses over time.
                     </p>
                 </div>
-                <!-- ▸ Compact “stat-pills” strip -->
                 <div class="flex flex-wrap justify-center gap-6">
                     <style>
                     .stat-pill{
@@ -118,7 +115,6 @@
                 })();
             </script>
         </section>
-        <!-- ▸ What Does EDR Actually Do? -->
         <section id="edr-functions" class="bg-[#142031] rounded-2xl p-8 md:p-7 shadow-lg ring-1 ring-slate-800/60">
             <h3 class="text-2xl md:text-3xl font-bold text-blue-300 mb-4"> What Does EDR Actually Do?</h3>
             <p class=" text-slate-300 text-lg leading-relaxed">
@@ -245,19 +241,14 @@
                 </article>
             </div>
         </section>
-        <!-- ▸ EDR Component Pipeline -->
         <section id="edr-components" class="bg-[#142031] rounded-2xl p-8 md:p-7 shadow-lg ring-1 ring-slate-800/60">
-            <!-- headline -->
             <h3 class="text-2xl md:text-3xl font-bold text-blue-300 mb-4">EDR Works as a Pipeline, each Component Plays a Role </h3>
-
-            <!-- brief explainer -->
             <p class=" text-slate-300 text-lg leading-relaxed">
                 An Endpoint Detection & Response platform isn’t a single agent, it’s a loop. A sensor collects raw events, analytics convert noise into high-fidelity alerts, and 
                 automated playbooks act before damage spreads. Remove one stage and the protection chain breaks. I'll take kaspersky EDR Optimum as an example and few of it's components.
             </p>
             <br>
             <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            <!-- Endpoint Agent -->
             <article class="bg-[#101e33] ring-1 ring-white/10 rounded-2xl p-6 flex flex-col">
                 <header class="flex items-center gap-3 mb-3">
                 <svg class="w-8 h-8 text-teal-300" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -273,7 +264,6 @@
                     the central console, enabling early threat detection and helping to spot anomalies without impacting device performance. However, it can kill or isolate locally within seconds.
                 </p>
             </article>
-            <!-- Central Console -->
             <article class="bg-[#101e33] ring-1 ring-white/10 rounded-2xl p-6 flex flex-col">
                 <header class="flex items-center gap-3 mb-3">
                 <svg class="w-8 h-8 text-sky-300" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -290,7 +280,6 @@
                     responses, and ensure consistent security across the network.
                 </p>
             </article>
-            <!-- Detection Engines -->
             <article class="bg-[#101e33] ring-1 ring-white/10 rounded-2xl p-6 flex flex-col">
                 <header class="flex items-center gap-3 mb-3">
                 <svg class="w-8 h-8 text-amber-300" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -304,7 +293,6 @@
                     These are the core analytical tools that process collected data. Indicators of Compromise (IoC) scans for known threats like malicious IPs or file hashes, based on the feeds, while Indicators of Attack
                     (IoA) focuses on behavioral patterns, such as unusual process activities. They're used to identify evasive threats quickly, often with MITRE ATT&CK mapping for better context, helping security teams investigate and prioritize incidents.                </p>
             </article>
-            <!-- Response & Automation -->
             <article class="bg-[#101e33] ring-1 ring-white/10 rounded-2xl p-6 flex flex-col">
                 <header class="flex items-center gap-3 mb-3">
                 <svg class="w-8 h-8 text-rose-300" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -321,7 +309,6 @@
                     minimize response times, reduce manual effort, and contain threats before they spread, making it ideal for businesses with limited in-house expertise.
                 </p>
             </article>
-            <!-- Threat Intelligence -->
             <article class="bg-[#101e33] ring-1 ring-white/10 rounded-2xl p-6 flex flex-col">
                 <header class="flex items-center gap-3 mb-3">
                 <svg class="w-8 h-8 text-indigo-300" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -343,7 +330,6 @@
                 Every vendor assembles these capabilities in its own set of components, so the exact architecture can vary from product to product.
             </blockquote>
         </section>
-        <!-- ▸ How Does EDR Detect Malware? -->
         <section id="edr-detection" class="bg-[#142031] rounded-2xl p-8 md:p-7 shadow-lg ring-1 ring-slate-800/60">
             <h3 class="text-2xl md:text-3xl font-bold text-blue-300 mb-4"> How Does EDR Detect Malware? </h3>
             <p class=" text-slate-300 text-lg leading-relaxed">
@@ -352,7 +338,6 @@
             </p>
             <br>
             <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-                <!-- Behavioral analytics -->
                 <article class="relative overflow-hidden rounded-2xl bg-[#11152b] p-6 ring-1 ring-white/10">
                     <span class="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-purple-500 to-indigo-500"></span>
                     <header class="flex items-center gap-3">
@@ -367,7 +352,6 @@
                         someone act suspiciously in a crowd, even if you've never seen them before, their actions give them away.
                     </p>
                 </article>
-                <!-- ML anomaly scoring -->
                 <article class="relative overflow-hidden rounded-2xl bg-[#11152b] p-6 ring-1 ring-white/10">
                     <span class="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-teal-400 to-emerald-500"></span>
                     <header class="flex items-center gap-3">
@@ -381,7 +365,6 @@
                         from this baseline as potential threats. AI helps correlate events and identify subtle, complex attack patterns that humans might miss.
                     </p>
                 </article>
-                <!-- Threat-intel correlation -->
                 <article class="relative overflow-hidden rounded-2xl bg-[#11152b] p-6 ring-1 ring-white/10">
                     <span class="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-rose-500 to-pink-500"></span>
                     <header class="flex items-center gap-3">
@@ -395,7 +378,6 @@
                         detect compromises faster. For example, if a device communicates with a command-and-control server listed in a threat feed, it's a red flag.
                     </p>
                 </article>
-                <!-- Fileless Malware  -->
                 <article class="relative overflow-hidden rounded-2xl bg-[#11152b] p-6 ring-1 ring-white/10">
                     <span class="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-amber-400 to-orange-500"></span>
                     <header class="flex items-center gap-3">
@@ -411,7 +393,6 @@
                         reboot wipes the evidence.
                     </p>
                 </article>
-                <!-- Heuristic Analysis -->
                 <article class="relative overflow-hidden rounded-2xl bg-[#11152b] p-6 ring-1 ring-white/10">
                     <span class="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-violet-400 to-indigo-500"></span>
                     <header class="flex items-center gap-3">
@@ -425,7 +406,6 @@
                         Using rules and algorithms to identify suspicious characteristics or patterns in code or behavior that are commonly associated with malware, even if it's a new variant.
                     </p>
                 </article>
-                <!-- Kernel- & Memory-Level Instrumentation -->
                 <article class="relative overflow-hidden rounded-2xl bg-[#11152b] p-6 ring-1 ring-white/10">
                     <span class="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-cyan-400 to-blue-500"></span>
                     <header class="flex items-center gap-3">
@@ -443,10 +423,9 @@
             </div>
             <br>
             <blockquote class="text-slate-400 pl-4">
-                💡 There are other ways how EDR detect malware, I just named few of them.
+                💡 There are other ways how EDR detect malware, click <a href="https://www.edr-telemetry.com/" class="text-gray-300 text-sm hover:underline">Here</a> to explore more about EDR telemetry.
               </blockquote>
         </section>
-        <!-- ▸ User-Mode vs Kernel-Mode Hooks -->
         <section id="hook-layers" class="bg-[#142031] rounded-2xl p-8 md:p-7 shadow-lg ring-1 ring-slate-800/60">
             <h3 class="text-2xl md:text-3xl font-bold text-blue-300 mb-4">User-Mode Hook vs Kernel-Mode Hook</h3>
             <p class=" text-slate-300 text-lg leading-relaxed">
@@ -592,7 +571,6 @@
                 </article>
             </div>
         </section>
-        <!-- ▸ Beyond Detection: Why EDR Matters More Than Ever -->
         <section id="edr-value" class="bg-[#142031] rounded-2xl p-8 md:p-7 shadow-lg ring-1 ring-slate-800/60">
             <div class="absolute inset-0 bg-gradient-to-b from-transparent via-sky-700/10 to-transparent [mask-image:radial-gradient(ellipse_at_center,white,transparent)] pointer-events-none"></div>
             <h3 class="text-2xl md:text-3xl font-bold text-blue-300 mb-4"> Beyond Detection: Why EDR Matters More Than Ever </h3>
@@ -697,10 +675,8 @@
                         Mature deployments cut Mean-Time-to-Detect to &lt;1 minute and Mean-Time-to-Respond to &lt;20 minutes (Gartner SOC Survey 2024).
                     </p>
                 </article>
-                <!-- Insurance & Risk Posture -->
                 <article class="bg-[#101e33] ring-1 ring-white/10 rounded-2xl p-5 flex flex-col sm:col-span-2 lg:col-span-1">
                     <header class="flex items-center gap-3 mb-4">
-                    <!-- dollar-shield icon -->
                     <svg class="w-8 h-8 text-teal-300" xmlns="http://www.w3.org/2000/svg" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -717,7 +693,6 @@
                 </article>
             </div>
         </section>
-        <!-- ▸ Antivirus vs EDR -->
         <section id="av-edr" class="bg-[#142031] rounded-2xl p-8 md:p-7 shadow-lg ring-1 ring-slate-800/60">
             <h3 class="text-2xl md:text-3xl font-bold text-blue-300 mb-6">Antivirus vs EDR</h3>
             <div class="grid gap-10 sm:grid-cols-2">
@@ -742,7 +717,6 @@
                     <li><strong>Weakness:</strong> Blind to fileless & novel attacks</li>
                 </ul>
             </article>
-            <!-- EDR card -->
             <article class="relative overflow-hidden rounded-2xl bg-[#171f38] p-6 ring-1 ring-white/10">
                 <span class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500"></span>
                 <header class="flex items-center gap-3 mb-3">
@@ -767,7 +741,6 @@
             </article>
             </div>
         </section>
-        <!-- ▸ Complete EDR Telemetry Landscape -->
         <section id="edr-telemetry" class="bg-[#0c1728] rounded-3xl p-10 md:p-7 shadow-xl ring-1 ring-white/10">
             <h3 class="text-2xl md:text-3xl font-bold text-blue-300 mb-4"> What an Enterprise-Grade EDR Collects</h3>
             <div class="grid gap-8 md:grid-cols-2">
@@ -873,7 +846,6 @@
                 💡 <strong>Tip for evaluations:</strong> If an EDR vendor can’t surface at least the first five categories, and retain them for 30-90 days, keep shopping.
               </blockquote>
         </section>
-        <!-- ▸ Antivirus vs EDR — enhanced comparison table -->
         <section id="av-edr-matrix" class="bg-[#0c1728] rounded-3xl p-10 md:p-7 shadow-xl ring-1 ring-white/10">
             <h3 class="text-2xl md:text-3xl font-bold text-blue-300 mb-4"> Why Enterprises Choose EDR Over Traditional AV </h3>
             <style>
@@ -1101,7 +1073,6 @@
                 that visibility is table stakes.
             </p>
         </section>
-        <!-- ▸ Key Things to Remember (Human Perspective) — sticky-note collage -->
         <section id="edr-human" class="bg-[#142031] rounded-2xl p-8 md:p-7 shadow-lg ring-1 ring-slate-800/60">
             <h3 class="text-3xl font-extrabold text-amber-300 mb-14 text-center tracking-tight"> Key Things to Remember </h3>
             <div class="flex flex-wrap justify-center sm:gap-40 gap-10">
@@ -1119,14 +1090,12 @@
                         Adjust the detection logic. It's a tool, wielded by humans.
                     </p>
                 </article>
-                <!-- 2: Deployment matters -->
                 <article class="note relative pin bg-teal-200/90 text-gray-900 rounded-lg p-6 shadow-lg transform -rotate-3">
                     <h4 class="font-semibold mb-2">Deployment Matters</h4>
                     <p class="text-sm leading-relaxed">
                         Every endpoint needs an agent. A single unprotected laptop is a foothold. Coverage gaps = vulnerabilities.
                     </p>
                 </article>
-                <!-- 3: Future integration -->
                 <article class="note relative pin bg-pink-200/90 text-gray-900 rounded-lg p-6 shadow-lg transform -rotate-2">
                     <h4 class="font-semibold mb-2">Future Integration</h4>
                     <p class="text-sm leading-relaxed">
@@ -1136,7 +1105,6 @@
                 </article>
             </div>
         </section>
-        <!-- ▸ Limitations & Common Evasion Tactics -->
         <section id="edr-evasion" class="bg-[#142031] rounded-2xl p-8 md:p-7 shadow-lg ring-1 ring-slate-800/60">
             <h3 class="text-2xl md:text-3xl font-bold text-blue-300 mb-4"> Limitations & Common Evasion Tactics </h3>
             <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
