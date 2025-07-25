@@ -183,16 +183,16 @@
                 </p>
                 <pre class="mt-8 overflow-x-auto bg-gray-900 p-4 rounded-lg shadow-inner">
                     <code class="language-cpp text-green-300">
-                        #include &lt;windows.h&gt;
-                        #include &lt;iostream&gt;
-                        int main() 
-                        {
-                            std::cout &lt;&lt; "Using Direct WinAPI call to MessageBox...\n";
-                            // Directly call the MessageBox function from user32.dll
-                            MessageBox(NULL, L"Hello from Direct WinAPI!", L"Direct Call", MB_OK);
-                            std::cout &lt;&lt; "MessageBox closed. Program finished.\n";
-                            return 0;
-                        }
+#include &lt;windows.h&gt;
+#include &lt;iostream&gt;
+int main() 
+{
+    std::cout &lt;&lt; "Using Direct WinAPI call to MessageBox...\n";
+    // Directly call the MessageBox function from user32.dll
+    MessageBox(NULL, L"Hello from Direct WinAPI!", L"Direct Call", MB_OK);
+    std::cout &lt;&lt; "MessageBox closed. Program finished.\n";
+    return 0;
+}
                     </code>
                 </pre>
             </div>
@@ -216,32 +216,32 @@
                     </p>
                     <pre class="overflow-x-auto bg-gray-900 p-4 rounded-lg shadow-inner">
                         <code class="language-cpp text-green-300">
-                            #include &lt;windows.h&gt;
-                            #include &lt;iostream&gt;
-                            typedef int (WINAPI* MessageBoxW_t)(HWND, LPCWSTR, LPCWSTR, UINT);
-                            int main() 
-                            {
-                                // Load the user32.dll library at runtime
-                                HMODULE hUser32 = LoadLibrary(L"user32.dll");
-                                if (!hUser32) 
-                                {
-                                    std::cerr &lt;&lt; "Failed to load user32.dll\n";
-                                    return 1;
-                                }
-                                // Get the address of the MessageBoxW function
-                                MessageBoxW_t pMessageBoxW = (MessageBoxW_t)GetProcAddress(hUser32, "MessageBoxW");
-                                if (!pMessageBoxW) 
-                                {
-                                    std::cerr &lt;&lt; "Failed to find MessageBoxW function\n";
-                                    FreeLibrary(hUser32);
-                                    return 1;
-                                }
-                                // Call MessageBoxW indirectly through the function pointer
-                                pMessageBoxW(NULL, L"Hello from Indirect WinAPI!", L"Indirect Call", MB_OK);
-                                // Free the loaded library
-                                FreeLibrary(hUser32);
-                                return 0;
-                            }
+#include &lt;windows.h&gt;
+#include &lt;iostream&gt;
+typedef int (WINAPI* MessageBoxW_t)(HWND, LPCWSTR, LPCWSTR, UINT);
+int main() 
+{
+    // Load the user32.dll library at runtime
+    HMODULE hUser32 = LoadLibrary(L"user32.dll");
+    if (!hUser32) 
+    {
+        std::cerr &lt;&lt; "Failed to load user32.dll\n";
+        return 1;
+    }
+    // Get the address of the MessageBoxW function
+    MessageBoxW_t pMessageBoxW = (MessageBoxW_t)GetProcAddress(hUser32, "MessageBoxW");
+    if (!pMessageBoxW) 
+    {
+        std::cerr &lt;&lt; "Failed to find MessageBoxW function\n";
+        FreeLibrary(hUser32);
+        return 1;
+    }
+    // Call MessageBoxW indirectly through the function pointer
+    pMessageBoxW(NULL, L"Hello from Indirect WinAPI!", L"Indirect Call", MB_OK);
+    // Free the loaded library
+    FreeLibrary(hUser32);
+    return 0;
+}
                         </code>
                     </pre>
                 </div>
@@ -250,8 +250,8 @@
     </section>
     <footer class="relative flex items-center justify-center text-[15px] text-slate-300 py-6">
     <div class="text-center">
-        Crafted with passion<br>
-        2025 Iron Hulk — No rights reserved.
+        Crafted with Passion<br>
+        2025 Iron Hulk — No Rights Reserved.
         <br>
         <a href="../index.html" class="text-slate-300 text-sm px-4 py-2 rounded transition">← Back to Dashboard</a>
     </div>
