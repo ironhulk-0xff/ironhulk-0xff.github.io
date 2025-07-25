@@ -21,15 +21,15 @@
     <div class="pointer-events-none absolute inset-0 bg-[url('https://www.toptal.com/designers/subtlepatterns/uploads/dots.png')] opacity-20 mix-blend-soft-light"></div>
       <h2 class="relative  text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400 text-center mb-8 drop-shadow-md">
         Process Enumeration: Recon Before the Raid</h2>
-    <p class="relative prose prose-invert text-gray-200 max-w-7xl mx-auto mb-12 sm:text-justify">
-      Imagine you’re a detective walking into a busy office building. So your first move is to scope out who’s working there, like their names, roles, and what they’re doing.
-      Process enumeration is the digital version of that, it’s the technique of listing every active process (programs, apps, services) running on a computer, along
-      with details. Process enumeration is a versatile technique used by attackers, pentesters, administrators, and security systems alike to gather critical system information 
-      on local machines and networked environments. Performed before, during, and after attacks or as part of routine maintenance, it serves purposes ranging from exploitation and 
-      evasion to monitoring and troubleshooting. Understanding its role and recognizing unusual activity is essential for both leveraging it responsibly and defending against its 
-      misuse
-    </p>
-    <div class="relative  grid gap-10 md:grid-cols-3">
+      <p class="relative prose prose-invert text-gray-200 max-w-7xl mx-auto mb-12 sm:text-justify">
+        Imagine you’re a detective walking into a busy office building. So your first move is to scope out who’s working there, like their names, roles, and what they’re doing.
+        Process enumeration is the digital version of that, it’s the technique of listing every active process (programs, apps, services) running on a computer, along
+        with details. Process enumeration is a versatile technique used by attackers, pentesters, administrators, and security systems alike to gather critical system information 
+        on local machines and networked environments. Performed before, during, and after attacks or as part of routine maintenance, it serves purposes ranging from exploitation and 
+        evasion to monitoring and troubleshooting. Understanding its role and recognizing unusual activity is essential for both leveraging it responsibly and defending against its 
+        misuse
+      </p>
+      <div class="relative  grid gap-10 md:grid-cols-3">
       <!-- Column 1: Data points -->
       <div class="group rounded-xl bg-gray-900/60 p-6 border border-cyan-400/20 shadow-xl hover:border-cyan-300/40 hover:shadow-cyan-500/30 transition duration-300">
         <h3 class="text-xl font-semibold text-cyan-300 mb-3 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a4 4 0 10-4-4 4 4 0 004 4V7m3 0v10"/></svg> Intel We Collect</h3>
@@ -177,19 +177,17 @@
       Enumerate early, adapt mid-attack, maintain footholds after the fact.
     </p>
   </section>
-  <div class="relative  grid gap-8 max-w-8xl mx-auto">
-    <div class="group rounded-2xl bg-gray-900/60 p-6 ring-1 ring-cyan-400/15 shadow-lg backdrop-blur-sm hover:ring-cyan-300/30 hover:shadow-cyan-500/30 transition">
-      <div class="flex items-center gap-3 mb-3">
-        <svg class="h-6 w-6 text-cyan-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5 1a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        <h3 class="text-lg font-semibold text-cyan-300">The Bottom Line</h3>
-      </div>
-      <p class="text-[15px] text-gray-300 p-6 leading-relaxed sm:text-justify">
-        Process enumeration is the Swiss Army knife in a hacker’s toolkit and it is used before, during, and after attacks to gather intel, exploit weaknesses, and evade consequences.
-        For defenders, spotting suspicious enumeration (Ex: mass <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">OpenProcess</code> calls) is a red flag. 
-        Understanding this cat-and-mouse game isn’t just technical, it’s critical for building resilient systems. Moreover, process enumeration is not inherently malicious, sysadmins and EDRs use it too
-      </p>
-    </div>
-  </div>
+  <section class="relative rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/90 p-8 shadow-2xl ring-1 ring-cyan-500/20 overflow-hidden">
+        <div class="flex items-center gap-3 mb-3">
+          <svg class="h-6 w-6 text-cyan-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5 1a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <h3 class="text-lg font-semibold text-cyan-300">The Bottom Line</h3>
+        </div>
+        <p class="text-[15px] text-gray-300 p-6 leading-relaxed sm:text-justify">
+          Process enumeration is the Swiss Army knife in a hacker’s toolkit and it is used before, during, and after attacks to gather intel, exploit weaknesses, and evade consequences.
+          For defenders, spotting suspicious enumeration (Ex: mass <code class="bg-[#334155] text-blue-300 rounded px-1 break-words whitespace-normal">OpenProcess</code> calls) is a red flag. 
+          Understanding this cat-and-mouse game isn’t just technical, it’s critical for building resilient systems. Moreover, process enumeration is not inherently malicious, sysadmins and EDRs use it too
+        </p>
+  </section>
   <section class="relative rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/90 p-8 shadow-2xl ring-1 ring-cyan-500/20 overflow-hidden">
     <div aria-hidden="true" class="absolute -top-16 -left-16 h-64 w-64 rounded-full "></div>
     <h2 class="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-sky-400 to-indigo-400 mb-6 drop-shadow-lg">
@@ -242,11 +240,7 @@
       </div>
     </div>
   </section>
-  <section class="relative rounded-2xl bg-gradient-to-br from-blue-950/70 via-slate-900/80 to-gray-900/90 p-10 shadow-2xl ring-1 ring-blue-500/30 overflow-hidden">
-    <div aria-hidden="true" class="absolute -top-10 -left-10 w-80 h-80 bg-cyan-500 opacity-20 blur-3xl rounded-full"
-    ></div>
-    <div aria-hidden="true" class="absolute -bottom-16 -right-16 w-96 h-96 bg-indigo-600 opacity-20 blur-3xl rounded-full"></div>
-
+  <section class="relative rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/90 p-8 shadow-2xl ring-1 ring-cyan-500/20 overflow-hidden">
     <h2 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400 text-center mb-10 tracking-wide">
       Tooling that makes Monitoring Practical</h2>
     <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -320,51 +314,50 @@
     </div>
   </section>
   <section class="relative rounded-2xl bg-gradient-to-br from-gray-800/70 to-gray-900/90 p-8 shadow-2xl ring-1 ring-cyan-300/20 overflow-hidden">
-  <div class="absolute -top-16 -left-24 h-60 w-60 rounded-full bg-cyan-500/20 blur-3xl pointer-events-none"></div>
-  <h2 class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-sky-400 to-indigo-400 mb-6 text-center">
-    High-Value Analytics in Action </h2>
-  <div class="grid gap-10 ">
-    <div class="md:col-span-2 space-y-6">
-      <div class="group relative rounded-xl bg-gray-800/50 p-6 ring-1 ring-gray-700/50 hover:shadow-lg transition" >
-        <h3 class="text-lg font-semibold text-cyan-300 mb-2">
-          Parent-Child Lineage Scoring</h3>
-        <p class="text-gray-300 leading-relaxed">
-          Flag execution chains like
-          <span class="text-cyan-400">Word → wscript → certutil</span>.
-        </p>
-      </div>
-      <div class="group relative rounded-xl bg-gray-800/50 p-6 ring-1 ring-gray-700/50 hover:shadow-lg transition">
-        <h3 class="text-lg font-semibold text-cyan-300 mb-2">
-          Token &amp; Integrity Shifts</h3>
-        <p class="text-gray-300 leading-relaxed">
-          Alert when a medium-IL user suddenly spawns a
-          <span class="text-cyan-400">SYSTEM</span> helper.
-        </p>
-      </div>
-      <div class="group relative rounded-xl bg-gray-800/50 p-6 ring-1 ring-gray-700/50 hover:shadow-lg transition" >
-        <h3 class="text-lg font-semibold text-cyan-300 mb-2">
-          Module Whitelisting</h3>
-        <p class="text-gray-300 leading-relaxed">
-          Detect unsigned or rarely-seen DLLs loaded inside critical hosts.
-        </p>
-      </div>
-      <div class="group relative rounded-xl bg-gray-800/50 p-6 ring-1 ring-gray-700/50 hover:shadow-lg transition">
-        <h3 class="text-lg font-semibold text-cyan-300 mb-2">
-          Burst Frequency Detection</h3>
-        <p class="text-gray-300 leading-relaxed">
-          Catch brute-force loops reading every PID in milliseconds.
-        </p>
-      </div>
-      <div class="group relative rounded-xl bg-gray-800/50 p-6 ring-1 ring-gray-700/50 hover:shadow-lg transition">
-        <h3 class="text-lg font-semibold text-cyan-300 mb-2">
-          Drift &amp; Absence Monitoring
-        </h3>
-        <p class="text-gray-300 leading-relaxed">
-          Silence from an EDR sensor can warn as loudly as a new binary.
-        </p>
+    <h2 class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-sky-400 to-indigo-400 mb-6 text-center">
+      High-Value Analytics in Action </h2>
+    <div class="grid gap-10 ">
+      <div class="md:col-span-2 space-y-6">
+        <div class="group relative rounded-xl bg-gray-800/50 p-6 ring-1 ring-gray-700/50 hover:shadow-lg transition" >
+          <h3 class="text-lg font-semibold text-cyan-300 mb-2">
+            Parent-Child Lineage Scoring</h3>
+          <p class="text-gray-300 leading-relaxed">
+            Flag execution chains like
+            <span class="text-cyan-400">Word → wscript → certutil</span>.
+          </p>
+        </div>
+        <div class="group relative rounded-xl bg-gray-800/50 p-6 ring-1 ring-gray-700/50 hover:shadow-lg transition">
+          <h3 class="text-lg font-semibold text-cyan-300 mb-2">
+            Token &amp; Integrity Shifts</h3>
+          <p class="text-gray-300 leading-relaxed">
+            Alert when a medium-IL user suddenly spawns a
+            <span class="text-cyan-400">SYSTEM</span> helper.
+          </p>
+        </div>
+        <div class="group relative rounded-xl bg-gray-800/50 p-6 ring-1 ring-gray-700/50 hover:shadow-lg transition" >
+          <h3 class="text-lg font-semibold text-cyan-300 mb-2">
+            Module Whitelisting</h3>
+          <p class="text-gray-300 leading-relaxed">
+            Detect unsigned or rarely-seen DLLs loaded inside critical hosts.
+          </p>
+        </div>
+        <div class="group relative rounded-xl bg-gray-800/50 p-6 ring-1 ring-gray-700/50 hover:shadow-lg transition">
+          <h3 class="text-lg font-semibold text-cyan-300 mb-2">
+            Burst Frequency Detection</h3>
+          <p class="text-gray-300 leading-relaxed">
+            Catch brute-force loops reading every PID in milliseconds.
+          </p>
+        </div>
+        <div class="group relative rounded-xl bg-gray-800/50 p-6 ring-1 ring-gray-700/50 hover:shadow-lg transition">
+          <h3 class="text-lg font-semibold text-cyan-300 mb-2">
+            Drift &amp; Absence Monitoring
+          </h3>
+          <p class="text-gray-300 leading-relaxed">
+            Silence from an EDR sensor can warn as loudly as a new binary.
+          </p>
+        </div>
       </div>
     </div>
-  </div>
   </section>
   <section class="relative rounded-2xl border border-cyan-500/60 bg-gradient-to-br from-gray-800/70 to-gray-900/90 p-8 shadow-2xl ring-1 ring-cyan-500/20 space-y-8">
     <h2 class="text-3xl md:text-4xl font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-sky-400 to-blue-400">
@@ -384,64 +377,64 @@
           <button class="copy-button absolute top-2 right-2 px-2 py-1 text-xs font-medium text-cyan-300 bg-slate-800/80 rounded hover:bg-slate-700/80" data-copy="#code-enum-1">
             Copy</button>
           <pre class="overflow-x-auto rounded-lg bg-gray-900/70 p-4 ring-1 ring-cyan-500/10">
-          <code id="code-enum-1" class="language-csharp">
-            // Project Name: Process Enumeration via EnumProcesses
-            // By: Iron Hulk
+          <code id="code-enum-1" class="language-csharp text-green-300">
+// Project Name: Process Enumeration via EnumProcesses
+// By: Iron Hulk
 
-            using System;
-            using System.Runtime.InteropServices;
-            using System.Text;
-            
-            class Program
+using System;
+using System.Runtime.InteropServices;
+using System.Text;
+
+class Program
+{
+    [DllImport("psapi.dll", SetLastError = true)]
+    static extern bool EnumProcesses(
+        [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U4)] uint[] processIds,
+        uint arraySizeBytes,
+        out uint bytesCopied
+    );
+
+    [DllImport("psapi.dll", SetLastError = true)]
+    static extern uint GetModuleFileNameEx(
+        IntPtr hProcess,
+        IntPtr hModule,
+        [Out] StringBuilder lpFilename,
+        uint nSize
+    );
+
+    static void Main()
+    {
+        uint[] processIds = new uint[1024];
+        uint bytesCopied;
+
+        if (!EnumProcesses(processIds, (uint)(processIds.Length * sizeof(uint)), out bytesCopied))
+        {
+            Console.WriteLine($"EnumProcesses failed: {Marshal.GetLastWin32Error()}");
+            return;
+        }
+
+        int numProcesses = (int)(bytesCopied / sizeof(uint));
+        Console.WriteLine("PID\tProcess Name\tExecutable Path");
+        Console.WriteLine("-----------------------------------------------");
+
+        for (int i = 0; i < numProcesses; i++)
+        {
+            uint pid = processIds[i];
+            if (pid == 0) continue; // Skip Idle process
+
+            try
             {
-                [DllImport("psapi.dll", SetLastError = true)]
-                static extern bool EnumProcesses(
-                    [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U4)] uint[] processIds,
-                    uint arraySizeBytes,
-                    out uint bytesCopied
-                );
-            
-                [DllImport("psapi.dll", SetLastError = true)]
-                static extern uint GetModuleFileNameEx(
-                    IntPtr hProcess,
-                    IntPtr hModule,
-                    [Out] StringBuilder lpFilename,
-                    uint nSize
-                );
-            
-                static void Main()
+                IntPtr hProcess = System.Diagnostics.Process.GetProcessById((int)pid).Handle;
+                var sb = new StringBuilder(1024);
+                if (GetModuleFileNameEx(hProcess, IntPtr.Zero, sb, (uint)sb.Capacity) != 0)
                 {
-                    uint[] processIds = new uint[1024];
-                    uint bytesCopied;
-            
-                    if (!EnumProcesses(processIds, (uint)(processIds.Length * sizeof(uint)), out bytesCopied))
-                    {
-                        Console.WriteLine($"EnumProcesses failed: {Marshal.GetLastWin32Error()}");
-                        return;
-                    }
-            
-                    int numProcesses = (int)(bytesCopied / sizeof(uint));
-                    Console.WriteLine("PID\tProcess Name\tExecutable Path");
-                    Console.WriteLine("-----------------------------------------------");
-            
-                    for (int i = 0; i < numProcesses; i++)
-                    {
-                        uint pid = processIds[i];
-                        if (pid == 0) continue; // Skip Idle process
-            
-                        try
-                        {
-                            IntPtr hProcess = System.Diagnostics.Process.GetProcessById((int)pid).Handle;
-                            var sb = new StringBuilder(1024);
-                            if (GetModuleFileNameEx(hProcess, IntPtr.Zero, sb, (uint)sb.Capacity) != 0)
-                            {
-                                Console.WriteLine($"{pid}\t{System.Diagnostics.Process.GetProcessById((int)pid).ProcessName}\t{sb}");
-                            }
-                        }
-                        catch { } // Skip inaccessible processes
-                    }
+                    Console.WriteLine($"{pid}\t{System.Diagnostics.Process.GetProcessById((int)pid).ProcessName}\t{sb}");
                 }
             }
+            catch { } // Skip inaccessible processes
+        }
+    }
+}
           </code></pre>
         </div>
       </details>
@@ -461,62 +454,62 @@
           <button class="copy-button absolute top-2 right-2 px-2 py-1 text-xs font-medium text-cyan-300 bg-slate-800/80 rounded hover:bg-slate-700/80" data-copy="#code-enum-2">
             Copy</button>
           <pre class="overflow-x-auto rounded-lg bg-gray-900/70 p-4 ring-1 ring-cyan-500/10">
-          <code id="code-enum-2" class="language-csharp">
-            // Project Name: Process Enumeration via WTSEnumerateProcesses
-            // By: Iron Hulk
+          <code id="code-enum-2" class="language-csharp text-green-300">
+// Project Name: Process Enumeration via WTSEnumerateProcesses
+// By: Iron Hulk
 
-            using System;
-            using System.Runtime.InteropServices;
-  
-            class Program
-            {
-                [DllImport("wtsapi32.dll", SetLastError = true)]
-                static extern bool WTSEnumerateProcesses(
-                    IntPtr hServer,
-                    int Reserved,
-                    int Version,
-                    ref IntPtr ppProcessInfo,
-                    ref int pCount
-                );
-  
-                [DllImport("wtsapi32.dll", SetLastError = true)]
-                static extern void WTSFreeMemory(IntPtr pMemory);
-  
-                [StructLayout(LayoutKind.Sequential)]
-                struct WTS_PROCESS_INFO
-                {
-                    public int SessionId;
-                    public int ProcessId;
-                    public IntPtr pProcessName;
-                    public IntPtr pUserSid;
-                }
-  
-                static void Main()
-                {
-                    IntPtr ppProcessInfo = IntPtr.Zero;
-                    int pCount = 0;
-  
-                    if (!WTSEnumerateProcesses(IntPtr.Zero, 0, 1, ref ppProcessInfo, ref pCount))
-                    {
-                        Console.WriteLine($"WTSEnumerateProcesses failed: {Marshal.GetLastWin32Error()}");
-                        return;
-                    }
-  
-                    Console.WriteLine("PID\tProcess Name");
-                    Console.WriteLine("----------------------");
-  
-                    for (int i = 0; i < pCount; i++)
-                    {
-                        IntPtr ptr = (IntPtr)((long)ppProcessInfo + i * Marshal.SizeOf(typeof(WTS_PROCESS_INFO)));
-                        var info = (WTS_PROCESS_INFO)Marshal.PtrToStructure(ptr, typeof(WTS_PROCESS_INFO));
-  
-                        string processName = Marshal.PtrToStringAnsi(info.pProcessName) ?? "(Unknown)";
-                        Console.WriteLine($"{info.ProcessId}\t{processName}");
-                    }
-  
-                    WTSFreeMemory(ppProcessInfo);
-                }
-            }
+using System;
+using System.Runtime.InteropServices;
+
+class Program
+{
+    [DllImport("wtsapi32.dll", SetLastError = true)]
+    static extern bool WTSEnumerateProcesses(
+        IntPtr hServer,
+        int Reserved,
+        int Version,
+        ref IntPtr ppProcessInfo,
+        ref int pCount
+    );
+
+    [DllImport("wtsapi32.dll", SetLastError = true)]
+    static extern void WTSFreeMemory(IntPtr pMemory);
+
+    [StructLayout(LayoutKind.Sequential)]
+    struct WTS_PROCESS_INFO
+    {
+        public int SessionId;
+        public int ProcessId;
+        public IntPtr pProcessName;
+        public IntPtr pUserSid;
+    }
+
+    static void Main()
+    {
+        IntPtr ppProcessInfo = IntPtr.Zero;
+        int pCount = 0;
+
+        if (!WTSEnumerateProcesses(IntPtr.Zero, 0, 1, ref ppProcessInfo, ref pCount))
+        {
+            Console.WriteLine($"WTSEnumerateProcesses failed: {Marshal.GetLastWin32Error()}");
+            return;
+        }
+
+        Console.WriteLine("PID\tProcess Name");
+        Console.WriteLine("----------------------");
+
+        for (int i = 0; i < pCount; i++)
+        {
+            IntPtr ptr = (IntPtr)((long)ppProcessInfo + i * Marshal.SizeOf(typeof(WTS_PROCESS_INFO)));
+            var info = (WTS_PROCESS_INFO)Marshal.PtrToStructure(ptr, typeof(WTS_PROCESS_INFO));
+
+            string processName = Marshal.PtrToStringAnsi(info.pProcessName) ?? "(Unknown)";
+            Console.WriteLine($"{info.ProcessId}\t{processName}");
+        }
+
+        WTSFreeMemory(ppProcessInfo);
+    }
+}
           </code></pre>
         </div>
       </details>
@@ -536,91 +529,91 @@
           <button class="copy-button absolute top-2 right-2 px-2 py-1 text-xs font-medium text-cyan-300 bg-slate-800/80 rounded hover:bg-slate-700/80" data-copy="#code-enum-3">
             Copy</button>
           <pre class="overflow-x-auto rounded-lg bg-gray-900/70 p-4 ring-1 ring-cyan-500/10">
-          <code id="code-enum-3" class="language-csharp">
-            // Project Name: Process Enumeration via NtQuerySystemInformation
-            // By: Iron Hulk
-            
-            using System;
-            using System.Collections.Generic;
-            using System.Runtime.InteropServices;
-            
-            internal static class Program
+          <code id="code-enum-3" class="language-csharp text-green-300">
+// Project Name: Process Enumeration via NtQuerySystemInformation
+// By: Iron Hulk
+
+using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+
+internal static class Program
+{
+    static void Main()
+    {
+        foreach (var p in NtEnum())
+            Console.WriteLine($"{p.pid,6} → {p.name}");
+    }
+    private static IEnumerable<(int pid, string name)> NtEnum()
+    {
+        const int SystemProcessInformation = 5;
+        const int STATUS_INFO_LENGTH_MISMATCH = unchecked((int)0xC0000004);
+
+        int len = 0x100000;
+        IntPtr buf = Marshal.AllocHGlobal(len);
+        try
+        {
+            int status;
+            int need;
+            while ((status = NtQuerySystemInformation(
+                        SystemProcessInformation, buf, len, out need))
+                    == STATUS_INFO_LENGTH_MISMATCH)
             {
-                static void Main()
-                {
-                    foreach (var p in NtEnum())
-                        Console.WriteLine($"{p.pid,6} → {p.name}");
-                }
-                private static IEnumerable<(int pid, string name)> NtEnum()
-                {
-                    const int SystemProcessInformation = 5;
-                    const int STATUS_INFO_LENGTH_MISMATCH = unchecked((int)0xC0000004);
-            
-                    int len = 0x100000;
-                    IntPtr buf = Marshal.AllocHGlobal(len);
-                    try
-                    {
-                        int status;
-                        int need;
-                        while ((status = NtQuerySystemInformation(
-                                    SystemProcessInformation, buf, len, out need))
-                               == STATUS_INFO_LENGTH_MISMATCH)
-                        {
-                            len = need;
-                            Marshal.FreeHGlobal(buf);
-                            buf = Marshal.AllocHGlobal(len);
-                        }
-                        if (status < 0) yield break;        // call failed
-                        IntPtr ptr = buf;
-                        for (; ; )
-                        {
-                            var spi = (SYSTEM_PROCESS_INFORMATION)
-                                      Marshal.PtrToStructure(ptr,
-                                          typeof(SYSTEM_PROCESS_INFORMATION));
-            
-                            string image;
-                            if (spi.ImageName.Length > 0 && spi.ImageName.Buffer != IntPtr.Zero)
-                                image = Marshal.PtrToStringUni(
-                                            spi.ImageName.Buffer, spi.ImageName.Length / 2);
-                            else
-                                image = "System Idle Process";
-            
-                            yield return ((int)spi.UniqueProcessId, image);
-            
-                            if (spi.NextEntryOffset == 0) break;
-                            ptr = IntPtr.Add(ptr, (int)spi.NextEntryOffset);
-                        }
-                    }
-                    finally { Marshal.FreeHGlobal(buf); }
-                }
-                // ---------------- P/Invoke & structs ----------------
-                [DllImport("ntdll.dll")]
-                private static extern int NtQuerySystemInformation(
-                    int systemInformationClass,
-                    IntPtr systemInformation,
-                    int systemInformationLength,
-                    out int returnLength);
-            
-                [StructLayout(LayoutKind.Sequential)]
-                private struct UNICODE_STRING
-                {
-                    public ushort Length;
-                    public ushort MaximumLength;
-                    public IntPtr Buffer;
-                }
-                [StructLayout(LayoutKind.Sequential)]
-                private struct SYSTEM_PROCESS_INFORMATION
-                {
-                    public uint NextEntryOffset;
-                    public uint NumberOfThreads;
-                    private long Reserved1, Reserved2, Reserved3;
-                    public long CreateTime, UserTime, KernelTime;
-                    public UNICODE_STRING ImageName;
-                    public int BasePriority;
-                    public IntPtr UniqueProcessId;
-                    public IntPtr InheritedFromUniqueProcessId;
-                }
-            }       
+                len = need;
+                Marshal.FreeHGlobal(buf);
+                buf = Marshal.AllocHGlobal(len);
+            }
+            if (status < 0) yield break;        // call failed
+            IntPtr ptr = buf;
+            for (; ; )
+            {
+                var spi = (SYSTEM_PROCESS_INFORMATION)
+                          Marshal.PtrToStructure(ptr,
+                              typeof(SYSTEM_PROCESS_INFORMATION));
+
+                string image;
+                if (spi.ImageName.Length > 0 && spi.ImageName.Buffer != IntPtr.Zero)
+                    image = Marshal.PtrToStringUni(
+                                spi.ImageName.Buffer, spi.ImageName.Length / 2);
+                else
+                    image = "System Idle Process";
+
+                yield return ((int)spi.UniqueProcessId, image);
+
+                if (spi.NextEntryOffset == 0) break;
+                ptr = IntPtr.Add(ptr, (int)spi.NextEntryOffset);
+            }
+        }
+        finally { Marshal.FreeHGlobal(buf); }
+    }
+    // ---------------- P/Invoke & structs ----------------
+    [DllImport("ntdll.dll")]
+    private static extern int NtQuerySystemInformation(
+        int systemInformationClass,
+        IntPtr systemInformation,
+        int systemInformationLength,
+        out int returnLength);
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct UNICODE_STRING
+    {
+        public ushort Length;
+        public ushort MaximumLength;
+        public IntPtr Buffer;
+    }
+    [StructLayout(LayoutKind.Sequential)]
+    private struct SYSTEM_PROCESS_INFORMATION
+    {
+        public uint NextEntryOffset;
+        public uint NumberOfThreads;
+        private long Reserved1, Reserved2, Reserved3;
+        public long CreateTime, UserTime, KernelTime;
+        public UNICODE_STRING ImageName;
+        public int BasePriority;
+        public IntPtr UniqueProcessId;
+        public IntPtr InheritedFromUniqueProcessId;
+    }
+}       
           </code></pre>
         </div>
       </details>
@@ -640,9 +633,10 @@
           <button class="copy-button absolute top-2 right-2 px-2 py-1 text-xs font-medium text-cyan-300 bg-slate-800/80 rounded hover:bg-slate-700/80" data-copy="#code-enum-4">
             Copy</button>
           <pre class="overflow-x-auto rounded-lg bg-gray-900/70 p-4 ring-1 ring-cyan-500/10">
-          <code id="code-enum-4" class="language-csharp">
-            Get-CimInstance Win32_Process | Select @{n='PID';e={$_.ProcessId}}, @{n='PPID';e={$_.ParentProcessId}}, @{n='Threads';e={$_.ThreadCount}}, @{n='Name';e={$_.Name}} | ft -a
-          </code></pre>
+          <code id="code-enum-4" class="text-green-300">
+Get-CimInstance Win32_Process | Select @{n='PID';e={$_.ProcessId}}, @{n='PPID';e={$_.ParentProcessId}}, @{n='Threads';e={$_.ThreadCount}}, @{n='Name';e={$_.Name}} | ft -a
+          </code>
+        </pre>
         </div>
       </details>
     </div>
