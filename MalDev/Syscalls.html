@@ -18,7 +18,6 @@
   <!-- Article -->
 <main id="article" class="p-2 sm:text-justify ">
     <section class="relative mx-auto overflow-hidden rounded-3xl bg-gradient-to-br from-slate-800/90 via-slate-900 to-black p-10 ring-1 ring-cyan-500/20">
-        <div class="absolute -left-16 w-48 h-48 bg-indigo-500 rounded-full opacity-20 mix-blend-screen filter blur-3xl"></div>
         <div class="bg-gray-800 bg-opacity-60 p-8 rounded-3xl shadow-2xl backdrop-blur-md">
         <h2 class="text-4xl font-bold text-indigo-300 mb-4">What Is a System Call?</h2>
         <p class="text-gray-200">
@@ -396,121 +395,121 @@
             <button class="absolute top-2 right-2 bg-indigo-500 text-white px-3 py-1 rounded text-sm" onclick="copyCode(this)">Copy</button>
             <pre class=" overflow-x-auto bg-gray-900 p-4 rounded-lg shadow-inner ">
             <pre><code class="language-cpp text-green-300">
-                // Project Name: Syscall-SSN Enumerator
-                // By: Iron Hulk
-                
-                #include &lt;windows.h&gt;
-                #include &lt;iostream&gt;
-                #include &lt;vector&gt;
-                #include &lt;string&gt;
-                #include &lt;sstream&gt;
-                #include &lt;iomanip&gt;
-                
-                typedef LONG (NTAPI* RtlGetVersionPtr)(PRTL_OSVERSIONINFOEXW);
-                
-                struct ExportInfo {
-                    std::string name;
-                    DWORD       ssn;
-                };
-                
-                std::vector&lt;ExportInfo&gt; GetNtExportsSSN() {
-                    HMODULE hNtdll = LoadLibraryW(L"ntdll.dll");
-                    if (!hNtdll) throw std::runtime_error("LoadLibrary failed");
-                
-                    auto dos     = reinterpret_cast&lt;PIMAGE_DOS_HEADER&gt;(hNtdll);
-                    auto nt      = reinterpret_cast&lt;PIMAGE_NT_HEADERS&gt;(
-                                        reinterpret_cast&lt;BYTE*&gt;(hNtdll) + dos-&gt;e_lfanew);
-                    auto exports = reinterpret_cast&lt;PIMAGE_EXPORT_DIRECTORY&gt;(
-                                        reinterpret_cast&lt;BYTE*&gt;(hNtdll) +
-                                        nt-&gt;OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress);
-                
-                    auto names = reinterpret_cast&lt;DWORD*&gt;(
-                                    reinterpret_cast&lt;BYTE*&gt;(hNtdll) + exports-&gt;AddressOfNames);
-                    auto funcs = reinterpret_cast&lt;DWORD*&gt;(
-                                    reinterpret_cast&lt;BYTE*&gt;(hNtdll) + exports-&gt;AddressOfFunctions);
-                    auto ords  = reinterpret_cast&lt;WORD*&gt;(
-                                    reinterpret_cast&lt;BYTE*&gt;(hNtdll) + exports-&gt;AddressOfNameOrdinals);
-                
-                    std::vector&lt;ExportInfo&gt; list;
-                    for (DWORD i = 0; i &lt; exports-&gt;NumberOfNames; ++i) {
-                        const char* fnName = reinterpret_cast&lt;const char*&gt;(hNtdll) + names[i];
-                        DWORD       rva    = funcs[ords[i]];
-                        BYTE*       stub   = reinterpret_cast&lt;BYTE*&gt;(hNtdll) + rva;
-                
-                        /* mov r10, rcx ; mov eax, imm32 ; syscall */
-                        if (stub[0] == 0x4C &amp;&amp; stub[1] == 0x8B &amp;&amp; stub[2] == 0xD1 &amp;&amp; stub[3] == 0xB8) {
-                            DWORD ssn = *reinterpret_cast&lt;DWORD*&gt;(stub + 4);
-                            list.push_back({ fnName, ssn });
-                        }
-                    }
-                    return list;
-                }
-                
-                int main() {
-                    OSVERSIONINFOEXW osvi = {};
-                    osvi.dwOSVersionInfoSize = sizeof(osvi);
-                
-                    if (auto hNtDll = GetModuleHandleW(L"ntdll.dll")) {
-                        auto rtlGetVersion = reinterpret_cast&lt;RtlGetVersionPtr&gt;(
-                                                GetProcAddress(hNtDll, "RtlGetVersion"));
-                        if (rtlGetVersion)
-                            rtlGetVersion(&amp;osvi);
-                        else
-                            GetVersionExW(reinterpret_cast&lt;OSVERSIONINFOW*&gt;(&amp;osvi)); // legacy
-                    }
-                
-                    std::wstring osName;
-                    if (osvi.dwMajorVersion == 10)
-                        osName = (osvi.dwBuildNumber &gt;= 22000) ? L"Windows 11" : L"Windows 10";
-                    else if (osvi.dwMajorVersion == 6 &amp;&amp; osvi.dwMinorVersion == 3) osName = L"Windows 8.1";
-                    else if (osvi.dwMajorVersion == 6 &amp;&amp; osvi.dwMinorVersion == 2) osName = L"Windows 8";
-                    else if (osvi.dwMajorVersion == 6 &amp;&amp; osvi.dwMinorVersion == 1) osName = L"Windows 7";
-                    else                                                         osName = L"Windows (unknown)";
-                
-                    std::wcout &lt;&lt; L"OS Name:    " &lt;&lt; osName &lt;&lt; L"\n"
-                                &lt;&lt; L"OS Version: "
-                                &lt;&lt; osvi.dwMajorVersion &lt;&lt; L'.'
-                                &lt;&lt; osvi.dwMinorVersion &lt;&lt; L" (Build "
-                                &lt;&lt; osvi.dwBuildNumber  &lt;&lt; L")\n";
-                
-                    BOOL isWow64 = FALSE;
-                    auto fnIsWow64 = reinterpret_cast&lt;BOOL (WINAPI*)(HANDLE,PBOOL)&gt;(
-                                        GetProcAddress(GetModuleHandleA("kernel32"), "IsWow64Process"));
-                
-                #ifdef _WIN64
-                    std::cout &lt;&lt; "Process architecture: x64\nOS architecture:      x64\n";
-                #else
-                    std::cout &lt;&lt; "Process architecture: x86\n";
-                    if (fnIsWow64 &amp;&amp; fnIsWow64(GetCurrentProcess(), &amp;isWow64) &amp;&amp; isWow64)
-                        std::cout &lt;&lt; "OS architecture:      x64 (WOW64)\n";
-                    else
-                        std::cout &lt;&lt; "OS architecture:      x86\n";
-                #endif
-                
-                    std::cout &lt;&lt; "\nSyscall SSNs:\n\n";
-                
-                    try {
-                        auto exports = GetNtExportsSSN();
-                
-                        std::cout &lt;&lt; std::left  &lt;&lt; std::setw(60) &lt;&lt; "Syscall"
-                                    &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(7) &lt;&lt; "Decimal"
-                                    &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(7) &lt;&lt; "Hex\n"
-                                    &lt;&lt; std::string(60,'-') &lt;&lt; "-+-"
-                                    &lt;&lt; std::string(7,'-')  &lt;&lt; "-+-"
-                                    &lt;&lt; std::string(7,'-')  &lt;&lt; '\n';
-                
-                        for (const auto&amp; e : exports) {
-                            std::ostringstream hex; hex &lt;&lt; "0x" &lt;&lt; std::hex &lt;&lt; std::uppercase &lt;&lt; e.ssn;
-                            std::cout &lt;&lt; std::left  &lt;&lt; std::setw(60) &lt;&lt; e.name
-                                        &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(7) &lt;&lt; std::dec &lt;&lt; e.ssn
-                                        &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(7) &lt;&lt; hex.str() &lt;&lt; '\n';
-                        }
-                    } catch (const std::exception&amp; ex) {
-                        std::cerr &lt;&lt; "Error: " &lt;&lt; ex.what() &lt;&lt; '\n';
-                        return 1;
-                    }
-                    return 0;
-                }
+// Project Name: Syscall-SSN Enumerator
+// By: Iron Hulk
+
+#include &lt;windows.h&gt;
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+#include &lt;sstream&gt;
+#include &lt;iomanip&gt;
+
+typedef LONG (NTAPI* RtlGetVersionPtr)(PRTL_OSVERSIONINFOEXW);
+
+struct ExportInfo {
+    std::string name;
+    DWORD       ssn;
+};
+
+std::vector&lt;ExportInfo&gt; GetNtExportsSSN() {
+    HMODULE hNtdll = LoadLibraryW(L"ntdll.dll");
+    if (!hNtdll) throw std::runtime_error("LoadLibrary failed");
+
+    auto dos     = reinterpret_cast&lt;PIMAGE_DOS_HEADER&gt;(hNtdll);
+    auto nt      = reinterpret_cast&lt;PIMAGE_NT_HEADERS&gt;(
+                        reinterpret_cast&lt;BYTE*&gt;(hNtdll) + dos-&gt;e_lfanew);
+    auto exports = reinterpret_cast&lt;PIMAGE_EXPORT_DIRECTORY&gt;(
+                        reinterpret_cast&lt;BYTE*&gt;(hNtdll) +
+                        nt-&gt;OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress);
+
+    auto names = reinterpret_cast&lt;DWORD*&gt;(
+                    reinterpret_cast&lt;BYTE*&gt;(hNtdll) + exports-&gt;AddressOfNames);
+    auto funcs = reinterpret_cast&lt;DWORD*&gt;(
+                    reinterpret_cast&lt;BYTE*&gt;(hNtdll) + exports-&gt;AddressOfFunctions);
+    auto ords  = reinterpret_cast&lt;WORD*&gt;(
+                    reinterpret_cast&lt;BYTE*&gt;(hNtdll) + exports-&gt;AddressOfNameOrdinals);
+
+    std::vector&lt;ExportInfo&gt; list;
+    for (DWORD i = 0; i &lt; exports-&gt;NumberOfNames; ++i) {
+        const char* fnName = reinterpret_cast&lt;const char*&gt;(hNtdll) + names[i];
+        DWORD       rva    = funcs[ords[i]];
+        BYTE*       stub   = reinterpret_cast&lt;BYTE*&gt;(hNtdll) + rva;
+
+        /* mov r10, rcx ; mov eax, imm32 ; syscall */
+        if (stub[0] == 0x4C &amp;&amp; stub[1] == 0x8B &amp;&amp; stub[2] == 0xD1 &amp;&amp; stub[3] == 0xB8) {
+            DWORD ssn = *reinterpret_cast&lt;DWORD*&gt;(stub + 4);
+            list.push_back({ fnName, ssn });
+        }
+    }
+    return list;
+}
+
+int main() {
+    OSVERSIONINFOEXW osvi = {};
+    osvi.dwOSVersionInfoSize = sizeof(osvi);
+
+    if (auto hNtDll = GetModuleHandleW(L"ntdll.dll")) {
+        auto rtlGetVersion = reinterpret_cast&lt;RtlGetVersionPtr&gt;(
+                                GetProcAddress(hNtDll, "RtlGetVersion"));
+        if (rtlGetVersion)
+            rtlGetVersion(&amp;osvi);
+        else
+            GetVersionExW(reinterpret_cast&lt;OSVERSIONINFOW*&gt;(&amp;osvi)); // legacy
+    }
+
+    std::wstring osName;
+    if (osvi.dwMajorVersion == 10)
+        osName = (osvi.dwBuildNumber &gt;= 22000) ? L"Windows 11" : L"Windows 10";
+    else if (osvi.dwMajorVersion == 6 &amp;&amp; osvi.dwMinorVersion == 3) osName = L"Windows 8.1";
+    else if (osvi.dwMajorVersion == 6 &amp;&amp; osvi.dwMinorVersion == 2) osName = L"Windows 8";
+    else if (osvi.dwMajorVersion == 6 &amp;&amp; osvi.dwMinorVersion == 1) osName = L"Windows 7";
+    else                                                         osName = L"Windows (unknown)";
+
+    std::wcout &lt;&lt; L"OS Name:    " &lt;&lt; osName &lt;&lt; L"\n"
+                &lt;&lt; L"OS Version: "
+                &lt;&lt; osvi.dwMajorVersion &lt;&lt; L'.'
+                &lt;&lt; osvi.dwMinorVersion &lt;&lt; L" (Build "
+                &lt;&lt; osvi.dwBuildNumber  &lt;&lt; L")\n";
+
+    BOOL isWow64 = FALSE;
+    auto fnIsWow64 = reinterpret_cast&lt;BOOL (WINAPI*)(HANDLE,PBOOL)&gt;(
+                        GetProcAddress(GetModuleHandleA("kernel32"), "IsWow64Process"));
+
+#ifdef _WIN64
+    std::cout &lt;&lt; "Process architecture: x64\nOS architecture:      x64\n";
+#else
+    std::cout &lt;&lt; "Process architecture: x86\n";
+    if (fnIsWow64 &amp;&amp; fnIsWow64(GetCurrentProcess(), &amp;isWow64) &amp;&amp; isWow64)
+        std::cout &lt;&lt; "OS architecture:      x64 (WOW64)\n";
+    else
+        std::cout &lt;&lt; "OS architecture:      x86\n";
+#endif
+
+    std::cout &lt;&lt; "\nSyscall SSNs:\n\n";
+
+    try {
+        auto exports = GetNtExportsSSN();
+
+        std::cout &lt;&lt; std::left  &lt;&lt; std::setw(60) &lt;&lt; "Syscall"
+                    &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(7) &lt;&lt; "Decimal"
+                    &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(7) &lt;&lt; "Hex\n"
+                    &lt;&lt; std::string(60,'-') &lt;&lt; "-+-"
+                    &lt;&lt; std::string(7,'-')  &lt;&lt; "-+-"
+                    &lt;&lt; std::string(7,'-')  &lt;&lt; '\n';
+
+        for (const auto&amp; e : exports) {
+            std::ostringstream hex; hex &lt;&lt; "0x" &lt;&lt; std::hex &lt;&lt; std::uppercase &lt;&lt; e.ssn;
+            std::cout &lt;&lt; std::left  &lt;&lt; std::setw(60) &lt;&lt; e.name
+                        &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(7) &lt;&lt; std::dec &lt;&lt; e.ssn
+                        &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(7) &lt;&lt; hex.str() &lt;&lt; '\n';
+        }
+    } catch (const std::exception&amp; ex) {
+        std::cerr &lt;&lt; "Error: " &lt;&lt; ex.what() &lt;&lt; '\n';
+        return 1;
+    }
+    return 0;
+}
                 </code>
             </pre>
             </pre>
