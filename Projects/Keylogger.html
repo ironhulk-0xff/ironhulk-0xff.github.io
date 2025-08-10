@@ -100,12 +100,16 @@
           <p class="text-gray-300 leading-relaxed mb-2 pl-4">
             The project is a C# tool designed to sit invisibly in the Windows input stack, capture every keystroke, and persist the result to a log file.<br>Here’s how the pieces fit together:
           </p>
-          <h3 class="flex items-center gap-2 text-lg font-bold text-blue-400 mb-4 pl-4">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-indigo-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <h3 class="flex flex-wrap items-center gap-2 text-lg font-bold text-blue-400 mb-4 pl-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-indigo-300 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h4l2 3h6l2-3h4M7 14h10M9 18h6"/>
             </svg>
-            Execution Path:
-            <span class="ml-2 text-[11px] px-2 py-0.5 rounded-full border border-blue-400/40 text-blue-300 bg-[#101a2e]">Step-by-Step</span>
+            <span class="min-w-0">
+              Execution <span class="text-indigo-300">Path:</span>
+            </span>
+            <span class="inline-flex items-center justify-center whitespace-nowrap flex-shrink-0 text-[11px] px-2 py-0.5 rounded-full border border-blue-400/40 text-blue-300 bg-[#101a2e]">
+              Step-by-Step
+            </span>
           </h3>
           <div class="relative pl-12">
             <div class="absolute left-3 top-0 bottom-0 w-px bg-gradient-to-b from-blue-400/40 via-blue-400/20 to-transparent pl-10"></div>
@@ -256,17 +260,24 @@
           <br>
           <div class="h-px bg-gradient-to-r from-blue-400/40 to-transparent"></div>
           <div class="bg-[#0f172a] p-6 shadow-md">
-            <h3 class="flex items-start gap-2 text-lg font-bold text-blue-400">
+            <h3 class="flex flex-wrap items-center gap-2 text-lg font-bold text-blue-400">
+              <!-- icon -->
               <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-indigo-300 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M5.07 19h13.86A2 2 0 0021 17.06L13.94 3.94a2 2 0 00-3.88 0L3 17.06A2 2 0 005.07 19z"/>
               </svg>
-              <span class="flex-1 min-w-0">
-                Function <span class="text-indigo-300">HookCallback</span>
-              </span>
-              <span class="ml-2 inline-flex items-center justify-center whitespace-nowrap flex-shrink-0 text-[11px] px-2 py-0.5 rounded-full border border-blue-400/40 text-blue-300 bg-[#101a2e]">
+          
+              <!-- title (no flex-1 so it won't push the badge away) -->
+              <span>Function <span class="text-indigo-300">HookCallback</span></span>
+          
+              <!-- badge sits next to the title; won’t wrap or shrink -->
+              <span class="inline-flex items-center justify-center whitespace-nowrap flex-shrink-0 text-[11px] px-2 py-0.5 rounded-full border border-blue-400/40 text-blue-300 bg-[#101a2e]">
                 Deep&nbsp;Dive
               </span>
             </h3>
+          
+            <p class="mt-2 text-gray-300 leading-relaxed">
+              <strong>The hot path starts here:</strong> let’s dive deep into its logic line-by-line and turn it out into something lean and rock-solid.
+            </p>
             <p class="text-gray-300 leading-relaxed pl-7 mb-5">
               <strong>The hot path starts here</strong>: let’s dive deep into its logic line-by-line and turn it out into something lean and rock-solid.
             </p>
