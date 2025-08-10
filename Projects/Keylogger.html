@@ -48,7 +48,7 @@
           <div class="bg-[#0f172a] p-4 rounded-lg border border-blue-400 transform ">
             <h3 class="flex items-center gap-2 text-lg font-bold text-blue-400">Software Keylogger:</h3>
             <p class="text-gray-300 leading-relaxed pl-2">
-              In <strong>user mode</strong>, it injects into processes, for example, a DLL injection into explorer.exe, or uses Windows APIs like <code class="text-blue-300 font-mono text-sm">SetWindowsHookEx</code> to intercept 
+              In <strong>user mode</strong>, it injects into processes, for example, a DLL injection into explorer.exe, or uses Windows APIs like <code class=" break-all text-blue-300 font-mono text-sm">SetWindowsHookEx</code> to intercept 
               keystrokes. <br>In a <strong>kernel mode</strong>, a custom keyboard‐filter driver hooks at the interrupt or driver‐stack level, capturing input below user‐mode defenses for 
               greater stealth.
             </p>
@@ -114,49 +114,49 @@
                 <span class="absolute left-0 -translate-x-1.5 flex items-center justify-center w-6 h-6 rounded-full bg-[#101a2e] border border-blue-400/50 text-blue-300 text-xs font-bold">1</span>
                 <div class="pl-7">
                   <span class="text-blue-300 font-semibold">Filter to key-down events</span>:
-                  <code class="text-blue-300 font-mono text-sm">if (nCode &gt;= 0 && wParam == (IntPtr)WM_KEYDOWN)</code>, this will logg only key-downs are logged while system-key events are ignored here
+                  <code class=" break-all text-blue-300 font-mono text-sm">if (nCode &gt;= 0 && wParam == (IntPtr)WM_KEYDOWN)</code>, this will logg only key-downs are logged while system-key events are ignored here
                 </div>
               </li>
               <li class="relative">
                 <span class="absolute left-0 -translate-x-1.5 flex items-center justify-center w-6 h-6 rounded-full bg-[#101a2e] border border-blue-400/50 text-blue-300 text-xs font-bold">2</span>
                 <div class="pl-7">
                   <span class="text-blue-300 font-semibold">Extract the virtual-key</span>:
-                  <code class="text-blue-300 font-mono text-sm">int vkCode = Marshal.ReadInt32(lParam);</code>, this will read the virtual-key from and cast to <code class="text-blue-300 font-mono text-sm">Keys</code>.
+                  <code class=" break-all text-blue-300 font-mono text-sm">int vkCode = Marshal.ReadInt32(lParam);</code>, this will read the virtual-key from and cast to <code class=" break-all text-blue-300 font-mono text-sm">Keys</code>.
                 </div>
               </li>
               <li class="relative">
                 <span class="absolute left-0 -translate-x-1.5 flex items-center justify-center w-6 h-6 rounded-full bg-[#101a2e] border border-blue-400/50 text-blue-300 text-xs font-bold">3</span>
                 <div class="pl-7">
                   <span class="text-blue-300 font-semibold">Sample modifiers</span>:
-                  <code class="text-blue-300 font-mono text-sm">bool capsLock</code> and <code class="text-blue-300 font-mono text-sm">bool shiftPress</code> will query for CapsLock and Shift to drive casing logic.
+                  <code class=" break-all text-blue-300 font-mono text-sm">bool capsLock</code> and <code class=" break-all text-blue-300 font-mono text-sm">bool shiftPress</code> will query for CapsLock and Shift to drive casing logic.
                 </div>
               </li>
               <li class="relative">
                 <span class="absolute left-0 -translate-x-1.5 flex items-center justify-center w-6 h-6 rounded-full bg-[#101a2e] border border-blue-400/50 text-blue-300 text-xs font-bold">4</span>
                 <div class="pl-7">
                   <span class="text-blue-300 font-semibold">Translate VK to characters with layout awareness</span>:
-                  <code class="text-blue-300 font-mono text-sm">string currentKey = KeyboardLayout((uint)vkCode);</code>, <code class="text-blue-300 font-mono text-sm">KeyboardLayout</code> uses <code class="text-blue-300 font-mono text-sm">GetKeyboardState + MapVirtualKey + ToUnicodeEx</code> to return a Unicode string for the current layout.
+                  <code class=" break-all text-blue-300 font-mono text-sm">string currentKey = KeyboardLayout((uint)vkCode);</code>, <code class=" break-all text-blue-300 font-mono text-sm">KeyboardLayout</code> uses <code class=" break-all text-blue-300 font-mono text-sm">GetKeyboardState + MapVirtualKey + ToUnicodeEx</code> to return a Unicode string for the current layout.
                 </div>
               </li>
               <li class="relative">
                 <span class="absolute left-0 -translate-x-1.5 flex items-center justify-center w-6 h-6 rounded-full bg-[#101a2e] border border-blue-400/50 text-blue-300 text-xs font-bold">5</span>
                 <div class="pl-7">
                   <span class="text-blue-300 font-semibold">Normalize</span>:
-                  Will apply correct casing (CapsLock + Shift) and collapse function keys into tokens like <code class="text-blue-300 font-mono text-sm">[F5]</code>.
+                  Will apply correct casing (CapsLock + Shift) and collapse function keys into tokens like <code class=" break-all text-blue-300 font-mono text-sm">[F5]</code>.
                 </div>
               </li>
               <li class="relative">
                 <span class="absolute left-0 -translate-x-1.5 flex items-center justify-center w-6 h-6 rounded-full bg-[#101a2e] border border-blue-400/50 text-blue-300 text-xs font-bold">6</span>
                 <div class="pl-7">
                   <span class="text-blue-300 font-semibold">Map common specials with a switch</span>:
-                  Will replace keys like Space/Enter/Esc/Tab/Ctrl/Shift with readable tokens (<code class="text-blue-300 font-mono text-sm">[SPACE]</code>, <code class="text-blue-300 font-mono text-sm">[ENTER]</code>).
+                  Will replace keys like Space/Enter/Esc/Tab/Ctrl/Shift with readable tokens (<code class=" break-all text-blue-300 font-mono text-sm">[SPACE]</code>, <code class=" break-all text-blue-300 font-mono text-sm">[ENTER]</code>).
                 </div>
               </li>
               <li class="relative">
                 <span class="absolute left-0 -translate-x-1.5 flex items-center justify-center w-6 h-6 rounded-full bg-[#101a2e] border border-blue-400/50 text-blue-300 text-xs font-bold">7</span>
                 <div class="pl-7">
                   <span class="text-blue-300 font-semibold">Write to the log with window context</span>:
-                  On a window change, it will write a header like <code class="text-blue-300 font-mono text-sm">### Title ###</code> and append the result to <code class="text-blue-300 font-mono text-sm">log.txt</code>.
+                  On a window change, it will write a header like <code class=" break-all text-blue-300 font-mono text-sm">### Title ###</code> and append the result to <code class=" break-all text-blue-300 font-mono text-sm">log.txt</code>.
                 </div>
               </li>
             </ol>
@@ -171,7 +171,7 @@
           <div class="pl-4">
             <h4 class="text-lg font-semibold text-blue-300 pl-8">Disk artifacts:</h4>
             <ul class="list-disc list-inside text-gray-300 mb-2 pl-12">
-              <li><code class="text-blue-300 font-mono text-sm">log.txt</code> is in a predictable path and in plaintext, no rotation or encryption.</li>
+              <li><code class=" break-all text-blue-300 font-mono text-sm">log.txt</code> is in a predictable path and in plaintext, no rotation or encryption.</li>
               <li>High-frequency appends (per-keystroke) make I/O patterns easy to baseline.</li>
               <li>EDR telemetry clearly tie the EXE and log together.</li>
             </ul>
@@ -179,16 +179,16 @@
           <div class="pl-4">
             <h4 class="text-lg font-semibold text-blue-300 pl-8">Process & memory tells:</h4>
             <ul class="list-disc list-inside text-gray-300 mb-2 pl-12">
-              <li>Visible <code class="text-blue-300 font-mono text-sm">user-mode</code> process with a <code class="text-blue-300 font-mono text-sm">WinForms</code> message loop (<code class="text-blue-300 font-mono text-sm">Application.Run()</code>).</li>
-              <li>Readable imports/strings such as <code class="text-blue-300 font-mono text-sm">SetWindowsHookEx</code>, <code class="text-blue-300 font-mono text-sm">ToUnicodeEx</code>, <code class="text-blue-300 font-mono text-sm">GetKeyState</code>, and literal <code class="text-blue-300 font-mono text-sm">log.txt</code>.</li>
+              <li>Visible <code class=" break-all text-blue-300 font-mono text-sm">user-mode</code> process with a <code class=" break-all text-blue-300 font-mono text-sm">WinForms</code> message loop (<code class=" break-all text-blue-300 font-mono text-sm">Application.Run()</code>).</li>
+              <li>Readable imports/strings such as <code class=" break-all text-blue-300 font-mono text-sm">SetWindowsHookEx</code>, <code class=" break-all text-blue-300 font-mono text-sm">ToUnicodeEx</code>, <code class=" break-all text-blue-300 font-mono text-sm">GetKeyState</code>, and literal <code class=" break-all text-blue-300 font-mono text-sm">log.txt</code>.</li>
               <li>No obfuscation or packing have been used making it easy for YARA/string matches.</li>
             </ul>
           </div>
           <div class="pl-4">
             <h4 class="text-lg font-semibold text-blue-300 pl-8">Hooking & API usage patterns:</h4>
             <ul class="list-disc list-inside text-gray-300 mb-2 pl-12">
-              <li>Global <code class="text-blue-300 font-mono text-sm">WH_KEYBOARD_LL</code> hook from a non-system module is straightforward to enumerate.</li>
-              <li>Repetitive calls to <code class="text-blue-300 font-mono text-sm">GetKeyState</code>, <code class="text-blue-300 font-mono text-sm">GetKeyboardState</code>, <code class="text-blue-300 font-mono text-sm">ToUnicodeEx</code>, and <code class="text-blue-300 font-mono text-sm">GetForegroundWindow</code> correlate tightly with keystrokes.</li>
+              <li>Global <code class=" break-all text-blue-300 font-mono text-sm">WH_KEYBOARD_LL</code> hook from a non-system module is straightforward to enumerate.</li>
+              <li>Repetitive calls to <code class=" break-all text-blue-300 font-mono text-sm">GetKeyState</code>, <code class=" break-all text-blue-300 font-mono text-sm">GetKeyboardState</code>, <code class=" break-all text-blue-300 font-mono text-sm">ToUnicodeEx</code>, and <code class=" break-all text-blue-300 font-mono text-sm">GetForegroundWindow</code> correlate tightly with keystrokes.</li>
             </ul>
           </div>
           <div class="pl-4">
@@ -204,7 +204,7 @@
             Overall take:
           </h3>
           <p class="text-gray-300 leading-relaxed mb-4 pl-12">
-            This is a textbook, noisy, and a <code class="text-blue-300 font-mono text-sm">user-mode</code> keylogger. Plaintext logs, with a hidden <code class="text-blue-300 font-mono text-sm">WinForms</code> message loop (<code class="text-blue-300 font-mono text-sm">Application.Run()</code>),
+            This is a textbook, noisy, and a <code class=" break-all text-blue-300 font-mono text-sm">user-mode</code> keylogger. Plaintext logs, with a hidden <code class=" break-all text-blue-300 font-mono text-sm">WinForms</code> message loop (<code class=" break-all text-blue-300 font-mono text-sm">Application.Run()</code>),
             and a global system-wide, low-level keyboard hook make it trivial to spot with signatures and behavior rules. Any AV or EDR will correlate the process, the hook, and the file within minutes.
           </p>
           <div class="flex items-center">
@@ -224,31 +224,31 @@
               <li class="relative">
                 <span class="absolute left-0 -translate-x-1.5 flex items-center justify-center w-6 h-6 rounded-full bg-[#101a2e] border border-blue-400/50 text-blue-300 text-xs font-bold">1</span>
                 <div class="pl-7">
-                  <p>Plaintext <code class="text-blue-300 font-mono text-sm">log.txt</code> with frequent small appends in the app directory</p>
+                  <p>Plaintext <code class=" break-all text-blue-300 font-mono text-sm">log.txt</code> with frequent small appends in the app directory</p>
                 </div>
               </li>
               <li class="relative">
                 <span class="absolute left-0 -translate-x-1.5 flex items-center justify-center w-6 h-6 rounded-full bg-[#101a2e] border border-blue-400/50 text-blue-300 text-xs font-bold">2</span>
                 <div class="pl-7">
-                  <p>Process owning a global <code class="text-blue-300 font-mono text-sm">WH_KEYBOARD_LL</code> hook that isn’t signed by Microsoft.</p>
+                  <p>Process owning a global <code class=" break-all text-blue-300 font-mono text-sm">WH_KEYBOARD_LL</code> hook that isn’t signed by Microsoft.</p>
                 </div>
               </li>
               <li class="relative">
                 <span class="absolute left-0 -translate-x-1.5 flex items-center justify-center w-6 h-6 rounded-full bg-[#101a2e] border border-blue-400/50 text-blue-300 text-xs font-bold">3</span>
                 <div class="pl-7">
-                  <p>Imports and strings such as <code class="text-blue-300 font-mono text-sm">SetWindowsHookEx</code>, <code class="text-blue-300 font-mono text-sm">ToUnicodeEx</code>, <code class="text-blue-300 font-mono text-sm">GetKeyState</code>, and the literal <code class="text-blue-300 font-mono text-sm">log.txt</code>.</p>
+                  <p>Imports and strings such as <code class=" break-all text-blue-300 font-mono text-sm">SetWindowsHookEx</code>, <code class=" break-all text-blue-300 font-mono text-sm">ToUnicodeEx</code>, <code class=" break-all text-blue-300 font-mono text-sm">GetKeyState</code>, and the literal <code class=" break-all text-blue-300 font-mono text-sm">log.txt</code>.</p>
                 </div>
               </li>
               <li class="relative">
                 <span class="absolute left-0 -translate-x-1.5 flex items-center justify-center w-6 h-6 rounded-full bg-[#101a2e] border border-blue-400/50 text-blue-300 text-xs font-bold">4</span>
                 <div class="pl-7">
-                  <p>Consistent “window header then burst of writes” matching the <code class="text-blue-300 font-mono text-sm">### Title ###</code> pattern.</p>
+                  <p>Consistent “window header then burst of writes” matching the <code class=" break-all text-blue-300 font-mono text-sm">### Title ###</code> pattern.</p>
                 </div>
               </li>
               <li class="relative">
                 <span class="absolute left-0 -translate-x-1.5 flex items-center justify-center w-6 h-6 rounded-full bg-[#101a2e] border border-blue-400/50 text-blue-300 text-xs font-bold">5</span>
                 <div class="pl-7">
-                  <p><code class="text-blue-300 font-mono text-sm">WinForms</code> message loop with no UI <code class="text-blue-300 font-mono text-sm">(Application.Run())</code>, recent start time, and steady context switches.</p>
+                  <p><code class=" break-all text-blue-300 font-mono text-sm">WinForms</code> message loop with no UI <code class=" break-all text-blue-300 font-mono text-sm">(Application.Run())</code>, recent start time, and steady context switches.</p>
                 </div>
               </li>
             </ol>
@@ -273,16 +273,16 @@
               What does the function do?
             </h4>
             <p class="text-gray-300 mb-2 pl-7">
-              This is the low-level keyboard hook handler registered via <code class="text-blue-300 font-mono text-sm">SetWindowsHookEx(WH_KEYBOARD_LL, …)</code>. Windows calls it for each keyboard event before the event is delivered to 
+              This is the low-level keyboard hook handler registered via <code class=" break-all text-blue-300 font-mono text-sm">SetWindowsHookEx(WH_KEYBOARD_LL, …)</code>. Windows calls it for each keyboard event before the event is delivered to 
               apps. The job inside this is to decide whether to log, transform, or ignore the event, then always chain to the next hook.
             </p>
             <div class="pl-7">
               <ul class="text-gray-300 leading-relaxed">
-                <li>• <span class="text-blue-300">Filter:</span> process only <code class="text-blue-300 font-mono text-sm">WM_KEYDOWN</code> with valid <code class="text-blue-300 font-mono text-sm">nCode</code>.</li>
-                <li>• <span class="text-blue-300">Extract:</span> read VK from <code class="text-blue-300 font-mono text-sm">lParam</code>; sample Caps or Shift via <code class="text-blue-300 font-mono text-sm">GetKeyState</code>.</li>
-                <li>• <span class="text-blue-300">Translate:</span> layout-aware chars using <code class="text-blue-300 font-mono text-sm">ToUnicodeEx</code>; map specials and F-keys.</li>
-                <li>• <span class="text-blue-300">Context:</span> detect window switch and insert <code class="text-blue-300 font-mono text-sm">### Title ###</code> headers.</li>
-                <li>• <span class="text-blue-300">Persist:</span> append to <code class="text-blue-300 font-mono text-sm">log.txt</code>, then pass control onward.</li>
+                <li>• <span class="text-blue-300">Filter:</span> process only <code class=" break-all text-blue-300 font-mono text-sm">WM_KEYDOWN</code> with valid <code class=" break-all text-blue-300 font-mono text-sm">nCode</code>.</li>
+                <li>• <span class="text-blue-300">Extract:</span> read VK from <code class=" break-all text-blue-300 font-mono text-sm">lParam</code>; sample Caps or Shift via <code class=" break-all text-blue-300 font-mono text-sm">GetKeyState</code>.</li>
+                <li>• <span class="text-blue-300">Translate:</span> layout-aware chars using <code class=" break-all text-blue-300 font-mono text-sm">ToUnicodeEx</code>; map specials and F-keys.</li>
+                <li>• <span class="text-blue-300">Context:</span> detect window switch and insert <code class=" break-all text-blue-300 font-mono text-sm">### Title ###</code> headers.</li>
+                <li>• <span class="text-blue-300">Persist:</span> append to <code class=" break-all text-blue-300 font-mono text-sm">log.txt</code>, then pass control onward.</li>
               </ul>
             </div>
             <br>
@@ -332,7 +332,7 @@
               Practical patch:
             </h4>
             <pre class="bg-[#0b1220] border border-blue-400/30 rounded-lg p-4 overflow-x-auto text-gray-200">
-              <code class="font-mono text-sm leading-6">
+              <code class=" break-all font-mono text-sm leading-6">
                 // Remember the goal in this project is to rewrite a function
                 // and to see how the security solution responds back, this is how we 
                 // study its behavior, not to fully 100% bypass all EDR solutions
@@ -430,8 +430,8 @@ private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
                 <div class="text-blue-300 font-semibold mb-2">Verification checklist (new function)</div>
                 <ul class="text-gray-300 text-sm space-y-1">
                   <li>• CapsLock + Shift: letters keep correct case.</li>
-                  <li>• Exactly one header per window switch <em>(requires a pure</em> <code class="text-blue-300 px-1 rounded">GetActiveWindowTitle()</code> <em>that doesn’t mutate state)</em>.</li>
-                  <li>• Fewer redundant <code class="text-blue-300 px-1 rounded">### Title ###</code> lines once the getter is pure.</li>
+                  <li>• Exactly one header per window switch <em>(requires a pure</em> <code class=" break-all text-blue-300 px-1 rounded">GetActiveWindowTitle()</code> <em>that doesn’t mutate state)</em>.</li>
+                  <li>• Fewer redundant <code class=" break-all text-blue-300 px-1 rounded">### Title ###</code> lines once the getter is pure.</li>
                   <li>• F-keys (F1–F12) and common specials (Space/Enter/Esc/Ctrl/Shift/Back/Win/Tab) are normalized.</li>
                 </ul>
               </div>
