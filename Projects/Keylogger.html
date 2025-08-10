@@ -340,15 +340,14 @@
                   The moment I compile the <span class="text-red-300 font-semibold">original project</span>, it’s instantly flagged and quarantined by Windows Defender right out of the gate, before even running it.
                 </p>
               </div>
-            
-              <!-- Image -->
               <div class="w-full md:w-[55%] lg:w-auto md:max-w-[520px] lg:max-w-[500px]">
-                <img src="../Projects/Images/keyFlag.png"
-                     alt="Windows Defender Safe"
-                     class="w-full h-auto rounded-md border border-red-500/40 shadow-lg object-contain">
-              </div>
+                <img src="../Projects/Images/keyFlag.png" alt="Windows Defender Safe" class="w-full h-auto rounded-md border border-red-500/40 shadow-lg object-contain cursor-pointer" onclick="openImageModal(this.src)">
             </div>
-            
+            <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-80 hidden items-center justify-center z-50">
+                <span class="absolute top-5 right-8 text-white text-4xl font-bold cursor-pointer" onclick="closeImageModal()">&times;</span>
+                <img id="modalImage" class="max-w-full max-h-full rounded-lg shadow-xl">
+            </div>
+            </div>
             <br>            
             <h4 class="mt-5 text-xl font-bold text-blue-400 flex items-center gap-2">
               <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-indigo-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -446,8 +445,8 @@ private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
                 </p>
               </div>
               <div class="w-full justify-self-end">
-                <img src="../Projects/Images/cleanLog.png" alt="Windows Defender Safe" class="w-full h-auto max-h-[420px] md:max-h-[360px] lg:max-h-[480px] rounded-md border border-green-500/40 shadow-lg object-contain">
-              </div>
+                <img src="../Projects/Images/cleanLog.png" alt="Windows Defender Safe" class="w-full h-auto max-h-[420px] md:max-h-[360px] lg:max-h-[480px] rounded-md border border-green-500/40 shadow-lg object-contain cursor-pointer" onclick="openImageModal(this.src)">
+            </div>
             </div>
             <br>
             <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -535,6 +534,16 @@ private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
       const minutes = Math.max(1, Math.ceil(words / 230));
       document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
     });
+    function openImageModal(src) {
+                document.getElementById("modalImage").src = src;
+                document.getElementById("imageModal").classList.remove("hidden");
+                document.getElementById("imageModal").classList.add("flex");
+            }
+            
+            function closeImageModal() {
+                document.getElementById("imageModal").classList.remove("flex");
+                document.getElementById("imageModal").classList.add("hidden");
+            }
   </script>
 </body>
 </html>
