@@ -255,13 +255,17 @@
           </div>
           <br>
           <div class="h-px bg-gradient-to-r from-blue-400/40 to-transparent"></div>
-          <div class="bg-[#0f172a] p-6 shadow-md ">
-            <h3 class="flex items-center gap-2 text-lg font-bold text-blue-400 ">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-indigo-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <div class="bg-[#0f172a] p-6 shadow-md">
+            <h3 class="flex items-start gap-2 text-lg font-bold text-blue-400">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-indigo-300 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M5.07 19h13.86A2 2 0 0021 17.06L13.94 3.94a2 2 0 00-3.88 0L3 17.06A2 2 0 005.07 19z"/>
               </svg>
-              Function <span class="text-indigo-300">HookCallback</span>
-              <span class="ml-2 text-[11px] px-2 py-0.5 rounded-full border border-blue-400/40 text-blue-300 bg-[#101a2e]">Deep Dive</span>
+              <span class="flex-1 min-w-0">
+                Function <span class="text-indigo-300">HookCallback</span>
+              </span>
+              <span class="ml-2 inline-flex items-center justify-center whitespace-nowrap flex-shrink-0 text-[11px] px-2 py-0.5 rounded-full border border-blue-400/40 text-blue-300 bg-[#101a2e]">
+                Deep&nbsp;Dive
+              </span>
             </h3>
             <p class="text-gray-300 leading-relaxed pl-7 mb-5">
               <strong>The hot path starts here</strong>: let’s dive deep into its logic line-by-line and turn it out into something lean and rock-solid.
@@ -447,32 +451,45 @@ private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
               </div>
             </div>
           </div>
-          <div class="bg-[#0f172a] border-t-4 border-blue-500 p-6 rounded-lg shadow-lg ">
+          <div class="bg-[#0f172a] border-t-4 border-blue-500 p-6 rounded-lg shadow-lg">
             <h3 class="text-blue-300 text-xl font-bold mb-3">Conclusion:</h3>
             <p class="text-gray-300 text-sm leading-relaxed mb-4">
-              <span class="font-semibold text-blue-400">Note:</span> What I have done is not rocket science, I was just playing with the code, making a few changes to see how the security solution would respond to the project. My message to you is:
+              <span class="font-semibold text-blue-400">Note:</span>
+              What I have done is not rocket science. I simply played with the code to see how the security solution would respond. My message to you is:
             </p>
-            <ul class="text-gray-300 text-sm leading-relaxed pl-3 space-y-1">
+            <ul class="text-gray-300 text-sm leading-relaxed pl-1 space-y-3">
               <li class="flex items-start gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-400 flex-shrink-0 mt-[2px]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-400 flex-shrink-0 mt-[2px]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
-                <span class="font-semibold text-blue-400">For Developers:</span> Always think smart, refine your skills, and approach challenges with an <span class="text-green-500 font-semibold">out-of-the-box mindset.</span>
+                <div class="min-w-0 break-words hyphens-auto">
+                  <span class="font-semibold text-blue-400">For Developers:</span>
+                  Always think smart, refine your skills, and approach challenges with an
+                  <span class="text-green-500 font-semibold">out-of-the-box mindset.</span>
+                </div>
               </li>
               <li class="flex items-start gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-yellow-400 flex-shrink-0 mt-[2px]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-yellow-400 flex-shrink-0 mt-[2px]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z" />
                 </svg>
-                <span class="font-semibold text-blue-400">For Users:</span> Practice strong security awareness and <span class="text-red-500 font-semibold">never click on links or open files blindly.</span>
+                <div class="min-w-0 break-words hyphens-auto">
+                  <span class="font-semibold text-blue-400">For Users:</span>
+                  Practice strong security awareness and
+                  <span class="text-red-500 font-semibold">never click on links or open files blindly.</span>
+                </div>
               </li>
               <li class="flex items-start gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-400 flex-shrink-0 mt-[2px]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-400 flex-shrink-0 mt-[2px]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                 </svg>
-                <span class="font-semibold text-blue-400">Final Note:</span> Thank you for reading, and stay tuned for upcoming projects that push the boundaries even further.
+                <div class="min-w-0 break-words hyphens-auto">
+                  <span class="font-semibold text-blue-400">Final Note:</span>
+                  Thank you for reading, and stay tuned for upcoming projects that push the boundaries even further.
+                </div>
               </li>
             </ul>
           </div>
+          
         </div>
       </div>
     </section>
