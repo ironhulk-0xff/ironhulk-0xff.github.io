@@ -153,7 +153,7 @@
                 <span class="absolute left-0 -translate-x-1.5 flex items-center justify-center w-6 h-6 rounded-full bg-[#101a2e] border border-blue-400/50 text-blue-300 text-xs font-bold">6</span>
                 <div class="pl-7">
                   <span class="text-blue-300 font-semibold">Map common specials with a switch</span>:
-                  Will replace keys like Space/Enter/Esc/Tab/Ctrl/Shift with readable tokens (<code class=" break-all text-blue-300 font-mono text-sm">[SPACE]</code>, <code class=" break-all text-blue-300 font-mono text-sm">[ENTER]</code>).
+                  Will replace keys like Space, Enter, Esc, Tab, Ctrl and Shift with readable tokens (<code class=" break-all text-blue-300 font-mono text-sm">[SPACE]</code>, <code class=" break-all text-blue-300 font-mono text-sm">[ENTER]</code>).
                 </div>
               </li>
               <li class="relative">
@@ -456,7 +456,7 @@ private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
                   <li>• CapsLock + Shift: letters keep correct case.</li>
                   <li>• Exactly one header per window switch <em>(requires a pure</em> <code class=" break-all text-blue-300 px-1 rounded">GetActiveWindowTitle()</code> <em>that doesn’t mutate state)</em>.</li>
                   <li>• Fewer redundant <code class=" break-all text-blue-300 px-1 rounded">### Title ###</code> lines once the getter is pure.</li>
-                  <li>• F-keys (F1–F12) and common specials (Space/Enter/Esc/Ctrl/Shift/Back/Win/Tab) are normalized.</li>
+                  <li>• F-keys (F1–F12) and common specials like Space, Enter, Esc, Ctrl, Shift, Back, Win and Tab are normalized.</li>
                 </ul>
               </div>
               <div class="rounded-xl border border-blue-400/30 bg-[#0f172a] p-4">
