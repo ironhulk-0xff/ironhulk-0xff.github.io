@@ -505,7 +505,7 @@
                 Ransomware in a Windows Fleet
               </dt>
               <dd class="text-slate-200/90 space-y-1">
-                <p><strong>Preventive:</strong> Patch hygiene, application control, macro restrictions, network segmentation.</p>
+                <p><strong>Preventive:</strong> Patch, application control, macro restrictions, network segmentation.</p>
                 <p><strong>Detective:</strong> Crypto-spike/IOPS anomalies, canary files, EDR process behavior.</p>
                 <p><strong>Corrective:</strong> Kill/quarantine, isolate VLAN, restore from tested backups, post-incident hardening.</p>
               </dd>
@@ -518,20 +518,8 @@
               </dt>
               <dd class="text-slate-200/90 space-y-1">
                 <p><strong>Preventive:</strong> SSO/MFA, DLP, scoped roles, tenant-wide sharing controls.</p>
-                <p><strong>Detective:</strong> Audit logs, UEBA, unusual downloads/shares, API access patterns.</p>
+                <p><strong>Detective:</strong> Audit logs, User & Entity Behavior Analytics (UEBA), unusual downloads/shares, API access patterns.</p>
                 <p><strong>Corrective:</strong> Revoke tokens, tighten policies, remove shares, notify stakeholders.</p>
-              </dd>
-            </div>
-            <!-- Hospital / PED -->
-            <div class="rounded-2xl bg-slate-800/60 border border-slate-700 p-6 shadow-lg lg:col-span-2">
-              <dt class="text-lg font-semibold text-sky-400 mb-2 flex items-center gap-2">
-                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none"><path d="M12 4v16M4 12h16" stroke="currentColor" stroke-width="1.5"/></svg>
-                Clinical Workstations (Hospital / PED)
-              </dt>
-              <dd class="text-slate-200/90 space-y-1">
-                <p><strong>Preventive:</strong> Badge access, screen locks, device control (USB/write), standard images, least privilege.</p>
-                <p><strong>Detective:</strong> EHR access audits, USB insert/write alerts, login anomalies, AV/EDR signals.</p>
-                <p><strong>Corrective:</strong> Suspend account, quarantine device, incident report, retrain staff; failover to paper SOPs if systems are down.</p>
               </dd>
             </div>
           </dl>
