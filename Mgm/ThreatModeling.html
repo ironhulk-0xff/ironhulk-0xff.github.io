@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Threat Modeling</title>
+  <meta name="description" content="A practical, standards-aligned guide to threat modeling with steps, approaches, and frameworks (NIST, ISO, ISACA/COBIT, (ISC)², SANS, EC-Council, CISA, CIA triad)." />
+</head>
+
+<body style="margin:0; font:16px/1.7 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; color:#22324d; background: radial-gradient(1200px 800px at 20% -10%, rgba(186,230,253,.35), transparent 60%),
+  radial-gradient(1000px 700px at 110% 30%, rgba(209,250,229,.35), transparent 60%),
+  #f8fafc;">
+  <!-- ======= Header (soft gradient) ======= -->
+  <header id="top" role="banner" style="
+  background:linear-gradient(120deg, #b3e5fc 0%, #c8e6c9 50%, #e1bee7 100%);
+  color:#1e293b;">
+  <div style="margin:0 auto; padding:15px 18px 10px;">
+    <!-- Flex container -->
+    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;">
+      <!-- Title + reading time together -->
+      <div style="display:flex; flex-direction:column; gap:4px; flex:1 1 auto; min-width:260px;">
+        <h1 style="margin:0; font-size:clamp(28px,5vw,40px); letter-spacing:.2px; color:#1e293b;">
+          Threat Modeling
+        </h1>
+        <small id="reading-time" style="color:#475569; font-size:13px;"></small>
+      </div>
+      <!-- Back link -->
+      <div>
+        <a href="../blog.html" style="color:#1e293b; font-size:14px; text-decoration:none;">
+          ← Back to Blogs
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+  <!-- ======= Container ======= -->
+  <main id="content" role="main"  style="margin:24px auto; padding:0 18px 60px;">
+    <!-- ======= 1. Introduction ======= -->
+    <section id="intro" style="background:#ffffff; border:1px solid #e9eef5; border-radius:16px; padding:22px; box-shadow:0 10px 24px rgba(34,50,77,.06); margin:0 0 18px;">
+      <div style="display:flex; gap:14px; align-items:flex-start; flex-wrap:wrap;">
+        <!-- Text column -->
+        <div style="flex:1 1 520px; min-width:260px;">
+          <h2 style="margin:0 0 8px; font-size:clamp(22px,3.2vw,28px); color:#1f2a44;">
+            1) What is Threat Modeling?
+          </h2>
+          <p style="margin:0 0 10px;">
+            Threat modeling is a way to think ahead about possible problems, <strong>what could go wrong</strong>, in your systems, applications, or infrastructure so you can build the right defenses before anyone attacks. 
+            Instead of waiting for something bad to happen, you look for weak spots early on, figure out how someone might break in, what they might go after, and what the damage could be. 
+            Then you come up with good solutions. At its core, it's a method that helps you find, measure, and deal with security threats across an organization. NIST (SP 800-30) says it's a key part of managing risk because it helps businesses decide which security steps to take, where to put resources, and how to use them properly. 
+            What started as basic checks for weaknesses has now become full frameworks that cover the whole picture of possible threats. As cyberattacks get more complex, the need for threat modeling has grown. 
+            CISA says that finding risks early lets organizations set up protections just in time, instead of fixing things after an attack happens. 
+            Another benefit is that it helps security teams think like hackers, looking at systems from the perspective of someone trying to break in and finding paths they might not have noticed. 
+            It's also a big part of managing risk in large companies, making sure security efforts match the business goals. Importantly, threat modeling knows there's no single solution that works for everyone. 
+            Every business has different risks based on its industry, where it's based, the technology it uses, and how it makes money.
+          </p>
+          <div style="border-left:4px solid #93c5fd; background:#eff6ff; padding:10px 12px; border-radius:12px; margin-top:8px;">
+            <strong>Outcome:</strong> fewer emergency fixes, clearer priorities, and architecture that removes whole classes of weaknesses.
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="diff-modeling-hunting" style="background:#ffffff; border:1px solid #e9eef5; border-radius:16px; padding:22px; box-shadow:0 10px 24px rgba(34,50,77,.06); margin:0 0 18px;">
+      <div style="display:flex; gap:14px; align-items:flex-start; flex-wrap:wrap;">
+        
+        <!-- Text column -->
+        <div style="flex:1 1 520px; min-width:260px;">
+          <h2 style="margin:0 0 8px; font-size:clamp(22px,3.2vw,28px); color:#1f2a44;">
+            2) How is Threat Modeling Different from Threat Hunting?
+          </h2>
+          <p style="margin:0 0 10px;">
+            While <strong>threat modeling</strong> is about looking ahead, anticipating what could go wrong during the design and development of systems, <strong>threat hunting</strong> is about looking inside your live environment to find signs of attackers who may already be active. 
+          </p>
+          <div style="margin:10px 0;">
+            <strong>Key Differences:</strong>
+            <ul style="margin:6px 0 0; padding-left:18px;">
+              <li><strong>Goal:</strong> Threat modeling aims to design systems securely before attacks happen. On the other hand, threat hunting seeks to detect stealthy attackers already inside the network.</li>
+              <li><strong>Timing:</strong> Threat modeling is proactive and used during design, planning, and development. Threat hunting is reactive and continuous, used during operations and monitoring.</li>
+              <li><strong>Focus:</strong> Threat modeling looks at assets, architecture, and potential attack paths. Threat hunting focuses on abnormal activity, attacker behaviors, and indicators of compromise.</li>
+              <li><strong>Outcome:</strong> Modeling produces better designs and preventive controls. Hunting produces detection, investigation, and faster incident response.</li>
+            </ul>
+          </div>
+          <div style="border-left:4px solid #22c55e; background:#f0fdf4; padding:10px 12px; border-radius:12px; margin-top:8px;">
+            <strong>Summary:</strong> Think of threat modeling as <em>locking the doors while building the house</em>, and threat hunting as <em>checking the house for intruders once you’re living in it</em>.
+          </div>
+        </div>
+    
+      </div>
+    </section>
+    
+    <!-- ======= 2. Approaches ======= -->
+    <section id="approaches" style="
+      background:#ffffff; border:1px solid #e9eef5; border-radius:16px; padding:22px;
+      box-shadow:0 10px 24px rgba(34,50,77,.06); margin:0 0 18px;">
+      <h2 style="margin:0 0 12px; font-size:clamp(22px,3.2vw,28px); color:#1f2a44;">3) Two Main Approaches: The philosophy behind a threat modeling initiative typically falls into one of two categories, each with distinct advantages and implications.</h2>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:14px;">
+        <div style="border:1px solid #eef2f8; border-radius:14px; padding:16px; background:#f5fbff;">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+            <div style="width:10px; height:10px; background:#a7f3d0; border-radius:50%;"></div>
+            <h3 style="margin:0; font-size:18px; color:#1f2a44;">Defensive Approach:</h3>
+          </div>
+          <p style="margin:0 0 10px;">
+            The defensive approach is about finding and dealing with possible threats before they turn into real problems.
+            This is the usual way of thinking about threats and is closely linked to modern threat modeling. It means building security into systems from the start, not adding it later. This method is used during the planning and making of any project. The main idea is to build security early on and use it all through the Software Development Life Cycle (SDLC) to help with how the system is designed, what features are needed, how it's tested, and when it's ready to be released. It focuses on solving problems that could let hackers get in before the code is finished.
+            </p>
+          <div style="margin-top:10px;">
+            <strong>Methodology:</strong> 
+            Security experts and developers work together to understand how the system works, predict what attackers might try, and list out possible threats based on how the system is built.
+          </div>
+          <div style="margin-top:8px;">
+            <strong>Benefits:</strong> 
+            It's much cheaper to fix a problem on paper during a meeting with the team than to fix it later in the actual code.
+            This way, you save money, avoid redoing work, and get secure products to market faster. It also matches the ISACA COBIT 2019 framework, which encourages taking control of company IT in a forward-thinking way. It helps keep the CIA Triad safe by making sure that the system protects confidentiality, keeps data accurate, and ensures it's always available from the beginning.
+          </div>
+          <div style="margin-top:8px;">
+            <strong>Analogy:</strong> 
+            Putting in a strong lock and alarm system when building a house, instead of after someone has already broken in.
+          </div>
+        </div>
+        <div style="border:1px solid #eef2f8; border-radius:14px; padding:16px; background:#fff7ed;">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+            <div style="width:10px; height:10px; background:#fde68a; border-radius:50%;"></div>
+            <h3 style="margin:0; font-size:18px; color:#1f2a44;">Reactive Approach:</h3>
+          </div>
+          <p style="margin:0;">
+            Even with all the steps taken to stay ahead of possible dangers, it's still hard to catch every threat before it happens. That's why it's important to have plans in place that respond to threats once they're already happening. One such method is called threat hunting. This involves looking closely at systems after they've been set up to spot any signs that something bad might have already taken place. These signs are often called Indicators of Compromise, or IoCs. Threat hunting helps find problems after they occur, which is different from defensive threat modeling, which aims to stop issues before they start.
+          </p>
+          <div style="margin-top:10px;">
+            <strong>Methodology:</strong> 
+            The team looks back at how a threat model was built for a live application and checks how it's working now to find any weaknesses that were missed during the original development.
+          </div>
+          <div style="margin-top:8px;">
+            <strong>Benefits:</strong> 
+            This approach helps make older systems, which weren't built with security in mind, safer.
+            It's especially useful in big, complicated environments where there are many potential risks.
+          </div>
+          <div style="margin-top:8px;">
+            <strong>Drawbacks:</strong> 
+            However, fixing issues found through this reactive method can be tricky, costly, and may cause the system to stop working.
+            While it's better than ignoring the problem, it uses more time and resources than a proactive strategy. Groups like CISA often encourage this method through rules that require regular checks for weaknesses and making systems more secure.
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:12px; border-left:4px solid #a5b4fc; background:#eef2ff; padding:10px 12px; border-radius:12px;">
+        <strong>Best programs use both:</strong> proactive to prevent, reactive to evolve.
+      </div>
+    </section>
+    <!-- ======= 3. Steps ======= -->
+    <section id="steps" style="background:#ffffff; border:1px solid #e9eef5; border-radius:16px; padding:22px; box-shadow:0 10px 24px rgba(34,50,77,.06); margin:0 0 18px;">
+      <h2 style="margin:0 0 12px; font-size:clamp(22px,3.2vw,28px); color:#1f2a44;">4) Steps Involved in Threat Modeling</h2>
+      <div class="grid-steps" style="display:grid; gap:14px;">
+        <div style="border:1px solid #eef2f8; border-radius:14px; padding:14px; background:#f8fafc;">
+          <h3 style="margin:0 0 6px; font-size:18px; color:#1f2a44;">1) Identify Assets:</h3>
+          <p style="margin:0;">Figure out which assets need to be protected, like data, systems, apps, and physical infrastructure.</p>
+          <div style="margin-top:6px;">
+            <strong>Activities:</strong>
+            <ul style="margin:6px 0 0; padding-left:18px;">
+              <li>Make a list of all the assets.</li>
+              <li>Sort them by how important and sensitive they are.</li>
+              <li>Find out how much each asset is worth to the company.</li>
+            </ul>
+          </div>
+        </div>
+        <div style="border:1px solid #eef2f8; border-radius:14px; padding:14px; background:#f0f9ff;">
+          <h3 style="margin:0 0 6px; font-size:18px; color:#1f2a44;">2) Create an Architecture Overview:</h3>
+          <p style="margin:0;">Make a big picture view of your netwrok digram, system setup and connectivity, how they are linked, showing how data moves and how different parts connect.</p>
+          <div style="margin-top:6px;">
+            <strong>Activities:</strong>
+            <ul style="margin:6px 0 0; padding-left:18px;">
+              <li>Draw a picture of the system to show where data goes.</li>
+              <li>List the main parts, like databases, servers, and network areas.</li>
+              <li>Show connections with outside systems and services.</li>
+            </ul>
+          </div>
+        </div>
+        <div style="border:1px solid #eef2f8; border-radius:14px; padding:14px; background:#fefce8;">
+          <h3 style="margin:0 0 6px; font-size:18px; color:#1f2a44;">3) Identify Threats:</h3>
+          <p style="margin:0;">Find out what possible threat could harm the security of the system. These might come from outside people, inside workers, bad access, or outside partners.
+            </p>
+          <div style="margin-top:6px;">
+            <strong>Activities:</strong>
+            <ul style="margin:6px 0 0; padding-left:18px;">
+              <li>Use guides and tools like STRIDE to find possible risks.</li>
+              <li>Talk with people in charge and security experts to think through possible dangers.</li>
+              <li>Look at threats from different angles, like what a hacker might try or what motives they might have.</li>
+            </ul>
+          </div>
+        </div>
+        <div style="border:1px solid #eef2f8; border-radius:14px; padding:14px; background:#ecfeff;">
+          <h3 style="margin:0 0 6px; font-size:18px; color:#1f2a44;">4) Identify Vulnerabilities:</h3>
+          <p style="margin:0;">Find weaknesses in the system that bad people might use to cause harm. These weaknesses can be things like software that hasn't been fixed, settings that are set up wrong, or passwords that are too simple.</p>
+          <div style="margin-top:6px;">
+            <strong>Activities:</strong>
+            <ul style="margin:6px 0 0; padding-left:18px;">
+              <li>Check for weaknesses using tests and tools.</li>
+              <li>Look at past problems and weaknesses in similar systems.</li>
+              <li>Use both automatic tools and manual checks to find security issues.</li>
+            </ul>
+          </div>
+        </div>
+        <div style="border:1px solid #eef2f8; border-radius:14px; padding:14px; background:#f0fdf4;">
+          <h3 style="margin:0 0 6px; font-size:18px; color:#1f2a44;">5) Determine Attack Vectors:</h3>
+          <p style="margin:0;">Figure out how an attacker could use each weakness. Ways attackers might try to take advantage include fake emails, harmful software, repeated login attempts, tricking people, and other methods.
+            Look at how bad each threat and weakness could be and how likely they are to happen.
+            </p>
+        </div>
+        <div style="border:1px solid #eef2f8; border-radius:14px; padding:14px; background:#faf5ff;">
+          <h3 style="margin:0 0 6px; font-size:18px; color:#1f2a44;">6) Assess Risks:</h3>
+          <p style="margin:0;">Architecture reviews, abuse-case tests, and observability checks confirm effectiveness.</p>
+          <strong>Activities:</strong>
+          <ul style="margin:6px 0 0; padding-left:18px;">
+            <li>Review risks to decide which threats are most important based on how bad they could be and how likely they are.</li>
+            <li>Use both general and specific ways to understand the risks.</li>
+            <li>Write down the results of your risk check and sort the threats by how serious they are.</li>
+          </ul>
+        </div>
+        <div style="border:1px solid #eef2f8; border-radius:14px; padding:14px; background:#fef2f2;">
+          <h3 style="margin:0 0 6px; font-size:18px; color:#1f2a44;">7) Prioritize Attacks:</h3>
+          <p style="margin:0;">Focus on the biggest and most likely threats first and pay attention to the ones that could cause the most problems for your company.
+            </p>
+        </div>
+        <div style="border:1px solid #eef2f8; border-radius:14px; padding:14px; background:#faf5ff;">
+          <h3 style="margin:0 0 6px; font-size:18px; color:#1f2a44;">8) Create Attack Scenarios:</h3>
+          <p style="margin:0;">For each important attack, come up with a clear plan that shows how the attack could happen. Talk about the steps an attacker might follow to use weaknesses and get into a system without permission.</p>
+        </div>
+        <div style="border:1px solid #eef2f8; border-radius:14px; padding:14px; background:#faf5ff;">
+          <h3 style="margin:0 0 6px; font-size:18px; color:#1f2a44;">9) Diagram Attack Paths:</h3>
+          <p style="margin:0;">Make pictures that show how an attack moves through a system. Use charts or drawings to show each part of the attack plan, like where the attacker starts, how they move through the system, how they take data out, and any other important steps.
+            </p>
+        </div>
+        <div style="border:1px solid #eef2f8; border-radius:14px; padding:14px; background:#faf5ff;">
+          <h3 style="margin:0 0 6px; font-size:18px; color:#1f2a44;">10) Determine Countermeasures and Mitigations:</h3>
+          <p style="margin:0;">: Find out what risks exist, create plans to lower or remove them, and put those plans into action.</p>
+          <strong>Activities:</strong>
+          <ul style="margin:6px 0 0; padding-left:18px;">
+            <li>Make and use security features like keeping data safe with codes, limiting who can access things, and watching for unwanted activity.</li>
+            <li>Check again to make sure these safety steps are working well against the dangers.</li>
+            <li>Update the list of possible threats to show how things have changed and improved.</li>
+          </ul>
+        </div>
+        <div style="border:1px solid #eef2f8; border-radius:14px; padding:14px; background:#faf5ff;">
+          <h3 style="margin:0 0 6px; font-size:18px; color:#1f2a44;">11) Validate and Verify:</h3>
+          <p style="margin:0;">Make sure the process of looking for threats and the safety steps are working as they should.</p>
+          <strong>Activities:</strong>
+          <ul style="margin:6px 0 0; padding-left:18px;">
+            <li>Test the security by trying to break into the system and checking the code for problems.</li>
+            <li>Keep checking and reviewing the threat list regularly.</li>
+            <li>Make sure all the found dangers and weak spots have been properly fixed.</li>
+          </ul>
+        </div>
+        <div style="border:1px solid #eef2f8; border-radius:14px; padding:14px; background:#faf5ff;">
+          <h3 style="margin:0 0 6px; font-size:18px; color:#1f2a44;">12) Document and Communicate:</h3>
+          <p style="margin:0;">Write down the whole process of threat modeling and share the results and what's been done with the right people.</p>
+          <strong>Activities:</strong>
+          <ul style="margin:6px 0 0; padding-left:18px;">
+            <li>Make clear reports that explain the threats, weaknesses, dangers, and ways to fix them.</li>
+            <li>Tell the results to the people who need to know, like leaders, IT staff, and security teams.</li>
+            <li>Keep talking and updating everyone so they know how secure the system is all the time.</li>
+          </ul>
+        </div>
+        <div style="border:1px solid #eef2f8; border-radius:14px; padding:14px; background:#faf5ff;">
+          <h3 style="margin:0 0 6px; font-size:18px; color:#1f2a44;">13) Monitor and Review:</h3>
+          <p style="margin:0;">Keep an eye on the system for new dangers and weaknesses, and change the threat model when needed.</p>
+          <strong>Activities:</strong>
+          <ul style="margin:6px 0 0; padding-left:18px;">
+            <li>Set up a way to find new threats and weaknesses quickly.</li>
+            <li>Check and update the threat model often to match any changes in the system or surroundings.</li>
+            <li>Do regular check-ups and threat modeling again to stay prepared.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <style>
+      .grid-steps { grid-template-columns: 1fr; }
+      @media (min-width: 768px) {
+        .grid-steps { grid-template-columns: repeat(3, 1fr); }
+      }
+    </style>
+    <!-- ======= 4. Identifying Threats ======= -->
+    <section id="identify" style="
+      background:#ffffff; border:1px solid #e9eef5; border-radius:16px; padding:22px;
+      box-shadow:0 10px 24px rgba(34,50,77,.06); margin:0 0 18px;">
+      <h2 style="margin:0 0 12px; font-size:clamp(22px,3.2vw,28px); color:#1f2a44;">5) Several different approaches to categorize and analyze these threats</h2>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:14px;">
+        <div style="border:1px solid #eef2f8; border-radius:14px; padding:16px; background:#f8fafc;">
+          <h3 style="margin:0 0 6px; font-size:18px; color:#1f2a44;">Focused on Assets:</h3>
+          <p style="margin:0;">In this method, you begin by looking at the value of the resources that the organization has, like data, intellectual property, or physical structures.
+            Once you figure out what these resources are and how valuable they are, you then look into the possible dangers they might face.
+            </p>
+            <br>
+          <div style="margin-top:8px; background:#ffffff; border:1px dashed #d8e2ee; border-radius:12px; padding:10px;">
+            <strong>Examples:</strong> : If a company has a very important customer database, the risks to this resource could be things like someone stealing the data, getting into the system without permission, or losing the data by accident.
+            <br><br><br>
+          </div>
+          <div style="margin-top:8px; background:#ffffff; border:1px dashed #d8e2ee; border-radius:12px; padding:10px;">
+            <strong>Goal:</strong> To find out the risks that could affect important resources, so that steps can be taken to keep them safe and secure.
+          </div>
+        </div>
+        <div style="border:1px solid #eef2f8; border-radius:14px; padding:16px; background:#f8fafc;">
+          <h3 style="margin:0 0 6px; font-size:18px; color:#1f2a44;">Focused on Attacker:</h3>
+          <p style="margin:0;">If a company works in a risky area, like banking or government, it might face attacks from nation-states, criminals, or groups with political goals.
+            The company can look into the ways these attackers might try to harm them, such as through fake emails (Scammers), stealing data for money (Ransomeware), or targeted attacks.
+            </p>
+          <div style="margin-top:8px; background:#ffffff; border:1px dashed #d8e2ee; border-radius:12px; padding:10px;">
+            <strong>Examples:</strong> If a company works in a risky area, like banking or government, it might face attacks from nation-states, criminals, or groups with political goals.
+            The company can look into the ways these attackers might try to harm them, such as through fake emails, stealing data for money, or targeted attacks.
+          </div>
+          <div style="margin-top:8px; background:#ffffff; border:1px dashed #d8e2ee; border-radius:12px; padding:10px;">
+            <strong>Goal:</strong> To find out and understand the dangers that specific attackers might cause, based on what they want, their plans, and how they attack.
+          </div>
+        </div>
+        <div style="border:1px solid #eef2f8; border-radius:14px; padding:16px; background:#f5fbff;">
+          <h3 style="margin:0 0 6px; font-size:18px; color:#1f2a44;">Focused on Software:</h3>
+          <p style="margin:0;"> If a company makes software, it pays attention to possible dangers that could affect the software.
+            This includes looking at weaknesses in the code, like errors in the program logic, unsafe ways to connect to the internet, or old parts of the code that are no longer supported.
+          </p>
+          <br>
+          <div style="margin-top:8px; background:#ffffff; border:1px dashed #d8e2ee; border-radius:12px; padding:10px;">
+            <strong>Examples:</strong> A software company might look at dangers in their web app, like when someone sneaks commands into a database, when harmful code is run from a website, or when data is stored beyond its limits.
+            <br><br><br>
+          </div>
+          <div style="margin-top:8px; background:#ffffff; border:1px dashed #d8e2ee; border-radius:12px; padding:10px;">
+            <strong>Goal:</strong> To find dangers that could harm software systems and make sure the program is safe at every stage of its life.
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ======= 5. Frameworks ======= -->
+    <section id="frameworks" style="
+      background:#ffffff; border:1px solid #e9eef5; border-radius:16px; padding:22px;
+      box-shadow:0 10px 24px rgba(34,50,77,.06); margin:0 0 18px;">
+      <h2 style="margin:0 0 12px; font-size:clamp(22px,3.2vw,28px); color:#1f2a44;">6) Frameworks & Methods to Lean On</h2>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:14px;">
+        <div style="border:1px solid #eef2f8; border-radius:14px; padding:14px; background:#f0f9ff;">
+          <h3 style="margin:0 0 6px; font-size:18px; color:#1f2a44;">NIST & ISO:</h3>
+          <ul style="margin:0; padding-left:18px;">
+            <li>NIST SP 800-30 — risk assessment (likelihood × impact)</li>
+            <li>NIST SP 800-154 — data-centric threat modeling</li>
+            <li>ISO/IEC 27005 — IS risk management within an ISMS</li>
+          </ul>
+        </div>
+        <div style="border:1px solid #eef2f8; border-radius:14px; padding:14px; background:#f8fafc;">
+          <h3 style="margin:0 0 6px; font-size:18px; color:#1f2a44;">ISACA / COBIT & (ISC)²:</h3>
+          <ul style="margin:0; padding-left:18px;">
+            <li>COBIT — governance hooks, roles, metrics</li>
+            <li>ISACA guidance — integrating modeling into enterprise risk</li>
+            <li>(ISC)² CBK — shared terminology for cross-teams</li>
+          </ul>
+        </div>
+        <div style="border:1px solid #eef2f8; border-radius:14px; padding:14px; background:#fefce8;">
+          <h3 style="margin:0 0 6px; font-size:18px; color:#1f2a44;">SANS, EC-Council, CISA:</h3>
+          <ul style="margin:0; padding-left:18px;">
+            <li>SANS: practitioner playbooks & IR loop</li>
+            <li>EC-Council: STRIDE, PASTA, OCTAVE, DREAD, TRIKE, VAST</li>
+            <li>CISA: Secure-by-Design / Default expectations</li>
+          </ul>
+        </div>
+      </div>
+      <div style="margin-top:12px; border-left:4px solid #b7e4c7; background:#ecfdf5; padding:10px 12px; border-radius:12px;">
+        <strong>Quick pick:</strong> Use <em>STRIDE</em> for fast design reviews, <em>PASTA</em> for risk-centric end-to-end analysis; tie results to ISO/NIST scoring and COBIT governance.
+      </div>
+    </section>
+    <!-- ======= Reference Box ======= -->
+    <section id="refs" style="
+      background:#ffffff; border:1px solid #e9eef5; border-radius:16px; padding:18px;
+      box-shadow:0 10px 24px rgba(34,50,77,.06);">
+      <h2 style="margin:0 0 10px; font-size:clamp(20px,3vw,26px); color:#1f2a44;">References (Organizations)</h2>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:10px;">
+        <div style="border:1px dashed #d8e2ee; border-radius:14px; padding:12px; background:#f8fafc;">
+          <div style="font-weight:700; margin-bottom:6px;">NIST</div>
+          <div>SP 800-30, SP 800-154, SP 800-12</div>
+        </div>
+        <div style="border:1px dashed #d8e2ee; border-radius:14px; padding:12px; background:#ecfdf5;">
+          <div style="font-weight:700; margin-bottom:6px;">ISO/IEC</div>
+          <div>27005 (risk), 27001/2 (ISMS context)</div>
+        </div>
+        <div style="border:1px dashed #d8e2ee; border-radius:14px; padding:12px; background:#f0f9ff;">
+          <div style="font-weight:700; margin-bottom:6px;">ISACA / COBIT</div>
+          <div>Governance & management objectives</div>
+        </div>
+        <div style="border:1px dashed #d8e2ee; border-radius:14px; padding:12px; background:#faf5ff;">
+          <div style="font-weight:700; margin-bottom:6px;">(ISC)²</div>
+          <div>CBK — risk & threat modeling domain</div>
+        </div>
+        <div style="border:1px dashed #d8e2ee; border-radius:14px; padding:12px; background:#fff7ed;">
+          <div style="font-weight:700; margin-bottom:6px;">SANS Institute</div>
+          <div>Threat modeling guides, IR playbooks</div>
+        </div>
+        <div style="border:1px dashed #d8e2ee; border-radius:14px; padding:12px; background:#fef2f2;">
+          <div style="font-weight:700; margin-bottom:6px;">EC-Council</div>
+          <div>Method overviews (STRIDE, PASTA, OCTAVE, …)</div>
+        </div>
+        <div style="border:1px dashed #d8e2ee; border-radius:14px; padding:12px; background:#eef2ff;">
+          <div style="font-weight:700; margin-bottom:6px;">CISA</div>
+          <div>Secure-by-Design / Default guidance</div>
+        </div>
+        <div style="border:1px dashed #d8e2ee; border-radius:14px; padding:12px; background:#f8fafc;">
+          <div style="font-weight:700; margin-bottom:6px;">CIA Triad</div>
+          <div>Confidentiality, Integrity, Availability</div>
+        </div>
+      </div>
+    </section>
+    <script>
+    (function () {
+      const root = document.getElementById('content');
+      const paras = root.querySelectorAll('p');
+      const mq = window.matchMedia('(min-width: 768px)');
+      function apply(e) {
+        paras.forEach(p => {
+          if (e.matches) {
+            p.style.textAlign = 'justify';
+            p.style.textJustify = 'inter-word';
+            p.style.hyphens = 'auto';
+          } else {
+            p.style.textAlign = 'left';
+            p.style.textJustify = '';
+            p.style.hyphens = '';
+          }
+        });
+      }
+      apply(mq);
+      mq.addEventListener('change', apply);
+    })();
+    </script>
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const dateWritten = '30/Aug/2025';
+          const words   = document.getElementById('content').innerText.trim().split(/\s+/).filter(Boolean).length;
+          const minutes = Math.max(1, Math.ceil(words / 230));
+          document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
+        });
+      </script>
+    <!-- ======= Footer ======= -->
+    <div style="position:relative; text-align:center; color:#64748b; font-size:14px; margin-top:24px; padding:18px 0; border-top:1px solid #e5e7eb;">
+      <div>
+        <div style="margin-bottom:6px; font-weight:500;">Executive Use Only</div>
+        <div>2025 © Iron Hulk — All Rights Reserved.</div>
+        <div style="margin-top:6px;">
+          <a href="../blog.html" style="color:#94a3b8; font-size:13px; padding:6px 12px; border-radius:6px; text-decoration:none;">
+            ← Back to Blogs
+          </a>
+        </div>
+      </div>
+      <a href="#top" style="position:absolute; right:18px; top:50%; transform:translateY(-50%); color:#94a3b8; text-decoration:none;">
+        <svg xmlns="http://www.w3.org/2000/svg" style="width:20px; height:20px;" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M3.707 10.707a1 1 0 01-1.414-1.414l7-7a1 1 0 011.414 0l7 7a1 1 0 11-1.414 1.414L11 4.414V19a1 1 0 11-2 0V4.414L3.707 10.707z" clip-rule="evenodd" />
+        </svg>
+      </a>
+    </div>
+  </main>
+</body>
+</html>
