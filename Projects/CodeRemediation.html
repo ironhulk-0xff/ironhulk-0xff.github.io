@@ -287,6 +287,7 @@
           the same for both, remote command execution, use of built-in platform tooling, and potential for misuse. Now,the conceptual differences and important design/behavioral considerations.
         </p>
         <h2 style="margin:2rem 0 1rem; color:#2c3e50;">Demo</h2>
+
         <div style="
           display:grid;
           grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
@@ -311,69 +312,75 @@
           display:grid;
           grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
           gap:16px;
-          margin-bottom:2rem;
-        ">
-          <table style="
-          width:100%;
-          min-width:600px; /* ensures scroll behavior on small screens */
-          border-collapse:collapse;
-          font-family:system-ui, sans-serif;
-          font-size:14px;
-          background:#fff;
-          box-shadow:0 1px 4px rgba(0,0,0,0.08);
-          border-radius:8px;
-        ">
-            <thead style="background:#1e293b;color:#f8fafc;">
-              <tr>
-                <th style="padding:10px;text-align:left;">Aspect</th>
-                <th style="padding:10px;text-align:left;">IronShellCode (Structured StreamReader/Writer)</th>
-                <th style="padding:10px;text-align:left;">One-Liner (Compact Byte-Loop One-Liner)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style="padding:10px;border-top:1px solid #e2e8f0;">Connection Setup</td>
-                <td style="padding:10px;border-top:1px solid #e2e8f0;">Uses <code>TcpClient</code> directly with IP/Domain.</td>
-                <td style="padding:10px;border-top:1px solid #e2e8f0;">Creates <code>TCPClient</code> directly with IP/Domain.</td>
-              </tr>
-              <tr>
-                <td style="padding:10px;border-top:1px solid #e2e8f0;">Data Framing / Input Mode</td>
-                <td style="padding:10px;border-top:1px solid #e2e8f0;">Line-oriented via <code>StreamReader.ReadLine()</code>; waits for newline-terminated commands.</td>
-                <td style="padding:10px;border-top:1px solid #e2e8f0;">Byte-oriented; reads raw buffers with <code>Read()</code> and must handle message boundaries manually.</td>
-              </tr>
-              <tr>
-                <td style="padding:10px;border-top:1px solid #e2e8f0;">Encoding</td>
-                <td style="padding:10px;border-top:1px solid #e2e8f0;">Converts bytes ⇄ text with <code>System.Text.ASCIIEncoding</code>.</td>
-                <td style="padding:10px;border-top:1px solid #e2e8f0;">Converts bytes ⇄ text with <code>System.Text.ASCIIEncoding</code>.</td>
-              </tr>
-              <tr>
-                <td style="padding:10px;border-top:1px solid #e2e8f0;">Execution Loop</td>
-                <td style="padding:10px;border-top:1px solid #e2e8f0;">Reads each line, executes it, trims output, sends back result.</td>
-                <td style="padding:10px;border-top:1px solid #e2e8f0;">Processes received bytes, executes decoded text, appends a prompt (<code>PS path&gt;</code>).</td>
-              </tr>
-              <tr>
-                <td style="padding:10px;border-top:1px solid #e2e8f0;">Termination</td>
-                <td style="padding:10px;border-top:1px solid #e2e8f0;">Breaks on sentinel token <code>exit</code>.</td>
-                <td style="padding:10px;border-top:1px solid #e2e8f0;">Ends when the stream closes (read returns 0).</td>
-              </tr>
-              <tr>
-                <td style="padding:10px;border-top:1px solid #e2e8f0;">Error Handling</td>
-                <td style="padding:10px;border-top:1px solid #e2e8f0;">Has <code>try/catch/finally</code> for cleanup and graceful failure.</td>
-                <td style="padding:10px;border-top:1px solid #e2e8f0;">No structured exception handling; abrupt on errors.</td>
-              </tr>
-              <tr>
-                <td style="padding:10px;border-top:1px solid #e2e8f0;">Output Behavior</td>
-                <td style="padding:10px;border-top:1px solid #e2e8f0;">Sends trimmed output only; quiet response channel.</td>
-                <td style="padding:10px;border-top:1px solid #e2e8f0;">Sends output plus interactive prompt string; more human-friendly.</td>
-              </tr>
-              <tr>
-                <td style="padding:10px;border-top:1px solid #e2e8f0;">Cleanup</td>
-                <td style="padding:10px;border-top:1px solid #e2e8f0;">Closes socket in <code>finally</code>; ensures resource release.</td>
-                <td style="padding:10px;border-top:1px solid #e2e8f0;">Closes client only after loop; no guaranteed cleanup on error.</td>
-              </tr>
-            </tbody>
-          </table>
+          margin-bottom:2rem;">
+          <!-- Grid item -->
+          <div style="
+            overflow-x:auto;                 /* enables left/right scroll */
+            -webkit-overflow-scrolling:touch;/* smooth on iOS */
+            border-radius:8px;
+            background:#fff;
+            box-shadow:0 1px 4px rgba(0,0,0,0.08);
+          ">
+            <table style="
+              width:100%;
+              min-width:720px;                /* force scroll on narrow screens */
+              border-collapse:collapse;
+              font-family:system-ui, sans-serif;
+              font-size:14px;
+            ">
+              <thead style="background:#1e293b;color:#f8fafc;">
+                <tr>
+                  <th style="padding:10px;text-align:left;white-space:nowrap;">Aspect</th>
+                  <th style="padding:10px;text-align:left;white-space:nowrap;">IronShellCode (Structured StreamReader/Writer)</th>
+                  <th style="padding:10px;text-align:left;white-space:nowrap;">One-Liner (Compact Byte-Loop One-Liner)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding:10px;border-top:1px solid #e2e8f0;">Connection Setup</td>
+                  <td style="padding:10px;border-top:1px solid #e2e8f0;">Uses <code>TcpClient</code> directly with IP/Domain.</td>
+                  <td style="padding:10px;border-top:1px solid #e2e8f0;">Creates <code>TCPClient</code> directly with IP/Domain.</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px;border-top:1px solid #e2e8f0;">Data Framing / Input Mode</td>
+                  <td style="padding:10px;border-top:1px solid #e2e8f0;">Line-oriented via <code>StreamReader.ReadLine()</code>; waits for newline-terminated commands.</td>
+                  <td style="padding:10px;border-top:1px solid #e2e8f0;">Byte-oriented; reads raw buffers with <code>Read()</code> and must handle message boundaries manually.</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px;border-top:1px solid #e2e8f0;">Encoding</td>
+                  <td style="padding:10px;border-top:1px solid #e2e8f0;">Converts bytes ⇄ text with <code>System.Text.ASCIIEncoding</code>.</td>
+                  <td style="padding:10px;border-top:1px solid #e2e8f0;">Converts bytes ⇄ text with <code>System.Text.ASCIIEncoding</code>.</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px;border-top:1px solid #e2e8f0;">Execution Loop</td>
+                  <td style="padding:10px;border-top:1px solid #e2e8f0;">Reads each line, executes it, trims output, sends back result.</td>
+                  <td style="padding:10px;border-top:1px solid #e2e8f0;">Processes received bytes, executes decoded text, appends a prompt (<code>PS path&gt;</code>).</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px;border-top:1px solid #e2e8f0;">Termination</td>
+                  <td style="padding:10px;border-top:1px solid #e2e8f0;">Breaks on sentinel token <code>exit</code>.</td>
+                  <td style="padding:10px;border-top:1px solid #e2e8f0;">Ends when the stream closes (read returns 0).</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px;border-top:1px solid #e2e8f0;">Error Handling</td>
+                  <td style="padding:10px;border-top:1px solid #e2e8f0;">Has <code>try/catch/finally</code> for cleanup and graceful failure.</td>
+                  <td style="padding:10px;border-top:1px solid #e2e8f0;">No structured exception handling; abrupt on errors.</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px;border-top:1px solid #e2e8f0;">Output Behavior</td>
+                  <td style="padding:10px;border-top:1px solid #e2e8f0;">Sends trimmed output only; quiet response channel.</td>
+                  <td style="padding:10px;border-top:1px solid #e2e8f0;">Sends output plus interactive prompt string; more human-friendly.</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px;border-top:1px solid #e2e8f0;">Cleanup</td>
+                  <td style="padding:10px;border-top:1px solid #e2e8f0;">Closes socket in <code>finally</code>; ensures resource release.</td>
+                  <td style="padding:10px;border-top:1px solid #e2e8f0;">Closes client only after loop; no guaranteed cleanup on error.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
+
         <div style="background:#e8f5e9; padding:0.2rem; border-left:4px solid #4caf50; ">
           <h2 style="color:#2c3e50; border-bottom:1px solid #eee;">Conclusion</h2>
           <p style="color:#1e293b;  ">
