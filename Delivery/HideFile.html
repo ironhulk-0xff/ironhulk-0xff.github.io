@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iron Hulk – Hide File</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0f172a] text-white font-sans min-h-screen">
+  <header class="bg-[#1e293b] p-4 shadow flex items-center justify-between gap-4">
+    <div>
+      <h1 class=" text-[17px] font-bold text-blue-400">Hide File</h1>
+      <small id="reading-time" class="text-xs text-gray-400"></small>
+    </div>
+    <a href="../blog.html" class="text-gray-300 text-sm hover:underline">← Back to Blogs</a>
+  </header>
+  <main id="article" class="p-6 space-y-6">
+    <section class="relative overflow-hidden rounded-2xl border border-sky-400/30 p-5 ring-1 ring-sky-400/10 transition-all duration-500">
+      <header class="relative mb-8">
+        <h2 class="text-3xl font-extrabold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-sky-500 to-indigo-500 drop-shadow-lg">
+          What Does “Hiding a File” Mean?
+        </h2>
+        <div class="mt-2 h-1 w-24 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full"></div>
+      </header>
+      <div class="relative space-y-6 text-gray-300 text-[15.5px] leading-relaxed sm:text-justify">
+        <p>
+          <span class="text-cyan-300 font-semibold">Hiding a file</span> means making it invisible to normal users or file browsers, even though it still exists on the system.
+          It’s not deleted or protected by a password, it’s simply concealed from view so it doesn’t appear in ordinary folder listings or searches unless special commands or
+          tools are used to reveal it. In <span class="text-blue-400 font-medium">Windows</span>, this is usually done by marking a file with the "hidden attribute", preventing it from showing in File Explorer
+          unless <strong>"Hide Protected Operating System Files"</strong> is unselected. However, more advanced methods go further, hiding the file entirely from the graphical interface, even when that option is turned on.
+          <br><br>
+          These deeply hidden files only become visible when using specific <span class="text-indigo-400 font-medium">command-line tools</span>. For example:
+        </p>
+        <div class="bg-[#111827] border border-sky-400/20 rounded-xl p-4 font-mono text-sm text-cyan-300 shadow-inner">
+          <code>dir /a</code><br>
+          <code>dir -force</code><br>
+          <code>Get-ChildItem -Force</code>
+        </div>
+        <p>
+          In this blog, I’ll demonstrate step-by-step how these techniques work, how Windows interprets file attributes, and why hiding files this way can be used for both
+          <span class="text-cyan-400 font-medium">privacy</span> and <span class="text-rose-400 font-medium">security research</span> purposes.
+        </p>
+      </div>
+      <br><br>
+      <div class="bg-gray-700 bg-opacity-30 p-6 rounded-xl border-l-4 border-red-400">
+        <h3 class="text-xl font-semibold text-red-300 mb-3">🎯 Why Malware Needs to Hide</h3>
+        <p class="text-gray-300 mb-3">Malware developers use hiding techniques to <strong class="text-white">increase infection lifespan and effectiveness</strong>. Just like a burglar avoids detection, malware must evade:</p>
+        <ul class="text-gray-300 list-disc list-inside space-y-2 ml-4">
+          <li><strong>To stay hidden from users:</strong> A visible strange file, icon, or running process might alert the victim that something is wrong. By hiding files the malware can operate silently in the background</li>
+          <li><strong>To maintain persistence:</strong> Hidden malware can continue running or reactivating itself even after system reboots or user attempts to clean up.</li>
+          <li><strong>To Achieve Persistence:</strong> The ability for malware to survive a system reboot. If a malicious file is visible, it can be deleted.</li>
+        </ul>
+      </div>
+      <br><br>
+      <section class="relative rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 p-8 overflow-visible shadow-2xl">
+        <div class="relative space-y-6">
+        <h2 class="text-3xl font-bold text-white"><span class="text-blue-400">Hide File Project</span></h2>
+          <div class="mt-4 relative ">
+            <p class="text-gray-300 leading-relaxed">
+              This is a small C# Windows Forms application designed to let a user select any file and mark it as both <strong>Hidden</strong> and <strong>System</strong>, making it invisible in File Explorer, even if the “Show hidden files” option is turned on. 
+              Such flags are commonly used for legitimate system files, but malware often abuses them to conceal malicious files.
+              <br><br>
+          
+              ⚙️ <strong>What Attributes It Changes:</strong> Windows files have attributes, special flags that tell the operating system how to treat a file. Each attribute is part of the 
+              <code class="bg-gray-800 text-green-300 rounded px-1">FileAttributes</code> enumeration in .NET and the Windows API. 
+              This program specifically applies two flags:
+              <ul class="list-disc list-inside text-gray-300 space-y-2">
+                <li><strong>Hidden:</strong> Marks a file as hidden, so the file won’t appear in File Explorer unless the “Show hidden files” option is enabled.</li>
+                <li><strong>System:</strong> Marks a file as a protected operating system file so even if “Show hidden files” is enabled, it remains invisible unless the user disables “Hide protected operating system files.”</li>
+              </ul>
+              <br>
+              By combining these two attributes, the file is treated like a protected system component, preventing it from being displayed under normal conditions. 
+              This behavior is used legitimately to protect critical Windows files, but it can also be exploited by attackers to hide malware components or payloads from users.
+              <br><br>
+              📘 <strong>Summary:</strong><br>
+              The program effectively makes a file invisible by setting both the 
+              <code class="bg-gray-800 text-green-300 rounded px-1">Hidden</code> and 
+              <code class="bg-gray-800 text-green-300 rounded px-1">System</code> attributes. 
+              This ensures that the file cannot be seen in File Explorer unless advanced view settings are changed or a command like 
+              <code class="bg-gray-800 text-blue-300 rounded px-1">dir /a</code> or 
+              <code class="bg-gray-800 text-blue-300 rounded px-1">dir -Force</code> or
+              <code class="bg-gray-800 text-blue-300 rounded px-1">Get-ChildItem -Force</code> 
+              is used in the command line.
+            </p>
+            <div class="relative mt-8">
+              <!-- Copy button -->
+              <button 
+                onclick="copyCode(this)" 
+                class="absolute top-2 right-2 bg-gray-700 hover:bg-gray-600 text-white text-sm px-3 py-1 rounded-md transition">
+                Copy
+              </button>
+            
+              <pre class="mt-8 overflow-x-auto bg-gray-900 p-4 rounded-lg shadow-inner ">
+                <code class="language-csharp text-green-300  ">
+// =============================================================
+// Project: Hide File Utility
+// Author: Iron Hulk
+// Description: A simple C# Windows Forms application that allows
+//              the user to select a file and mark it as both 
+//              Hidden and System, making it invisible in 
+//              File Explorer even when “Show hidden files” is enabled.
+// =============================================================
+
+using System;
+using System.IO;
+using System.Windows.Forms;
+
+
+internal static class HideFileUtility
+{
+    [STAThread]
+    private static void Main()
+    {
+        // Initialize Windows Forms application context
+        Application.EnableVisualStyles();
+        Application.SetCompatibleTextRenderingDefault(false);
+
+        // Create a file selection dialog
+        using (var fileDialog = new OpenFileDialog())
+        {
+            // The text shown on the dialog window
+            fileDialog.Title = "Select File to Hide";
+
+            // Restricts which file types are displayed — here it allows all files
+            fileDialog.Filter = "All Files (*.*)|*.*";
+
+            // Ensures the file really exists before proceeding
+            fileDialog.CheckFileExists = true;
+
+            // Display the dialog and proceed only if a file is chosen
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string selectedPath = fileDialog.FileName;
+
+                try
+                {
+                    // Retrieve the current attributes
+                    FileAttributes currentAttributes = File.GetAttributes(selectedPath);
+
+                    // Combine with Hidden + System flags
+                    FileAttributes newAttributes = currentAttributes | (FileAttributes.Hidden | FileAttributes.System);
+
+                    // Apply the new attributes to the file
+                    File.SetAttributes(selectedPath, newAttributes);
+
+                    MessageBox.Show(
+                        $"✅ The file:\n\n{Path.GetFileName(selectedPath)}\n\nis now hidden and protected as a system file.",
+                        "Operation Successful",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(
+                        "❌ An error occurred while setting attributes:\n\n" + ex.Message,
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
+                }
+            }
+        }
+    }
+}</code>
+              </pre>
+            </div>
+          </div>
+        </div>
+      </section>
+      <br>
+      <section class="relative rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 p-8 overflow-visible shadow-2xl">
+        <div class="relative space-y-6">
+          <h2 class="text-3xl font-bold text-white">Final Note: <span class="text-blue-400">Protect Yourself from Hidden Files & Stealthy Malware</span></h2>
+      
+          <p class="text-gray-300 leading-relaxed">
+            Hiding files using attributes or more advanced tricks is a common obfuscation technique. Below are practical, defensive steps you can use to detect,
+            prevent, and recover from files that are being concealed on a Windows machine.
+          </p>
+      
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-gray-800 bg-opacity-40 p-6 rounded-2xl border border-gray-700">
+              <h3 class="text-xl font-semibold text-white mb-3">Quick checks</h3>
+              <ul class="list-disc list-inside text-gray-300 space-y-2">
+                <li>File Explorer → <strong>View → Options → View</strong>: enable <em>Show hidden files, folders, and drives</em>, and only uncheck <em>Hide protected operating system files</em> when you're ready to inspect (be careful).</li>
+                <li>Command line listings:
+                  <pre class="mt-2 p-2 bg-gray-900 text-sm rounded text-green-300 overflow-x-auto">
+<code>dir /a <br>
+dir -force <br>
+Get-ChildItem -Force</code></pre>
+                </li>
+                <li>To list Alternate Data Streams (ADS) in CMD: <code class="inline-code bg-gray-800 text-blue-300 rounded px-1">dir /R</code>.</li>
+              </ul>
+            </div>
+            <div class="bg-gray-800 bg-opacity-40 p-6 rounded-2xl border border-gray-700">
+              <h3 class="text-xl font-semibold text-white mb-3">If you suspect hidden/malicious files</h3>
+              <ol class="list-decimal list-inside text-gray-300 space-y-2">
+                <li>Isolate the machine from the network to stop exfiltration or spreading.</li>
+                <li>Run updated AV/antimalware scans and collect evidence (file hashes, screenshots, process lists).</li>
+                <li>Dont run the file unless you are sure it wont effect your sytem and run on safe environment.</li>
+                <li>When unsure, preserve evidence and escalate to IT/security.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+
+    </section>
+    <script>
+      function copyCode(button) {
+        const code = button.nextElementSibling.querySelector('code').innerText;
+        navigator.clipboard.writeText(code).then(() => {
+          button.textContent = "Copied!";
+          setTimeout(() => button.textContent = "Copy", 1500);
+        });
+      }
+    </script>
+  <!-- Footer -->
+  <footer class="relative flex items-center justify-center text-[15px] text-slate-300 py-6">
+    <div class="text-center">
+      Crafted with Passion<br>
+      2025 Iron Hulk — No Rights Reserved.
+      <br>
+      <a href="../blog.html" class="text-slate-300 text-sm px-4 py-2 rounded transition">← Back to Blogs</a>
+    </div>
+    <a href="#top" class="absolute right-6 top-1/2 transform -translate-y-1/2 text-slate-500 hover:text-slate-700">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M3.707 10.707a1 1 0 01-1.414-1.414l7-7a1 1 0 011.414 0l7 7a1 1 0 11-1.414 1.414L11 4.414V19a1 1 0 11-2 0V4.414L3.707 10.707z" clip-rule="evenodd" />
+      </svg>
+    </a>
+  </footer>
+  </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const dateWritten = '26/October/2025';
+      const words = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
+      const minutes = Math.max(1, Math.ceil(words / 230));
+      document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
+    });
+  </script>
+</body>
+</html>
