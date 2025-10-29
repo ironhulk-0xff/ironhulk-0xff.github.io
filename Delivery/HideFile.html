@@ -32,9 +32,12 @@
           These deeply hidden files only become visible when using specific <span class="text-indigo-400 font-medium">command-line tools</span>. For example:
         </p>
         <div class="bg-[#111827] border border-sky-400/20 rounded-xl p-4 font-mono text-sm text-cyan-300 shadow-inner">
-          <code>dir /a</code><br>
-          <code>dir -force</code><br>
-          <code>Get-ChildItem -Force</code>
+          <code>dir /a</code><br><br>
+          <code>dir -force</code><br><br>
+          <code>Get-ChildItem -Path C:\ -Recurse -Force -ErrorAction SilentlyContinue |
+            Where-Object { ($_.Attributes -band [IO.FileAttributes]::Hidden) -and ($_.Attributes -band [IO.FileAttributes]::System) } |
+            Select-Object FullName, Attributes, Length
+          </code>
         </div>
         <p>
           In this blog, I’ll demonstrate step-by-step how these techniques work, how Windows interprets file attributes, and why hiding files this way can be used for both
@@ -51,6 +54,182 @@
           <li><strong>To Achieve Persistence:</strong> The ability for malware to survive a system reboot. If a malicious file is visible, it can be deleted.</li>
         </ul>
       </div>
+      <br>
+      <section class="relative overflow-hidden rounded-2xl border border-sky-400/30 p-5 ring-1 ring-sky-400/10 transition-all duration-500">
+        <div class="relative space-y-6">
+          <h2 class="text-3xl font-bold text-white">Technical Execution: <span class="text-red-400">How Hidden Malware is Triggered</span></h2>
+          <div class="bg-gray-700 bg-opacity-30 p-6 rounded-xl border-l-4 border-red-400">
+            <h3 class="text-xl font-semibold text-red-300 mb-4">🎯 The Core Problem: Hiding vs. Execution</h3>
+            <p class="text-gray-300 mb-4">
+              Simply hiding a file isn't enough, malware needs execution mechanisms to become active. 
+              Advanced malware uses <strong class="text-white">trigger mechanisms</strong> to activate when needed. 
+              This technique uses a legitimate-looking executable for example: <code class="bg-green-900 text-white px-1 rounded">calc.exe</code> to trigger a completely hidden malware file 
+              <code class="bg-red-900 text-white px-1 rounded">malware.exe</code>. The decoy file appears normal while secretly activating the hidden payload.
+            </p>
+          </div>
+          <div class="bg-gray-800 bg-opacity-50 p-6 rounded-2xl shadow-lg">
+            <h3 class="text-xl font-semibold text-blue-300 mb-4">🔄 Attack Execution Flow</h3>
+            <div class="flex flex-col md:flex-row justify-between items-center md:space-y-0">
+              <div class="text-center">
+                <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <span class="text-white font-bold">1</span>
+                </div>
+                <h4 class="font-semibold text-white">File Delivery</h4>
+                <p class="text-gray-400 text-sm mt-2">Two files delivered to target</p>
+                <div class="mt-2 space-y-1">
+                    <div class="bg-red-900 px-3 py-1 rounded text-xs text-white">malware.exe</div>
+                    <div class="bg-green-900 px-3 py-1 rounded text-xs text-white">calc.exe</div>
+                </div>
+              </div>
+              <div class="text-center text-2xl text-gray-400">
+                <span class="inline-block sm:rotate-0 rotate-90">→</span>
+              </div>           
+              <div class="text-center">
+                <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                  <span class="text-white font-bold">2</span>
+                </div>
+                <h4 class="font-semibold text-white">User Execution</h4>
+                <p class="text-gray-400 text-sm mt-2">User runs calculator</p>
+                <div class="mt-2">
+                  <div class="bg-green-900 px-3 py-1 rounded text-xs text-white">calc.exe</div>
+                  <div class="text-xs text-gray-500">(Appears normal)</div>
+                </div>
+              </div>
+              <div class="text-center text-2xl text-gray-400">
+                <span class="inline-block sm:rotate-0 rotate-90">→</span>
+              </div>     
+              <div class="text-center">
+                <div class="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                  <span class="text-white font-bold">3</span>
+                </div>
+                <h4 class="font-semibold text-white">Background Trigger</h4>
+                <p class="text-gray-400 text-sm mt-2">Calculator launches malware</p>
+                <div class="mt-2">
+                  <div class="bg-red-900 px-3 py-1 rounded text-xs text-white">malware.exe</div>
+                  <div class="text-xs text-gray-500">(Runs hidden in background)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-gray-800 bg-opacity-50 p-6 rounded-2xl shadow-lg">
+              <h3 class="text-xl font-semibold text-red-300 mb-4">📁 Malware.exe - Hidden File</h3>
+              <div class="bg-[#111827] border border-sky-400/20 rounded-xl p-4 font-mono text-sm text-cyan-300 shadow-inner">
+                <h4 class="font-semibold text-red-200 mb-2">Hiding Technique</h4>
+                  <code class="text-gray-200 text-sm block mb-2">
+                      File.SetAttributes("malware.exe", <br>
+                      &nbsp;&nbsp;FileAttributes.Hidden | FileAttributes.System);
+                  </code>
+                  <p class="text-gray-400 text-sm">
+                      File becomes invisible in Windows Explorer even when "Show hidden files" is enabled.
+                  </p>
+              </div>
+              <br>
+              <div class="bg-[#111827] border border-sky-400/20 rounded-xl p-4 font-mono text-sm text-cyan-300 shadow-inner">
+                <h4 class="font-semibold text-red-200 mb-2">Storage Location</h4>
+                  <code class="text-gray-200 text-sm block">
+                      C:\Windows\Temp\malware.exe<br>
+                      C:\Users\Public\Documents\malware.exe<br>
+                      C:\ProgramData\Microsoft\malware.exe
+                  </code>
+                  <p class="text-gray-400 text-sm mt-2">
+                      Hidden in legitimate-looking system directories to avoid suspicion.
+                  </p>
+              </div>
+            </div>
+            <div class="bg-gray-800 bg-opacity-50 p-6 rounded-2xl shadow-lg">
+              <h3 class="text-xl font-semibold text-green-300 mb-4">🖱️ Calc.exe - Trigger File</h3>
+              <div class="bg-[#111827] border border-sky-400/20 rounded-xl p-4 font-mono text-sm text-cyan-300 shadow-inner">
+                <h4 class="font-semibold text-green-200 mb-2">Execution Method</h4>
+                  <code class="text-gray-200 text-sm block mb-2">
+                      Process.Start("path\to\malware.exe");<br>
+                      Process.Start("calc.exe");
+                  </code>
+                  <p class="text-gray-400 text-sm">
+                      First launches hidden malware, then opens real calculator to deceive user.
+                  </p>
+              </div>
+              <br>
+              <div class="bg-[#111827] border border-sky-400/20 rounded-xl p-4 font-mono text-sm text-cyan-300 shadow-inner">
+                <h4 class="font-semibold text-green-200 mb-2">Advanced Techniques</h4>
+                  <ul class="text-gray-300 text-sm list-disc list-inside space-y-1">
+                      <li>Process hollowing (replace calc.exe memory)</li>
+                      <li>DLL side-loading (malicious calc.exe)</li>
+                      <li>Code injection into legitimate calculator</li>
+                      <li>PowerShell hidden execution</li>
+                  </ul>
+              </div>
+            </div>
+          </div>
+          <div class="bg-gray-800 bg-opacity-50 p-6 rounded-2xl shadow-lg">
+            <h3 class="text-xl font-semibold text-yellow-300 mb-4">💻 Technical Implementation Code</h3>
+            <div class="grid  gap-6">
+              <div>
+                <h4 class="font-semibold text-yellow-200 mb-3">C# Trigger Implementation</h4>
+                <div class="bg-[#111827] border border-sky-400/20 rounded-xl p-4 font-mono text-sm text-green-300 shadow-inner">
+                  <div class="text-gray-500">// Modified calc.exe code</div>
+                    <div class="mb-2"></div>
+                    <div>using System.Diagnostics;</div>
+                    <div>using System.Windows.Forms;</div>
+                    <div class="mb-2"></div>
+                    <div>static void Main()</div>
+                    <div>{</div>
+                    <div>&nbsp;&nbsp;// Start hidden malware first</div>
+                    <div>&nbsp;&nbsp;Process.Start(@"C:\Windows\Temp\malware.exe");</div>
+                    <div class="mb-2"></div>
+                    <div>&nbsp;&nbsp;// Then start real calculator</div>
+                    <div>&nbsp;&nbsp;Process.Start("calc.exe");</div>
+                    <div class="mb-2"></div>
+                    <div>&nbsp;&nbsp;// Optional: Self-destruct trigger file</div>
+                    <div>&nbsp;&nbsp;File.Delete(Application.ExecutablePath);</div>
+                    <div>}</div>
+                </div>
+              </div> 
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="bg-gray-800 bg-opacity-50 p-6 rounded-2xl shadow-lg">
+          <h3 class="text-xl font-semibold text-green-300 mb-4">🛡️ Defense Strategies</h3>
+          <div class="space-y-4">
+            <div class="flex items-start space-x-3">
+              <div class="text-2xl">🔐</div>
+              <div>
+                <h4 class="font-semibold text-white">Application Whitelisting</h4>
+                <p class="text-gray-400 text-sm">Only allow execution of signed, approved calculators from legitimate paths.</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-3">
+              <div class="text-2xl">👁️</div>
+              <div>
+                <h4 class="font-semibold text-white">Process Monitoring</h4>
+                <p class="text-gray-400 text-sm">Monitor for calc.exe spawning other processes or making network calls.</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-3">
+              <div class="text-2xl">📊</div>
+              <div>
+                <h4 class="font-semibold text-white">Behavior Analysis</h4>
+                <p class="text-gray-400 text-sm">Detect unusual file attribute changes and hidden process creation.</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-3">
+              <div class="text-2xl">⚡</div>
+              <div>
+                <h4 class="font-semibold text-white">Endpoint Detection</h4>
+                <p class="text-gray-400 text-sm">Use EDR solutions to detect dual-file delivery patterns.</p>
+              </div>
+            </div>
+          </div>
+      </div>
+      <br>
+      <div class="bg-blue-900 bg-opacity-30 p-4 rounded-lg">
+        <p class="text-blue-200 text-sm">
+            <strong>Educational Purpose:</strong> This technique demonstrates how attackers use legitimate applications 
+            as trojans to trigger hidden malware. Understanding this pattern is crucial for effective detection and defense.
+        </p>
+      </div>
+      </section>
       <br>
       <section class="relative rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 p-8 overflow-visible shadow-2xl">
         <div class="relative space-y-6">
