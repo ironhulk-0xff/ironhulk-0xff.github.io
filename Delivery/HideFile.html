@@ -142,8 +142,8 @@
               <div class="bg-[#111827] border border-sky-400/20 rounded-xl p-4 font-mono text-sm text-cyan-300 shadow-inner">
                 <h4 class="font-semibold text-green-200 mb-2">Execution Method</h4>
                   <code class="text-gray-200 text-sm block mb-2">
-                      Process.Start("path\to\malware.exe");<br>
-                      Process.Start("calc.exe");
+                    Process.Start(@"C:\Windows\Temp\malware.exe");<br>
+                    Process.Start("calc.exe");
                   </code>
                   <p class="text-gray-400 text-sm">
                       First launches hidden malware, then opens real calculator to deceive user.
