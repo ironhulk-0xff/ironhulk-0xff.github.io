@@ -359,14 +359,18 @@
             <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center sm:text-justify opacity-0 ">
             </div>
           </div>
-          <p class="leading-relaxed text-gray-300 "> ⚠️ The detection rate fell from 57 down to 19, likely because of un-obfuscated strings (we’ll cover string obfuscation techniques later).</p>
         </div>
+        <br>
+      <p class="leading-relaxed text-gray-300 "> ⚠️ The detection rate fell from 57 down to 19, likely because of un-obfuscated strings (we’ll cover string obfuscation techniques later).</p>
     </section>
     <br>
     <section class="relative rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 p-8 overflow-visible shadow-2xl">
     <div class="relative space-y-6">
       <h2 class="text-3xl font-bold text-white">C# project: <span class="text-blue-400">Encryption & Decryption</span></h2>
-      <details class="bg-blue-900 bg-opacity-50 p-4 rounded-lg group">
+      <div class="relative bg-gray-700 bg-opacity-50 p-6 rounded-2xl shadow-lg overflow-hidden transform transition-transform duration-300">
+        <h2 class="text-3xl font-bold text-white"><span class="text-blue-400">AES Encryption</span></h2>
+        <br>
+        <details class="bg-blue-900 bg-opacity-50 p-4 rounded-lg group">
         <summary class="flex items-center justify-between text-xl font-semibold text-black-400 cursor-pointer ">
           <span>Encryption Project</span>
           <svg class="w-6 h-6 transform transition-transform duration-200 group-open:rotate-180 text-black-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -377,7 +381,6 @@
           <button class="absolute top-2 right-2 bg-indigo-500 text-white px-3 py-1 rounded text-sm" onclick="copyCode(this)">Copy</button>
           <pre class="mt-8 overflow-x-auto bg-gray-900 p-4 rounded-lg shadow-inner ">
           <code class="language-csharp text-green-300  ">
-
 // Project Name: AES Payload Encryption
 // By: Iron Hulk
 
@@ -483,11 +486,11 @@ public class Encryption
          – executes the shellcode in memory.
     • Typical red-team pipeline:  msfvenom → this tool → loader → target.
 */
-
               </code>
             </pre>
           </div>
         </details>
+        <br>
         <details class="bg-blue-900 bg-opacity-50 p-4 rounded-lg group">
           <summary class="flex items-center justify-between text-xl font-semibold text-black-400 cursor-pointer">
             <span>Decryption Project</span>
@@ -606,13 +609,11 @@ namespace Decryption
     • Fire(shellcode): VirtualAlloc (RWX) → Marshal.Copy → CreateThread → WaitForSingleObject.
     • Execute(): Hides console, loads Enc[], derives key, decrypts it, and launches Fire().
 */
-
               </code>
             </pre>
           </div>
         </details>
       </div>
-      <br>
       <div>
         <p class="leading-relaxed text-gray-300 "> 
           ⚠️ Hard-coding a symmetric key in a binary is always recoverable by an analyst, he can dump the process or disassemble it, find a way to protect it. However, 
@@ -620,6 +621,7 @@ namespace Decryption
           what’s actually running, and at that point the code must be in clear text, making it fair game for extraction.
         </p>
       </div>
+    </div>
     </section>
     <style>
       .copy-button 
