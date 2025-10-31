@@ -65,14 +65,14 @@
                         alertable state when it voluntarily makes a call to specific Windows API functions that wait for an event, signal, or I/O operation. These functions include:
                     </p>
                     <ul class="mt-3 list-inside list-disc text-slate-300 space-y-1">
-                      <li><code>SleepEx()</code>: Suspends the current thread for specified time while allowing APC interruption</li>
+                      <li>Suspends the current thread for specified time while allowing APC interruption</li>
 <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20 max-w-full overflow-x-auto">
 <pre><code>DWORD SleepEx(
     DWORD  dwMilliseconds,      // Time to sleep in milliseconds
     BOOL   bAlertable           // TRUE = enable APC processing
 );</code></pre>
                         </div><br>
-                      <li><code>WaitForSingleObjectEx()</code>: Waits for a single synchronization object to become signaled</li>
+                      <li>Waits for a single synchronization object to become signaled</li>
 <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20 max-w-full overflow-x-auto">
 <pre><code>DWORD WaitForSingleObjectEx(
     HANDLE hHandle,             // Handle to object (mutex, event, process, etc.)
@@ -88,7 +88,7 @@
     */
 );</code></pre>
                         </div><br>
-                      <li><code>WaitForMultipleObjectsEx()</code>: Waits for multiple synchronization objects simultaneously</li>
+                      <li>Waits for multiple synchronization objects simultaneously</li>
 <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20 max-w-full overflow-x-auto">
 <pre><code>DWORD WaitForMultipleObjectsEx(
     DWORD   nCount,             // Number of handles in array
@@ -104,7 +104,7 @@
     */
 );</code></pre>
                         </div><br>
-                      <li><code>SignalObjectAndWait()</code>: Atomically signals one object and waits on another</li>
+                      <li>Atomically signals one object and waits on another</li>
 <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20 max-w-full overflow-x-auto">
 <pre><code>DWORD SignalObjectAndWait(
     HANDLE hObjectToSignal,     // Object to signal (mutex, event, semaphore)
@@ -113,7 +113,7 @@
     BOOL   bAlertable           // TRUE = enable APC processing
 );</code></pre>
                         </div><br>
-                      <li><code>MsgWaitForMultipleObjectsEx()</code>: Waits for objects OR specific window messages - crucial for UI threads</li>
+                      <li>Waits for objects OR specific window messages - crucial for UI threads</li>
                       <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20 max-w-full overflow-x-auto">
 <pre><code>DWORD MsgWaitForMultipleObjectsEx(
     DWORD   nCount,             // Number of handles
