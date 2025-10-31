@@ -239,7 +239,7 @@
   <!-- Reading-time logic -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const dateWritten = '20/July/2025';
+      const dateWritten = '31/Oct/2025';
       const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
       const minutes = Math.max(1, Math.ceil(words / 230));
       document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
