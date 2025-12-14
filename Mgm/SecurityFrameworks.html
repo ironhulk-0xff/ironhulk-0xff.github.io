@@ -18,7 +18,7 @@
             <small id="reading-time" style="color:#475569; font-size:13px;"></small>
           </div>
           <div>
-            <a href="../blog.html" style="color:#1e293b; font-size:14px; text-decoration:none;">
+            <a href="../blog.html" style="color:#1e293b; font-size:15px; text-decoration:none;">
               ← Back to Blogs
             </a>
           </div>
@@ -186,7 +186,7 @@
                 </div>
                 <div>
                   <h3 style="margin:2px 0 0; color:#0f172a;">
-                    ISO (Information Security Management System (ISMS) Frameworks)
+                    <a href="https://www.iso.org/standards.html" style="color:#1e293b; font-size:15px; text-decoration:none;" onmouseover="this.style.color='#2563eb'" onmouseout="this.style.color='#1e293b'">ISO (Information Security Management System (ISMS) Frameworks)</a>
                   </h3>
                 </div>
               </div>
@@ -230,7 +230,7 @@
                 </div>
                 <div>
                   <h3 style="margin:2px 0 0; color:#0f172a;">
-                    NIST (Risk-Based Cybersecurity Frameworks)
+                    <a href="https://nvlpubs.nist.gov/nistpubs/CSWP/NIST.CSWP.29.pdf" style="color:#1e293b; font-size:15px; text-decoration:none;" onmouseover="this.style.color='#2563eb'" onmouseout="this.style.color='#1e293b'">NIST (Risk-Based Cybersecurity Frameworks)</a>
                   </h3>
                 </div>
               </div>
@@ -239,6 +239,7 @@
                 manage and reduce cybersecurity risk.
               </p>
               <ul style="margin:0; padding-left:20px; color:#1f2937; line-height:1.6;">
+                <li><strong>Govern:</strong> Establishing and monitoring cybersecurity risk management strategy, roles, policies, and oversight aligned with business objectives.</li>
                 <li><strong>Identify:</strong> Understanding the business environment and cybersecurity risks.</li>
                 <li><strong>Protect:</strong> Developing safeguards to ensure critical systems and data are protected.</li>
                 <li><strong>Detect:</strong> Implementing processes to detect cybersecurity events.</li>
@@ -273,7 +274,7 @@
                 </div>
                 <div>
                   <h3 style="margin:2px 0 0; color:#0f172a;">
-                    COBIT (Governance & Enterprise IT Frameworks)
+                    <a href="https://auditboard.com/blog/cobit" style="color:#1e293b; font-size:15px; text-decoration:none;" onmouseover="this.style.color='#2563eb'" onmouseout="this.style.color='#1e293b'">COBIT (Governance & Enterprise IT Frameworks)</a>
                   </h3>
                 </div>
               </div>
@@ -322,7 +323,7 @@
                 </div>
                 <div>
                   <h3 style="margin:2px 0 0; color:#0f172a;">
-                    SABSA (Architecture & Design Frameworks)
+                    <a href="https://sabsa.org/sabsa-executive-summary/" style="color:#1e293b; font-size:15px; text-decoration:none;" onmouseover="this.style.color='#2563eb'" onmouseout="this.style.color='#1e293b'">SABSA (Architecture & Design Frameworks)</a>
                   </h3>
                 </div>
               </div>
@@ -371,7 +372,7 @@
                 </div>
                 <div>
                   <h3 style="margin:2px 0 0; color:#0f172a;">
-                    PCI DSS (payment card industry)
+                    <a href="https://www.pcisecuritystandards.org/standards/pci-dss/" style="color:#1e293b; font-size:15px; text-decoration:none;" onmouseover="this.style.color='#2563eb'" onmouseout="this.style.color='#1e293b'">PCI DSS (payment card industry)</a>
                   </h3>
                 </div>
               </div>
@@ -417,7 +418,7 @@
                 </div>
                 <div>
                   <h3 style="margin:2px 0 0; color:#0f172a;">
-                    FedRAMP (cloud services for U.S. federal agencies)
+                    <a href="https://www.fedramp.gov/" style="color:#1e293b; font-size:15px; text-decoration:none;" onmouseover="this.style.color='#2563eb'" onmouseout="this.style.color='#1e293b'">FedRAMP (cloud services for U.S. federal agencies)</a>
                   </h3>
                 </div>
               </div>
@@ -438,15 +439,14 @@
           </div>
         </div>
       </section>
-
-        <script>
-          document.addEventListener('DOMContentLoaded', () => {
-            const dateWritten = '14/Dec/2025';
-            const words   = document.getElementById('content').innerText.trim().split(/\s+/).filter(Boolean).length;
-            const minutes = Math.max(1, Math.ceil(words / 230));
-            document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
-          });
-        </script>
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const dateWritten = '14/Dec/2025';
+          const words   = document.getElementById('content').innerText.trim().split(/\s+/).filter(Boolean).length;
+          const minutes = Math.max(1, Math.ceil(words / 230));
+          document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
+        });
+      </script>
       <div style="position:relative; text-align:center; color:#64748b; font-size:14px; margin-top:24px; padding:18px 0; border-top:1px solid #e5e7eb;">
         <div>
           <div style="margin-bottom:6px; font-weight:500;">Executive Use Only</div>
