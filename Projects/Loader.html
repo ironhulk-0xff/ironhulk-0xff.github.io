@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iron Hulk – Loader</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+</head>
+    <body class="bg-[#0f172a] text-white font-sans min-h-screen">
+        <header class="bg-[#1e293b] p-4 shadow flex items-center justify-between gap-4">
+            <div>
+            <h1 class="text-xl font-bold text-blue-400">The Stealthy Threat</h1>
+            <small id="reading-time" class="text-xs text-gray-400"></small>
+            </div>
+            <a href="../projects.html" class="text-gray-300 text-sm hover:underline">← Back to Projects</a>
+        </header>
+        <main id="article" class="p-6 sm:text-justify">
+            <div class="relative isolate overflow-hidden rounded-2xl bg-[#04151f] p-10 shadow-xl ring-1 ring-teal-400/25">
+                <h2 class="text-2xl sm:text-3xl font-semibold text-teal-300 leading-tight">
+                    How Encrypted Loaders Deploy Malware in Memory
+                </h2>
+                <br>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+                    <div class="space-y-7 text-slate-200">
+                        <article class="relative rounded-xl border border-teal-400/15 bg-gray-950/35 p-5">
+                            <div class="absolute left-0 top-4 h-[calc(100%-2rem)] w-1 rounded bg-gradient-to-b from-teal-400 to-emerald-400"></div>
+                            <h3 class="text-lg font-semibold text-teal-200">
+                            Introduction: A Real-World Attack?
+                            </h3>
+                            <p class="mt-2 leading-relaxed text-gray-200/90">
+                                Imagine a scenario where a seemingly legitimate file, perhaps disguised as a software update, lands on a corporate computer. Once executed, it doesn't do anything obviously 
+                                malicious. Instead, it silently decrypts and unleashes its true purpose in the computer's memory, disabling security software and deploying ransomware, all while leaving 
+                                minimal traces on the hard drive. This is the work of a sophisticated malware loader, and it represents one of the most effective evasion techniques used by cybercriminals 
+                                today. This blog post dives deep into the mechanics of these loaders, explaining what they are, how they bypass modern security, and why their "fileless" or memory-based 
+                                execution makes them so dangerous.
+                            </p>
+                            <br>
+                            <div class="mt-4 grid gap-3 sm:grid-cols-2">
+                                <div class="rounded-lg border border-emerald-400/20 bg-emerald-500/5 p-3 text-sm">
+                                    <p class="text-emerald-200 font-semibold">Why it’s hard to catch</p>
+                                    <p class="text-gray-200/85">Few stable files to scan; runtime artifacts are fleeting.</p>
+                                </div>
+                                <div class="rounded-lg border border-amber-400/25 bg-amber-500/5 p-3 text-sm">
+                                    <p class="text-amber-200 font-semibold">What defenders see</p>
+                                    <p class="text-gray-200/85">A “normal” process until the handoff happens.</p>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    <figure>
+                        <img src="../Projects/Images/loader2.webp" alt="Process injection illustration" class="w-full max-h-[360px] object-contain rounded-xl" />
+                    </figure>
+                </div>
+                <br>
+                <article class="rounded-xl border border-teal-400/15 bg-gray-950/35 p-5">
+                    <h3 class="text-lg font-semibold text-teal-200">What is a Loader?</h3>
+                    <p class="mt-2 leading-relaxed text-gray-200/90">
+                        At its core, a loader is a program designed to execute a malicious payload on a machine while bypassing existing security protections. Think of it as a 
+                        specialized delivery vehicle. Its primary job is not to cause direct harm but to safely transport and deploy a more dangerous "cargo" such as ransomware, 
+                        information stealers, or backdoors, onto a compromised system. The most advanced loaders enhance their stealth by:
+                    </p>
+                    <ul class="mt-3 space-y-2 text-sm sm:text-base">
+                        <li class="flex gap-2">
+                            <span class="mt-1 h-2 w-2 rounded-full bg-teal-400 shrink-0"></span>
+                            <span><strong class="text-teal-200">Delivering Encrypted Payloads:</strong> The malicious payload is hidden using encryption or obfuscation, making it unreadable to security scanners.</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <span class="mt-1 h-2 w-2 rounded-full bg-emerald-400 shrink-0"></span>
+                            <span><strong class="text-emerald-200">In-Memory Execution:</strong> The payload is decrypted directly into the computer's memory (RAM) and executed there, often without ever being written as a detectable file on the disk.</span>
+                        </li>
+                    </ul>
+                    <br>
+                    <blockquote class="border-l-4 border-blue-400 pl-4">
+                        💡 <b>Key idea:</b> the loader keeps the payload unreadable on disk, then decrypts it only at runtime, often directly into memory, and then transfers execution to it..
+                    </blockquote> 
+                </article>
+                <br>
+                <div class="rounded-2xl bg-[#04151f] p-10 shadow-xl ring-1 ring-teal-400/25">
+                    <div class="relative grid grid-cols-1 gap-10">
+                        <section class="space-y-4 text-gray-200">
+                            <h2 class="text-[25px] font-semibold text-teal-300">
+                                How Security Tools Work And How Loaders Bypass Them?
+                            </h2>
+                            <h3 class="text-lg font-semibold text-indigo-300">
+                                To understand why loaders are effective, we must first look at how security tools like antivirus (AV) and Endpoint Detection and Response (EDR) systems try to 
+                                catch malware. Here is a short explanation
+                            </h3>
+                            <section class="rounded-2xl border border-emerald-500/30 bg-gray-950 shadow-xl">
+                                <div class="border-b border-emerald-500/20 bg-gradient-to-r from-emerald-600/20 to-teal-600/10 p-5">
+                                <h3 class="text-xl font-semibold text-emerald-200">
+                                    Security Controls vs Loader Blind Spots
+                                </h3>
+                                </div>
+                                <div class="overflow-x-auto">
+                                <table class="min-w-full text-sm md:text-base">
+                                    <thead class="text-gray-100">
+                                    <tr class="bg-gray-900/80 uppercase text-xs tracking-wider text-center">
+                                        <th class="px-4 py-3">Defense Layer</th>
+                                        <th class="px-4 py-3">Designed Purpose</th>
+                                        <th class="px-4 py-3 text-amber-300">Blind Spot Exploited</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-emerald-700/30 text-gray-100">
+                                    <tr class="hover:bg-emerald-700/10 transition">
+                                        <td class="px-4 py-4 font-semibold">
+                                        Signature & Static Analysis
+                                        </td>
+                                        <td class="px-4 py-4">
+                                        Detects known malicious patterns or hashes on disk.
+                                        </td>
+                                        <td class="px-4 py-4 text-center text-amber-200">
+                                        Encrypted payloads remove readable signatures; loaders mutate easily.
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-emerald-700/10 transition">
+                                        <td class="px-4 py-4 font-semibold">
+                                        Heuristic & Behavioral Analysis
+                                        </td>
+                                        <td class="px-4 py-4">
+                                        Flags suspicious runtime activity.
+                                        </td>
+                                        <td class="px-4 py-4 text-center text-amber-200">
+                                        Activity split across stages appears benign early.
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-emerald-700/10 transition">
+                                        <td class="px-4 py-4 font-semibold">
+                                        IAT Inspection
+                                        </td>
+                                        <td class="px-4 py-4">
+                                        Inspects imported Windows APIs for malicious intent.
+                                        </td>
+                                        <td class="px-4 py-4 text-center text-amber-200">
+                                        APIs resolved dynamically at runtime.
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-emerald-700/10 transition">
+                                        <td class="px-4 py-4 font-semibold">
+                                        AMSI & ETW
+                                        </td>
+                                        <td class="px-4 py-4">
+                                        Scans scripts and logs events for EDR visibility.
+                                        </td>
+                                        <td class="px-4 py-4 text-center text-amber-200">
+                                        Decryption occurs outside monitored engines.
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-emerald-700/10 transition">
+                                        <td class="px-4 py-4 font-semibold">
+                                        API Hooking
+                                        </td>
+                                        <td class="px-4 py-4">
+                                        Monitors Windows API calls for malicious sequences.
+                                        </td>
+                                        <td class="px-4 py-4 text-center text-amber-200">
+                                        Direct syscalls bypass user-mode hooks.
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                </div>
+                            </section>
+                            <header class="border-b border-teal-400/20 bg-gradient-to-r p-5 sm:p-7"></header>
+                            <header class="border-b border-emerald-500/20 bg-gradient-to-r p-5 sm:p-7">
+                                <div class="flex flex-wrap items-center gap-3">
+                                <h2 class="text-xl sm:text-2xl md:text-3xl font-semibold text-teal-200 tracking-tight">
+                                    Why Do These Loaders Bypass Security?
+                                </h2>
+                                </div>
+                                <p class="mt-3 text-sm sm:text-base leading-relaxed text-gray-200/90">
+                                Loaders do not “break” security controls; they operate in the blind spots those controls were never designed to fully cover.
+                                Each bypass advantage comes from a specific function the loader performs.
+                                </p>
+                            </header>
+                            <div class="p-4 sm:p-7">
+                                <ol class="grid gap-4 sm:gap-5 lg:gap-6">
+                                    <li class="group rounded-2xl border border-emerald-500/20 bg-gray-900/40 hover:bg-gray-900/55 transition-colors">
+                                        <div class="p-4 sm:p-6">
+                                            <div class="flex items-start gap-4">
+                                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-400/25 bg-emerald-500/10 text-emerald-200 font-bold">
+                                                    01
+                                                </div>
+                                                <div class="min-w-0">
+                                                    <h3 class="text-base sm:text-lg font-semibold text-gray-100">
+                                                    Payload Encryption <span class="text-emerald-200/80">— Breaking Static Visibility</span>
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                            <div class="mt-4 grid gap-3 sm:gap-4 md:grid-cols-3">
+                                                <div class="rounded-xl border border-emerald-500/15 bg-gray-950/40 p-4">
+                                                    <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-emerald-300">
+                                                        <span class="h-2 w-2 rounded-full bg-emerald-400"></span> Function
+                                                    </div>
+                                                    <ul class="mt-2 space-y-1.5 text-sm text-gray-200/90 list-disc pl-5">
+                                                        <li>The loader stores the real payload as encrypted or encoded data.</li>
+                                                        <li>On disk, the payload looks like random bytes or compressed data.</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="rounded-xl border border-emerald-500/15 bg-gray-950/40 p-4">
+                                                    <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-teal-300">
+                                                        <span class="h-2 w-2 rounded-full bg-teal-400"></span> Why This Works
+                                                    </div>
+                                                    <ul class="mt-2 space-y-1.5 text-sm text-gray-200/90 list-disc pl-5">
+                                                        <li>Static inspection is strongest when content is readable.</li>
+                                                        <li>Encrypted data lacks recognizable opcode patterns and signatures.</li>
+                                                        <li>Often resembles legitimate protected/compressed data.</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="rounded-xl border border-emerald-500/15 bg-gray-950/40 p-4">
+                                                    <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-amber-300">
+                                                        <span class="h-2 w-2 rounded-full bg-amber-400"></span> Security Gap
+                                                    </div>
+                                                    <ul class="mt-2 space-y-1.5 text-sm text-gray-200/90 list-disc pl-5">
+                                                        <li>Static scanners can’t assess intent until runtime decryption.</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="group rounded-2xl border border-emerald-500/20 bg-gray-900/40 hover:bg-gray-900/55 transition-colors">
+                                        <div class="p-4 sm:p-6" >
+                                            <div class="flex items-start gap-4">
+                                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-400/25 bg-emerald-500/10 text-emerald-200 font-bold">
+                                                    02
+                                                </div>
+                                                <div class="min-w-0">
+                                                    <h3 class="text-base sm:text-lg font-semibold text-gray-100">
+                                                        Delayed Decryption <span class="text-emerald-200/80">— Avoiding “Scan-on-Write”</span>
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                            <div class="mt-4 grid gap-3 sm:gap-4 md:grid-cols-3">
+                                                <div class="rounded-xl border border-emerald-500/15 bg-gray-950/40 p-4">
+                                                    <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-emerald-300">
+                                                        <span class="h-2 w-2 rounded-full bg-emerald-400"></span> Function
+                                                    </div>
+                                                    <ul class="mt-2 space-y-1.5 text-sm text-gray-200/90 list-disc pl-5">
+                                                        <li>Decryption occurs only at execution time, often milliseconds before execution.</li>
+                                                        <li>Some loaders decrypt:
+                                                            <ol class="list-disc pl-3 ">
+                                                                <li>In small chunks.</li>
+                                                                <li>Just-in-time.</li>
+                                                                <li>Only after environment checks.</li>
+                                                            </ol>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="rounded-xl border border-emerald-500/15 bg-gray-950/40 p-4">
+                                                    <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-teal-300">
+                                                        <span class="h-2 w-2 rounded-full bg-teal-400"></span> Why This Works
+                                                    </div>
+                                                    <ul class="mt-2 space-y-1.5 text-sm text-gray-200/90 list-disc pl-5">
+                                                        <li>Many defenses trigger when:
+                                                            <ol class="list-disc pl-3 ">
+                                                                <li>A file is written to disk.</li>
+                                                                <li>A module is loaded from disk.</li>
+                                                            </ol>
+                                                        </li>
+                                                        <li>If the decrypted payload is never written as a file, those hooks are skipped.</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="rounded-xl border border-emerald-500/15 bg-gray-950/40 p-4">
+                                                    <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-amber-300">
+                                                        <span class="h-2 w-2 rounded-full bg-amber-400"></span> Security Gap
+                                                    </div>
+                                                    <ul class="mt-2 space-y-1.5 text-sm text-gray-200/90 list-disc pl-5">
+                                                        <li>Controls expect a stable artifact to scan; loaders create only fleeting runtime artifacts.</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="group rounded-2xl border border-emerald-500/20 bg-gray-900/40 hover:bg-gray-900/55 transition-colors">
+                                        <div class="p-4 sm:p-6" >
+                                            <div class="flex items-start gap-4">
+                                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-400/25 bg-emerald-500/10 text-emerald-200 font-bold">
+                                                    03
+                                                </div>
+                                                <div class="min-w-0">
+                                                    <h3 class="text-base sm:text-lg font-semibold text-gray-100">
+                                                        Memory-Only Execution <span class="text-emerald-200/80">— No Persistent Malware File</span>
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                            <div class="mt-4 grid gap-3 sm:gap-4 md:grid-cols-3">
+                                                <div class="rounded-xl border border-emerald-500/15 bg-gray-950/40 p-4">
+                                                    <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-emerald-300">
+                                                        <span class="h-2 w-2 rounded-full bg-emerald-400"></span> Function
+                                                    </div>
+                                                    <ul class="mt-2 space-y-1.5 text-sm text-gray-200/90 list-disc pl-5">
+                                                        <li>The decrypted payload executes directly from RAM.</li>
+                                                        <li>The final malware logic may never exist as a standalone executable on disk.</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="rounded-xl border border-emerald-500/15 bg-gray-950/40 p-4">
+                                                    <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-teal-300">
+                                                        <span class="h-2 w-2 rounded-full bg-teal-400"></span> Why This Works
+                                                    </div>
+                                                    <ul class="mt-2 space-y-1.5 text-sm text-gray-200/90 list-disc pl-5">
+                                                        <li>Memory-resident code:
+                                                            <ol class="list-disc pl-3 ">
+                                                                <li>Has no filename.</li>
+                                                                <li>No hash.</li>
+                                                                <li>No persistent footprint.</li>
+                                                            </ol>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="rounded-xl border border-emerald-500/15 bg-gray-950/40 p-4">
+                                                    <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-amber-300">
+                                                        <span class="h-2 w-2 rounded-full bg-amber-400"></span> Security Gap
+                                                    </div>
+                                                    <ul class="mt-2 space-y-1.5 text-sm text-gray-200/90 list-disc pl-5">
+                                                        <li>Most legacy defenses were built around files, not memory regions.</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="group rounded-2xl border border-emerald-500/20 bg-gray-900/40 hover:bg-gray-900/55 transition-colors">
+                                        <div class="p-4 sm:p-6">
+                                            <div class="flex items-start gap-4">
+                                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-400/25 bg-emerald-500/10 text-emerald-200 font-bold">
+                                                    04
+                                                </div>
+                                                <div class="min-w-0">
+                                                    <h3 class="text-base sm:text-lg font-semibold text-gray-100">
+                                                        Legitimate Process Context <span class="text-emerald-200/80">— Trust Inheritance</span>
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                            <div class="mt-4 grid gap-3 sm:gap-4 md:grid-cols-3">
+                                                <div class="rounded-xl border border-emerald-500/15 bg-gray-950/40 p-4">
+                                                    <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-emerald-300">
+                                                        <span class="h-2 w-2 rounded-full bg-emerald-400"></span> Function
+                                                    </div>
+                                                    <ul class="mt-2 space-y-1.5 text-sm text-gray-200/90 list-disc pl-5">
+                                                        <li>The loader executes or hosts the payload within:
+                                                            <ol class="list-disc pl-3 ">
+                                                                <li>Its own process.</li>
+                                                                <li>A trusted system or user process.</li>
+                                                            </ol>
+                                                        </li>
+                                                        <li>From the OS perspective, execution happens under a valid, signed process identity.</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="rounded-xl border border-emerald-500/15 bg-gray-950/40 p-4">
+                                                    <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-teal-300">
+                                                        <span class="h-2 w-2 rounded-full bg-teal-400"></span> Why This Works
+                                                    </div>
+                                                    <ul class="mt-2 space-y-1.5 text-sm text-gray-200/90 list-disc pl-5">
+                                                        <li>Security products often apply risk scoring:
+                                                            <ol class="list-disc pl-3 ">
+                                                                <li>Trusted parent process → lower suspicion.</li>
+                                                                <li>Known binaries → relaxed heuristics.</li>
+                                                            </ol>
+                                                            <li>Malicious code inherits the reputation of its host.</li>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="rounded-xl border border-emerald-500/15 bg-gray-950/40 p-4">
+                                                    <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-amber-300">
+                                                        <span class="h-2 w-2 rounded-full bg-amber-400"></span> Security Gap
+                                                    </div>
+                                                    <ul class="mt-2 space-y-1.5 text-sm text-gray-200/90 list-disc pl-5">
+                                                        <li>Trust is assigned to process identity, not to every memory region inside it.</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="group rounded-2xl border border-emerald-500/20 bg-gray-900/40 hover:bg-gray-900/55 transition-colors">
+                                        <div class="p-4 sm:p-6">
+                                            <div class="flex items-start gap-4">
+                                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-400/25 bg-emerald-500/10 text-emerald-200 font-bold">
+                                                    05
+                                                </div>
+                                                <div class="min-w-0">
+                                                    <h3 class="text-base sm:text-lg font-semibold text-gray-100">
+                                                        Minimal Initial Behavior <span class="text-emerald-200/80">— Reducing Early Indicators</span>
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                            <div class="mt-4 grid gap-3 sm:gap-4 md:grid-cols-3">
+                                                <div class="rounded-xl border border-emerald-500/15 bg-gray-950/40 p-4">
+                                                    <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-emerald-300">
+                                                        <span class="h-2 w-2 rounded-full bg-emerald-400"></span> Function
+                                                    </div>
+                                                    <ul class="mt-2 space-y-1.5 text-sm text-gray-200/90 list-disc pl-5">
+                                                        <li>The loader’s early actions are intentionally simple:
+                                                            <ol class="list-disc pl-3 ">
+                                                                <li>Allocate memory.</li>
+                                                                <li>Decode data.</li>
+                                                                <li>Start execution.</li>
+                                                            </ol>
+                                                        </li>
+                                                        <li>No obvious malicious actions at stage one.</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="rounded-xl border border-emerald-500/15 bg-gray-950/40 p-4">
+                                                    <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-teal-300">
+                                                        <span class="h-2 w-2 rounded-full bg-teal-400"></span> Why This Works
+                                                    </div>
+                                                    <ul class="mt-2 space-y-1.5 text-sm text-gray-200/90 list-disc pl-5">
+                                                        <li>Behavioral engines often wait for:
+                                                            <ol class="list-disc pl-3 ">
+                                                                <li>Network activity.</li>
+                                                                <li>Credential access.</li>
+                                                                <li>Persistence attempts.</li>
+                                                            </ol>
+                                                        </li>
+                                                        <li>By the time those occur, the loader has already handed off execution.</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="rounded-xl border border-emerald-500/15 bg-gray-950/40 p-4">
+                                                    <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-amber-300">
+                                                        <span class="h-2 w-2 rounded-full bg-amber-400"></span> Security Gap
+                                                    </div>
+                                                    <ul class="mt-2 space-y-1.5 text-sm text-gray-200/90 list-disc pl-5">
+                                                        <li>Detection engines expect compound malicious behavior.</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="group rounded-2xl border border-emerald-500/20 bg-gray-900/40 hover:bg-gray-900/55 transition-colors">
+                                        <div class="p-4 sm:p-6">
+                                            <div class="flex items-start gap-4">
+                                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-400/25 bg-emerald-500/10 text-emerald-200 font-bold">
+                                                    06
+                                                </div>
+                                                <div class="min-w-0">
+                                                    <h3 class="text-base sm:text-lg font-semibold text-gray-100">
+                                                        Sandbox and Emulator Evasion <span class="text-emerald-200/80">— Indirect Bypass</span>
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                            <div class="mt-4 grid gap-3 sm:gap-4 md:grid-cols-3">
+                                                <div class="rounded-xl border border-emerald-500/15 bg-gray-950/40 p-4">
+                                                <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-emerald-300">
+                                                    <span class="h-2 w-2 rounded-full bg-emerald-400"></span> Function
+                                                </div>
+                                                <ul class="mt-2 space-y-1.5 text-sm text-gray-200/90 list-disc pl-5">
+                                                    <li>Loaders may gate decryption if:
+                                                        <ol class="list-disc pl-3 ">
+                                                            <li>Environment checks.</li>
+                                                            <li>Timing conditions.</li>
+                                                            <li>Missing resources.</li>
+                                                        </ol>
+                                                    </li>
+                                                    <li>If conditions fail, the payload never decrypts.</li>
+                                                </ul>
+                                                </div>
+                                                <div class="rounded-xl border border-emerald-500/15 bg-gray-950/40 p-4">
+                                                    <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-teal-300">
+                                                        <span class="h-2 w-2 rounded-full bg-teal-400"></span> Why This Works
+                                                    </div>
+                                                    <ul class="mt-2 space-y-1.5 text-sm text-gray-200/90 list-disc pl-5">
+                                                        <li>Sandboxes are:
+                                                            <ol class="list-disc pl-10 ">
+                                                                <li>Time-limited.</li>
+                                                                <li>Size-limited.</li>
+                                                                <li>Environment-simplified.</li>
+                                                            </ol>
+                                                        </li>
+                                                        <li>If decryption never happens, analysis sees only a encrypted data.</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="rounded-xl border border-emerald-500/15 bg-gray-950/40 p-4">
+                                                    <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-amber-300">
+                                                        <span class="h-2 w-2 rounded-full bg-amber-400"></span> Security Gap
+                                                    </div>
+                                                    <ul class="mt-2 space-y-1.5 text-sm text-gray-200/90 list-disc pl-5">
+                                                        <li>Automated analysis cannot always replicate real execution conditions.</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="group rounded-2xl border border-emerald-500/20 bg-gray-900/40 hover:bg-gray-900/55 transition-colors">
+                                        <div class="p-4 sm:p-6">
+                                            <div class="flex items-start gap-4">
+                                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-400/25 bg-emerald-500/10 text-emerald-200 font-bold">
+                                                    07
+                                                </div>
+                                                <div class="min-w-0">
+                                                    <h3 class="text-base sm:text-lg font-semibold text-gray-100">
+                                                        Reduced Signature Reuse <span class="text-emerald-200/80">— Breaking IOC-Based Detection</span>
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                            <div class="mt-4 grid gap-3 sm:gap-4 md:grid-cols-3">
+                                                <div class="rounded-xl border border-emerald-500/15 bg-gray-950/40 p-4">
+                                                    <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-emerald-300">
+                                                        <span class="h-2 w-2 rounded-full bg-emerald-400"></span> Function
+                                                    </div>
+                                                    <ul class="mt-2 space-y-1.5 text-sm text-gray-200/90 list-disc pl-5">
+                                                        <li>Loaders are small and frequently modified.</li>
+                                                        <li>Encryption keys, blobs, and structure change often.</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="rounded-xl border border-emerald-500/15 bg-gray-950/40 p-4">
+                                                    <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-teal-300">
+                                                        <span class="h-2 w-2 rounded-full bg-teal-400"></span> Why This Works
+                                                    </div>
+                                                    <ul class="mt-2 space-y-1.5 text-sm text-gray-200/90 list-disc pl-5">
+                                                        <li>Hash-based and signature-based detection relies on reuse.</li>
+                                                        <li>If only the loader is seen and it changes often, IOCs decay rapidly.</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="rounded-xl border border-emerald-500/15 bg-gray-950/40 p-4">
+                                                    <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-amber-300">
+                                                        <span class="h-2 w-2 rounded-full bg-amber-400"></span> Security Gap
+                                                    </div>
+                                                    <ul class="mt-2 space-y-1.5 text-sm text-gray-200/90 list-disc pl-5">
+                                                        <li>Detection pipelines optimized for “known bad” struggle with fast mutation.</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ol>
+                            </div>
+                            <footer class="relative border-t border-emerald-500/20 bg-gray-950/60 p-5 sm:p-6">
+                                <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-emerald-400/40 to-transparent"></div>
+                                <p class="text-xs sm:text-sm text-gray-300/85 leading-relaxed">
+                                <span class="font-semibold text-emerald-300">Closing note:</span>
+                                This article does not attempt to catalog every loader technique. It focuses on a small set of representative behaviors to explain 
+                                <span class="text-emerald-200">why loaders work</span>, not to exhaustively document how they are built.
+                                </p>
+                            </footer>
+                        </section>
+                    </div>
+                    <header class="border-b border-teal-400/20 bg-gradient-to-r p-5 sm:p-7"></header>
+                    <header class="border-b border-teal-400/20 bg-gradient-to-r p-5 sm:p-7">
+                        <h2 class="mt-3 text-xl sm:text-2xl md:text-3xl font-semibold text-teal-300 tracking-tight">
+                        The Encryption Project
+                        </h2>
+                        <p class="mt-2 max-w-3xl text-sm sm:text-base text-gray-300/90">
+                        A high-level overview of how payload data is transformed into a transport-safe encrypted form.
+                        </p>
+                    </header><br>
+                    <ol class="relative space-y-4 sm:space-y-6 px-5 sm:px-7 pb-6">
+                        <li class="relative rounded-xl border border-teal-400/20 bg-gray-950/40 p-4 sm:p-5">
+                            <div class="flex gap-4">
+                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-teal-400/25 bg-teal-500/10 text-teal-200 font-bold">
+                                01
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-100">
+                                    Convert the payload into raw bytes
+                                    </h3>
+                                    <p class="mt-1 text-sm text-gray-300/90">
+                                    Binary data cannot be safely embedded or moved around in its original form and is easy for security tools to recognize.
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="relative rounded-xl border border-teal-400/20 bg-gray-950/40 p-4 sm:p-5">
+                            <div class="flex gap-4">
+                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-teal-400/25 bg-teal-500/10 text-teal-200 font-bold">
+                                02
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-100">
+                                        Define a key and convert it to bytes
+                                    </h3>
+                                    <p class="mt-1 text-sm text-gray-300/90">
+                                        Encryption and obfuscation operate at the byte level, not on human-readable strings.
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="relative rounded-xl border border-teal-400/20 bg-gray-950/40 p-4 sm:p-5">
+                            <div class="flex gap-4">
+                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-teal-400/25 bg-teal-500/10 text-teal-200 font-bold">
+                                03
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-100">
+                                        Apply XOR between payload and key
+                                    </h3>
+                                    <p class="mt-1 text-sm text-gray-300/90">
+                                        XOR changes every byte of the payload into a different value, making it unreadable while still allowing it to be restored later using the same key.
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="relative rounded-xl border border-teal-400/20 bg-gray-950/40 p-4 sm:p-5">
+                            <div class="flex gap-4">
+                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-teal-400/25 bg-teal-500/10 text-teal-200 font-bold">
+                                04
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-100">
+                                        Repeat the key across the payload
+                                    </h3>
+                                    <p class="mt-1 text-sm text-gray-300/90">
+                                        the payload is usually longer than the key, and this keeps the transformation consistent without increasing code complexity.
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="relative rounded-xl border border-teal-400/20 bg-gray-950/40 p-4 sm:p-5">
+                            <div class="flex gap-4">
+                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-teal-400/25 bg-teal-500/10 text-teal-200 font-bold">
+                                05
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-100">
+                                        Encode output as Base64
+                                    </h3>
+                                    <p class="mt-1 text-sm text-gray-300/90">
+                                        Base64 converts binary data into safe, printable characters that can be easily copied, stored, or embedded in another program.
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="relative rounded-xl border border-emerald-400/30 bg-emerald-500/5 p-4 sm:p-5">
+                            <div class="flex gap-4">
+                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-400/30 bg-emerald-500/10 text-emerald-200 font-bold">
+                                ✓
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-emerald-200">
+                                        Result
+                                    </h3>
+                                    <p class="mt-1 text-sm text-gray-200/90">
+                                        A recognizable payload becomes unreadable text that can be safely hidden and later reconstructed when required.
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                    </ol>
+                    <header class="border-b border-teal-400/20 bg-gradient-to-r p-5 sm:p-7"></header>
+                    <header class="border-b border-teal-400/20 bg-gradient-to-r p-5 sm:p-7">
+                        <h2 class="mt-3 text-xl sm:text-2xl md:text-3xl font-semibold text-teal-300 tracking-tight">
+                        The Runner Project - Malware Loader with Memory Injection
+                        </h2>
+                        <p class="mt-2 max-w-3xl text-sm sm:text-base text-gray-300/90">
+                        A high-level overview of how to write your loader to bypass some of antivirus software.
+                        </p>
+                    </header>
+                    <div class="p-5 sm:p-7">
+                        <blockquote class="relative rounded-xl border border-blue-400/30 bg-blue-500/5 p-4 text-sm sm:text-base text-gray-200">
+                            <span class="absolute -left-2 top-4 h-6 w-1 rounded bg-blue-400"></span>
+                            <span class="font-semibold text-blue-300">Note:</span>
+                            This project is writen in C# and is not shared. The explanation stays intentionally high-level and conceptual. 
+                            The approach mirrors common loader techniques but with few changes.
+                        </blockquote>
+                    </div>
+                    <ol class="relative space-y-4 sm:space-y-6 px-5 sm:px-7 pb-6">
+                        <li class="relative rounded-xl border border-teal-400/20 bg-gray-950/40 p-4 sm:p-5">
+                            <div class="flex gap-4">
+                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-teal-400/25 bg-teal-500/10 text-teal-200 font-bold">
+                                01
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-100">
+                                        Import Windows API Functions for Memory Operations
+                                    </h3>
+                                    <p class="mt-1 text-sm text-gray-300/90">
+                                        Use [DllImport] to access low-level Windows functions from kernel32.dll and user32.dll. Why we do this:
+                                        <ol class="list-decimal pl-6">
+                                            <li>C# normally runs in a managed, safe environment.</li>
+                                            <li>We need direct Windows API access to manipulate memory and processes.</li>
+                                            <li>These functions let us allocate executable memory and create threads.</li>
+                                            <li>Key functions imported:
+                                                <pre class="mt-2 rounded-lg shadow-inner">
+                                                    <code class="language-csharp text-green-300">
+VirtualAlloc() = Reserves memory we can execute code from.
+CreateThread() = Creates a new thread to run our code.
+WaitForSingleObject() = Waits for the thread to complete.
+GetConsoleWindow() + ShowWindow() = Hides the console window. </code></pre>
+                                            </li>
+                                        </ol>
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="relative rounded-xl border border-teal-400/20 bg-gray-950/40 p-4 sm:p-5">
+                            <div class="flex gap-4">
+                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-teal-400/25 bg-teal-500/10 text-teal-200 font-bold">
+                                02
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-100">
+                                        We Hide the Console Window and Add Delay
+                                    </h3>
+                                    <p class="mt-1 text-sm text-gray-300/90">
+                                        Get the console window handle and hide it, then sleep for 2 ~ 5 minutes. Because a visible console can alert the user and make the process look suspicious
+                                    </p>
+                                    <pre class="mt-2 rounded-lg shadow-inner ">
+                                        <code class="language-csharp text-green-300">
+var handle = GetConsoleWindow();
+ShowWindow(handle, 0);                  // 0 = SW_HIDE
+Thread.Sleep(new TimeSpan(0, 2, 0));    // 2 minute delay </code></pre>
+                                    <p><br>
+                                        Evasion reasons:
+                                        <ol class="list-decimal pl-6">
+                                            <li>Hide execution: User won't see a console window pop up.</li>
+                                            <li>Avoid sandboxes: Many malware analysis sandboxes only run programs briefly (30-60 seconds).</li>
+                                            <li>Wait out detection: Security tools might stop monitoring after initial execution.</li>
+                                            <li>Timing-based evasion: Real users might click and walk away; sandboxes often don't wait 2 minutes.</li>
+                                        </ol>
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="relative rounded-xl border border-teal-400/20 bg-gray-950/40 p-4 sm:p-5">
+                            <div class="flex gap-4">
+                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-teal-400/25 bg-teal-500/10 text-teal-200 font-bold">
+                                03
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-100">
+                                        We Decode and Decrypt the Payload
+                                    </h3>
+                                    <p class="mt-1 text-sm text-gray-300/90">
+                                        Take Base64-encoded encrypted payload, decode it, then XOR-decrypt it.
+                                    </p>
+                                    <pre class="mt-2 rounded-lg shadow-inner ">
+                                        <code class="language-csharp text-green-300">
+string dataBS64 = "Enc_Payload_Here";                           // 1. Get Base64
+byte[] data = Convert.FromBase64String(dataBS64);               // 2. Decode to bytes
+byte[] keyBytes = Encoding.ASCII.GetBytes("Ir0n7U1k0x69!");     // 3. Prepare key
+byte[] encoded = xor(data, keyBytes);                           // 4. XOR decrypt</code></pre>
+                                    <p><br>
+                                        Technical details:
+                                        <ol class="list-decimal pl-6">
+                                            <li>Base64 stored in code = Looks like random text, not binary data.</li>
+                                            <li>Convert.FromBase64String() = Turns "hTqzCscK..." into [0x85, 0x3A, 0xB3...].</li>
+                                            <li>Same XOR function as before - But now it's decrypting (XOR is symmetric).
+                                                <ol class="list-decimal pl-6">
+                                                    <li><b>If original:</b> shellcode ^ key = encrypted.</li>
+                                                    <li><b>Then</b>: encrypted ^ key = shellcode (back to original!).</li>
+                                                </ol>
+                                            </li>
+                                        </ol>
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="relative rounded-xl border border-teal-400/20 bg-gray-950/40 p-4 sm:p-5">
+                            <div class="flex gap-4">
+                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-teal-400/25 bg-teal-500/10 text-teal-200 font-bold">
+                                04
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-100">
+                                        We Allocate Executable Memory
+                                    </h3>
+                                    <p class="mt-1 text-sm text-gray-300/90">
+                                        Use VirtualAlloc() to reserve memory with execute permissions..
+                                    </p>
+                                    <pre class="mt-2 rounded-lg shadow-inner ">
+                                        <code class="language-csharp text-green-300">
+IntPtr codeAddr = VirtualAlloc(
+IntPtr.Zero,                        // Let system choose address
+(UInt32)encoded.Length,             // Size of our decrypted shellcode
+0x3000,                             // MEM_COMMIT | MEM_RESERVE (allocate now)
+0x40                                // PAGE_EXECUTE_READWRITE (can execute!)
+);</code></pre>
+                                    <p><br>
+                                        Memory protection flags explained:
+                                        <ol class="list-decimal pl-6">
+                                            <li>0x1000 = MEM_COMMIT = Actually allocate physical/RAM memory.</li>
+                                            <li>0x2000 = MEM_RESERVE = Reserve address space.</li>
+                                            <li>0x40 = PAGE_EXECUTE_READWRITE = Memory can be read, written, AND executed.</li>
+                                            <li><b>Critical security bypass:</b> Normally, data areas shouldn't be executable (Data Execution Prevention - DEP). This flag bypasses that protection..</li>
+                                        </ol>
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="relative rounded-xl border border-teal-400/20 bg-gray-950/40 p-4 sm:p-5">
+                            <div class="flex gap-4">
+                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-teal-400/25 bg-teal-500/10 text-teal-200 font-bold">
+                                05
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-100">
+                                        We Copy Shellcode into Memory and Execute It
+                                    </h3>
+                                    <p class="mt-1 text-sm text-gray-300/90">
+                                        Copy decrypted bytes into allocated memory, then create a thread to run it.
+                                    </p>
+                                    <pre class="mt-2 rounded-lg shadow-inner ">
+                                        <code class="language-csharp text-green-300">
+Marshal.Copy(encoded, 0, codeAddr, encoded.Length);     // Copy shellcode to memory
+IntPtr threadHandle = CreateThread(
+IntPtr.Zero,                                            // Default security
+0,                                                      // Default stack size  
+codeAddr,                                               // Address of our shellcode - THIS IS EXECUTED!
+IntPtr.Zero,                                            // No parameters
+0,                                                      // Start immediately
+IntPtr.Zero                                             // Don't need thread ID
+);</code></pre>
+
+                                    <p><br>
+                                        Thread execution details:
+                                        <ol class="list-decimal pl-6">
+                                            <li>CreateThread() = starts a new thread in the current process.</li>
+                                            <li>Thread begins executing at codeAddr (our shellcode location).</li>
+                                            <li>Shellcode runs in memory = no file on disk ever contains the decrypted code.</li>
+                                            <li>WaitForSingleObject() pauses main program until shellcode finishes.</li>
+                                        </ol>
+                                    </p>
+                                    <p><br>
+                                        What the shellcode typically does "any-of-this":
+                                        <ol class="list-decimal pl-6">
+                                            <li>Download additional malware.</li>
+                                            <li>Establish reverse shell connection.</li>
+                                            <li>Install persistence mechanisms.</li>
+                                            <li>Encrypt files (ransomware).</li>
+                                        </ol>
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+                <footer class="relative flex items-center justify-center text-[15px] text-slate-300 py-6">
+                <div class="text-center">
+                    Crafted With Passion<br>
+                    2025 Iron Hulk — No Rights Reserved.
+                    <br>
+                    <a href="../projects.html" class="text-gray-300 text-sm hover:underline">← Back to Projects</a>
+                </div>
+                <a href="#top" class="absolute right-6 top-1/2 transform -translate-y-1/2 text-slate-300 hover:text-slate-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M3.707 10.707a1 1 0 01-1.414-1.414l7-7a1 1 0 011.414 0l7 7a1 1 0 11-1.414 1.414L11 4.414V19a1 1 0 11-2 0V4.414L3.707 10.707z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+                </footer>
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                    const dateWritten = '16/Drc/2025';
+                    const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
+                    const minutes = Math.max(1, Math.ceil(words / 230));
+                    document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
+                    });
+                </script>
+            </div>
+        </main>
+    </body>
+</html>
