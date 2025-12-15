@@ -7,7 +7,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-[#0f172a] text-white font-sans min-h-screen">
-  <!-- Header -->
   <header class="bg-[#1e293b] p-4 shadow flex items-center justify-between gap-4">
     <div>
       <h1 class="text-xl font-bold text-blue-400">About Me</h1>
@@ -16,53 +15,42 @@
     <a href="index.html" class="text-gray-300 text-sm hover:underline">← Back to Dashboard</a>
   </header>
   <main class="flex-1 p-6 space-y-12">
-    <!-- Intro card (placeholder paragraph) -->
     <section class="rounded-2xl border border-blue-500/40 bg-gray-800/80 p-8 shadow-xl ring-1 ring-blue-500/20">
       <h2 class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-sky-400 to-indigo-400 mb-4">Introduction</h2>
       <p class="text-[15px] leading-relaxed text-gray-300 text-justify">
-        <!-- Put your intro text here -->
-        I have more than eight years of experience in cybersecurity, focusing on network security, offensive operations, and building strong defense systems for enterprises. 
-        I work with malware creation, leading security teams, and managing large-scale security setups. I'm certified in CISM, which helps me lead and guide security strategies 
-        effectively. On the defensive side, I create and maintain strong security systems.
-        I set up and adjust endpoint detection and response tools, configure firewalls, build secure connections with IPsec, design and secure Active Directory, handle certificate 
-        management, automate software updates, and run security scans to find and report weaknesses. These actions help keep security systems effective, meet legal requirements, and 
-        ensure the business can keep running smoothly. <br><br>
-        As a malware developer and designer of custom Command-and-Control servers, I build specialized tools for testing security defenses, simulating attacks, and managing access 
-        after a system is compromised. My tools are designed to work in secure environments and can avoid even the latest security tools and network protections. In attack simulations and 
-        security tests, I focus on how attackers gain entry, gain higher access levels, and move through a network. In combined red and blue team exercises, I help connect attack testing 
-        with defense strategies, improve how threats are understood, and make sure the response plans are accurate and up to date. <br><br>
-        I also have deep knowledge of firewalls, encryption, public key infrastructure, and overall infrastructure security. I make sure that security practices support the business 
-        goals and follow important laws and rules by combining strong leadership with detailed technical skills.
+        Hello, I'm IronHulk, and I'm based in Oman. I have several certifications, like CISM, OSEP, OSCP, CEH, and more. I've been working in cybersecurity for more than eight years, 
+        focusing on network security, offensive operations, and building resilient defense architectures for mid to large-scale enterprises. I do both leading teams and doing detailed technical work. 
+        I lead security teams, design and manage large-scale security environments, and develop malware for controlled testing purposes. I work where strategy meets action, making sure security plans fit with 
+        business goals, risk control, and keeping operations running smoothly. On the defense side, I set up and keep strong security systems. This involves setting up and adjusting 
+        EDR tools, configuring firewalls, setting up secure IPsec connections, designing and securing Active Directory, managing PKI and certificates, automating updates and patches, and 
+        doing ongoing checks for vulnerabilities. These efforts help meet regulations, keep operations stable, and maintain good security. As a malware developer and creator of custom 
+        Command-and-Control (C2) systems, I build tools used for testing attacks, checking defenses, in controlled situations and approved environments. These tools are made to work with 
+        today's security measures include strong endpoint and network protection. In red team activity, I focus on getting initial access, privilege escalation, and lateral movement across 
+        complex networks. In purple team exercises, I connect offensive discoveries with defensive improvements, making detection better, refining response steps, and boosting overall 
+        awareness of threats. I also design and deliver security awareness programs tailored for both technical and non-technical audiences. These programs go beyond theory and include 
+        live, controlled demonstrations of selected attack scenarios, showing how real-world threats such as phishing, malware creation, and execution by visualizing attacker behavior in 
+        in real time, I help teams understand risk more clearly, recognize early warning signs, and translate awareness into practical defensive actions.
       </p>
     </section>
-
-    <!-- Skill grids -->
     <section class="grid gap-8 md:grid-cols-2">
-      <!-- Technical skills -->
       <div class="rounded-2xl border border-cyan-500/40 bg-gray-800/80 p-8 shadow-xl ring-1 ring-cyan-500/20">
         <h2 class="mb-6 flex items-center gap-2 text-2xl font-bold text-cyan-300">
           <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 20l9-5-9-5-9 5 9 5z"/></svg>
           Technical Skills
         </h2>
         <div class="space-y-4" id="tech-skills">
-          <!-- Skill bars injected by JS -->
         </div>
       </div>
-
-      <!-- Non‑technical skills -->
       <div class="rounded-2xl border border-emerald-500/40 bg-gray-800/80 p-8 shadow-xl ring-1 ring-emerald-500/20">
         <h2 class="mb-6 flex items-center gap-2 text-2xl font-bold text-emerald-300">
           <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
           Soft Skills
         </h2>
         <div class="space-y-4" id="soft-skills">
-          <!-- Skill bars injected by JS -->
         </div>
       </div>
     </section>
   </main>
-
-  <!-- JS for skill bars & reading time -->
   <script>
     const tech = {
       "Web Pentesting":20,
@@ -95,9 +83,7 @@
       "Strategic Planning":75,
       "Ethics & Integrity":95
     };
-
     function barColor(v){return v<25?'bg-red-500':v<50?'bg-orange-500':v<75?'bg-yellow-400':'bg-green-500'}
-
     function render(map,wrapper){
       Object.entries(map).forEach(([k,v])=>{
         wrapper.insertAdjacentHTML('beforeend',`
@@ -109,7 +95,6 @@
           </div>`)
       })
     }
-
     render(tech,document.getElementById('tech-skills'));
     render(soft,document.getElementById('soft-skills'));
   </script>
