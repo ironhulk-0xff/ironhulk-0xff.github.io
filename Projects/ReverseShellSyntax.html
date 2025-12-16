@@ -290,8 +290,8 @@
           <p style="margin:.8rem 0 0;">
             <strong>Behavior:</strong> Creates a bidirectional channel using a named pipe and netcat, bypassing Bash’s <code>/dev/tcp</code> feature entirely.
           </p>
-        </div>
-        <p style="margin:0 0 1.2rem;">These two payloads, performing the exact same function as the first, were not detected by the EDR solution.</p>
+        </div><br>
+        <a href="../Projects/linux_bypass.MOV" style="background:#60a5fa; color:#fff; padding:.5rem 1rem; border-radius:6px; text-decoration:none;">View Demo</a>
         <h2 style="margin:2rem 0 1rem; color:#2c3e50;">Summary of the Test</h2>
         <div style="margin:1.2rem 0; padding:1.5rem; border-radius:12px; background:#f9fafb; border:1px solid #e5e7eb; box-shadow:0 4px 10px rgba(0,0,0,.05);">
           <p style="margin:0 0 1.2rem; font-size:1rem; line-height:1.6;">
@@ -345,7 +345,7 @@
             </table>
           </div>
           <div style="margin-top:1.2rem; padding:1rem 1.2rem; border-left:4px solid #3498db; background:#eef6fc; border-radius:6px; font-size:.95rem; line-height:1.5;">
-            <strong>Final takeaway:</strong> Functionally, all three commands do the same thing, they remap <code>stdin</code>, <code>stdout</code>, and <code>stderr</code> into a network socket.
+            <strong>Final takeaway:</strong> Functionally, all three commands do the same thing; they remap <code>stdin</code>, <code>stdout</code>, and <code>stderr</code> into a network socket.
           </div>
         </div>
         <h2 style="color:#2c3e50; margin:2rem 0 1rem; padding-bottom:.5rem; border-bottom:2px solid #eee;">Implications for Security Teams</h2>
@@ -370,7 +370,7 @@
           <p>
             Minor changes in the way code is written can make a big difference in how well security tools detect threats, because many endpoint detection and response systems still rely a 
             lot on fixed patterns. The examples I tested with reverse shells show that security tools might not catch harmful actions if attackers use unusual ways of writing code or tools 
-            that aren't commonly used. As endpoint detection and response tools get better and start using more behavior-based analysis, attackers will also come up with new methods.
+            that aren't commonly used. As endpoint detection and response tools improve and begin to utilize more behavior-based analysis, attackers will also develop new methods.
             This ongoing battle between defenders and attackers means understanding how these systems work is key for both sides.
           </p>
         </div>
