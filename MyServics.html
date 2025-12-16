@@ -7,363 +7,394 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
   </head>
-  <body class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white min-h-screen p-6">
-    <main id="article" class="p-6 space-y-6">
-      <!-- Title -->
-      <div class="text-center mb-12">
-        <h1 class="text-5xl font-extrabold tracking-tight text-amber-500">
-          My Services
-        </h1>
-        <p class="mt-4 text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed">
-          Tailored cybersecurity and advisory solutions designed to meet your specific goals.
-        </p>
-      </div> 
-      <section class="relative rounded-2xl border border-cyan-500/60 bg-gradient-to-br from-gray-800/70 to-gray-900/90 p-8 shadow-2xl ring-1 ring-cyan-500/20 space-y-8">      
+  <body class="bg-[#0b1220] text-white min-h-screen">
+    <div aria-hidden="true" class="pointer-events-none fixed inset-0">
+      <div class="absolute inset-0 opacity-[0.08] bg-[linear-gradient(to_right,rgba(255,255,255,0.14)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.14)_1px,transparent_1px)] bg-[size:72px_72px]"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/35"></div>
+    </div>
+    <main id="article" class="relative p-6 space-y-6 mx-auto">
+      <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] p-8 shadow-[0_18px_50px_rgba(0,0,0,0.45)]">
+        <div class="relative text-center">
+          <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">
+            <span class="bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-orange-200 to-yellow-200">
+              My Services
+            </span>
+          </h1>
+          <p class="mt-4 text-slate-300 text-lg max-w-2xl mx-auto leading-relaxed">
+            Tailored cybersecurity and advisory solutions designed to meet your specific goals.
+          </p>
+          <div class="mt-6 flex flex-wrap justify-center gap-2 text-xs">
+            <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-slate-200/90">Training</span>
+            <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-slate-200/90">Advisory</span>
+            <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-slate-200/90">Engineering</span>
+            <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-slate-200/90">Demos</span>
+          </div>
+        </div>
+      </div>
+      <section class="rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:p-8 shadow-[0_18px_50px_rgba(0,0,0,0.45)]">
         <div x-data="{ open: null }" class="space-y-4 md:w-full">
-          <!-- Security Awareness Program -->
-          <div class="bg-gray-800 rounded-xl border border-blue-400/20">
-            <h2 @click="open = (open === 0 ? null : 0)" 
-                class="flex items-center justify-between p-5 cursor-pointer">
-              <div class="flex items-center space-x-3">
-                <svg xmlns="http://www.w3.org/2000/svg" 
-                    class="h-8 w-8 text-blue-400 transition-transform duration-300" 
-                    :class="open === 0 ? 'rotate-12' : ''" 
-                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6l4 2"/>
-                </svg>
+          <div class="group relative overflow-hidden rounded-3xl border border-white/10 bg-[#0b1220]/60">
+            <div class="absolute left-0 top-0 h-full w-1.5 bg-gradient-to-b from-blue-400/80 to-cyan-300/70"></div>
+            <h2 @click="open = (open === 0 ? null : 0)"
+                class="flex items-start justify-between gap-4 p-6 cursor-pointer">
+              <div class="flex items-start gap-4">
+                <div class="mt-0.5 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500/10 border border-blue-400/15">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-200 transition-transform duration-300"
+                       :class="open === 0 ? 'rotate-12' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6l4 2"/>
+                  </svg>
+                </div>
                 <div>
-                  <h3 class="text-2xl font-semibold text-blue-300">Security Awareness Program</h3>
-                  <p class="text-gray-400">Practical, engaging training to build a real security culture</p>
+                  <h3 class="text-xl md:text-2xl font-semibold text-slate-100">Security Awareness Program</h3>
+                  <p class="mt-1 text-slate-400">Practical, engaging training to build a real security culture</p>
                 </div>
               </div>
-              <svg xmlns="http://www.w3.org/2000/svg" 
-                  class="h-6 w-6 text-gray-400 transition-transform duration-200" 
-                  :class="open === 0 ? 'rotate-180' : ''" 
-                  fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-              </svg>
+              <div class="flex items-center gap-3">
+                <span class="hidden sm:inline text-xs text-slate-400">Details</span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="h-6 w-6 text-slate-400 transition-transform duration-200"
+                     :class="open === 0 ? 'rotate-180' : ''"
+                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </div>
             </h2>
-            <div x-show="open === 0" x-collapse class="px-8 pb-6 space-y-4 bg-gradient-to-t from-gray-700 to-gray-800">
-              <!-- Intro -->
-              <p class="text-gray-300 text-[18px] leading-relaxed">
-                Security goes much further than just technology or setting up protective systems, it really comes down to people and how they act. Based on my experience, I provide a full 
-                security awareness program that offers customized training and real-world knowledge sharing, designed to meet each client’s specific needs, lower risks caused by human actions, 
-                and build a stronger security culture within their company.
-              </p>
-              <section>
-                <h4 class="text-blue-300 font-bold text-[16px] mb-2">🔹 The Core Problem: Human Risk</h4>
-                <p class="text-gray-200 text-[18px] leading-relaxed">
-                  Human mistakes are the main reason security issues happen. 
-                  This program fills the gap between your security policies and how employees actually behave, turning your team from a potential weakness into a strong defense.
+            <div x-show="open === 0" x-collapse class="px-6 pb-6">
+              <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-6 space-y-4">
+                <p class="text-slate-200 text-[16px] leading-relaxed">
+                  Security goes much further than just technology or setting up protective systems; it really comes down to people and how they act. Based on my experience, I provide a full
+                  security awareness program that offers customized training and real-world knowledge sharing, designed to meet each client’s specific needs, lower risks caused by human actions,
+                  and build a stronger security culture within their company.
                 </p>
-              </section>
-              <section>
-                <h4 class="text-blue-300 font-bold text-[16px] mb-2">🔹 Benefits of this program:</h4>
-                <ul class="list-disc pl-5 text-[15px] space-y-1 text-gray-200">
-                  <li>Reduces the #1 cause of breaches <span class="font-bold">human error</span>.</li>
-                  <li>Builds staff confidence in spotting phishing, scams, and insider threats.</li>
-                  <li>Transforms security from “IT problem” to <span class="font-bold">shared responsibility</span>.</li>
-                </ul>
-              </section>
-              <section>
-                <h4 class="text-blue-300 font-bold text-[16px] mb-2">🔹 Problems this program solves:</h4>
-                <ul class="list-disc pl-5 text-[15px] space-y-1 text-gray-200">
-                  <li><span class="font-bold">Phishing success rates:</span> Employees clicking on malicious links/emails.</li>
-                  <li><span class="font-bold">Weak password habits:</span> Password reuse, sharing, and unsafe storage.</li>
-                  <li><span class="font-bold">Shadow IT:</span> Unapproved apps, risky file sharing, and cloud misuse.</li>
-                  <li><span class="font-bold">Data mishandling:</span> Unencrypted transfers, sensitive data leaks.</li>
-                </ul>
-              </section>
-              <section>
-                <h4 class="text-blue-300 font-bold text-[16px] mb-2">🔹 What I deliver:</h4>
-                <ul class="list-disc pl-5 text-[15px] space-y-2 text-gray-200">
-                  <li><span class="font-bold">Training:</span> Based on client request and needs.</li>
-                  <li><span class="font-bold">Social Engineering Simulations:</span> Realistic tests with coaching and detailed reports.</li>
-                  <li><span class="font-bold">Knowledge Sharing:</span> Engaging talks, Q&A, and case studies based on real-world attacks.</li>
-                </ul>
-              </section>
+                <section>
+                  <h4 class="text-blue-200 font-bold text-[15px] mb-2">The Core Problem: Human Risk</h4>
+                  <p class="text-slate-200/90 text-[15px] leading-relaxed">
+                    Human mistakes are the main reason security issues happen. This program fills the gap between your security policies and how employees actually behave, turning your team from a
+                    potential weakness into a strong defense.
+                  </p>
+                </section>
+                <section>
+                  <h4 class="text-blue-200 font-bold text-[15px] mb-2">Benefits of this program</h4>
+                  <ul class="list-disc pl-5 text-[14px] space-y-1 text-slate-200/90">
+                    <li>Reduces the #1 cause of breaches <span class="font-semibold">human error</span>.</li>
+                    <li>Builds staff confidence in spotting phishing, scams, and insider threats.</li>
+                    <li>Transforms security from “IT problem” to <span class="font-semibold">shared responsibility</span>.</li>
+                  </ul>
+                </section>
+                <section>
+                  <h4 class="text-blue-200 font-bold text-[15px] mb-2">Problems this program solves</h4>
+                  <ul class="list-disc pl-5 text-[14px] space-y-1 text-slate-200/90">
+                    <li><span class="font-semibold">Phishing success rates:</span> Employees clicking on malicious links/emails.</li>
+                    <li><span class="font-semibold">Weak password habits:</span> Password reuse, sharing, and unsafe storage.</li>
+                    <li><span class="font-semibold">Shadow IT:</span> Unapproved apps, risky file sharing, and cloud misuse.</li>
+                    <li><span class="font-semibold">Data mishandling:</span> Unencrypted transfers, sensitive data leaks.</li>
+                  </ul>
+                </section>
+                <section>
+                  <h4 class="text-blue-200 font-bold text-[15px] mb-2">What I deliver</h4>
+                  <ul class="list-disc pl-5 text-[14px] space-y-2 text-slate-200/90">
+                    <li><span class="font-semibold">Training:</span> Based on client request and needs.</li>
+                    <li><span class="font-semibold">Social Engineering Simulations:</span> Realistic tests with coaching and detailed reports.</li>
+                    <li><span class="font-semibold">Knowledge Sharing:</span> Engaging talks, Q&A, and case studies based on real-world attacks.</li>
+                  </ul>
+                </section>
+              </div>
             </div>
           </div>
-          <div class="bg-gray-800 rounded-xl border border-purple-400/20">
-            <h2 @click="open = (open === 1 ? null : 1)" class="flex items-center justify-between p-5 cursor-pointer">
-              <div class="flex items-center space-x-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-400 transition-transform duration-300" :class="open === 1 ? 'rotate-12' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"/>
-                </svg>
+          <div class="group relative overflow-hidden rounded-3xl border border-white/10 bg-[#0b1220]/60">
+            <div class="absolute left-0 top-0 h-full w-1.5 bg-gradient-to-b from-purple-400/80 to-fuchsia-300/70"></div>
+            <h2 @click="open = (open === 1 ? null : 1)" class="flex items-start justify-between gap-4 p-6 cursor-pointer">
+              <div class="flex items-start gap-4">
+                <div class="mt-0.5 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-500/10 border border-purple-400/15">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-200 transition-transform duration-300"
+                       :class="open === 1 ? 'rotate-12' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"/>
+                  </svg>
+                </div>
                 <div>
-                  <h3 class="text-2xl font-semibold text-purple-300">Consultation & Advisory</h3>
-                  <p class="text-gray-400">Comprehensive security guidance across governance, risk, and technical domains</p>
+                  <h3 class="text-xl md:text-2xl font-semibold text-slate-100">Consultation & Advisory</h3>
+                  <p class="mt-1 text-slate-400">Comprehensive guidance across governance, risk, and technical domains</p>
                 </div>
               </div>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 transition-transform duration-200" :class="open === 1 ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-              </svg>
-            </h2>
-            <div x-show="open === 1" x-collapse class="px-8 pb-6 space-y-4 bg-gradient-to-t from-gray-700 to-gray-800">
-              <!-- Intro -->
-              <p class="text-gray-300 text-[18px] leading-relaxed">
-                As a certified CISM professional, I offer online consultation and advisory services across all areas of security, including governance and risk management, technical operations, 
-                and secure development. My goal is to assist organizations in designing, implementing, and improving their security programs, ensuring every policy and practice aligns smoothly 
-                with their strategic business objectives.
-              </p>
-              <section class="space-y-4">
-                <div>
-                  <h5 class="text-[15px] font-bold text-gray-200">🔹 Security Governance, Policies & Principles</h5>
-                  <ul class="list-disc pl-6 text-gray-200 text-[15px] space-y-1">
-                    <li>Developing security frameworks, policies, and governance models</li>
-                    <li>Defining strategy and aligning with business goals</li>
-                    <li>Compliance with regulations and industry standards</li>
-                  </ul>
-                </div>
-                <div>
-                  <h5 class="text-[15px] font-bold text-gray-200">🔹 Risk & Personnel Security</h5>
-                  <ul class="list-disc pl-6 text-gray-200 text-[15px] space-y-1">
-                    <li>Risk identification, analysis, and treatment planning</li>
-                    <li>Embedding risk into enterprise decision-making</li>
-                    <li>Personnel security, ethics, and role-based accountability</li>
-                  </ul>
-                </div>
-                <div>
-                  <h5 class="text-[15px] font-bold text-gray-200">🔹 Asset & Data Security</h5>
-                  <ul class="list-disc pl-6 text-gray-200 text-[15px] space-y-1">
-                    <li>Data classification, ownership, and lifecycle</li>
-                    <li>Privacy protection and secure data handling</li>
-                    <li>Retention and secure disposal of sensitive information</li>
-                  </ul>
-                </div>
-                <div>
-                  <h5 class="text-[15px] font-bold text-gray-200">🔹 Security Architecture & Engineering</h5>
-                  <ul class="list-disc pl-6 text-gray-200 text-[15px] space-y-1">
-                    <li>Secure infrastructure and system design principles</li>
-                    <li>Cryptography, PKI, and advanced security models</li>
-                    <li>Physical and environmental security considerations</li>
-                  </ul>
-                </div>
-                <div>
-                  <h5 class="text-[15px] font-bold text-gray-200">🔹 Communication & Network Security</h5>
-                  <ul class="list-disc pl-6 text-gray-200 text-[15px] space-y-1">
-                    <li>Secure network architecture and segmentation</li>
-                    <li>Protocols, VPNs, wireless security, and firewalls</li>
-                    <li>Detecting and defending against network-based threats</li>
-                  </ul>
-                </div>
-                <div>
-                  <h5 class="text-[15px] font-bold text-gray-200">🔹 Identity & Access Management</h5>
-                  <ul class="list-disc pl-6 text-gray-200 text-[15px] space-y-1">
-                    <li>Authentication, authorization, and accounting (AAA)</li>
-                    <li>Federation, SSO, and lifecycle access management</li>
-                    <li>Privileged account management and zero trust principles</li>
-                  </ul>
-                </div>
-                <div>
-                  <h5 class="text-[15px] font-bold text-gray-200">🔹 Security Assessment & Testing</h5>
-                  <ul class="list-disc pl-6 text-gray-200 text-[15px] space-y-1">
-                    <li>Audits, vulnerability assessments, and penetration testing</li>
-                    <li>Continuous monitoring and security metrics</li>
-                    <li>Gap analysis and maturity assessments</li>
-                  </ul>
-                </div>
-                <div>
-                  <h5 class="text-[15px] font-bold text-gray-200">🔹 Security Operations & Incident Management</h5>
-                  <ul class="list-disc pl-6 text-gray-200 text-[15px] space-y-1">
-                    <li>Incident detection, response, and recovery</li>
-                    <li>Disaster recovery and business continuity planning</li>
-                    <li>SOC optimization, logging, and monitoring</li>
-                  </ul>
-                </div>
-                <div>
-                  <h5 class="text-[15px] font-bold text-gray-200">🔹 Software & Application Security</h5>
-                  <ul class="list-disc pl-6 text-gray-200 text-[15px] space-y-1">
-                    <li>Secure coding practices and application review</li>
-                    <li>DevSecOps integration into pipelines</li>
-                    <li>Managing vulnerabilities throughout the SDLC</li>
-                  </ul>
-                </div>
-                <div>
-                  <h5 class="text-[15px] font-bold text-gray-200">🔹 Security Program Development & Governance</h5>
-                  <ul class="list-disc pl-6 text-gray-200 text-[15px] space-y-1">
-                    <li>Designing and managing enterprise-wide security programs</li>
-                    <li>Defining roles, responsibilities, and accountability</li>
-                    <li>Performance metrics, reporting, and continuous improvement</li>
-                  </ul>
-                </div>
-              </section>
-            </div>
-          </div>
-          <!-- Custom C2 Server — Design & Development -->
-          <div class="bg-gray-800 rounded-xl border border-amber-400/20">
-            <h2 @click="open = (open === 2 ? null : 2)" class="flex items-center justify-between p-5 cursor-pointer">
-              <div class="flex items-center space-x-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-amber-400 transition-transform duration-300"
-                    :class="open === 2 ? 'rotate-12' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6M4 6h16M6 18l-2 2m14-2l2 2"/>
+              <div class="flex items-center gap-3">
+                <span class="hidden sm:inline text-xs text-slate-400">Details</span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="h-6 w-6 text-slate-400 transition-transform duration-200"
+                     :class="open === 1 ? 'rotate-180' : ''"
+                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                 </svg>
-                <div>
-                  <h3 class="text-2xl font-semibold text-amber-300">Custom Command & Control (C2) — Design & Development</h3>
-                  <p class="text-gray-400">Bespoke, authorized C2 platform built to your requirements for adversary simulation & training</p>
-                </div>
               </div>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 transition-transform duration-200"
-                  :class="open === 2 ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-              </svg>
             </h2>
-            <div x-show="open === 2" x-collapse class="px-8 pb-6 space-y-4 bg-gradient-to-t from-gray-700 to-gray-800">
-              <!-- Intro -->
-              <section class="space-y-2">
-                <h4 class="text-lg font-semibold text-amber-300">What is a C2 platform?</h4>
-                <p class="text-gray-300 text-[15px] leading-relaxed">
-                  A <span class="font-bold">Command & Control (C2) server</span> is the central platform used during 
-                  red-team operations and adversary simulations to manage compromised clients (agents). 
-                  Popular examples include <span class="font-bold">Metasploit, Cobalt Strike, and Havoc</span>.  
-                  Unlike off-the-shelf tools, I design and build <span class="font-bold">custom C2 solutions</span> 
-                  tailored to your needs, with flexible architecture, reporting, and safety controls.
+            <div x-show="open === 1" x-collapse class="px-6 pb-6">
+              <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-6 space-y-4">
+                <p class="text-slate-200 text-[16px] leading-relaxed">
+                  As a certified CISM professional, I offer online consultation and advisory services across all areas of security, including governance and risk management, technical operations,
+                  and secure development. My goal is to assist organizations in designing, implementing, and improving their security programs, ensuring every policy and practice aligns smoothly
+                  with their strategic business objectives.
                 </p>
-              </section>
-              <!-- Components -->
-              <section class="space-y-2">
-                <h4 class="text-lg font-semibold text-amber-300">Core components of a C2</h4>
-                <ul class="list-disc pl-5 space-y-1 text-gray-200">
-                  <li><span class="font-bold">Agents (Beacons):</span> Lightweight programs deployed on target systems (Windows, Linux) that connect back to the C2.</li>
-                  <li><span class="font-bold">Comms Layer:</span> Channels such as HTTP(S), DNS, or custom profiles that carry encrypted traffic between clients and the server.</li>
-                  <li><span class="font-bold">Operator Console:</span> UI for operators to issue commands, manage sessions, and view results (CLI, GUI, or web dashboard).</li>
-                  <li><span class="font-bold">Tasking & Response Flow:</span> Operators send a command → client executes → result is sent back to the C2 server and displayed in real time.</li>
-                </ul>
-              </section>
-              <!-- How we design & build -->
-              <section class="space-y-2">
-                <h4 class="text-lg font-semibold text-amber-300">How I design & build your C2</h4>
-                <ul class="list-disc pl-5 space-y-1 text-gray-200 ">
-                  <li><span class="font-medium">Discover:</span> use-cases, success metrics, target OS mix, legal scope (ROE) & constraints.</li>
-                  <li><span class="font-medium">Design:</span> architecture diagram, comms topology, data flows, OPSEC guardrails, operator roles.</li>
-                  <li><span class="font-medium">Build:</span> server core, agent modules, operator UI, packaging & deployment for the approved environment.</li>
-                  <li><span class="font-medium">Validate:</span> lab exercises, logging & detections, performance & stability checks.</li>
-                  <li><span class="font-medium">Handover:</span> runbooks, training, admin/ops guides, shutdown & cleanup procedures.</li>
-                </ul>
-              </section>
-              <!-- What’s needed -->
-              <section class="space-y-2">
-                <h4 class="text-lg font-semibold text-amber-300">What I need from you</h4>
-                <ul class="list-disc pl-5 space-y-1 text-gray-200 ">
-                  <li><span class="font-medium">Authorization:</span> written approvals, ROE, asset boundaries, test windows, emergency contacts.</li>
-                  <li><span class="font-medium">Environment:</span> segmented lab or explicitly approved range (VMs/VPCs), monitored DNS/HTTP(S).</li>
-                </ul>
-              </section>
-              <!-- Safety & Legal -->
-              <section class="space-y-2">
-                <h4 class="text-lg font-semibold text-amber-300">Safety & Legal</h4>
-                <ul class="list-disc pl-5 space-y-1 text-gray-200 ">
-                  <li>Work performed only under explicit written authorization and defined ROE.</li>
-                  <li>All activity controlled, logged, reversible; cleanup is mandatory at close.</li>
-                  <li>Purpose is training, resilience, and detection engineering not misuse.</li>
-                </ul>
-              </section>
+                <section class="space-y-4">
+                  <div>
+                    <h5 class="text-[14px] font-bold text-slate-200">Security Governance, Policies & Principles</h5>
+                    <ul class="list-disc pl-6 text-slate-200/90 text-[14px] space-y-1">
+                      <li>Developing security frameworks, policies, and governance models</li>
+                      <li>Defining strategy and aligning with business goals</li>
+                      <li>Compliance with regulations and industry standards</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h5 class="text-[14px] font-bold text-slate-200">Risk & Personnel Security</h5>
+                    <ul class="list-disc pl-6 text-slate-200/90 text-[14px] space-y-1">
+                      <li>Risk identification, analysis, and treatment planning</li>
+                      <li>Embedding risk into enterprise decision-making</li>
+                      <li>Personnel security, ethics, and role-based accountability</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h5 class="text-[14px] font-bold text-slate-200">Asset & Data Security</h5>
+                    <ul class="list-disc pl-6 text-slate-200/90 text-[14px] space-y-1">
+                      <li>Data classification, ownership, and lifecycle</li>
+                      <li>Privacy protection and secure data handling</li>
+                      <li>Retention and secure disposal of sensitive information</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h5 class="text-[14px] font-bold text-slate-200">Security Architecture & Engineering</h5>
+                    <ul class="list-disc pl-6 text-slate-200/90 text-[14px] space-y-1">
+                      <li>Secure infrastructure and system design principles</li>
+                      <li>Cryptography, PKI, and advanced security models</li>
+                      <li>Physical and environmental security considerations</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h5 class="text-[14px] font-bold text-slate-200">Communication & Network Security</h5>
+                    <ul class="list-disc pl-6 text-slate-200/90 text-[14px] space-y-1">
+                      <li>Secure network architecture and segmentation</li>
+                      <li>Protocols, VPNs, wireless security, and firewalls</li>
+                      <li>Detecting and defending against network-based threats</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h5 class="text-[14px] font-bold text-slate-200">Identity & Access Management</h5>
+                    <ul class="list-disc pl-6 text-slate-200/90 text-[14px] space-y-1">
+                      <li>Authentication, authorization, and accounting (AAA)</li>
+                      <li>Federation, SSO, and lifecycle access management</li>
+                      <li>Privileged account management and zero trust principles</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h5 class="text-[14px] font-bold text-slate-200">Security Assessment & Testing</h5>
+                    <ul class="list-disc pl-6 text-slate-200/90 text-[14px] space-y-1">
+                      <li>Audits, vulnerability assessments, and penetration testing</li>
+                      <li>Continuous monitoring and security metrics</li>
+                      <li>Gap analysis and maturity assessments</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h5 class="text-[14px] font-bold text-slate-200">Security Operations & Incident Management</h5>
+                    <ul class="list-disc pl-6 text-slate-200/90 text-[14px] space-y-1">
+                      <li>Incident detection, response, and recovery</li>
+                      <li>Disaster recovery and business continuity planning</li>
+                      <li>SOC optimization, logging, and monitoring</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h5 class="text-[14px] font-bold text-slate-200">Software & Application Security</h5>
+                    <ul class="list-disc pl-6 text-slate-200/90 text-[14px] space-y-1">
+                      <li>Secure coding practices and application review</li>
+                      <li>DevSecOps integration into pipelines</li>
+                      <li>Managing vulnerabilities throughout the SDLC</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h5 class="text-[14px] font-bold text-slate-200">Security Program Development & Governance</h5>
+                    <ul class="list-disc pl-6 text-slate-200/90 text-[14px] space-y-1">
+                      <li>Designing and managing enterprise-wide security programs</li>
+                      <li>Defining roles, responsibilities, and accountability</li>
+                      <li>Performance metrics, reporting, and continuous improvement</li>
+                    </ul>
+                  </div>
+                </section>
+              </div>
             </div>
           </div>
-          <!-- Live Hacking Demos (On Request) -->
-          <div class="bg-gray-800 rounded-xl border border-red-400/20">
-            <h2 @click="open = (open === 3 ? null : 3)" 
-                class="flex items-center justify-between p-5 cursor-pointer">
-              <div class="flex items-center space-x-3">
-                <svg xmlns="http://www.w3.org/2000/svg" 
-                    class="h-8 w-8 text-red-400 transition-transform duration-300" 
-                    :class="open === 3 ? 'rotate-12' : ''" 
-                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                        d="M15 10l4.553-2.276A2 2 0 0122 9.618v4.764a2 2 0 01-2.447 1.894L15 14M4 6h8M4 10h8m-8 4h6" />
-                </svg>
+          <div class="group relative overflow-hidden rounded-3xl border border-white/10 bg-[#0b1220]/60">
+            <div class="absolute left-0 top-0 h-full w-1.5 bg-gradient-to-b from-amber-400/85 to-orange-300/70"></div>
+            <h2 @click="open = (open === 2 ? null : 2)" class="flex items-start justify-between gap-4 p-6 cursor-pointer">
+              <div class="flex items-start gap-4">
+                <div class="mt-0.5 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/10 border border-amber-400/15">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-amber-200 transition-transform duration-300"
+                       :class="open === 2 ? 'rotate-12' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6M4 6h16M6 18l-2 2m14-2l2 2"/>
+                  </svg>
+                </div>
                 <div>
-                  <h3 class="text-2xl font-semibold text-red-300">Live Hacking Demos (On Request)</h3>
-                  <p class="text-gray-400">Safe, controlled demonstrations showing how attackers really operate</p>
+                  <h3 class="text-xl md:text-2xl font-semibold text-slate-100">Custom Command & Control (C2) — Design & Development</h3>
+                  <p class="mt-1 text-slate-400">Bespoke, authorized C2 platform built to your requirements for simulation & training</p>
                 </div>
               </div>
-              <svg xmlns="http://www.w3.org/2000/svg" 
-                  class="h-6 w-6 text-gray-400 transition-transform duration-200" 
-                  :class="open === 3 ? 'rotate-180' : ''" 
-                  fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-              </svg>
+              <div class="flex items-center gap-3">
+                <span class="hidden sm:inline text-xs text-slate-400">Details</span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="h-6 w-6 text-slate-400 transition-transform duration-200"
+                     :class="open === 2 ? 'rotate-180' : ''"
+                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </div>
             </h2>
-            <div x-show="open === 3" x-collapse class="px-8 pb-6 space-y-4 bg-gradient-to-t from-gray-700 to-gray-800">
-              <!-- Intro -->
-              <p class="text-gray-300 text-[18px] leading-relaxed">
-                Seeing is believing <span class="text-red-400 font-bold">live hacking demos</span> make threats real.  
-                Delivered in a safe and controlled environment, these sessions educate, engage, and leave a lasting impression.
-              </p>
-              <!-- Benefits -->
-              <section>
-                <h4 class="text-red-300 font-bold text-[16px] mb-2">🔹 Benefits</h4>
-                <ul class="list-disc pl-5 text-[15px] space-y-2 text-gray-200">
-                  <li><span class="font-bold">High Engagement:</span> More impactful than slides or reports.</li>
-                  <li><span class="font-bold">Awareness Boost:</span> Staff see how quickly mistakes can be exploited.</li>
-                  <li><span class="font-bold">Stronger Buy-in:</span> Justifies investment in training and controls.</li>
-                  <li><span class="font-bold">Culture Shift:</span> Security becomes personal, not abstract.</li>
-                </ul>
-              </section>
-              <!-- Problems solved -->
-              <section>
-                <h4 class="text-red-300 font-bold text-[16px] mb-2">🔹 Problems this solves</h4>
-                <ul class="list-disc pl-5 text-[15px] space-y-2 text-gray-200">
-                  <li><span class="font-bold">Low awareness:</span> Staff underestimate real-world risks.</li>
-                  <li><span class="font-bold">Poor adoption:</span> Security policies are ignored until risk is visible.</li>
-                  <li><span class="font-bold">Training fatigue:</span> Traditional awareness feels boring or irrelevant.</li>
-                </ul>
-              </section>
-              <!-- What I deliver -->
-              <section>
-                <h4 class="text-red-300 font-bold text-[16px] mb-2">🔹 What I deliver</h4>
-                <ul class="list-disc pl-5 text-[15px] space-y-2 text-gray-200">
-                  <li><span class="font-bold">Phishing Attack Demo:</span> How a single click can compromise accounts.</li>
-                  <li><span class="font-bold">Password Cracking Demo:</span> Weak/reused passwords broken in seconds.</li>
-                  <li><span class="font-bold">Wi-Fi Attack Demo:</span> Risks of connecting to unsafe wireless networks.</li>
-                  <li><span class="font-bold">Web Exploit Demo:</span> Showing how unpatched apps can be abused.</li>
-                  <li><span class="font-bold">Custom Scenarios:</span> Tailored demos based on your industry or request.</li>
-                </ul>
-              </section>
-              <!-- Safety -->
-              <section>
-                <h4 class="text-red-300 font-bold text-[16px] mb-2">🔹 Safety & Ethics</h4>
-                <ul class="list-disc pl-5 text-[15px] space-y-2 text-gray-200">
-                  <li>Demos are <span class="font-bold">safe and controlled</span> and no real production systems are harmed.</li>
-                  <li>Each session ends with <span class="font-bold">lessons learned and defense tips</span>.</li>
-                  <li>Delivered only with <span class="font-bold">explicit client approval</span>.</li>
-                </ul>
-              </section>
+            <div x-show="open === 2" x-collapse class="px-6 pb-6">
+              <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-6 space-y-4">
+                <section class="space-y-2">
+                  <h4 class="text-lg font-semibold text-amber-200">What is a C2 platform?</h4>
+                  <p class="text-slate-200/90 text-[14px] leading-relaxed">
+                    A <span class="font-semibold">Command & Control (C2) server</span> is the central platform used during
+                    red-team operations and adversary simulations to manage compromised clients (agents).
+                    Popular examples include <span class="font-semibold">Metasploit, Cobalt Strike, and Havoc</span>.
+                    Unlike off-the-shelf tools, I design and build <span class="font-semibold">custom C2 solutions</span>
+                    tailored to your needs, with flexible architecture, reporting, and safety controls.
+                  </p>
+                </section>
+                <section class="space-y-2">
+                  <h4 class="text-lg font-semibold text-amber-200">Core components of a C2</h4>
+                  <ul class="list-disc pl-5 space-y-1 text-slate-200/90 text-[14px]">
+                    <li><span class="font-semibold">Agents (Beacons):</span> Lightweight programs deployed on target systems (Windows, Linux) that connect back to the C2.</li>
+                    <li><span class="font-semibold">Comms Layer:</span> Channels such as HTTP(S), DNS, or custom profiles that carry encrypted traffic between clients and the server.</li>
+                    <li><span class="font-semibold">Operator Console:</span> UI for operators to issue commands, manage sessions, and view results (CLI, GUI, or web dashboard).</li>
+                    <li><span class="font-semibold">Tasking & Response Flow:</span> Operators send a command → client executes → result is sent back to the C2 server and displayed in real time.</li>
+                  </ul>
+                </section>
+                <section class="space-y-2">
+                  <h4 class="text-lg font-semibold text-amber-200">How I design & build your C2</h4>
+                  <ul class="list-disc pl-5 space-y-1 text-slate-200/90 text-[14px]">
+                    <li><span class="font-medium">Discover:</span> use-cases, success metrics, target OS mix, legal scope (ROE) & constraints.</li>
+                    <li><span class="font-medium">Design:</span> architecture diagram, comms topology, data flows, OPSEC guardrails, operator roles.</li>
+                    <li><span class="font-medium">Build:</span> server core, agent modules, operator UI, packaging & deployment for the approved environment.</li>
+                    <li><span class="font-medium">Validate:</span> lab exercises, logging & detections, performance & stability checks.</li>
+                    <li><span class="font-medium">Handover:</span> runbooks, training, admin/ops guides, shutdown & cleanup procedures.</li>
+                  </ul>
+                </section>
+                <section class="space-y-2">
+                  <h4 class="text-lg font-semibold text-amber-200">What I need from you</h4>
+                  <ul class="list-disc pl-5 space-y-1 text-slate-200/90 text-[14px]">
+                    <li><span class="font-medium">Authorization:</span> written approvals, ROE, asset boundaries, test windows, emergency contacts.</li>
+                    <li><span class="font-medium">Environment:</span> segmented lab or explicitly approved range (VMs/VPCs), monitored DNS/HTTP(S).</li>
+                  </ul>
+                </section>
+                <section class="space-y-2">
+                  <h4 class="text-lg font-semibold text-amber-200">Safety & Legal</h4>
+                  <ul class="list-disc pl-5 space-y-1 text-slate-200/90 text-[14px]">
+                    <li>Work performed only under explicit written authorization and defined ROE.</li>
+                    <li>All activity controlled, logged, reversible; cleanup is mandatory at close.</li>
+                    <li>Purpose is training, resilience, and detection engineering not misuse.</li>
+                  </ul>
+                </section>
+              </div>
+            </div>
+          </div>
+          <div class="group relative overflow-hidden rounded-3xl border border-white/10 bg-[#0b1220]/60">
+            <div class="absolute left-0 top-0 h-full w-1.5 bg-gradient-to-b from-red-400/85 to-rose-300/70"></div>
+            <h2 @click="open = (open === 3 ? null : 3)"
+                class="flex items-start justify-between gap-4 p-6 cursor-pointer">
+              <div class="flex items-start gap-4">
+                <div class="mt-0.5 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-red-500/10 border border-red-400/15">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-200 transition-transform duration-300"
+                       :class="open === 3 ? 'rotate-12' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M15 10l4.553-2.276A2 2 0 0122 9.618v4.764a2 2 0 01-2.447 1.894L15 14M4 6h8M4 10h8m-8 4h6" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-xl md:text-2xl font-semibold text-slate-100">Live Hacking Demos (On Request)</h3>
+                  <p class="mt-1 text-slate-400">Safe, controlled demonstrations showing how attackers operate</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="hidden sm:inline text-xs text-slate-400">Details</span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="h-6 w-6 text-slate-400 transition-transform duration-200"
+                     :class="open === 3 ? 'rotate-180' : ''"
+                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </div>
+            </h2>
+            <div x-show="open === 3" x-collapse class="px-6 pb-6">
+              <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-6 space-y-4">
+                <p class="text-slate-200 text-[16px] leading-relaxed">
+                  Seeing is believing <span class="text-red-200 font-semibold">live hacking demos</span> make threats real.
+                  Delivered in a safe and controlled environment, these sessions educate, engage, and leave a lasting impression.
+                </p>
+                <section>
+                  <h4 class="text-red-200 font-bold text-[15px] mb-2">Benefits</h4>
+                  <ul class="list-disc pl-5 text-[14px] space-y-2 text-slate-200/90">
+                    <li><span class="font-semibold">High Engagement:</span> More impactful than slides or reports.</li>
+                    <li><span class="font-semibold">Awareness Boost:</span> Staff see how quickly mistakes can be exploited.</li>
+                    <li><span class="font-semibold">Stronger Buy-in:</span> Justifies investment in training and controls.</li>
+                    <li><span class="font-semibold">Culture Shift:</span> Security becomes personal, not abstract.</li>
+                  </ul>
+                </section>
+                <section>
+                  <h4 class="text-red-200 font-bold text-[15px] mb-2">Problems this solves</h4>
+                  <ul class="list-disc pl-5 text-[14px] space-y-2 text-slate-200/90">
+                    <li><span class="font-semibold">Low awareness:</span> Staff underestimate real-world risks.</li>
+                    <li><span class="font-semibold">Poor adoption:</span> Security policies are ignored until risk is visible.</li>
+                    <li><span class="font-semibold">Training fatigue:</span> Traditional awareness feels boring or irrelevant.</li>
+                  </ul>
+                </section>
+                <section>
+                  <h4 class="text-red-200 font-bold text-[15px] mb-2">What I deliver</h4>
+                  <ul class="list-disc pl-5 text-[14px] space-y-2 text-slate-200/90">
+                    <li><span class="font-semibold">Phishing Attack Demo:</span> How a single click can compromise accounts.</li>
+                    <li><span class="font-semibold">Password Cracking Demo:</span> Weak/reused passwords broken in seconds.</li>
+                    <li><span class="font-semibold">Wi-Fi Attack Demo:</span> Risks of connecting to unsafe wireless networks.</li>
+                    <li><span class="font-semibold">Web Exploit Demo:</span> Showing how unpatched apps can be abused.</li>
+                    <li><span class="font-semibold">Custom Scenarios:</span> Tailored demos based on your industry or request.</li>
+                  </ul>
+                </section>
+                <section>
+                  <h4 class="text-red-200 font-bold text-[15px] mb-2">Safety & Ethics</h4>
+                  <ul class="list-disc pl-5 text-[14px] space-y-2 text-slate-200/90">
+                    <li>Demos are <span class="font-semibold">safe and controlled</span> and no real production systems are harmed.</li>
+                    <li>Each session ends with <span class="font-semibold">lessons learned and defense tips</span>.</li>
+                    <li>Delivered only with <span class="font-semibold">explicit client approval</span>.</li>
+                  </ul>
+                </section>
+              </div>
             </div>
           </div>
         </div>
-        <div class="mt-8 p-6 rounded-xl border border-amber-500/40 bg-gradient-to-r from-gray-800/70 to-gray-900/80 shadow-lg">
-          <h4 class="text-amber-400 font-bold text-lg mb-3">Note for Clients:</h4>
-          <ul class="list-disc pl-5 space-y-3 text-gray-300 text-[15px] leading-relaxed">
+        <div class="mt-8 p-6 rounded-3xl border border-amber-400/20 bg-white/[0.03] shadow-[0_18px_50px_rgba(0,0,0,0.45)]">
+          <h4 class="text-amber-200 font-bold text-lg mb-3">Note for Clients</h4>
+          <ul class="list-disc pl-5 space-y-3 text-slate-200/90 text-[14px] leading-relaxed">
             <li>
-              All services presented here are <span class="font-bold">self-developed</span> and refined through my hands-on 
-              professional experience in cybersecurity, consulting, and real-world projects. Each offering is provided 
-              through secure <span class="font-bold">online sessions</span>, making it possible to collaborate efficiently 
+              All services presented here are <span class="font-semibold">self-developed</span> and refined through my hands-on
+              professional experience in cybersecurity, consulting, and real-world projects. Each offering is provided
+              through secure <span class="font-semibold">online sessions</span>, making it possible to collaborate efficiently
               no matter where you are located.
             </li>
             <li>
-              The <span class="font-bold">pricing</span> for every service is flexible and will be discussed and agreed upon 
-              based on your organization’s <span class="font-bold">specific needs, scope, and level of engagement</span>. 
-              This approach ensures full transparency, avoids one-size-fits-all solutions, and allows you to receive 
-              a package that delivers the most value for your situation.
+              The <span class="font-semibold">pricing</span> for every service is flexible and will be discussed and agreed upon
+              based on your organization’s <span class="font-semibold">specific needs, scope, and level of engagement</span>.
+              This approach ensures transparency and avoids one-size-fits-all packages.
             </li>
             <li>
-              By choosing these services, you benefit from <span class="font-bold">practical insights</span> built on years 
-              of working with security frameworks, tools, and training programs.  
-              Each session is focused on providing <span class="font-bold">real results, actionable strategies, 
-              and knowledge transfer</span> so your team can continue applying what they learn long after our engagement ends.
+              By choosing these services, you benefit from <span class="font-semibold">practical insights</span> built on years
+              of working with security frameworks, tools, and training programs. Each session focuses on
+              <span class="font-semibold">actionable strategies and knowledge transfer</span>.
             </li>
           </ul>
         </div>
-        
       </section>
-      <!-- Footer -->
       <footer class="relative flex items-center justify-center text-[15px] text-slate-300 py-6">
         <div class="text-center">
           Crafted with Passion<br>
-          2025 © Iron Hulk — All Rights Reserved.
+          2025 © Iron Hulk
           <br>
-          <a href="index.html" class="text-slate-300  px-4 py-2 rounded transition">← Back to Dashboard</a>
+          <a href="index.html"
+             class="inline-flex items-center gap-2 mt-3 rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm text-slate-200 hover:bg-white/10 hover:border-white/20 transition">
+            <span class="opacity-80">←</span> Back to Dashboard
+          </a>
         </div>
       </footer>
     </main>
