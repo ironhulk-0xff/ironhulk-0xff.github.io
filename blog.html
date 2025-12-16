@@ -6,339 +6,257 @@
     <title>Blogs</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-  </head>  
-  <body class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white min-h-screen p-6">
-    <main id="article" class="p-6 space-y-6">
-      <h1 class="text-4xl font-extrabold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-indigo-400">Blogs</h1>
-      <div x-data="{ open: null }" class="space-y-6 md:w-full md:h-full">
-        <div class="bg-gray-800 rounded-xl">
-          <h2 @click="open = (open === 0 ? null : 0)" class="flex items-center justify-between p-5 cursor-pointer">
-            <div class="flex items-center space-x-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-pink-400 transition-transform duration-300" :class="open === 0 ? 'rotate-12' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              <div>
-                <h3 class="text-2xl font-semibold">General Info</h3>
-                <p class="text-gray-400 text-sm">Basics of core security concepts</p>
+  </head>
+  <body class="bg-[#0b1220] text-white min-h-screen">
+    <div aria-hidden="true" class="pointer-events-none fixed inset-0">
+      <div class="absolute inset-0 opacity-[0.08] bg-[linear-gradient(to_right,rgba(255,255,255,0.14)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.14)_1px,transparent_1px)] bg-[size:72px_72px]"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/35"></div>
+    </div>
+    <main id="article" class="relative mx-auto p-6 space-y-6">
+      <header class="rounded-3xl border border-white/10 bg-white/[0.04] p-7 shadow-[0_18px_50px_rgba(0,0,0,0.45)]">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+          <div>
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">
+              <span class="bg-clip-text text-transparent bg-gradient-to-r from-pink-200 via-fuchsia-200 to-indigo-200">
+                Blogs
+              </span>
+            </h1>
+            <p class="mt-2 text-slate-300/90">
+              Explore topics by category. Fast navigation on desktop, accordion on mobile.
+            </p>
+          </div>
+          <a href="index.html"
+             class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm text-slate-200 hover:bg-white/10 hover:border-white/20 transition">
+            <span class="opacity-80">←</span> Back to Dashboard
+          </a>
+        </div>
+      </header>
+      <div x-data="{ tab: 0, open: null }" class="grid gap-6 lg:grid-cols-12">
+        <aside class="hidden lg:block lg:col-span-4">
+          <div class="sticky top-6 rounded-3xl border border-white/10 bg-white/[0.04] p-4 shadow-[0_18px_50px_rgba(0,0,0,0.45)]">
+            <div class="px-2 py-3">
+              <div class="text-xs uppercase tracking-widest text-slate-400">Categories</div>
+              <div class="mt-3 space-y-2">
+                <button @click="tab=0"
+                        class="w-full text-left rounded-2xl border px-4 py-4 transition"
+                        :class="tab===0 ? 'border-pink-300/30 bg-pink-500/10' : 'border-white/10 bg-white/0 hover:bg-white/[0.05]'">
+                  <div class="flex items-center justify-between gap-3">
+                    <div>
+                      <div class="font-semibold text-slate-100">General Info</div>
+                      <div class="text-sm text-slate-400">Basics of core security concepts</div>
+                    </div>
+                    <span class="text-pink-200">→</span>
+                  </div>
+                </button>
+                <button @click="tab=1" class="w-full text-left rounded-2xl border px-4 py-4 transition" :class="tab===1 ? 'border-indigo-300/30 bg-indigo-500/10' : 'border-white/10 bg-white/0 hover:bg-white/[0.05]'">
+                  <div class="flex items-center justify-between gap-3">
+                    <div>
+                      <div class="font-semibold text-slate-100">Malware Development</div>
+                      <div class="text-sm text-slate-400">Tools & techniques for crafting payloads</div>
+                    </div>
+                    <span class="text-indigo-200">→</span>
+                  </div>
+                </button>
+                <button @click="tab=2" class="w-full text-left rounded-2xl border px-4 py-4 transition" :class="tab===2 ? 'border-pink-300/30 bg-pink-500/10' : 'border-white/10 bg-white/0 hover:bg-white/[0.05]'">
+                  <div class="flex items-center justify-between gap-3">
+                    <div>
+                      <div class="font-semibold text-slate-100">Delivery Options</div>
+                      <div class="text-sm text-slate-400">Choose your preferred delivery method</div>
+                    </div>
+                    <span class="text-pink-200">→</span>
+                  </div>
+                </button>
+                <button @click="tab=3" class="w-full text-left rounded-2xl border px-4 py-4 transition" :class="tab===3 ? 'border-emerald-300/30 bg-emerald-500/10' : 'border-white/10 bg-white/0 hover:bg-white/[0.05]'">
+                  <div class="flex items-center justify-between gap-3">
+                    <div>
+                      <div class="font-semibold text-slate-100">Management</div>
+                      <div class="text-sm text-slate-400">Best practices for security governance</div>
+                    </div>
+                    <span class="text-emerald-200">→</span>
+                  </div>
+                </button>
               </div>
             </div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 transition-transform duration-200" :class="open === 0 ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
-          </h2>
-          <ul x-show="open === 0" x-collapse class="px-8 pb-5 space-y-2 bg-gradient-to-t from-gray-700 to-gray-800">
-            <li><a href="GeneralInfo/FW.html" class="flex items-center hover:text-pink-400 transition"><span class="mr-2">🔒</span>What is Firewall</a></li>
-            <li><a href="GeneralInfo/AD.html" class="flex items-center hover:text-pink-400 transition"><span class="mr-2">🗂️</span>Active Directory</a></li>
-            <li><a href="GeneralInfo/EDR.html" class="flex items-center hover:text-pink-400 transition"><span class="mr-2">🛡️</span>What is EDR</a></li>
-          </ul>
-        </div>
-        <div class="bg-gray-800 rounded-xl">
-          <h2 @click="open = (open === 1 ? null : 1)" class="flex items-center justify-between p-5 cursor-pointer">
-            <div class="flex items-center space-x-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-400 transition-transform duration-300" :class="open === 1 ? 'rotate-12' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2-1.343-2-3-2zM4 15v.01M12 15v.01M20 15v.01M12 17c4.418 0 8 .895 8 2v.5H4V19c0-1.105 3.582-2 8-2z" />
-              </svg>
-              <div>
-                <h3 class="text-2xl font-semibold">Malware Development</h3>
-                <p class="text-gray-400 text-sm">Tools & techniques for crafting payloads</p>
+          </div>
+        </aside>
+        <section class="lg:col-span-8 space-y-4">
+          <div class="lg:hidden space-y-4">
+            <div class="rounded-3xl border border-white/10 bg-white/[0.04] overflow-hidden">
+              <button @click="open = (open === 0 ? null : 0)" class="w-full flex items-center justify-between p-5 text-left">
+                <div class="flex items-center gap-3">
+                  <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-pink-500/10 border border-pink-300/20">🗓️</span>
+                  <div>
+                    <div class="text-lg font-semibold">General Info</div>
+                    <div class="text-sm text-slate-400">Basics of core security concepts</div>
+                  </div>
+                </div>
+                <span class="text-slate-400" :class="open===0 ? 'rotate-180' : ''" style="transition:transform .2s;">⌄</span>
+              </button>
+              <div x-show="open===0" x-collapse class="px-6 pb-5">
+                <div class="rounded-2xl border border-white/10 bg-[#0b1220]/60 p-5">
+                  <ul class="space-y-2">
+                    <li><a href="GeneralInfo/FW.html" class="flex items-center gap-2 text-slate-200 hover:text-pink-200 transition"><span>🔒</span>What is Firewall</a></li>
+                    <li><a href="GeneralInfo/AD.html" class="flex items-center gap-2 text-slate-200 hover:text-pink-200 transition"><span>🗂️</span>Active Directory</a></li>
+                    <li><a href="GeneralInfo/EDR.html" class="flex items-center gap-2 text-slate-200 hover:text-pink-200 transition"><span>🛡️</span>What is EDR</a></li>
+                  </ul>
+                </div>
               </div>
             </div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 transition-transform duration-200" :class="open === 1 ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
-          </h2>
-          <ul x-show="open === 1" x-collapse class="px-8 pb-5 space-y-2 bg-gradient-to-t from-gray-700 to-gray-800">
-            <li>
-              <a href="MalDev/RoadMap.html" class="group flex items-center gap-2 hover:text-indigo-400 transition">
-                <svg class="h-5 w-5 text-sky-400 group-hover:text-sky-300 transition-transform group-hover:scale-110" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M4.5 6.5 9 4.5l6 2 4.5-2v11l-4.5 2-6-2-4.5 2v-11Z"/>
-                  <path d="M9 4.5v11"/>
-                  <path d="M15 6.5v11"/>
-                  <path d="M11.5 10c0-1.1.9-2 2-2s2 .9 2 2c0 .9-.7 1.9-2 3.1-1.3-1.2-2-2.2-2-3.1Z"/>
-                  <circle cx="13.5" cy="10" r=".55"/>
-                </svg>
-                <span>Road Map</span>
-              </a>
-            </li>
-            <li>
-              <a href="MalDev/winapi.html" class="flex items-center hover:text-indigo-400 transition">
-                <svg class="w-5 h-5 text-orange-400 group-hover:text-orange-300 mr-2 transition-transform group-hover:scale-110" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-labelledby="placeTargetTitle">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.983 2.003a1 1 0 011.984 0l.2 2.683a1 1 0 00.757.913l2.649.765a1 1 0 01.58 1.624l-1.897 2.074a1 1 0 000 1.278l1.897 2.074a1 1 0 01-.58 1.624l-2.649.765a1 1 0 00-.757.913l-.2 2.683a1 1 0 01-1.984 0l-.2-2.683a1 1 0 00-.757-.913l-2.649-.765a1 1 0 01-.58-1.624l1.897-2.074a1 1 0 000-1.278l-1.897-2.074a1 1 0 01.58-1.624l2.649-.765a1 1 0 00.757-.913l.2-2.683z"/>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8a4 4 0 100 8 4 4 0 000-8z"/>
-                </svg>
-                What is WinAPI
-              </a>
-            </li>  
-            <li>
-              <a href="MalDev/Detection.html" class="flex items-center gap-2 hover:text-indigo-400 transition">
-                <span class="inline-block h-5 w-5">
-                  <svg class="h-5 w-5 text-emerald-400 group-hover:text-emerald-300 transition-transform group-hover:scale-110" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-labelledby="placeTargetTitle">
-                    <title id="detRadarTitle">Detection Mechanisms</title> 
-                    <circle cx="11" cy="11" r="5"/>
-                    <path d="M14.5 14.5 17 17"/>
-                    <path d="M11 6a5 5 0 0 1 5 5"/>
-                    <path d="M11 8.2a2.8 2.8 0 0 1 2.8 2.8"/>
-                  </svg>
-                </span>
-                <span>Detection Mechanisms</span>
-              </a>
-            </li>
-            <li>
-              <a href="MalDev/Payload_Placement.html" class="group flex items-center gap-2 hover:text-indigo-400 transition">
-                <svg class="h-5 w-5 text-purple-400 group-hover:text-purple-300 transition-transform group-hover:scale-110" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-labelledby="placeTargetTitle">
-                  <title id="placeTargetTitle">Payload Placement</title>
-                  <path d="M12 4v4"/>
-                  <rect x="9" y="2.5" width="6" height="5" rx="1"/>
-                  <circle cx="12" cy="15" r="5.5"/>
-                  <circle cx="12" cy="15" r="2.3"/>
-                  <path d="M12 12.7v1.9l1.2 1.2"/>
-                </svg>
-                <span>Payload Placement</span>
-              </a>
-            </li>
-            <li>
-              <a href="MalDev/PayloadEncryption.html" class="group flex items-center gap-2 hover:text-indigo-400 transition">
-                <svg class="h-5 w-5 text-indigo-400 group-hover:text-indigo-300 transition-transform group-hover:scale-110"
-                      xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                      fill="none" stroke="currentColor" stroke-width="1.8"
-                      stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="5" y="10.5" width="14" height="9" rx="2"/>
-                  <path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/>
-                  <path d="M11 14.5 9 18m0-3.5 2 3.5M15 14.5l-2 3.5m0-3.5 2 3.5"/>
-                </svg>
-                <span>Payload Encryption</span>
-              </a>
-            </li>
-            <li>
-              <a href="MalDev/PayloadObfuscation.html" class="group flex items-center gap-2 hover:text-indigo-400 transition">
-                <svg class="h-5 w-5 text-rose-400 group-hover:text-rose-300 transition-transform group-hover:scale-110" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 3.5 5 6v5.9c0 5 3.3 7.9 7 8.7 3.7-.8 7-3.7 7-8.7V6l-7-2.5Z"/>
-                  <path d="M9 11.2h.5M11 9.8h.5M13 12.6h.5M15 11h.5M11 14.2h.5M13 16h.5"/>
-                </svg>
-                <span>Payload/IP Obfuscation</span>
-              </a>
-            </li>
-            <li>
-              <a href="MalDev/Sleep.html" class="group flex items-center gap-2 hover:text-indigo-400 transition">
-                <svg class="h-5 w-5 text-cyan-400 group-hover:text-cyan-300 transition-transform group-hover:scale-110" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 1 0 9.79 9.79Z" />
-                </svg>
-                <span>Introduction to Sleep</span>
-              </a>
-            </li>
-            <li>
-              <a href="MalDev/ProcessEnumeration.html" class="group flex items-center gap-2 hover:text-indigo-400 transition">
-                <svg class="h-5 w-5 text-yellow-400 group-hover:text-yellow-300 proc-mag transition-transform group-hover:scale-110" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-labelledby="procListMagTitle">
-                  <path d="M5.5 7.5h7M5.5 11h7M5.5 14.5h4.5"/>
-                  <rect x="4" y="5" width="9.5" height="11.5" rx="2"/>
-                  <circle cx="16.5" cy="15.5" r="3.2"/>
-                  <path d="m18.8 17.8 1.7 1.7"/>
-                </svg>
-                <span>Process Enumeration</span>
-              </a>
-            </li>
-            <li>
-              <a href="MalDev/ProcessInjection.html"
-                class="group flex items-center gap-2 hover:text-indigo-400 transition">
-                <svg class="h-5 w-5 text-lime-400 group-hover:text-lime-300 transition-transform group-hover:scale-110"
-                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                    fill="none" stroke="currentColor" stroke-width="1.8"
-                    stroke-linecap="round" stroke-linejoin="round" aria-labelledby="piCapsuleTitle">
-                  <rect x="4" y="6" width="9" height="12" rx="2"/>
-                  <path d="M7 10h3M7 13h3"/>
-                  <path d="M14.8 10.2c-1 .9-1 2.7 0 3.6l2 2c.9.9 2.4.9 3.3 0 .9-.9.9-2.4 0-3.3l-2-2c-.9-.9-2.4-.9-3.3 0Z"/>
-                  <path d="M14.8 10.2 20.1 15.5"/>
-                </svg>
-                <span>Process Injection</span>
-              </a>
-            </li>
-            <li>
-              <a href="MalDev/APCInjection.html"
-                class="group flex items-center gap-2 hover:text-indigo-400 transition">
-                <svg class="h-5 w-5 text-stone-400 group-hover:text-stone-300 transition-transform group-hover:scale-110"
-                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                    fill="none" stroke="currentColor" stroke-width="1.8"
-                    stroke-linecap="round" stroke-linejoin="round" aria-labelledby="syringeTitle">
-                  <rect x="4" y="6" width="12" height="10" rx="1"/>
-                  <rect x="16" y="7" width="3" height="8" rx="0.5"/>
-                  <path d="M4 11H2"/>
-                  <path d="M2 11L0 9"/>
-                  <path d="M2 11L0 13"/>
-                  <rect x="5" y="7" width="10" height="6" fill="currentColor" opacity="0.6"/>
-                </svg>
-                <span>APC Injection</span>
-              </a>
-            </li>
-            <li>
-              <a href="MalDev/CallbackAbuse.html" class="group flex items-center gap-2 hover:text-indigo-400 transition">
-                <svg class="h-5 w-5 text-teal-400 group-hover:text-teal-300 transition-transform group-hover:scale-110" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-labelledby="cbMemTitle">
-                  <rect x="4.5" y="5" width="7" height="7" rx="1.3"/>
-                  <path d="M11.5 8.5h3.2a4.8 4.8 0 1 1-4.8 4.8v-.4"/>
-                  <path d="M11.5 12.1 9 9.6l2.5-2.5"/>
-                </svg>
-                <span>Callback Abuse</span>
-              </a>
-            </li>
-            <li>
-              <a href="MalDev/Syscalls.html" class="group flex items-center gap-2 hover:text-indigo-400 transition">
-                <svg class="h-5 w-5 text-violet-400 group-hover:text-violet-300 transition-transform group-hover:scale-110" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-labelledby="sysChipArrowTitle">
-                  <rect x="4.5" y="4.5" width="9" height="9" rx="1.8"/>
-                  <path d="M9 2.5v2M9 13.5v2M2.5 9h2M13.5 9h2"/>
-                  <path d="M17 14.5v5m0 0 2-2m-2 2-2-2"/>
-                  <path d="M4.5 18.5h9"/>
-                </svg>
-                <span>System Calls</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div class="bg-gray-800 rounded-xl">
-          <h2 @click="open = (open === 2 ? null : 2)" class="flex items-center justify-between p-5 cursor-pointer">
-            <div class="flex items-center space-x-3">
-              <svg xmlns="http://www.w3.org/2000/svg" 
-                class="h-8 w-8 text-pink-400 transition-transform duration-300" 
-                :class="open === 2 ? 'rotate-6 scale-105' : ''" 
-                fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3 7l9-4 9 4v10l-9 4-9-4V7z" />
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18" />
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3 7l9 4 9-4" />
-              </svg>
-              <div>
-                <h3 class="text-2xl font-semibold">Delivery Options</h3>
-                <p class="text-gray-400 text-sm">Choose your preferred delivery method</p>
+            <div class="rounded-3xl border border-white/10 bg-white/[0.04] overflow-hidden">
+              <button @click="open = (open === 1 ? null : 1)" class="w-full flex items-center justify-between p-5 text-left">
+                <div class="flex items-center gap-3">
+                  <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-indigo-500/10 border border-indigo-300/20">🧬</span>
+                  <div>
+                    <div class="text-lg font-semibold">Malware Development</div>
+                    <div class="text-sm text-slate-400">Tools & techniques for crafting payloads</div>
+                  </div>
+                </div>
+                <span class="text-slate-400" :class="open===1 ? 'rotate-180' : ''" style="transition:transform .2s;">⌄</span>
+              </button>
+              <div x-show="open===1" x-collapse class="px-6 pb-5">
+                <div class="rounded-2xl border border-white/10 bg-[#0b1220]/60 p-5">
+                  <ul class="space-y-2">
+                    <li><a href="MalDev/RoadMap.html" class="flex items-center gap-2 hover:text-indigo-200 transition">🗺️ <span>Road Map</span></a></li>
+                    <li><a href="MalDev/winapi.html" class="flex items-center gap-2 hover:text-indigo-200 transition">⚙️ <span>What is WinAPI</span></a></li>
+                    <li><a href="MalDev/Detection.html" class="flex items-center gap-2 hover:text-indigo-200 transition">🔎 <span>Detection Mechanisms</span></a></li>
+                    <li><a href="MalDev/Payload_Placement.html" class="flex items-center gap-2 hover:text-indigo-200 transition">🎯 <span>Payload Placement</span></a></li>
+                    <li><a href="MalDev/PayloadEncryption.html" class="flex items-center gap-2 hover:text-indigo-200 transition">🔐 <span>Payload Encryption</span></a></li>
+                    <li><a href="MalDev/PayloadObfuscation.html" class="flex items-center gap-2 hover:text-indigo-200 transition">🫥 <span>Payload/IP Obfuscation</span></a></li>
+                    <li><a href="MalDev/Sleep.html" class="flex items-center gap-2 hover:text-indigo-200 transition">🌙 <span>Introduction to Sleep</span></a></li>
+                    <li><a href="MalDev/ProcessEnumeration.html" class="flex items-center gap-2 hover:text-indigo-200 transition">📋 <span>Process Enumeration</span></a></li>
+                    <li><a href="MalDev/ProcessInjection.html" class="flex items-center gap-2 hover:text-indigo-200 transition">💉 <span>Process Injection</span></a></li>
+                    <li><a href="MalDev/APCInjection.html" class="flex items-center gap-2 hover:text-indigo-200 transition">🧪 <span>APC Injection</span></a></li>
+                    <li><a href="MalDev/CallbackAbuse.html" class="flex items-center gap-2 hover:text-indigo-200 transition">🔁 <span>Callback Abuse</span></a></li>
+                    <li><a href="MalDev/Syscalls.html" class="flex items-center gap-2 hover:text-indigo-200 transition">🧠 <span>System Calls</span></a></li>
+                  </ul>
+                </div>
               </div>
             </div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 transition-transform duration-200" :class="open === 2 ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
-          </h2>
-          <ul x-show="open === 2" x-collapse class="px-8 pb-5 space-y-2 bg-gradient-to-t from-gray-700 to-gray-800">
-            <li>
-              <a href="Delivery/HideFile.html" class="flex items-center hover:text-pink-400">
-                <span class="mr-2" aria-hidden="true">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-400 transition" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Hide file">
-                    <title>Hide file</title>
-                    <path d="M14 2H6a2 2 0 0 0-2 2v12" />
-                    <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-                    <path d="M16 18a4 4 0 0 0-6.9-2.9" />
-                    <path d="M2 20s3-4 8-4c.9 0 1.8.1 2.6.4" />
-                    <path d="M22 2l-6 6" />
-                    <path d="M2 2l20 20" />
-                  </svg>
-                </span>
-                Hide File
-              </a>
-            </li>
-                      </ul>
-        </div>
-        <div class="bg-gray-800 rounded-xl">
-          <h2 @click="open = (open === 3 ? null : 3)" class="flex items-center justify-between p-5 cursor-pointer">
-            <div class="flex items-center space-x-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-400 transition-transform duration-300" :class="open === 3 ? 'rotate-12' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M19 3v4m-2-2h4M5 21v-4M3 17h4m12 4v-4m-2 2h4M12 8v8m-3-3h6" />
-              </svg>
-              <div>
-                <h3 class="text-2xl font-semibold">Management</h3>
-                <p class="text-gray-400 text-sm">Best practices for security governance</p>
+            <div class="rounded-3xl border border-white/10 bg-white/[0.04] overflow-hidden">
+              <button @click="open = (open === 2 ? null : 2)" class="w-full flex items-center justify-between p-5 text-left">
+                <div class="flex items-center gap-3">
+                  <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-pink-500/10 border border-pink-300/20">📦</span>
+                  <div>
+                    <div class="text-lg font-semibold">Delivery Options</div>
+                    <div class="text-sm text-slate-400">Choose your preferred delivery method</div>
+                  </div>
+                </div>
+                <span class="text-slate-400" :class="open===2 ? 'rotate-180' : ''" style="transition:transform .2s;">⌄</span>
+              </button>
+              <div x-show="open===2" x-collapse class="px-6 pb-5">
+                <div class="rounded-2xl border border-white/10 bg-[#0b1220]/60 p-5">
+                  <ul class="space-y-2">
+                    <li>
+                      <a href="Delivery/HideFile.html" class="flex items-center gap-2 hover:text-pink-200 transition">
+                        🫣 <span>Hide File</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 transition-transform duration-200" :class="open === 3 ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
-          </h2>
-          <ul x-show="open === 3" x-collapse class="px-8 pb-5 space-y-2 bg-gradient-to-t from-gray-700 to-gray-800">
-            <li><a href="Mgm/BeyondCIA.html" class="flex items-center hover:text-green-400 transition"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.105.672-2 2-2s2 .895 2 2-.672 2-2 2-2-.895-2-2z M4 17v-2a4 4 0 014-4h8a4 4 0 014 4v2"/>
-              </svg>Security Principles</a>
-            </li>
-            <li>
-              <a href="Mgm/Protection.html" class="flex items-center hover:text-green-400 transition">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5 mr-2 text-orange-400"
-                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    aria-hidden="true">
-                  <g stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 3l8 4v6c0 5-3.5 9.5-8 11-4.5-1.5-8-6-8-11V7l8-4z"/>
-                    <path d="M12 6.5l5 2.5v3.5c0 3.2-2.1 6-5 7.2-2.9-1.2-5-4-5-7.2V9l5-2.5z"/>
-                    <path d="M12 9.5l3.5 1.7v2c0 2.1-1.4 3.9-3.5 4.7-2.1-.8-3.5-2.6-3.5-4.7v-2L12 9.5z"/>
-                  </g>
-                </svg>
-                Protection Mechanisms
-              </a>
-            </li>
-            <li>
-              <a href="Mgm/SecurityFrameworks.html" class="flex items-center hover:text-green-500 transition">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                     class="h-5 w-5 mr-2 text-fuchsia-600"
-                     viewBox="0 0 24 24"
-                     fill="none"
-                     stroke="currentColor"
-                     aria-hidden="true">
-                  <g stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 2l7 3v6c0 5-3.5 9-7 11-3.5-2-7-6-7-11V5l7-3z"/>
-                    <path d="M9 9h6"/>
-                    <path d="M8 12h8"/>
-                    <path d="M10 15h4"/>
-                  </g>
-                </svg>
-                Security Frameworks
-              </a>
-            </li>
-            
-            <li>
-              <a href="Mgm/ThreatModeling.html" class="flex items-center hover:text-green-500 transition">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5 mr-2 text-blue-500"
-                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    aria-hidden="true">
-                  <g stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 3l8 4v6c0 5-3.5 9.5-8 11-4.5-1.5-8-6-8-11V7l8-4z"/>
-                    <circle cx="12" cy="12" r="3"/>
-                    <line x1="14.5" y1="14.5" x2="17" y2="17"/>
-                  </g>
-                </svg>
-                Threat Modeling
-              </a>
-            </li>
-            <li>
-              <a href="Mgm/SupplyChain.html" class="flex items-center hover:text-green-500 transition">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5 mr-2 text-red-500"
-                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    aria-hidden="true">
-                  <g stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 3l8 4v6c0 5-3.5 9.5-8 11-4.5-1.5-8-6-8-11V7l8-4z"/>
-                    <circle cx="12" cy="12" r="3"/>
-                    <circle cx="16" cy="8" r="1.5"/>
-                    <circle cx="8" cy="8" r="1.5"/>
-                  </g>
-                </svg>
-                SCRM (Supply Chain Risk Management)
-              </a>
-            </li>
-            <li>
-              <a href="Mgm/JobAdvertising.html" class="flex items-center hover:text-green-500 transition">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                     class="h-5 w-5 mr-2 text-green-600"
-                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                     aria-hidden="true">
-                  <g stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M9 3h6a2 2 0 012 2v1h1a2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h1V5a2 2 0 012-2z"/>
-                    <path d="M9 3v4h6V3"/>
-                  </g>
-                </svg>
-                Job Advertising, Onboarding, and Offboarding
-              </a>
-            </li>
-          </ul>
-        </div>
+            <div class="rounded-3xl border border-white/10 bg-white/[0.04] overflow-hidden">
+              <button @click="open = (open === 3 ? null : 3)" class="w-full flex items-center justify-between p-5 text-left">
+                <div class="flex items-center gap-3">
+                  <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-500/10 border border-emerald-300/20">📚</span>
+                  <div>
+                    <div class="text-lg font-semibold">Management</div>
+                    <div class="text-sm text-slate-400">Best practices for security governance</div>
+                  </div>
+                </div>
+                <span class="text-slate-400" :class="open===3 ? 'rotate-180' : ''" style="transition:transform .2s;">⌄</span>
+              </button>
+              <div x-show="open===3" x-collapse class="px-6 pb-5">
+                <div class="rounded-2xl border border-white/10 bg-[#0b1220]/60 p-5">
+                  <ul class="space-y-2">
+                    <li><a href="Mgm/BeyondCIA.html" class="flex items-center gap-2 hover:text-emerald-200 transition">🧩 <span>Security Principles</span></a></li>
+                    <li><a href="Mgm/Protection.html" class="flex items-center gap-2 hover:text-emerald-200 transition">🛡️ <span>Protection Mechanisms</span></a></li>
+                    <li><a href="Mgm/SecurityFrameworks.html" class="flex items-center gap-2 hover:text-emerald-200 transition">📜 <span>Security Frameworks</span></a></li>
+                    <li><a href="Mgm/ThreatModeling.html" class="flex items-center gap-2 hover:text-emerald-200 transition">🎯 <span>Threat Modeling</span></a></li>
+                    <li><a href="Mgm/SupplyChain.html" class="flex items-center gap-2 hover:text-emerald-200 transition">⛓️ <span>SCRM (Supply Chain Risk Management)</span></a></li>
+                    <li><a href="Mgm/JobAdvertising.html" class="flex items-center gap-2 hover:text-emerald-200 transition">🧑‍💼 <span>Job Advertising, Onboarding, and Offboarding</span></a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="hidden lg:block">
+            <div class="rounded-3xl border border-white/10 bg-white/[0.04] p-6 shadow-[0_18px_50px_rgba(0,0,0,0.45)]">
+              <div x-show="tab===0" x-transition.opacity>
+                <div class="flex items-center justify-between">
+                  <div>
+                    <h2 class="text-2xl font-bold text-pink-200">General Info</h2>
+                    <p class="text-sm text-slate-400 mt-1">Basics of core security concepts</p>
+                  </div>
+                </div>
+                <div class="mt-5 rounded-2xl border border-white/10 bg-[#0b1220]/60 p-5">
+                  <ul class="space-y-2">
+                    <li><a href="GeneralInfo/FW.html" class="flex items-center gap-2 hover:text-pink-200 transition">🔒 <span>What is Firewall</span></a></li>
+                    <li><a href="GeneralInfo/AD.html" class="flex items-center gap-2 hover:text-pink-200 transition">🗂️ <span>Active Directory</span></a></li>
+                    <li><a href="GeneralInfo/EDR.html" class="flex items-center gap-2 hover:text-pink-200 transition">🛡️ <span>What is EDR</span></a></li>
+                  </ul>
+                </div>
+              </div>
+              <div x-show="tab===1" x-transition.opacity>
+                <h2 class="text-2xl font-bold text-indigo-200">Malware Development</h2>
+                <p class="text-sm text-slate-400 mt-1">Tools & techniques for crafting payloads</p>
+                <div class="mt-5 rounded-2xl border border-white/10 bg-[#0b1220]/60 p-5">
+                  <ul class="space-y-2">
+                    <li><a href="MalDev/RoadMap.html" class="flex items-center gap-2 hover:text-indigo-200 transition">🗺️ <span>Road Map</span></a></li>
+                    <li><a href="MalDev/winapi.html" class="flex items-center gap-2 hover:text-indigo-200 transition">⚙️ <span>What is WinAPI</span></a></li>
+                    <li><a href="MalDev/Detection.html" class="flex items-center gap-2 hover:text-indigo-200 transition">🔎 <span>Detection Mechanisms</span></a></li>
+                    <li><a href="MalDev/Payload_Placement.html" class="flex items-center gap-2 hover:text-indigo-200 transition">🎯 <span>Payload Placement</span></a></li>
+                    <li><a href="MalDev/PayloadEncryption.html" class="flex items-center gap-2 hover:text-indigo-200 transition">🔐 <span>Payload Encryption</span></a></li>
+                    <li><a href="MalDev/PayloadObfuscation.html" class="flex items-center gap-2 hover:text-indigo-200 transition">🫥 <span>Payload/IP Obfuscation</span></a></li>
+                    <li><a href="MalDev/Sleep.html" class="flex items-center gap-2 hover:text-indigo-200 transition">🌙 <span>Introduction to Sleep</span></a></li>
+                    <li><a href="MalDev/ProcessEnumeration.html" class="flex items-center gap-2 hover:text-indigo-200 transition">📋 <span>Process Enumeration</span></a></li>
+                    <li><a href="MalDev/ProcessInjection.html" class="flex items-center gap-2 hover:text-indigo-200 transition">💉 <span>Process Injection</span></a></li>
+                    <li><a href="MalDev/APCInjection.html" class="flex items-center gap-2 hover:text-indigo-200 transition">🧪 <span>APC Injection</span></a></li>
+                    <li><a href="MalDev/CallbackAbuse.html" class="flex items-center gap-2 hover:text-indigo-200 transition">🔁 <span>Callback Abuse</span></a></li>
+                    <li><a href="MalDev/Syscalls.html" class="flex items-center gap-2 hover:text-indigo-200 transition">🧠 <span>System Calls</span></a></li>
+                  </ul>
+                </div>
+              </div>
+              <div x-show="tab===2" x-transition.opacity>
+                <h2 class="text-2xl font-bold text-pink-200">Delivery Options</h2>
+                <p class="text-sm text-slate-400 mt-1">Choose your preferred delivery method</p>
+                <div class="mt-5 rounded-2xl border border-white/10 bg-[#0b1220]/60 p-5">
+                  <ul class="space-y-2">
+                    <li>
+                      <a href="Delivery/HideFile.html" class="flex items-center gap-2 hover:text-pink-200 transition">
+                        🫣 <span>Hide File</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div x-show="tab===3" x-transition.opacity>
+                <h2 class="text-2xl font-bold text-emerald-200">Management</h2>
+                <p class="text-sm text-slate-400 mt-1">Best practices for security governance</p>
+                <div class="mt-5 rounded-2xl border border-white/10 bg-[#0b1220]/60 p-5">
+                  <ul class="space-y-2">
+                    <li><a href="Mgm/BeyondCIA.html" class="flex items-center gap-2 hover:text-emerald-200 transition">🧩 <span>Security Principles</span></a></li>
+                    <li><a href="Mgm/Protection.html" class="flex items-center gap-2 hover:text-emerald-200 transition">🛡️ <span>Protection Mechanisms</span></a></li>
+                    <li><a href="Mgm/SecurityFrameworks.html" class="flex items-center gap-2 hover:text-emerald-200 transition">📜 <span>Security Frameworks</span></a></li>
+                    <li><a href="Mgm/ThreatModeling.html" class="flex items-center gap-2 hover:text-emerald-200 transition">🎯 <span>Threat Modeling</span></a></li>
+                    <li><a href="Mgm/SupplyChain.html" class="flex items-center gap-2 hover:text-emerald-200 transition">⛓️ <span>SCRM (Supply Chain Risk Management)</span></a></li>
+                    <li><a href="Mgm/JobAdvertising.html" class="flex items-center gap-2 hover:text-emerald-200 transition">🧑‍💼 <span>Job Advertising, Onboarding, and Offboarding</span></a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
       <footer class="relative flex items-center justify-center text-[15px] text-slate-300 py-6">
         <div class="text-center">
           Crafted with Passion<br>
-          2025 Iron Hulk — Some Rights Reserved.
+          2025 Iron Hulk
           <br>
-          <a href="index.html" class="text-slate-300 text-sm px-4 py-2 rounded transition">← Back to Dashboard</a>
+          <a href="index.html"
+             class="inline-flex items-center gap-2 mt-3 rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm text-slate-200 hover:bg-white/10 hover:border-white/20 transition">
+            <span class="opacity-80">←</span> Back to Dashboard
+          </a>
         </div>
       </footer>
     </main>
