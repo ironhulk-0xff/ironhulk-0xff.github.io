@@ -7,14 +7,46 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-[#0f172a] text-white font-sans min-h-screen">
-  <header class="p-4 shadow flex items-center justify-between gap-4">
-    <div>
-      <h1 class="text-lg font-bold text-blue-400">Keylogger</h1>
-      <small id="reading-time" class="text-xs text-gray-400"></small>
+  <header class="relative overflow-hidden border-b border-blue-500/20 bg-gradient-to-r from-[#0b1220] via-[#0f172a] to-[#020617] px-5 py-4 sm:px-7 shadow-lg">
+    <div class="pointer-events-none absolute -top-20 -right-20 h-60 w-60 rounded-full bg-blue-500/15 blur-3xl"></div>
+    <div class="relative flex flex-wrap items-start justify-between gap-4">
+      <div class="min-w-0 space-y-2">
+        <h1 class="text-xl sm:text-2xl font-semibold tracking-tight text-blue-300">
+          Keylogger
+        </h1>
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs sm:text-sm text-gray-400">
+          <span>
+            <span class="text-gray-400">Written by:</span>
+            <span class="font-semibold text-blue-300">Iron Hulk</span>
+          </span>
+          <span class="hidden sm:inline text-gray-600">•</span>
+          <span>
+            <span class="text-gray-400">Published:</span>
+            August 10, 2025
+          </span>
+          <span class="hidden sm:inline text-gray-600">•</span>
+          <span>
+            <span class="text-gray-400">Reading time:</span>
+            <span id="reading-time"></span>
+          </span>
+          <span>
+            <a href="https://twitter.com/IronHulk_0xff" target="_blank" rel="noopener noreferrer"
+              style="color:#ffffff; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="#60a5fa" aria-hidden="true">
+                <path d="M22.46 6c-.77.35-1.6.58-2.46.69a4.27 4.27 0 001.88-2.35 8.48 8.48 0 01-2.7 1.04 4.23 4.23 0 00-7.24 3.86A12 12 0 013 4.79a4.23 4.23 0 001.31 5.64 4.18 4.18 0 01-1.91-.53v.05a4.23 4.23 0 003.39 4.14 4.3 4.3 0 01-1.9.07 4.24 4.24 0 003.95 2.93A8.5 8.5 0 012 19.54a12 12 0 006.29 1.84c7.55 0 11.68-6.26 11.68-11.68 0-.18 0-.36-.01-.54A8.35 8.35 0 0022.46 6z"/>
+              </svg>
+              <span class="text-gray-400">Iron Hulk</span>
+            </a>
+          </span>
+        </div>
+      </div>
+      <a href="../projects.html"
+         class="group inline-flex items-center gap-2 rounded-lg border border-blue-400/25 bg-blue-500/5 px-4 py-2 text-sm text-gray-200 transition hover:bg-blue-500/15">
+        <span class="text-blue-300 transition group-hover:-translate-x-0.5">←</span>
+        <span>Back to Projects</span>
+      </a>
     </div>
-    <a href="../projects.html" class="text-gray-300 text-sm hover:underline">← Back to Projects</a>
   </header>
-  <!-- Article -->
   <main id="article" class="p-6 space-y-6 sm:text-justify">
     <section class="relative bg-[#1f2937] p-6 rounded-xl shadow-md overflow-hidden">
       <div class="absolute -top-16 -right-16 opacity-10 w-64 h-64">
@@ -33,7 +65,7 @@
         </h3>
         <p class="text-gray-300 leading-relaxed pl-10 mb-5">
           In this project, I will demonstrate how I transformed a detected C# malware by Kaspersky AV and EDR into an undetected malware by refactoring the implementation of a single function. We’ll bring back a 
-          six-year-old GitHub repo, one that’s been blacklisted by security tools, and will step through how it works, make a few tweaks, and celebrate when it runs undetected. Please note that this bypasses
+          a six-year-old GitHub repo, one that’s been blacklisted by security tools, and will step through how it works, make a few tweaks, and celebrate when it runs undetected. Please note that this bypasses
           other security solutions. <span class="text-red-500 font-semibold">USE AT YOUR OWN RISK.</span>
         </p>
         
@@ -41,7 +73,7 @@
           First, let’s understand what a keylogger is
         </h3>
         <p class="text-gray-300 leading-relaxed pl-12">
-          A keylogger is a surveillance tool either a hardware or a software that records every keystroke a user makes on their keyboard. Attackers and penetration testers 'if allowed'  use
+          A keylogger is a surveillance tool, either hardware or software, that records every keystroke a user makes on their keyboard. Attackers and penetration testers, if allowed,  use
           keyloggers to harvest sensitive information such as passwords, credit-card numbers, chat messages, and more.              
         </p>
         <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -63,7 +95,7 @@
         </div>
         <br>
         <h3 class="flex items-center gap-2 text-lg font-bold text-blue-400 pl-10">
-          How It Works?
+          How does it work?
         </h3>
         <ol class="list-decimal list-inside text-gray-300 pl-12">
           <li><strong>Capture:</strong> A hook or driver intercepts each keystroke before it reaches applications.</li>
@@ -118,7 +150,7 @@
                 <span class="absolute left-0 -translate-x-1.5 flex items-center justify-center w-6 h-6 rounded-full bg-[#101a2e] border border-blue-400/50 text-blue-300 text-xs font-bold">1</span>
                 <div class="pl-7">
                   <span class="text-blue-300 font-semibold">Filter to key-down events</span>:
-                  <code class=" break-all text-blue-300 font-mono text-sm">if (nCode &gt;= 0 && wParam == (IntPtr)WM_KEYDOWN)</code>, this will logg only key-downs are logged while system-key events are ignored here
+                  <code class=" break-all text-blue-300 font-mono text-sm">if (nCode &gt;= 0 && wParam == (IntPtr)WM_KEYDOWN)</code>, this will log only key-downs are logged while system-key events are ignored here
                 </div>
               </li>
               <li class="relative">
@@ -153,7 +185,7 @@
                 <span class="absolute left-0 -translate-x-1.5 flex items-center justify-center w-6 h-6 rounded-full bg-[#101a2e] border border-blue-400/50 text-blue-300 text-xs font-bold">6</span>
                 <div class="pl-7">
                   <span class="text-blue-300 font-semibold">Map common specials with a switch</span>:
-                  Will replace keys like Space, Enter, Esc, Tab, Ctrl and Shift with readable tokens (<code class=" break-all text-blue-300 font-mono text-sm">[SPACE]</code>, <code class=" break-all text-blue-300 font-mono text-sm">[ENTER]</code>).
+                  Will replace keys like Space, Enter, Esc, Tab, Ctrl, and Shift with readable tokens (<code class=" break-all text-blue-300 font-mono text-sm">[SPACE]</code>, <code class=" break-all text-blue-300 font-mono text-sm">[ENTER]</code>).
                 </div>
               </li>
               <li class="relative">
@@ -177,7 +209,7 @@
             <ul class="list-disc list-inside text-gray-300 mb-2 pl-12">
               <li><code class=" break-all text-blue-300 font-mono text-sm">log.txt</code> is in a predictable path and in plaintext, no rotation or encryption.</li>
               <li>High-frequency appends (per-keystroke) make I/O patterns easy to baseline.</li>
-              <li>EDR telemetry clearly tie the EXE and log together.</li>
+              <li>EDR telemetry clearly ties the EXE and log together.</li>
             </ul>
           </div>
           <div class="pl-4">
@@ -185,7 +217,7 @@
             <ul class="list-disc list-inside text-gray-300 mb-2 pl-12">
               <li>Visible <code class=" break-all text-blue-300 font-mono text-sm">user-mode</code> process with a <code class=" break-all text-blue-300 font-mono text-sm">WinForms</code> message loop (<code class=" break-all text-blue-300 font-mono text-sm">Application.Run()</code>).</li>
               <li>Readable imports/strings such as <code class=" break-all text-blue-300 font-mono text-sm">SetWindowsHookEx</code>, <code class=" break-all text-blue-300 font-mono text-sm">ToUnicodeEx</code>, <code class=" break-all text-blue-300 font-mono text-sm">GetKeyState</code>, and literal <code class=" break-all text-blue-300 font-mono text-sm">log.txt</code>.</li>
-              <li>No obfuscation or packing have been used making it easy for YARA/string matches.</li>
+              <li>No obfuscation or packing has been used, making it easy for YARA/string matches.</li>
             </ul>
           </div>
           <div class="pl-4">
@@ -198,7 +230,7 @@
           <div class="pl-4">
             <h4 class="text-lg font-semibold text-blue-300 pl-8">OpSec mistakes:</h4>
             <ul class="list-disc list-inside text-gray-300 mb-5 pl-12">
-              <li>No persistence mechanism making it die once system shutdown, reboot or logoff.</li>
+              <li>No persistence mechanism, making it die once the system shuts down, reboots, or logs off.</li>
             </ul>
           </div>
           <h3 class="flex items-center gap-2 text-xl font-bold text-blue-400 mb-2 pl-4">
@@ -209,7 +241,7 @@
           </h3>
           <p class="text-gray-300 leading-relaxed mb-4 pl-12">
             This is a textbook, noisy, and a <code class=" break-all text-blue-300 font-mono text-sm">user-mode</code> keylogger. Plaintext logs, with a hidden <code class=" break-all text-blue-300 font-mono text-sm">WinForms</code> message loop (<code class=" break-all text-blue-300 font-mono text-sm">Application.Run()</code>),
-            and a global system-wide, low-level keyboard hook make it trivial to spot with signatures and behavior rules. Any AV or EDR will correlate the process, the hook, and the file within minutes.
+            and a global system-wide, low-level keyboard hook makes it trivial to spot with signatures and behavior rules. Any AV or EDR will correlate the process, the hook, and the file within minutes.
           </p>
           <div class="flex items-center">
             <div class="flex items-center justify-center rounded-xl">
@@ -350,8 +382,8 @@
             </h4>
             <pre class="bg-[#0b1220] border border-blue-400/30 rounded-lg p-4 overflow-x-auto text-gray-200">
               <code class=" break-all font-mono text-sm leading-6">
-                // Remember the goal of this project is to rewrite a function
-                // and to see how the security solution responds back, this is how we 
+                // Remember, the goal of this project is to rewrite a function
+                // and to see how the security solution responds, this is how we 
                 // study its behavior, not to fully 100% bypass all EDR solutions
 
 private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
@@ -449,7 +481,7 @@ private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
                   <li>• CapsLock + Shift: letters keep correct case.</li>
                   <li>• Exactly one header per window switch <em>(requires a pure</em> <code class=" break-all text-blue-300 px-1 rounded">GetActiveWindowTitle()</code> <em>that doesn’t mutate state)</em>.</li>
                   <li>• Fewer redundant <code class=" break-all text-blue-300 px-1 rounded">### Title ###</code> lines once the getter is pure.</li>
-                  <li>• F-keys (F1–F12) and common specials like Space, Enter, Esc, Ctrl, Shift, Back, Win and Tab are normalized.</li>
+                  <li>• F-keys (F1–F12) and common specials like Space, Enter, Esc, Ctrl, Shift, Back, Win, and Tab are normalized.</li>
                 </ul>
               </div>
               <div class="rounded-xl border border-blue-400/30 bg-[#0f172a] p-4">
@@ -459,7 +491,7 @@ private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
                   <li>• Hunt down and fix the remaining bugs from the latest update.</li>
                   <li>• Implement a secure exfiltration channel to send logs to your server.</li>
                   <li>• Apply both syscall usage and aggressive string obfuscation.</li>
-                  <li>• These are just the starting points, it’s on you to push it further and bypass other AV/EDRs.</li>
+                  <li>• These are just the starting points; it’s on you to push it further and bypass other AV/EDRs.</li>
                 </ul>
               </div>
             </div>
@@ -508,7 +540,7 @@ private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
     <footer class="relative flex items-center justify-center text-[15px] text-slate-300 py-6">
       <div class="text-center">
         Crafted with Passion<br>
-        2025 Iron Hulk: All Rights Reserved.
+        2025 © Iron Hulk: All Rights Reserved.
         <br><br>
         <a href="../projects.html" class="text-slate-300 text-sm px-4 py-2 rounded transition">← Back to Project</a>
       </div>
@@ -519,20 +551,17 @@ private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
       </a>
     </footer>
   </main>
-  <!-- Reading-time logic -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const dateWritten = '10/Aug/2025';
       const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
       const minutes = Math.max(1, Math.ceil(words / 230));
-      document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
+      document.getElementById('reading-time').textContent = `${minutes} min reading`;
     });
     function openImageModal(src) {
                 document.getElementById("modalImage").src = src;
                 document.getElementById("imageModal").classList.remove("hidden");
                 document.getElementById("imageModal").classList.add("flex");
             }
-            
             function closeImageModal() {
                 document.getElementById("imageModal").classList.remove("flex");
                 document.getElementById("imageModal").classList.add("hidden");
