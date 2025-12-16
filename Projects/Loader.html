@@ -8,13 +8,49 @@
   <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </head>
     <body class="bg-[#0f172a] text-white font-sans min-h-screen">
-        <header class="bg-[#1e293b] p-4 shadow flex items-center justify-between gap-4">
-            <div>
-            <h1 class="text-xl font-bold text-blue-400">The Stealthy Threat</h1>
-            <small id="reading-time" class="text-xs text-gray-400"></small>
+        <header class="relative overflow-hidden border-b border-emerald-500/20 bg-gradient-to-r from-[#0b1220] via-[#0f172a] to-[#020617] px-5 py-4 sm:px-7 shadow-lg">
+            <div class="pointer-events-none absolute -top-20 -right-20 h-60 w-60 rounded-full bg-emerald-500/15 blur-3xl"></div>
+            <div class="relative flex flex-wrap items-start justify-between gap-4">
+              <div class="min-w-0 space-y-2">
+                <h1 class="text-xl sm:text-2xl font-semibold tracking-tight text-emerald-300">
+                  The Stealthy Threat
+                </h1>
+                <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs sm:text-sm text-gray-400">
+                  <span>
+                    <span class="text-gray-400">Written by:</span>
+                    <span class="font-semibold text-emerald-300">Iron Hulk</span>
+                  </span>
+                  <span class="hidden sm:inline text-gray-600">•</span>
+                  <span>
+                    <span class="text-gray-400">Published:</span>
+                    December 16, 2025
+                  </span>
+                  <span class="hidden sm:inline text-gray-600">•</span>
+                  <span>
+                    <span class="text-gray-400">Reading time:</span>
+                    <span id="reading-time"></span>
+                  </span>
+                  <span>
+                    <a href="https://twitter.com/IronHulk_0xff" target="_blank" rel="noopener noreferrer"
+                      style="color:#ffffff; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="#60a5fa" aria-hidden="true">
+                        <path d="M22.46 6c-.77.35-1.6.58-2.46.69a4.27 4.27 0 001.88-2.35 8.48 8.48 0 01-2.7 1.04 4.23 4.23 0 00-7.24 3.86A12 12 0 013 4.79a4.23 4.23 0 001.31 5.64 4.18 4.18 0 01-1.91-.53v.05a4.23 4.23 0 003.39 4.14 4.3 4.3 0 01-1.9.07 4.24 4.24 0 003.95 2.93A8.5 8.5 0 012 19.54a12 12 0 006.29 1.84c7.55 0 11.68-6.26 11.68-11.68 0-.18 0-.36-.01-.54A8.35 8.35 0 0022.46 6z"/>
+                      </svg>
+                      <span class="text-gray-400">Iron Hulk</span>
+                    </a>
+                  </span>
+                </div>
+              </div>
+          
+              <!-- Right -->
+              <a href="../projects.html"
+                 class="group inline-flex items-center gap-2 rounded-lg border border-emerald-400/25 bg-emerald-500/5 px-4 py-2 text-sm text-gray-200 transition hover:bg-emerald-500/15">
+                <span class="text-emerald-300 transition group-hover:-translate-x-0.5">←</span>
+                <span>Back to Projects</span>
+              </a>
             </div>
-            <a href="../projects.html" class="text-gray-300 text-sm hover:underline">← Back to Projects</a>
-        </header>
+          </header>
+          
         <main id="article" class="p-6 sm:text-justify">
             <div class="relative isolate overflow-hidden rounded-2xl bg-[#04151f] p-10 shadow-xl ring-1 ring-teal-400/25">
                 <h2 class="text-2xl sm:text-3xl font-semibold text-teal-300 leading-tight">
@@ -30,10 +66,10 @@
                             </h3>
                             <p class="mt-2 leading-relaxed text-gray-200/90">
                                 Imagine a scenario where a seemingly legitimate file, perhaps disguised as a software update, lands on a corporate computer. Once executed, it doesn't do anything obviously 
-                                malicious. Instead, it silently decrypts and unleashes its true purpose in the computer's memory, disabling security software and deploying ransomware, all while leaving 
-                                minimal traces on the hard drive. This is the work of a sophisticated malware loader, and it represents one of the most effective evasion techniques used by cybercriminals 
-                                today. This blog post dives deep into the mechanics of these loaders, explaining what they are, how they bypass modern security, and why their "fileless" or memory-based 
-                                execution makes them so dangerous.
+                                malicious. Instead, it silently runs malware and unleashes its true purpose in the computer's memory, disabling security software and deploying ransomware, running a reverse shell 
+                                or even stealing your data, doing all while leaving minimal traces on the hard drive. This is the work of a sophisticated malware loader, and it represents one of the most 
+                                effective evasion techniques used by cybercriminals today. This blog post dives into the mechanics of these loaders, explaining what they are, how they bypass modern security, 
+                                and why their "fileless" or memory-based execution makes them so dangerous.
                             </p>
                             <br>
                             <div class="mt-4 grid gap-3 sm:grid-cols-2">
@@ -72,7 +108,9 @@
                     </ul>
                     <br>
                     <blockquote class="border-l-4 border-blue-400 pl-4">
-                        💡 <b>Key idea:</b> the loader keeps the payload unreadable on disk, then decrypts it only at runtime, often directly into memory, and then transfers execution to it..
+                        💡 <b>Key idea:</b> The loader ensures the payload remains unreadable on disk and decrypts it only at runtime, often directly in memory, before handing off execution. 
+                        In some cases, the loader functions as a staged component. Once executed, it contacts a remote server to retrieve the encrypted payload and then continues execution. 
+                        This approach leaves the initial loader with no suspicious content on disk.
                     </blockquote> 
                 </article>
                 <br>
@@ -132,7 +170,7 @@
                                         Inspects imported Windows APIs for malicious intent.
                                         </td>
                                         <td class="px-4 py-4 text-center text-amber-200">
-                                        APIs resolved dynamically at runtime.
+                                        APIs are resolved dynamically at runtime.
                                         </td>
                                     </tr>
                                     <tr class="hover:bg-emerald-700/10 transition">
@@ -464,7 +502,7 @@
                                                                 <li>Environment-simplified.</li>
                                                             </ol>
                                                         </li>
-                                                        <li>If decryption never happens, analysis sees only a encrypted data.</li>
+                                                        <li>If decryption never happens, analysis sees only encrypted data.</li>
                                                     </ul>
                                                 </div>
                                                 <div class="rounded-xl border border-emerald-500/15 bg-gray-950/40 p-4">
@@ -505,7 +543,7 @@
                                                         <span class="h-2 w-2 rounded-full bg-teal-400"></span> Why This Works
                                                     </div>
                                                     <ul class="mt-2 space-y-1.5 text-sm text-gray-200/90 list-disc pl-5">
-                                                        <li>Hash-based and signature-based detection relies on reuse.</li>
+                                                        <li>Hash-based and signature-based detection rely on reuse.</li>
                                                         <li>If only the loader is seen and it changes often, IOCs decay rapidly.</li>
                                                     </ul>
                                                 </div>
@@ -532,13 +570,13 @@
                             </footer>
                         </section>
                     </div>
-                    <header class="border-b border-teal-400/20 bg-gradient-to-r p-5 sm:p-7"></header>
-                    <header class="border-b border-teal-400/20 bg-gradient-to-r p-5 sm:p-7">
+                    <header class="border-b border-teal-400/20 bg-gradient-to-r p-5 sm:p-5"></header>
+                    <header class="border-b border-teal-400/20 bg-gradient-to-r p-5 sm:p-5">
                         <h2 class="mt-3 text-xl sm:text-2xl md:text-3xl font-semibold text-teal-300 tracking-tight">
                         The Encryption Project
                         </h2>
                         <p class="mt-2 max-w-3xl text-sm sm:text-base text-gray-300/90">
-                        A high-level overview of how payload data is transformed into a transport-safe encrypted form.
+                        A high-level overview of how payload data is transformed into an encrypted form.
                         </p>
                     </header><br>
                     <ol class="relative space-y-4 sm:space-y-6 px-5 sm:px-7 pb-6">
@@ -597,7 +635,7 @@
                                         Repeat the key across the payload
                                     </h3>
                                     <p class="mt-1 text-sm text-gray-300/90">
-                                        the payload is usually longer than the key, and this keeps the transformation consistent without increasing code complexity.
+                                        The payload is usually longer than the key, and this keeps the transformation consistent without increasing code complexity.
                                     </p>
                                 </div>
                             </div>
@@ -633,21 +671,21 @@
                             </div>
                         </li>
                     </ol>
-                    <header class="border-b border-teal-400/20 bg-gradient-to-r p-5 sm:p-7"></header>
-                    <header class="border-b border-teal-400/20 bg-gradient-to-r p-5 sm:p-7">
+                    <header class="border-b border-teal-400/20 bg-gradient-to-r p-5 sm:p-2"></header>
+                    <header class="border-b border-teal-400/20 bg-gradient-to-r p-5 sm:p-5">
                         <h2 class="mt-3 text-xl sm:text-2xl md:text-3xl font-semibold text-teal-300 tracking-tight">
                         The Runner Project - Malware Loader with Memory Injection
                         </h2>
-                        <p class="mt-2 max-w-3xl text-sm sm:text-base text-gray-300/90">
-                        A high-level overview of how to write your loader to bypass some of antivirus software.
+                        <p class="mt-2 text-sm sm:text-base text-gray-300/90">
+                        A high-level overview of how to write your loader to bypass antivirus software "DOESN'T HAVE TO BE ALL".
                         </p>
                     </header>
                     <div class="p-5 sm:p-7">
                         <blockquote class="relative rounded-xl border border-blue-400/30 bg-blue-500/5 p-4 text-sm sm:text-base text-gray-200">
                             <span class="absolute -left-2 top-4 h-6 w-1 rounded bg-blue-400"></span>
                             <span class="font-semibold text-blue-300">Note:</span>
-                            This project is writen in C# and is not shared. The explanation stays intentionally high-level and conceptual. 
-                            The approach mirrors common loader techniques but with few changes.
+                            This project is written in C#, and the full code is not shared. The explanation stays intentionally high-level and conceptual. 
+                            The approach mirrors common loader techniques but with a few changes.
                         </blockquote>
                     </div>
                     <ol class="relative space-y-4 sm:space-y-6 px-5 sm:px-7 pb-6">
@@ -661,7 +699,7 @@
                                         Import Windows API Functions for Memory Operations
                                     </h3>
                                     <p class="mt-1 text-sm text-gray-300/90">
-                                        Use [DllImport] to access low-level Windows functions from kernel32.dll and user32.dll. Why we do this:
+                                        Use [DllImport] to access low-level Windows functions from kernel32.dll and user32.dll. Why do we do this?
                                         <ol class="list-decimal pl-6">
                                             <li>C# normally runs in a managed, safe environment.</li>
                                             <li>We need direct Windows API access to manipulate memory and processes.</li>
@@ -686,7 +724,7 @@ GetConsoleWindow() + ShowWindow() = Hides the console window. </code></pre>
                                 </div>
                                 <div>
                                     <h3 class="font-semibold text-gray-100">
-                                        We Hide the Console Window and Add Delay
+                                        Hide the Console Window and Add a Delay
                                     </h3>
                                     <p class="mt-1 text-sm text-gray-300/90">
                                         Get the console window handle and hide it, then sleep for 2 ~ 5 minutes. Because a visible console can alert the user and make the process look suspicious
@@ -715,10 +753,10 @@ Thread.Sleep(new TimeSpan(0, 2, 0));    // 2 minute delay </code></pre>
                                 </div>
                                 <div>
                                     <h3 class="font-semibold text-gray-100">
-                                        We Decode and Decrypt the Payload
+                                        Decode and Decrypt the Payload
                                     </h3>
                                     <p class="mt-1 text-sm text-gray-300/90">
-                                        Take Base64-encoded encrypted payload, decode it, then XOR-decrypt it.
+                                        Take the Base64-encoded encrypted payload, decode it, then XOR-decrypt it.
                                     </p>
                                     <pre class="mt-2 rounded-lg shadow-inner ">
                                         <code class="language-csharp text-green-300">
@@ -732,7 +770,7 @@ byte[] encoded = xor(data, keyBytes);                           // 4. XOR decryp
                                             <li>Base64 stored in code = Looks like random text, not binary data.</li>
                                             <li>Convert.FromBase64String() = Turns "hTqzCscK..." into [0x85, 0x3A, 0xB3...].</li>
                                             <li>Same XOR function as before - But now it's decrypting (XOR is symmetric).
-                                                <ol class="list-decimal pl-6">
+                                                <ol class="list-disc pl-3">
                                                     <li><b>If original:</b> shellcode ^ key = encrypted.</li>
                                                     <li><b>Then</b>: encrypted ^ key = shellcode (back to original!).</li>
                                                 </ol>
@@ -749,10 +787,10 @@ byte[] encoded = xor(data, keyBytes);                           // 4. XOR decryp
                                 </div>
                                 <div>
                                     <h3 class="font-semibold text-gray-100">
-                                        We Allocate Executable Memory
+                                        Allocate Executable Memory
                                     </h3>
                                     <p class="mt-1 text-sm text-gray-300/90">
-                                        Use VirtualAlloc() to reserve memory with execute permissions..
+                                        Use VirtualAlloc() to reserve memory with execute permissions.
                                     </p>
                                     <pre class="mt-2 rounded-lg shadow-inner ">
                                         <code class="language-csharp text-green-300">
@@ -765,10 +803,10 @@ IntPtr.Zero,                        // Let system choose address
                                     <p><br>
                                         Memory protection flags explained:
                                         <ol class="list-decimal pl-6">
-                                            <li>0x1000 = MEM_COMMIT = Actually allocate physical/RAM memory.</li>
+                                            <li>0x1000 = MEM_COMMIT = Actually allocate physical/RAM.</li>
                                             <li>0x2000 = MEM_RESERVE = Reserve address space.</li>
                                             <li>0x40 = PAGE_EXECUTE_READWRITE = Memory can be read, written, AND executed.</li>
-                                            <li><b>Critical security bypass:</b> Normally, data areas shouldn't be executable (Data Execution Prevention - DEP). This flag bypasses that protection..</li>
+                                            <li><b>Critical security bypass:</b> Normally, data areas shouldn't be executable (Data Execution Prevention - DEP). This flag bypasses that protection.</li>
                                         </ol>
                                     </p>
                                 </div>
@@ -781,7 +819,7 @@ IntPtr.Zero,                        // Let system choose address
                                 </div>
                                 <div>
                                     <h3 class="font-semibold text-gray-100">
-                                        We Copy Shellcode into Memory and Execute It
+                                        Copy Shellcode into Memory and Execute It
                                     </h3>
                                     <p class="mt-1 text-sm text-gray-300/90">
                                         Copy decrypted bytes into allocated memory, then create a thread to run it.
@@ -797,14 +835,13 @@ IntPtr.Zero,                                            // No parameters
 0,                                                      // Start immediately
 IntPtr.Zero                                             // Don't need thread ID
 );</code></pre>
-
                                     <p><br>
                                         Thread execution details:
                                         <ol class="list-decimal pl-6">
                                             <li>CreateThread() = starts a new thread in the current process.</li>
                                             <li>Thread begins executing at codeAddr (our shellcode location).</li>
                                             <li>Shellcode runs in memory = no file on disk ever contains the decrypted code.</li>
-                                            <li>WaitForSingleObject() pauses main program until shellcode finishes.</li>
+                                            <li>WaitForSingleObject() pauses the main program until the shellcode finishes.</li>
                                         </ol>
                                     </p>
                                     <p><br>
@@ -819,12 +856,47 @@ IntPtr.Zero                                             // Don't need thread ID
                                 </div>
                             </div>
                         </li>
+                        <li class="relative rounded-xl border border-teal-400/20 bg-gray-950/40 p-4 sm:p-5">
+                            <div class="flex gap-4">
+                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-teal-400/25 bg-teal-500/10 text-teal-200 font-bold">
+                                06
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-100">
+                                        Starts a new thread
+                                    </h3>
+                                    <p class="mt-1 text-sm text-gray-300/90">
+                                        because that’s how it transfers control to the payload bytes as if they were a function.
+                                    </p>
+                                    <pre class="mt-2 rounded-lg shadow-inner ">
+                                        <code class="language-csharp text-green-300">
+threadHandle = CreateThread(IntPtr.Zero, 0, codeAddr, IntPtr.Zero, 0, IntPtr.Zero);   // Start running code beginning at codeAddr
+WaitForSingleObject(threadHandle, 0xFFFFFFFF);                                        // waits indefinitely for the payload thread to finish</code></pre>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="relative rounded-xl border border-emerald-400/30 bg-emerald-500/5 p-4 sm:p-5">
+                            <div class="flex gap-4">
+                                <div class="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-emerald-400/40 bg-emerald-500/10">
+                                    <span class="absolute h-full w-full rounded-full bg-emerald-400/20 animate-ping"></span>
+                                    <span class="relative h-3 w-3 rounded-full bg-emerald-400"></span>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-emerald-200">
+                                        One-line summary
+                                    </h3>
+                                    <p class="mt-1 text-sm text-gray-200/90">
+                                        This program hides its window, sleeps, Base64-decodes and XOR-decrypts an embedded payload, allocates executable memory, copies the payload into it, executes it via a new thread.
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
                     </ol>
                 </div>
                 <footer class="relative flex items-center justify-center text-[15px] text-slate-300 py-6">
                 <div class="text-center">
                     Crafted With Passion<br>
-                    2025 Iron Hulk — No Rights Reserved.
+                    2025 Iron Hulk — All Rights Reserved.
                     <br>
                     <a href="../projects.html" class="text-gray-300 text-sm hover:underline">← Back to Projects</a>
                 </div>
@@ -836,10 +908,9 @@ IntPtr.Zero                                             // Don't need thread ID
                 </footer>
                 <script>
                     document.addEventListener('DOMContentLoaded', () => {
-                    const dateWritten = '16/Drc/2025';
                     const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
                     const minutes = Math.max(1, Math.ceil(words / 230));
-                    document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
+                    document.getElementById('reading-time').textContent = `${minutes} min`;
                     });
                 </script>
             </div>
