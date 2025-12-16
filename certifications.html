@@ -6,90 +6,185 @@
   <title>Iron Hulk – Certifications</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-[#0f172a] text-white font-sans min-h-screen">
-  <!-- Header -->
-  <header class="bg-[#1e293b] p-4 shadow flex items-center justify-between gap-4">
-    <div>
-      <h1 class="text-xl font-bold text-blue-400">Certifications</h1>
-      <small id="reading-time" class="text-xs text-gray-400"></small>
-    </div>
-    <a href="index.html" class="text-gray-300 text-sm hover:underline">← Back to Dashboard</a>
-  </header>
-    <section class="min-h-screen bg-[#0f172a] text-gray-100 font-sans py-12 px-6">
-      <div class="max-w-6xl mx-auto mb-8 flex items-center justify-between">
-        <h1 class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400">Certifications</h1>
+
+<body class="bg-[#070A12] text-white font-sans min-h-screen">
+  <div aria-hidden="true" class="pointer-events-none fixed inset-0 overflow-hidden">
+    <div class="absolute -top-40 -left-40 h-[520px] w-[520px] rounded-full bg-blue-500/10 blur-3xl"></div>
+    <div class="absolute -bottom-40 -right-40 h-[560px] w-[560px] rounded-full bg-indigo-500/10 blur-3xl"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.06),transparent_55%),radial-gradient(ellipse_at_bottom,rgba(255,255,255,0.04),transparent_60%)]"></div>
+    <div class="absolute inset-0 opacity-[0.08] bg-[linear-gradient(to_right,rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.18)_1px,transparent_1px)] bg-[size:48px_48px]"></div>
+  </div>
+  <header class="relative mx-auto l px-6 pt-6">
+    <div class="flex items-center justify-between gap-4 rounded-3xl border border-white/10 bg-white/[0.03] px-5 py-4 shadow-[0_20px_60px_rgba(0,0,0,0.55)]">
+      <div>
+        <h1 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-indigo-200">
+          Certifications
+        </h1>
+        <small id="reading-time" class="text-xs text-slate-400"></small>
       </div>
-      <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-6xl mx-auto">
-        <div class="flex flex-col items-center bg-[#1f2937] rounded-xl p-6 shadow-lg hover:shadow-xl transition">
-          <a href="https://www.isaca.org/credentialing/cism" class="text-lg font-semibold text-blue-400 hover:text-white transition">CISM</a>
-          <p class="mt-2 text-sm text-gray-400 text-center">Certified Information Security Manager</p>
+      <a href="index.html" class="inline-flex items-center gap-2 text-slate-200/90 text-sm px-4 py-2 rounded-xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/20 transition">
+        <span class="opacity-80">←</span> Back to Dashboard
+      </a>
+    </div>
+  </header>
+  <section class="relative min-h-screen text-gray-100 font-sans py-10 px-6">
+    <div class="l mx-auto space-y-10">
+      <div class="flex items-end justify-between gap-4">
+        <div>
+          <h2 class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-indigo-200">
+            Certifications
+          </h2>
+          <p class="mt-2 text-sm text-slate-400">
+            Click a badge to view the official program page.
+          </p>
         </div>
-        <div class="flex flex-col items-center bg-[#1f2937] rounded-xl p-6 shadow-lg hover:shadow-xl transition">
-          <a href="https://www.offsec.com/courses/pen-300/" class="text-lg font-semibold text-blue-400 hover:text-white transition">OSEP</a>
-          <p class="mt-2 text-sm text-gray-400 text-center">Advanced Penetration Testing Certification</p>
-        </div>
-        <div class="flex flex-col items-center bg-[#1f2937] rounded-xl p-6 shadow-lg hover:shadow-xl transition">
-          <a href="https://www.offsec.com/courses/pen-200/" class="text-lg font-semibold text-blue-400 hover:text-white transition">OSCP</a>
-          <p class="mt-2 text-sm text-gray-400 text-center">Offensive Security Certified Professional</p>
-        </div>
-        <div class="flex flex-col items-center bg-[#1f2937] rounded-xl p-6 shadow-lg hover:shadow-xl transition">
-          <a href="https://security.ine.com/certifications/ecppt-certification/" class="text-lg font-semibold text-blue-400 hover:text-white transition">eCPPTv2</a>
-          <p class="mt-2 text-sm text-gray-400 text-center">Certified Professional Penetration Tester</p>
-        </div>
-        <div class="flex flex-col items-center bg-[#1f2937] rounded-xl p-6 shadow-lg hover:shadow-xl transition">
-          <a href="https://certiprof.com/pages/cyber-security-foundation-csfpc?srsltid=AfmBOooJZHBLVUQYuyzcv9ZxlD5wiZE68pcDX1faF_bOWGzJfijmSFd5" class="text-lg font-semibold text-blue-400 hover:text-white transition">CSFPC</a>
-          <p class="mt-2 text-sm text-gray-400 text-center">Cyber Security Foundation</p>
-        </div>
-        <div class="flex flex-col items-center bg-[#1f2937] rounded-xl p-6 shadow-lg hover:shadow-xl transition">
-          <a href="https://www.eccouncil.org/train-certify/ceh-master/" class="text-lg font-semibold text-blue-400 hover:text-white transition">CEH v10 Master</a>
-          <p class="mt-2 text-sm text-gray-400 text-center">Certified Ethical Hacker</p>
-        </div>
-        <div class="flex flex-col items-center bg-[#1f2937] rounded-xl p-6 shadow-lg hover:shadow-xl transition">
-          <span class="text-lg text-blue-400 font-semibold">CCNA Security</span>
-          <p class="mt-2 text-sm text-gray-400 text-center">(Legacy)</p>
-        </div>
-        <div class="flex flex-col items-center bg-[#1f2937] rounded-xl p-6 shadow-lg hover:shadow-xl transition">
-          <span class="text-lg text-blue-400 font-semibold">CCNA Routing & Switching</span>
-          <p class="mt-2 text-sm text-gray-400 text-center">(Legacy)</p> 
-        </div>
-        <br>
-        </div>
-        <div class="max-w-6xl mx-auto mb-8 flex items-center justify-between">
-          <h1 class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400">Hack The Box Pro Labs</h1>
-        </div>
-        <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-6xl mx-auto">
-          <div class="flex flex-col items-center bg-[#1f2937] rounded-xl p-6 shadow-lg hover:shadow-xl transition">
-            <a href="https://www.hackthebox.com/hacker/pro-labs" class="text-lg font-semibold text-blue-400 hover:text-white transition">Dante</a>
-            <p class="mt-2 text-sm text-gray-400 text-center">Common penetration testing methodologies</p>
+      </div>
+      <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div class="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.55)] hover:-translate-y-1 transition">
+          <div class="absolute inset-0 bg-gradient-to-br from-blue-400/15 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+          <div class="relative">
+            <a href="https://www.isaca.org/credentialing/cism" class="text-lg font-semibold text-blue-200 hover:text-white transition">CISM</a>
+            <p class="mt-2 text-sm text-slate-400">Certified Information Security Manager</p>
           </div>
-          <div class="flex flex-col items-center bg-[#1f2937] rounded-xl p-6 shadow-lg hover:shadow-xl transition">
-            <a href="https://www.hackthebox.com/hacker/pro-labs" class="text-lg font-semibold text-blue-400 hover:text-white transition">Offshore</a>
-            <p class="mt-2 text-sm text-gray-400 text-center">Modern Active Directory misconfigurations</p>
-          </div>
-          <div class="flex flex-col items-center bg-[#1f2937] rounded-xl p-6 shadow-lg hover:shadow-xl transition">
-            <a href="https://www.hackthebox.com/hacker/pro-labs" class="text-lg font-semibold text-blue-400 hover:text-white transition">RastaLabs</a>
-            <p class="mt-2 text-sm text-gray-400 text-center">Red team simulation environment</p>
-          </div>
+          <div class="relative mt-4 h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent"></div>
+          <div class="relative mt-3 text-xs text-slate-400">ISACA</div>
         </div>
-        <br>
-        <div class="max-w-6xl mx-auto mb-8 flex items-center justify-between">
-          <h1 class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400">Malware Development</h1>
-        </div>
-        <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-6xl mx-auto">
-          <div class="flex flex-col items-center bg-[#1f2937] rounded-xl p-6 shadow-lg hover:shadow-xl transition">
-            <a href="https://maldevacademy.com/" class="text-lg font-semibold text-blue-400 hover:text-white transition">MaldevAcademy</a>
-            <p class="mt-2 text-sm text-gray-400 text-center">Malware Development, Obfescation and Bypass</p>
+        <div class="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.55)] hover:-translate-y-1 transition">
+          <div class="absolute inset-0 bg-gradient-to-br from-indigo-400/15 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+          <div class="relative">
+            <a href="https://www.offsec.com/courses/pen-300/" class="text-lg font-semibold text-blue-200 hover:text-white transition">OSEP</a>
+            <p class="mt-2 text-sm text-slate-400">Advanced Penetration Testing Certification</p>
           </div>
+          <div class="relative mt-4 h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent"></div>
+          <div class="relative mt-3 text-xs text-slate-400">Offensive Security</div>
         </div>
-          <br><br>
-          <footer class="relative flex items-center justify-center text-[15px] text-slate-300 py-6">
-            <div class="text-center">
-              Crafted with Passion<br>
-              2025 Iron Hulk  — No Rights Reserved.
-              <br>
-              <a href="index.html" class="text-slate-300 text-sm px-4 py-2 rounded transition">← Back to Dashboard</a>
-            </div>
-          </footer>
-    </section>
-  </body>
+        <div class="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.55)] hover:-translate-y-1 transition">
+          <div class="absolute inset-0 bg-gradient-to-br from-blue-400/15 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+          <div class="relative">
+            <a href="https://www.offsec.com/courses/pen-200/" class="text-lg font-semibold text-blue-200 hover:text-white transition">OSCP</a>
+            <p class="mt-2 text-sm text-slate-400">Offensive Security Certified Professional</p>
+          </div>
+          <div class="relative mt-4 h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent"></div>
+          <div class="relative mt-3 text-xs text-slate-400">Offensive Security</div>
+        </div>
+        <div class="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.55)] hover:-translate-y-1 transition">
+          <div class="absolute inset-0 bg-gradient-to-br from-indigo-400/15 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+          <div class="relative">
+            <a href="https://security.ine.com/certifications/ecppt-certification/" class="text-lg font-semibold text-blue-200 hover:text-white transition">eCPPTv2</a>
+            <p class="mt-2 text-sm text-slate-400">Certified Professional Penetration Tester</p>
+          </div>
+          <div class="relative mt-4 h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent"></div>
+          <div class="relative mt-3 text-xs text-slate-400">INE Security</div>
+        </div>
+        <div class="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.55)] hover:-translate-y-1 transition">
+          <div class="absolute inset-0 bg-gradient-to-br from-blue-400/15 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+          <div class="relative">
+            <a href="https://certiprof.com/pages/cyber-security-foundation-csfpc?srsltid=AfmBOooJZHBLVUQYuyzcv9ZxlD5wiZE68pcDX1faF_bOWGzJfijmSFd5" class="text-lg font-semibold text-blue-200 hover:text-white transition">CSFPC</a>
+            <p class="mt-2 text-sm text-slate-400">Cyber Security Foundation</p>
+          </div>
+          <div class="relative mt-4 h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent"></div>
+          <div class="relative mt-3 text-xs text-slate-400">Foundation</div>
+        </div>
+        <div class="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.55)] hover:-translate-y-1 transition">
+          <div class="absolute inset-0 bg-gradient-to-br from-indigo-400/15 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+          <div class="relative">
+            <a href="https://www.eccouncil.org/train-certify/ceh-master/" class="text-lg font-semibold text-blue-200 hover:text-white transition">CEH v10 Master</a>
+            <p class="mt-2 text-sm text-slate-400">Certified Ethical Hacker</p>
+          </div>
+          <div class="relative mt-4 h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent"></div>
+          <div class="relative mt-3 text-xs text-slate-400">EC-Council</div>
+        </div>
+        <div class="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.55)] hover:-translate-y-1 transition">
+          <div class="absolute inset-0 bg-gradient-to-br from-blue-400/15 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+          <div class="relative">
+            <span class="text-lg text-blue-200 font-semibold">CCNA Security</span>
+            <p class="mt-2 text-sm text-slate-400">(Legacy)</p>
+          </div>
+          <div class="relative mt-4 h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent"></div>
+          <div class="relative mt-3 text-xs text-slate-400">Cisco (Legacy)</div>
+        </div>
+
+        <div class="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.55)] hover:-translate-y-1 transition">
+          <div class="absolute inset-0 bg-gradient-to-br from-indigo-400/15 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+          <div class="relative">
+            <span class="text-lg text-blue-200 font-semibold">CCNA Routing & Switching</span>
+            <p class="mt-2 text-sm text-slate-400">(Legacy)</p>
+          </div>
+          <div class="relative mt-4 h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent"></div>
+          <div class="relative mt-3 text-xs text-slate-400">Cisco (Legacy)</div>
+        </div>
+      </div>
+      <div class="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+      <div class="flex items-end justify-between gap-4">
+        <div>
+          <h2 class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-indigo-200">
+            Hack The Box Pro Labs
+          </h2>
+          <p class="mt-2 text-sm text-slate-400">Hands-on, scenario-driven environments.</p>
+        </div>
+      </div>
+      <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div class="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.55)] hover:-translate-y-1 transition">
+          <div class="absolute inset-0 bg-gradient-to-br from-blue-400/15 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+          <div class="relative">
+            <a href="https://www.hackthebox.com/hacker/pro-labs" class="text-lg font-semibold text-blue-200 hover:text-white transition">Dante</a>
+            <p class="mt-2 text-sm text-slate-400">Common penetration testing methodologies</p>
+          </div>
+          <div class="relative mt-4 h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent"></div>
+          <div class="relative mt-3 text-xs text-slate-400">Pro Lab</div>
+        </div>
+        <div class="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.55)] hover:-translate-y-1 transition">
+          <div class="absolute inset-0 bg-gradient-to-br from-indigo-400/15 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+          <div class="relative">
+            <a href="https://www.hackthebox.com/hacker/pro-labs" class="text-lg font-semibold text-blue-200 hover:text-white transition">Offshore</a>
+            <p class="mt-2 text-sm text-slate-400">Modern Active Directory misconfigurations</p>
+          </div>
+          <div class="relative mt-4 h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent"></div>
+          <div class="relative mt-3 text-xs text-slate-400">Pro Lab</div>
+        </div>
+
+        <div class="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.55)] hover:-translate-y-1 transition">
+          <div class="absolute inset-0 bg-gradient-to-br from-blue-400/15 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+          <div class="relative">
+            <a href="https://www.hackthebox.com/hacker/pro-labs" class="text-lg font-semibold text-blue-200 hover:text-white transition">RastaLabs</a>
+            <p class="mt-2 text-sm text-slate-400">Red team simulation environment</p>
+          </div>
+          <div class="relative mt-4 h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent"></div>
+          <div class="relative mt-3 text-xs text-slate-400">Pro Lab</div>
+        </div>
+      </div>
+      <div class="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+      <div class="flex items-end justify-between gap-4">
+        <div>
+          <h2 class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-indigo-200">
+            Malware Development
+          </h2>
+          <p class="mt-2 text-sm text-slate-400">Focused training & lab work.</p>
+        </div>
+      </div>
+      <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div class="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.55)] hover:-translate-y-1 transition">
+          <div class="absolute inset-0 bg-gradient-to-br from-indigo-400/15 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+          <div class="relative">
+            <a href="https://maldevacademy.com/" class="text-lg font-semibold text-blue-200 hover:text-white transition">MaldevAcademy</a>
+            <p class="mt-2 text-sm text-slate-400">Malware Development, Obfescation and Bypass</p>
+          </div>
+          <div class="relative mt-4 h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent"></div>
+          <div class="relative mt-3 text-xs text-slate-400">Training</div>
+        </div>
+      </div>
+      <footer class="relative flex items-center justify-center text-[15px] text-slate-300 py-6">
+        <div class="text-center">
+          Crafted with Passion<br />
+          2025 Iron Hulk
+          <br />
+          <a href="index.html"
+             class="inline-flex items-center gap-2 mt-3 text-slate-200/90 text-sm px-4 py-2 rounded-xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/20 transition">
+            <span class="opacity-80">←</span> Back to Dashboard
+          </a>
+        </div>
+      </footer>
+    </div>
+  </section>
+</body>
 </html>
