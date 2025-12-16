@@ -680,7 +680,7 @@
                     <br>
                     <ol class="relative space-y-4 sm:space-y-6 px-5 sm:px-7 pb-6">
                         <li class="relative rounded-xl border border-teal-400/20 bg-gray-950/40 p-4 sm:p-5">
-                            <div class="flex gap-4">
+                            <div class="relative flex gap-4 max-h-[60vh] max-w-full overflow-auto md:max-h-[70vh] lg:overflow-visible lg:max-h-none">
                                 <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-teal-400/25 bg-teal-500/10 text-teal-200 font-bold">
                                 01
                                 </div>
@@ -708,7 +708,7 @@ GetConsoleWindow() + ShowWindow() = Hides the console window. </code></pre>
                             </div>
                         </li>
                         <li class="relative rounded-xl border border-teal-400/20 bg-gray-950/40 p-4 sm:p-5">
-                            <div class="flex gap-4">
+                            <div class="relative flex gap-4 max-h-[60vh] max-w-full overflow-auto md:max-h-[70vh] lg:overflow-visible lg:max-h-none">
                                 <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-teal-400/25 bg-teal-500/10 text-teal-200 font-bold">
                                 02
                                 </div>
@@ -737,7 +737,7 @@ Thread.Sleep(new TimeSpan(0, 2, 0));    // 2 minute delay </code></pre>
                             </div>
                         </li>
                         <li class="relative rounded-xl border border-teal-400/20 bg-gray-950/40 p-4 sm:p-5">
-                            <div class="flex gap-4">
+                            <div class="relative flex gap-4 max-h-[60vh] max-w-full overflow-auto md:max-h-[70vh] lg:overflow-visible lg:max-h-none">
                                 <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-teal-400/25 bg-teal-500/10 text-teal-200 font-bold">
                                 03
                                 </div>
@@ -771,7 +771,7 @@ byte[] encoded = xor(data, keyBytes);                           // 4. XOR decryp
                             </div>
                         </li>
                         <li class="relative rounded-xl border border-teal-400/20 bg-gray-950/40 p-4 sm:p-5">
-                            <div class="flex gap-4">
+                            <div class="relative flex gap-4 max-h-[60vh] max-w-full overflow-auto md:max-h-[70vh] lg:overflow-visible lg:max-h-none">
                                 <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-teal-400/25 bg-teal-500/10 text-teal-200 font-bold">
                                 04
                                 </div>
@@ -803,7 +803,7 @@ IntPtr.Zero,                        // Let system choose address
                             </div>
                         </li>
                         <li class="relative rounded-xl border border-teal-400/20 bg-gray-950/40 p-4 sm:p-5">
-                            <div class="flex gap-4">
+                            <div class="relative flex gap-4 max-h-[60vh] max-w-full overflow-auto md:max-h-[70vh] lg:overflow-visible lg:max-h-none">
                                 <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-teal-400/25 bg-teal-500/10 text-teal-200 font-bold">
                                 05
                                 </div>
@@ -847,7 +847,7 @@ IntPtr.Zero                                             // Don't need thread ID
                             </div>
                         </li>
                         <li class="relative rounded-xl border border-teal-400/20 bg-gray-950/40 p-4 sm:p-5">
-                            <div class="flex gap-4">
+                            <div class="relative flex gap-4 max-h-[60vh] max-w-full overflow-auto md:max-h-[70vh] lg:overflow-visible lg:max-h-none">
                                 <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-teal-400/25 bg-teal-500/10 text-teal-200 font-bold">
                                 06
                                 </div>
@@ -1165,15 +1165,11 @@ public class Program
                         .closest('div')
                         .parentElement
                         .querySelector('code');
-                    
                         if (!codeBlock) return;
-                    
                         const text = codeBlock.innerText;
-                    
                         navigator.clipboard.writeText(text).then(() => {
                         const original = button.textContent;
                         button.textContent = 'Copied ✓';
-                    
                         setTimeout(() => {
                             button.textContent = original;
                         }, 1500);
