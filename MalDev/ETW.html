@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iron Hulk – Event Tracing For Windows </title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0f172a] text-white font-sans min-h-screen">
+  <header class="relative overflow-hidden border-b border-blue-500/20 bg-gradient-to-r from-[#0b1220] via-[#0f172a] to-[#020617] px-5 py-4 sm:px-7 shadow-lg">
+    <div class="pointer-events-none absolute -top-20 -right-20 h-60 w-60 rounded-full bg-blue-500/15 blur-3xl"></div>
+    <div class="relative flex flex-wrap items-start justify-between gap-4">
+      <div class="min-w-0 space-y-2">
+        <h1 class="text-xl sm:text-2xl font-semibold tracking-tight text-blue-300">
+          Event Tracing For Windows
+        </h1>
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs sm:text-sm text-gray-400">
+          <span>
+            <span class="text-gray-400">Written by:</span>
+            <span class="font-semibold text-blue-300">Iron Hulk</span>
+          </span>
+          <span class="hidden sm:inline text-gray-600">•</span>
+          <span>
+            <span class="text-gray-400">Published:</span>
+            - - - 
+          </span>
+          <span class="hidden sm:inline text-gray-600">•</span>
+          <span>
+            <span class="text-gray-400">Reading time:</span>
+            <span id="reading-time"></span>
+          </span>
+          <span>
+            <a href="https://twitter.com/IronHulk_0xff" target="_blank" rel="noopener noreferrer"
+              style="color:#ffffff; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="#60a5fa" aria-hidden="true">
+                <path d="M22.46 6c-.77.35-1.6.58-2.46.69a4.27 4.27 0 001.88-2.35 8.48 8.48 0 01-2.7 1.04 4.23 4.23 0 00-7.24 3.86A12 12 0 013 4.79a4.23 4.23 0 001.31 5.64 4.18 4.18 0 01-1.91-.53v.05a4.23 4.23 0 003.39 4.14 4.3 4.3 0 01-1.9.07 4.24 4.24 0 003.95 2.93A8.5 8.5 0 012 19.54a12 12 0 006.29 1.84c7.55 0 11.68-6.26 11.68-11.68 0-.18 0-.36-.01-.54A8.35 8.35 0 0022.46 6z"/>
+              </svg>
+              <span class="text-gray-400">Iron Hulk</span>
+            </a>
+          </span>
+        </div>
+      </div>
+      <a href="../projects.html"
+         class="group inline-flex items-center gap-2 rounded-lg border border-blue-400/25 bg-blue-500/5 px-4 py-2 text-sm text-gray-200 transition hover:bg-blue-500/15">
+        <span class="text-blue-300 transition group-hover:-translate-x-0.5">←</span>
+        <span>Back to Projects</span>
+      </a>
+    </div>
+  </header>
+  <main id="article" class="p-6 space-y-3">
+    <section class="bg-[#1f2937] p-6 rounded-xl shadow-md">
+      <div class="relative rounded-3xl p-8 md:p-10 overflow-hidden bg-[#0B0F14] border border-[#1F2A37] shadow-[0_24px_70px_rgba(0,0,0,0.65)] text-slate-100">
+        <div class="relative">
+        <h2 class="mt-4 text-4xl md:text-5xl font-black tracking-tight leading-[1.05]">
+          <span class="text-slate-100">Event Tracing </span><span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-indigo-300 to-fuchsia-300"> for Windows</span>
+        </h2>
+        <p class="mt-4 text-slate-300 leading-relaxed">
+          ETW is the fundamental, high-performance logging and diagnostics framework built directly into the Windows operating system. 
+          Think of it as the central system for monitoring activity on a Windows machine. Its primary job is to collect detailed, structured records (called "events" or "traces") about everything happening in the system starting from kernel operations, disk I/O to application behavior and security incidents. 
+          ETW is a kernel-level mechanism designed for extreme efficiency and minimal performance overhead. This allows it to run constantly in production environments without significantly slowing down the system, making it indispensable for real-time monitoring, performance analysis, and security forensics.        </p>
+        </div>
+        <div class="relative mt-8 grid gap-5">
+        <div class="md:col-span-2 rounded-2xl p-6 bg-gradient-to-b from-white/10 to-white/5 border border-white/10">
+          <div class="flex items-center gap-2">
+            <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 border border-white/10">
+              <svg class="h-5 w-5 text-amber-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2l7 4v6c0 5-3 9-7 10-4-1-7-5-7-10V6l7-4Z"/>
+                <path d="M12 11v4"/>
+                <path d="M12 18h.01"/>
+              </svg>
+            </span>
+            <div>
+              <div class="text-xs tracking-[0.2em] uppercase text-slate-300">Why it matters</div>
+              <div class="text-lg font-bold text-slate-100">Security Telemetry</div>
+            </div>
+          </div>
+          <div class="mt-4 rounded-xl p-4 bg-[#0B0F14]/60 border border-white/10">
+            <p class="text-sm font-mono text-slate-200 leading-relaxed">
+              ETW matters to security because it’s one of the few Windows mechanisms that can deliver high-fidelity, near-real-time, structured telemetry at scale including kernel visibility without the overhead and latency you’d get if you tried to log everything through traditional event logs.
+            </p>
+          </div>
+          <div class="mt-4 flex flex-wrap gap-2">
+            <span class="text-xs px-2.5 py-1 rounded-full bg-cyan-300/10 border border-cyan-300/20 text-cyan-200">
+              Low overhead
+            </span>
+            <span class="text-xs px-2.5 py-1 rounded-full bg-indigo-300/10 border border-indigo-300/20 text-indigo-200">
+              High fidelity
+            </span>
+            <span class="text-xs px-2.5 py-1 rounded-full bg-fuchsia-300/10 border border-fuchsia-300/20 text-fuchsia-200">
+              Correlation-ready
+            </span>
+          </div>
+        </div>
+        </div>
+      </div>
+      <br>
+      <div class="relative rounded-3xl p-8 md:p-10 bg-[#0b1220] text-slate-100 border border-[#22314a] shadow-[0_18px_60px_rgba(0,0,0,0.55)] overflow-hidden">
+        <div class="relative flex items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="h-11 w-11 rounded-2xl bg-white/8 border border-white/10 grid place-items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-teal-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15h18M9 3v18m6-18v18" />
+              </svg>
+            </div>
+            <div>
+              <h2 class="text-3xl font-extrabold tracking-tight">
+                Why it matters to <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-200 to-sky-200">security</span>
+              </h2>
+            </div>
+          </div>
+        </div>
+        <div class="relative mt-7 grid gap-4 md:grid-cols-2">
+          <div class="rounded-2xl p-5 bg-white/6 border border-white/10">
+            <div class="flex items-start gap-3">
+              <span class="mt-1.5 h-2.5 w-2.5 rounded-full bg-teal-300"></span>
+              <div>
+                <h3 class="font-semibold text-slate-100">Real-time detection, not after the fact:</h3>
+                <p class="mt-2 text-slate-300 leading-relaxed">
+                  Security tools can subscribe live to ETW sessions and see behavior as it happens (process starts, image loads, WMI activity, PowerShell providers, etc.). That enables:
+                </p>
+                <ul class="mt-3 space-y-1.5 text-slate-300 list-disc list-inside">
+                  <li>Faster detection = lower dwell time.</li>
+                  <li>Richer behavioral correlation, sequence of events.</li>
+                  <li>Faster response automation.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="rounded-2xl p-5 bg-white/6 border border-white/10">
+            <div class="flex items-start gap-3">
+              <span class="mt-1.5 h-2.5 w-2.5 rounded-full bg-sky-300"></span>
+              <div>
+                <h3 class="font-semibold text-slate-100">Kernel + user-mode coverage:</h3>
+                <ul class="mt-3 space-y-1.5 text-slate-300 list-disc list-inside">
+                  <li><b class="text-slate-100">Kernel providers:</b> Deep OS activity signals.</li>
+                  <li><b class="text-slate-100">User-mode providers:</b> Services, apps, components.</li>
+                </ul>
+                <p class="mt-3 text-slate-300 leading-relaxed">
+                  That coverage gives defenders a way to see activity that may never be written to classic logs unless explicitly configured.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="rounded-2xl p-5 bg-white/6 border border-white/10">
+            <div class="flex items-start gap-3">
+              <span class="mt-1.5 h-2.5 w-2.5 rounded-full bg-indigo-300"></span>
+              <div>
+                <h3 class="font-semibold text-slate-100">Richer context than many classic logs:</h3>
+                <p class="mt-2 text-slate-300 leading-relaxed">
+                  ETW events are structured fields, not just text, which makes them easier to:
+                </p>
+                <ul class="mt-3 space-y-1.5 text-slate-300 list-disc list-inside">
+                  <li>Normalize into a security data model.</li>
+                  <li>Correlate (PID/PPID/TID, session, user/SID, image path, hashes if enriched, etc...).</li>
+                  <li>Filter precisely (keywords/levels) to reduce noise.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="rounded-2xl p-5 bg-white/6 border border-white/10">
+            <div class="flex items-start gap-3">
+              <span class="mt-1.5 h-2.5 w-2.5 rounded-full bg-fuchsia-300"></span>
+              <div>
+                <h3 class="font-semibold text-slate-100">Better correlation:</h3>
+                <p class="mt-2 text-slate-300 leading-relaxed">
+                  ETW supports precise timestamps and consistent IDs:
+                </p>
+                <ul class="mt-3 space-y-1.5 text-slate-300 list-disc list-inside">
+                  <li>process → child process → module load → registry write → network connect</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="relative mt-8 rounded-2xl p-5 bg-gradient-to-r from-white/10 to-white/5 border border-white/10">
+          <p class="text-sm text-slate-200/80 italic leading-relaxed">
+            It’s also a battleground, attacker vs defender: <br>
+            Because ETW is valuable, attackers sometimes try to evade or reduce visibility around it. For defenders, that means ETW isn’t just telemetry, it’s part of the assurance/integrity story: “are we still seeing what we think we’re seeing?”
+          </p>
+        </div>
+      </div>
+      <br>
+      <div class="relative rounded-3xl p-8 md:p-10 bg-[#0b0f1a] text-slate-100 border border-[#1b2540] shadow-[0_25px_70px_rgba(0,0,0,0.6)] overflow-hidden">
+        <div class="relative">
+          <h2 class="mt-4 text-3xl md:text-4xl font-black tracking-tight leading-tight">
+            Deep Dive into the ETW Architecture -
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-blue-300 to-fuchsia-300">
+              Four Pillars
+            </span>
+          </h2>
+          <p class="mt-3 text-slate-300/80 leading-relaxed">
+            The layout below is a “blueprint board”: 4 pillar cards in a responsive grid,
+            each with a strong title bar, subtle icon marker, and consistent spacing for readability.
+          </p>
+        </div>
+        <div class="relative mt-8 overflow-x-auto overscroll-x-contain lg:overflow-x-visible" >
+                <section class="rounded-2xl border border-white/10 bg-white/6 overflow-hidden">
+            <div class="relative rounded-xl border border-slate-600 bg-[#0b0f14] shadow-lg">
+              <div class="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-emerald-400/15 to-transparent border-b border-white/10">
+                <div class="flex items-center gap-3">
+                  <div>
+                    <h3 class="text-lg font-semibold text-slate-100">
+                      Providers: <span class="text-slate-400 font-normal"> Event Sources</span>
+                    </h3>
+                  </div>
+                </div>
+                <span class="text-xs font-mono text-slate-300/70">Windows Components • Apps • Services • Drivers (Kernel)</span>
+              </div> 
+              <div class="px-6 py-5 space-y-6 text-slate-300 leading-relaxed">
+                <section>
+                  <p>
+                    An ETW provider is simply an event source: a Windows component, driver, service, or application that knows how to “write” ETW events when something happens.
+                    Each provider is identified by:              
+                  </p>
+                  <ul class="mt-3 list-disc list-inside">
+                    <li><b class="text-slate-100">Provider Name:</b> Human-friendly identifier.</li>
+                    <li><b class="text-slate-100">Provider GUID:</b> The unique identity used internally by Windows.</li>
+                  </ul>
+                </section>
+                <section>
+                  <p>Each provider defines the structure and scope of its telemetry:</p>
+                  <ul class="mt-3 list-disc list-inside">
+                    <li><b class="text-slate-100">Event IDs:</b> What event occurred.</li>
+                    <li><b class="text-slate-100">Levels:</b> Verbosity / severity.</li>
+                    <li><b class="text-slate-100">Keywords:</b> Bitmask categories for filtering.</li>
+                  </ul>
+                </section>
+                <section>
+                  <p>
+                    The command <code class="px-1.5 py-0.5 rounded bg-black/40 border border-slate-600 font-mono text-sm">logman query providers</code>
+                    enumerates registered ETW providers and exposes their metadata.
+                  </p>
+                  <ul class="mt-3 list-disc list-inside">
+                    <li><b class="text-slate-100">Name:</b> <code>Microsoft-Windows-PowerShell</code></li>
+                    <li><b class="text-slate-100">GUID:</b> <code>{A0C18…}</code></li>
+                  </ul>
+                </section>
+                <section>
+                  <p>
+                    When running:
+                    <code class="px-1.5 py-0.5 rounded bg-black/40 border border-slate-600 font-mono text-sm">logman query providers Microsoft-Windows-PowerShell</code> we see:
+                  </p>
+                  <ul class="mt-3 list-disc list-inside space-y-3">
+                    <li>
+                      <b class="text-slate-100">Provider + GUID:</b>
+                      <ul class="list-disc list-inside ml-4 mt-1">
+                        <li><b>Provider:</b> The ETW event source.</li>
+                        <li><b>GUID:</b> The internal identifier ETW uses.</li>
+                      </ul>
+                    </li>
+                    <li>
+                      <b class="text-slate-100">Value / Keyword / Description:</b>
+                      <ul class="list-disc list-inside ml-4 mt-1">
+                        <li><b>Value:</b> 64-bit bitmask (hex).</li>
+                        <li><b>Keyword:</b> Readable name for that bit.</li>
+                        <li><b>Description:</b> Microsoft’s explanation of that category.</li>
+                      </ul>
+                    </li>
+                  </ul>
+                </section>
+              </div>
+            </div>
+          </section>
+          <br>
+          <div class="relative rounded-xl border border-slate-600 bg-[#0b0f14] shadow-lg">
+            <div class="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-sky-400/15 to-transparent border-b border-white/10">
+              <div class="flex items-center gap-3">
+                <div>
+                  <h3 class="text-lg font-semibold text-slate-100">
+                    Session: <span class="text-slate-400 font-normal"> Event Collection Pipeline</span>
+                  </h3>
+                </div>
+              </div>
+              <span class="text-xs font-mono text-slate-300/70">ETW Logger • Real-time Stream • ETL Trace File</span>
+            </div> 
+            <div class="px-6 py-5 space-y-6 text-slate-300 leading-relaxed">
+              <section>
+                <p>
+                  An ETW session is defined as
+                  <span class="italic">
+                    “a unique instance of an event tracing session that handles the collection
+                    and routing of events from one or more providers.”
+                  </span>
+                </p>
+                <p class="mt-3">
+                  In practice, a session (also called a trace session or logger) is a live
+                  collection pipeline that sits between providers and consumers.
+                </p>
+              </section>
+              <section>
+                <p>A running ETW session is responsible for:</p>
+                <ul class="mt-3 list-disc list-inside space-y-1">
+                  <li>Selecting which ETW providers are enabled.</li>
+                  <li>Applying filters using <b class="text-slate-100">Levels</b> and <b class="text-slate-100">Keyword bitmasks</b>.</li>
+                  <li>
+                    Allocating in-memory buffers to receive events and routing them:
+                    <ul class="list-disc list-inside ml-4 mt-1">
+                      <li>to real-time consumers, or</li>
+                      <li>to an <code class="px-1.5 py-0.5 rounded bg-black/40 border border-slate-600 font-mono text-sm">.etl</code> trace file.</li>
+                    </ul>
+                  </li>
+                </ul>
+              </section>
+              <section class="rounded-md border border-slate-600 bg-black/30 px-4 py-3">
+                <p class="text-slate-200">
+                  <b>Key takeaway:</b>
+                  Providers generate events, but the <b>session</b> decides what gets collected,
+                  how it’s filtered, and where it goes.
+                </p>
+              </section>
+            </div>
+          </div>
+          <br>
+          <div class="relative rounded-xl border border-slate-600 bg-[#0b0f14] shadow-lg">
+            <div class="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-fuchsia-400/15 to-transparent border-b border-white/10">
+              <div class="flex items-center gap-3">
+                <div>
+                  <h3 class="text-lg font-semibold text-slate-100">
+                    Controller: <span class="text-slate-400 font-normal"> Session Orchestrator</span>
+                  </h3>
+                </div>
+              </div>
+              <span class="text-xs font-mono text-slate-300/70">OS Services • EDR • Admin Tools </span>
+            </div> 
+            <div class="px-6 py-5 space-y-6 text-slate-300 leading-relaxed">
+              <section>
+                <p>
+                  In the ETW architecture, the <b class="text-slate-100">Controller</b> is the management component
+                  responsible for creating, configuring, starting, stopping, and updating ETW sessions.
+                  It is the entity that brings providers and sessions to life.
+                </p>
+              </section>
+              <section>
+                <p class="font-semibold text-slate-200">Core responsibilities:</p>
+                <ul class="mt-3 list-disc list-inside space-y-1">
+                  <li>
+                    <b class="text-slate-100">Create:</b>
+                    Define a new session (name, buffer size, output mode, log file path).
+                  </li>
+                  <li>
+                    <b class="text-slate-100">Start/Enable:</b>
+                    Activate the session, triggering provider callback functions and enabling event generation
+                    based on configured Levels and Keywords.
+                  </li>
+                  <li>
+                    <b class="text-slate-100">Stop/Disable:</b>
+                    Halt the session, flush buffers, and close output streams.
+                  </li>
+                  <li>
+                    <b class="text-slate-100">Update:</b>
+                    Modify a running session by adding providers or adjusting filters.
+                  </li>
+                </ul>
+              </section>
+              <section>
+                <p class="font-semibold text-slate-200">Who acts as a Controller in practice?</p>
+                <ul class="mt-3 list-disc list-inside space-y-1">
+                  <li>
+                    <b class="text-slate-100">Security & EDR software:</b>
+                    Creates high-priority sessions, enables security-critical providers, and often consumes
+                    events in real time.
+                  </li>
+                  <li>
+                    <b class="text-slate-100">Windows services:</b>
+                    Run built-in diagnostic and telemetry sessions.
+                  </li>
+                  <li>
+                    <b class="text-slate-100">Custom code:</b>
+                    Any application implementing ETW controller APIs.
+                  </li>
+                  <li>
+                    <b class="text-slate-100">Forensic tools:</b>
+                    Incident response utilities that deploy targeted tracing on demand.
+                  </li>
+                </ul>
+              </section>
+              <section>
+                <p class="font-semibold text-slate-200">
+                  Example sequence (security tool perspective)
+                </p>
+                <ul class="mt-3 list-decimal list-inside space-y-1">
+                  <li>
+                    <b class="text-slate-100">Decision:</b>
+                    An EDR agent decides to monitor PowerShell activity.
+                  </li>
+                  <li>
+                    <b class="text-slate-100">Configuration:</b>
+                    A session named <code class="px-1 py-0.5 rounded bg-black/40 border border-slate-600 font-mono text-sm">EDR_PS_Monitor</code> is created and the
+                    <code class="px-1 py-0.5 rounded bg-black/40 border border-slate-600 font-mono text-sm">
+                    Microsoft-Windows-PowerShell</code> provider is enabled with the <code>ScriptBlock</code> keyword.
+                  </li>
+                  <li>
+                    <b class="text-slate-100">Start:</b>
+                    The session starts, triggering the provider’s callback and activating deep instrumentation.
+                  </li>
+                  <li>
+                    <b class="text-slate-100">Result:</b>
+                    All PowerShell script blocks are streamed into the session and analyzed in real time.
+                  </li>
+                </ul>
+              </section>
+              <section class="rounded-md border border-slate-600 bg-black/30 px-4 py-3">
+                <p class="text-slate-200 font-semibold mb-2">
+                  Example: Acting as a Controller via PowerShell
+                </p>
+                <code class="block whitespace-pre font-mono text-sm text-slate-200">
+          New-EtwTraceSession -Name "Hunt_Process" `
+            -ProviderName "Microsoft-Windows-Kernel-Process" `
+            -OutputFilePath "C:\hunt.etl"
+                </code>
+                <p class="mt-3 text-slate-300">
+                  This command creates and starts a new ETW session, enables a kernel provider,
+                  and begins streaming process creation events into an <code>.etl</code> file.
+                </p>
+              </section>
+            </div>
+          </div>
+          <br>
+          <section class="rounded-2xl border border-white/10 bg-white/6 overflow-hidden">
+            <div class="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-rose-300/15 to-transparent border-b border-white/10">
+              <div class="flex items-center gap-3">
+                <div>
+                  <h3 class="text-lg font-semibold text-slate-100">
+                    Consumer: <span class="text-slate-400 font-normal"> Reads, parses, and uses events</span>
+                  </h3>
+                </div>
+              </div>
+              <span class="text-xs font-mono text-slate-300/70">EDR • Tools • Analytics</span>
+            </div>
+            <div class="px-6 py-5 text-slate-300 leading-relaxed space-y-4">
+              <p>
+                ETW Consumer is not just a passive receiver; it's the active processor and analyzer that transforms the raw stream of binary events 
+                into actionable intelligence. For security, this is where detection and response happen.
+              </p>
+              <section>
+                <p class="font-semibold text-slate-200">Who Are the Consumers?</p>
+                <ul class="mt-3 list-disc list-inside space-y-1">
+                  <li>
+                    <b class="text-slate-100">Consumer Application:</b>
+                    <ul class="mt-3 list-disc list-inside space-y-1 pl-5">
+                      <li><b class="text-slate-100">Microsoft Defender for Endpoint / CrowdStrike Falcon / Other EDRs:</b> The EDR agent is a Controller, Session Manager, and Consumer all in one. It consumes kernel ETW events in real-time, enriches them with threat intelligence, runs detection algorithms, and can kill malicious processes on the spot.</li>
+                      <li><b class="text-slate-100">Splunk Universal Forwarder / Windows Event Collector (WEC):</b> These "log forwarders" are specialized Consumers. They subscribe to ETW sessions (or the Windows Event Log, which is built on ETW), format the events, and send them over the network to a central SIEM like Splunk or Elasticsearch.</li>
+                      <li><b class="text-slate-100">Sysinternals Process Monitor (ProcMon):</b> A classic example. When you run ProcMon, it starts an ETW session (as a Controller) enabling file, registry, and process providers, and then acts as its own Consumer to display the events in its iconic UI in real-time.</li>
+                      <li><b class="text-slate-100">Windows Event Viewer (eventvwr.msc):</b> When you open an .evtx file, Event Viewer is consuming a converted ETW log. The live "Windows Logs" view is also consuming events from the persistent ETW session that backs the Event Log service.</li>
+                    </ul>
+                  </li>
+                </ul>
+              </section>
+            </div>
+          </section>
+        </div>
+        <br>
+        <section class="rounded-md border border-slate-600 bg-black/30 px-4 py-3">
+          <h3 class="text-sm font-semibold text-slate-200 mb-2">ETW Diagram</h3>
+          <img id="inlineImg" src="../MalDev/images/ETW.png" alt="ETW Architecture" class="rounded-md border border-slate-700 transition-all duration-300 max-h-64 mx-auto"            onclick="openImg(this.src, this.alt)" />
+        </section>
+        <div id="imgOverlay" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/85 p-6" onclick="closeImg()">
+          <div class="relative" onclick="event.stopPropagation()">
+            <button type="button" class="absolute -top-3 -right-3 rounded-full border border-slate-600 bg-slate-900/80 px-3 py-1 text-sm text-slate-200 hover:bg-slate-800" onclick="closeImg()" aria-label="Close">
+              ✕
+            </button>
+            <img id="imgOverlayPic" src="../MalDev/images/ETW.png" alt="ETW Architecture" class="max-h-[90vh] max-w-[90vw] rounded-md border border-slate-700 shadow-2xl object-contain"/>
+            <p id="imgOverlayCaption" class="mt-3 text-center text-xs text-slate-300/80"
+            ></p>
+          </div>
+        </div>
+        <script>
+          function openImg(src, alt) {
+            const overlay = document.getElementById("imgOverlay");
+            const pic = document.getElementById("imgOverlayPic");
+            const caption = document.getElementById("imgOverlayCaption");
+        
+            pic.src = src;
+            pic.alt = alt || "Expanded image";
+            caption.textContent = alt || "";
+        
+            overlay.classList.remove("hidden");
+            overlay.classList.add("flex");
+        
+            // lock background scroll
+            document.body.style.overflow = "hidden";
+          }
+        
+          function closeImg() {
+            const overlay = document.getElementById("imgOverlay");
+            const pic = document.getElementById("imgOverlayPic");
+        
+            overlay.classList.add("hidden");
+            overlay.classList.remove("flex");
+        
+            pic.src = "";
+            document.body.style.overflow = "";
+          }
+        
+          // ESC closes popup
+          document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") closeImg();
+          });
+        </script>
+      </div>
+    </section>
+    </main>
+    <footer class="relative flex items-center justify-center text-[15px] text-slate-300 py-6">
+      <div class="text-center">
+        Crafted with Passion<br>
+        2025 Iron Hulk — No Rights Reserved.
+        <br>
+        <a href="../blog.html" class="text-slate-300 text-sm px-4 py-2 rounded transition">← Back to Blogs</a>
+      </div>
+      <a href="#top" class="absolute right-6 top-1/2 transform -translate-y-1/2 text-slate-300 hover:text-slate-700">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M3.707 10.707a1 1 0 01-1.414-1.414l7-7a1 1 0 011.414 0l7 7a1 1 0 11-1.414 1.414L11 4.414V19a1 1 0 11-2 0V4.414L3.707 10.707z" clip-rule="evenodd" />
+        </svg>
+      </a>
+    </footer>
+    
+    <!-- Reading-time logic -->
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
+        const minutes = Math.max(1, Math.ceil(words / 230));
+        document.getElementById('reading-time').textContent = `${minutes} min reading`;
+      });
+    </script>
+  </body>
+</html>
