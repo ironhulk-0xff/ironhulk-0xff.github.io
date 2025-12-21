@@ -403,11 +403,13 @@
                 <p class="text-slate-200 font-semibold mb-2">
                   Example: Acting as a Controller via PowerShell
                 </p>
-                <code class="block whitespace-pre font-mono text-sm text-slate-200">
-          New-EtwTraceSession -Name "Hunt_Process" `
-            -ProviderName "Microsoft-Windows-Kernel-Process" `
-            -OutputFilePath "C:\hunt.etl"
-                </code>
+                <div class="overflow-x-auto -mx-4 px-4 sm:-mx-0 sm:px-0">
+                  <code class="block min-w-max whitespace-pre font-mono text-sm text-slate-200">
+              New-EtwTraceSession -Name "Hunt_Process" `
+                -ProviderName "Microsoft-Windows-Kernel-Process" `
+                -OutputFilePath "C:\hunt.etl"
+                  </code>
+                </div>
                 <p class="mt-3 text-slate-300">
                   This command creates and starts a new ETW session, enables a kernel provider,
                   and begins streaming process creation events into an <code>.etl</code> file.
