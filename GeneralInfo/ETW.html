@@ -194,7 +194,7 @@
           </p>
         </div>
         <div class="relative mt-8 overflow-x-auto overscroll-x-contain lg:overflow-x-visible" >
-                <section class="rounded-2xl border border-white/10 bg-white/6 overflow-hidden">
+          <section class="rounded-2xl border border-white/10 bg-white/6 overflow-hidden">
             <div class="relative rounded-xl border border-slate-600 bg-[#0b0f14] shadow-lg">
               <div class="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-emerald-400/15 to-transparent border-b border-white/10">
                 <div class="flex items-center gap-3">
@@ -405,7 +405,7 @@
                 </p>
                 <div class="overflow-x-auto -mx-4 px-4 sm:-mx-0 sm:px-0">
                   <code class="block min-w-max whitespace-pre font-mono text-sm text-slate-200">
-New-EtwTraceSession -Name "Hunt_Process" -ProviderName "Microsoft-Windows-Kernel-Process" -OutputFilePath "C:\hunt.etl"
+                  New-EtwTraceSession -Name "Hunt_Process" -ProviderName "Microsoft-Windows-Kernel-Process" -OutputFilePath "C:\hunt.etl"
                   </code>
                 </div>
                 <p class="mt-3 text-slate-300">
@@ -492,8 +492,8 @@ New-EtwTraceSession -Name "Hunt_Process" -ProviderName "Microsoft-Windows-Kernel
       </div>
       <br>
       <div class="relative rounded-3xl p-8 md:p-10 bg-[#0b0f1a] text-slate-100 border border-[#1b2540] shadow-[0_25px_70px_rgba(0,0,0,0.6)] overflow-hidden">
-        <div class="relative inline-block">
-          <h2 class="text-3xl font-extrabold tracking-tight text-slate-100">
+        <div class="relative">
+          <h2 class="mt-4 text-3xl md:text-4xl font-black tracking-tight leading-tight">
             Why It Matters to
             <span class="relative ml-2 inline-block">
               <span class="absolute inset-0 blur-md bg-gradient-to-r from-red-500/40 to-orange-400/40"></span>
@@ -502,120 +502,122 @@ New-EtwTraceSession -Name "Hunt_Process" -ProviderName "Microsoft-Windows-Kernel
               </span>
             </span>
           </h2>
-          <p>
+          <p class="mt-3 text-slate-300/80 leading-relaxed">
             For an attacker, ETW matters because it's the primary source of telemetry for modern security defenses. Failing to bypass it is like tripping a silent alarm that leaves a detailed, structured audit trail of every malicious action, significantly increasing the chances of detection and forensic analysis
           </p>
-          <br>
+        </div>
+        <div class="relative mt-8 overflow-x-auto overscroll-x-contain lg:overflow-x-visible" >
           <section class="rounded-2xl border border-white/10 bg-white/6 overflow-hidden">
-            <div class="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-rose-300/15 to-transparent border-b border-white/10">
-              <div class="flex items-center gap-3">
-                <div>
-                  <h3 class="text-lg font-semibold text-slate-100">
-                    Why Attackers Must Bypass ETW
-                  </h3>
+            <div class="relative rounded-xl border border-slate-600 bg-[#0b0f14] shadow-lg">
+              <div class="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-rose-400/15 to-transparent border-b border-white/10">
+                <div class="flex items-center gap-3">
+                  <div>
+                    <h3 class="text-lg font-semibold text-slate-100">
+                      Why Attackers Must Bypass ETW
+                    </h3>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="px-6 py-5 text-slate-300 leading-relaxed">
-              <section>
-                <ul class="mt-3 list-disc list-inside ">
-                  <li>
-                    <b class="text-slate-100">ETW creates four major problems for attackers:</b>
-                    <ul class="mt-3 list-decimal list-inside  pl-5">
-                      <li><b class="text-slate-100">Detailed Forensic Timeline:</b> ETW logs, especially those from the kernel, and keep a detailed timed record of things like when a process starts, how a computer connects to the network, and what files are accessed. This helps security experts put together a full story of what happened during an attack and understand the full scope of the incident.</li>
-                      <li><b class="text-slate-100">Process Attribution:</b> New features in ETW, like including the Process ID and Process Start Key in event details, have filled a big security gap. It's now more difficult for someone trying to attack a system to hide where an action really came from. For instance, when a scheduled task is made "Event ID 4698", the event now clearly shows the actual program that started it, not just the tool used, like schtasks.exe. This helps security teams easily identify harmful sequences such as powershell.exe starting schtasks.exe.</li>
-                      <li><b class="text-slate-100">Core of EDR Detection:</b> Advanced Endpoint Detection and Response (EDR) systems depend a lot on ETW, especially the Threat Intelligence (TI) provider, to analyze how systems behave. The TI provider records detailed, security-related activities happening deep within the operating system, such as when memory is allocated for running code, when threads are controlled, and when Asynchronous Procedure Calls (APCs) are managed. This helps EDR tools spot sophisticated attack methods like process injection without using traditional hooking techniques.</li>
-                      <li><b class="text-slate-100">Tamper Detection:</b> Even when someone tries to hide their actions, like deleting event logs, it still creates ETW events, like Event ID 1102. Now, these events also include information about the process that started them, which turns the attempt to clean up into a chance to spot what happened.</li>
-                    </ul>
-                  </li>
-                </ul>
-              </section>
-            </div>
-          </section>
-          <br>
-          <section class="rounded-2xl border border-white/10 bg-white/6 overflow-hidden">
-            <div class="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-rose-300/15 to-transparent border-b border-white/10">
-              <div class="flex items-center gap-3">
-                <div>
-                  <h3 class="text-lg font-semibold text-slate-100">
-                    How Attackers Bypass ETW
-                  </h3>
-                </div>
+              <div class="px-6 py-5 text-slate-300 leading-relaxed">
+                <section>
+                  <ul class="mt-3 list-disc list-inside ">
+                    <li>
+                      <b class="text-slate-100">ETW creates four major problems for attackers:</b>
+                      <ul class="mt-3 list-decimal list-inside  pl-5">
+                        <li><b class="text-slate-100">Detailed Forensic Timeline:</b> ETW logs, especially those from the kernel, and keep a detailed timed record of things like when a process starts, how a computer connects to the network, and what files are accessed. This helps security experts put together a full story of what happened during an attack and understand the full scope of the incident.</li>
+                        <li><b class="text-slate-100">Process Attribution:</b> New features in ETW, like including the Process ID and Process Start Key in event details, have filled a big security gap. It's now more difficult for someone trying to attack a system to hide where an action really came from. For instance, when a scheduled task is made "Event ID 4698", the event now clearly shows the actual program that started it, not just the tool used, like schtasks.exe. This helps security teams easily identify harmful sequences such as powershell.exe starting schtasks.exe.</li>
+                        <li><b class="text-slate-100">Core of EDR Detection:</b> Advanced Endpoint Detection and Response (EDR) systems depend a lot on ETW, especially the Threat Intelligence (TI) provider, to analyze how systems behave. The TI provider records detailed, security-related activities happening deep within the operating system, such as when memory is allocated for running code, when threads are controlled, and when Asynchronous Procedure Calls (APCs) are managed. This helps EDR tools spot sophisticated attack methods like process injection without using traditional hooking techniques.</li>
+                        <li><b class="text-slate-100">Tamper Detection:</b> Even when someone tries to hide their actions, like deleting event logs, it still creates ETW events, like Event ID 1102. Now, these events also include information about the process that started them, which turns the attempt to clean up into a chance to spot what happened.</li>
+                      </ul>
+                    </li>
+                  </ul>
+                </section>
               </div>
             </div>
-            <div class="px-6 py-5 text-slate-300 leading-relaxed">
-              <section>
-                <ul class="mt-3 list-disc list-inside ">
-                  <li>
-                    <b class="text-slate-100">Common Techniques:</b>
-                    <ul class="mt-3 list-decimal list-inside  pl-5">
-                      <li><b class="text-slate-100">Patching ETW Functions via Byte Patching:</b> 
-                        One way to do this is by changing the key function <code class="px-1.5 py-0.5 rounded bg-black/40 border border-slate-600 font-mono text-sm">EtwEventWrite</code> in memory, <code class="px-1.5 py-0.5 rounded bg-black/40 border border-slate-600 font-mono text-sm">EtwEventWrite</code> along with <code class="px-1.5 py-0.5 rounded bg-black/40 border border-slate-600 font-mono text-sm">EtwEventWriteEx</code> and <code class="px-1.5 py-0.5 rounded bg-black/40 border border-slate-600 font-mono text-sm">EtwEventWriteFull</code> are used to write events to an ETW session. 
-                        By patching <code class="px-1.5 py-0.5 rounded bg-black/40 border border-slate-600 font-mono text-sm">EtwEventWrite</code> makes the function exit right away without recording any information, which can suppress ETW events emitted from that process via <code class="px-1.5 py-0.5 rounded bg-black/40 border border-slate-600 font-mono text-sm">user-mode</code> ETW write paths, which may degrade visibility for tools relying on that telemetry.
-                      <br>
-                      <li><b class="text-slate-100">Patching ETW Functions via Hardware Breakpoints (HBPs):</b> is a sophisticated, it This is a method that works in memory and uses the CPU's debugging features instead of changing the bytes used by ETWEventWrite. 
-                        A hardware breakpoint can be set in a thread's debug registers (DR0 to DR3, controlled by DR7). When a thread with this breakpoint reaches the specific instruction, Windows sends an EXCEPTION_SINGLE_STEP exception. 
-                        If the attacker has set up a Vectored Exception Handler (VEH), their code can run at that moment. It can check the thread's state and possibly change it to skip the normal ETW writing process, making it look like the action was successful. 
-                        This approach avoids typical signs of code modification, but might leave other clues like strange debug register settings, new VEH handlers, or odd single-step exception behavior.</li>
+            <br>
+            <section class="rounded-2xl border border-white/10 bg-white/6 overflow-hidden">
+              <div class="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-rose-300/15 to-transparent border-b border-white/10">
+                <div class="flex items-center gap-3">
+                  <div>
+                    <h3 class="text-lg font-semibold text-slate-100">
+                      How Attackers Bypass ETW
+                    </h3>
+                  </div>
+                </div>
+              </div>
+              <div class="px-6 py-5 text-slate-300 leading-relaxed">
+                <section>
+                  <ul class="mt-3 list-disc list-inside ">
+                    <li>
+                      <b class="text-slate-100">Common Techniques:</b>
+                      <ul class="mt-3 list-decimal list-inside  pl-5">
+                        <li><b class="text-slate-100">Patching ETW Functions via Byte Patching:</b> 
+                          One way to do this is by changing the key function <code class="px-1.5 py-0.5 rounded bg-black/40 border border-slate-600 font-mono text-sm">EtwEventWrite</code> in memory, <code class="px-1.5 py-0.5 rounded bg-black/40 border border-slate-600 font-mono text-sm">EtwEventWrite</code> along with <code class="px-1.5 py-0.5 rounded bg-black/40 border border-slate-600 font-mono text-sm">EtwEventWriteEx</code> and <code class="px-1.5 py-0.5 rounded bg-black/40 border border-slate-600 font-mono text-sm">EtwEventWriteFull</code> are used to write events to an ETW session. 
+                          By patching <code class="px-1.5 py-0.5 rounded bg-black/40 border border-slate-600 font-mono text-sm">EtwEventWrite</code> makes the function exit right away without recording any information, which can suppress ETW events emitted from that process via <code class="px-1.5 py-0.5 rounded bg-black/40 border border-slate-600 font-mono text-sm">user-mode</code> ETW write paths, which may degrade visibility for tools relying on that telemetry.
                         <br>
-                        <section class="rounded-md border border-slate-600 bg-black/30 px-4 py-3">
-                          <img id="inlineImg2" src="../GeneralInfo/Img/etwHBP.png" class="rounded-md border border-slate-700 transition-all duration-300 max-h-64 mx-auto" onclick="openImg(this.src, this.alt)" />
-                        </section>
-                        <div id="imgOverlay2" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/85 p-6" onclick="closeImg()">
-                          <div class="relative" onclick="event.stopPropagation()">
-                            <button type="button" class="absolute -top-3 -right-3 rounded-full border border-slate-600 bg-slate-900/80 px-3 py-1 text-sm text-slate-200 hover:bg-slate-800" onclick="closeImg()" aria-label="Close">
-                              ✕
-                            </button>
-                            <img id="imgOverlayPic2" src="../GeneralInfo/Img/etwHBP.png" class="max-h-[90vh] max-w-[90vw] rounded-md border border-slate-700 shadow-2xl object-contain"/>
-                            <p id="imgOverlayCaption2" class="mt-3 text-center text-xs text-slate-300/80"
-                            ></p>
+                        <li><b class="text-slate-100">Patching ETW Functions via Hardware Breakpoints (HBPs):</b> is a sophisticated, it This is a method that works in memory and uses the CPU's debugging features instead of changing the bytes used by ETWEventWrite. 
+                          A hardware breakpoint can be set in a thread's debug registers (DR0 to DR3, controlled by DR7). When a thread with this breakpoint reaches the specific instruction, Windows sends an EXCEPTION_SINGLE_STEP exception. 
+                          If the attacker has set up a Vectored Exception Handler (VEH), their code can run at that moment. It can check the thread's state and possibly change it to skip the normal ETW writing process, making it look like the action was successful. 
+                          This approach avoids typical signs of code modification, but might leave other clues like strange debug register settings, new VEH handlers, or odd single-step exception behavior.</li>
+                          <br>
+                          <section class="rounded-md border border-slate-600 bg-black/30 px-4 py-3">
+                            <img id="inlineImg2" src="../GeneralInfo/Img/etwHBP.png" class="rounded-md border border-slate-700 transition-all duration-300 max-h-64 mx-auto" onclick="openImg(this.src, this.alt)" />
+                          </section>
+                          <div id="imgOverlay2" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/85 p-6" onclick="closeImg()">
+                            <div class="relative" onclick="event.stopPropagation()">
+                              <button type="button" class="absolute -top-3 -right-3 rounded-full border border-slate-600 bg-slate-900/80 px-3 py-1 text-sm text-slate-200 hover:bg-slate-800" onclick="closeImg()" aria-label="Close">
+                                ✕
+                              </button>
+                              <img id="imgOverlayPic2" src="../GeneralInfo/Img/etwHBP.png" class="max-h-[90vh] max-w-[90vw] rounded-md border border-slate-700 shadow-2xl object-contain"/>
+                              <p id="imgOverlayCaption2" class="mt-3 text-center text-xs text-slate-300/80"
+                              ></p>
+                            </div>
                           </div>
-                        </div>
-                        <script>
-                          function openImg(src, alt) {
-                            const overlay = document.getElementById("imgOverlay2");
-                            const pic = document.getElementById("imgOverlayPic2");
-                            const caption = document.getElementById("imgOverlayCaption2");
-                            pic.src = src;
-                            pic.alt = alt || "Expanded image";
-                            caption.textContent = alt || "";
-                            overlay.classList.remove("hidden");
-                            overlay.classList.add("flex");
-                            document.body.style.overflow = "hidden";
-                          }
-                          function closeImg() {
-                            const overlay = document.getElementById("imgOverlay2");
-                            const pic = document.getElementById("imgOverlayPic2");
-                            overlay.classList.add("hidden");
-                            overlay.classList.remove("flex");
-                            pic.src = "";
-                            document.body.style.overflow = "";
-                          }
-                          document.addEventListener("keydown", (e) => {
-                            if (e.key === "Escape") closeImg();
-                          });
-                        </script>
-                        <br>
-                          <b class="text-slate-100">Technical Breakdown of the HBP Attack:</b>
-                          <ul class="mt-3 list-decimal list-inside  pl-5">
-                            <li><b class="text-slate-100">The Hook: Setting the Hardware Breakpoint:</b> An attacker's code places a hardware breakpoint on the very first instruction of the <code class="px-1.5 py-0.5 rounded bg-black/40 border border-slate-600 font-mono text-sm">EtwEventWrite</code> function. This is achieved by writing to the CPU's debug registers, which are called DR0 through DR3. Whenever a thread that has the breakpoint set in its debug registers reaches that instruction, the CPU sends a single-step interrupt called <code class="px-1.5 py-0.5 rounded bg-black/40 border border-slate-600 font-mono text-sm">EXCEPTION_SINGLE_STEP</code>, which stops the normal execution of the program.</li>
-                            <li><b class="text-slate-100">The Handler: Seizing Control:</b> The attacker needed to set up a Vectored Exception Handler before attacking. This is a special part of their malware that the operating system runs when a breakpoint is hit. It lets them take control right when the system is about to log something.</li>
-                            <li><b class="text-slate-100">The Inspection: Analyzing the Caller:</b> Inside the exception handler, the attacker looks at the call stack. They go back through the return addresses to find out the important question: "Which part of this program is trying to record an event?" They check if the module that called the code is from a recognized security tool, like an EDR DLL, or if it's their own harmful code.</li>
-                            <li><b class="text-slate-100">The Filter: Selective Logging:</b> This is the core of the bypass. The attacker implements logic in their handler:
-                              <ul class="mt-3 list-disc list-inside  pl-5">
-                                <li><b class="text-slate-100">If:</b> the caller is considered "Original" like a regular part of the system, so the handler takes away the breakpoint, lets the original <code class="px-1.5 py-0.5 rounded bg-black/40 border border-slate-600 font-mono text-sm">EtwEventWrite</code> run completely so the event gets logged, and then puts the breakpoint back in place.</li>
-                                <li><b class="text-slate-100">If:</b> the caller is considered "Malicious," either because they are using their own code or trying to hide a security tool. The handler changes the thread's context. It usually sets the instruction pointer (RIP/EIP) to point to a RET instruction or directly to the end of <code class="px-1.5 py-0.5 rounded bg-black/40 border border-slate-600 font-mono text-sm">EtwEventWrite</code>, so none of the logging code is executed. The function then returns a "success" result without actually logging anything.</li>
-                              </ul>
-                            </li>
-                            <li><b class="text-slate-100">The Resumption: Continuing Execution:</b> After changing the context, the handler sends <code class="px-1.5 py-0.5 rounded bg-black/40 border border-slate-600 font-mono text-sm">EXCEPTION_CONTINUE_EXECUTION</code>. The CPU then continues running from that altered point, which means it ignores the unwanted ETW event.</li>
-
-                          </ul>
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-              </section>
-            </div>
+                          <script>
+                            function openImg(src, alt) {
+                              const overlay = document.getElementById("imgOverlay2");
+                              const pic = document.getElementById("imgOverlayPic2");
+                              const caption = document.getElementById("imgOverlayCaption2");
+                              pic.src = src;
+                              pic.alt = alt || "Expanded image";
+                              caption.textContent = alt || "";
+                              overlay.classList.remove("hidden");
+                              overlay.classList.add("flex");
+                              document.body.style.overflow = "hidden";
+                            }
+                            function closeImg() {
+                              const overlay = document.getElementById("imgOverlay2");
+                              const pic = document.getElementById("imgOverlayPic2");
+                              overlay.classList.add("hidden");
+                              overlay.classList.remove("flex");
+                              pic.src = "";
+                              document.body.style.overflow = "";
+                            }
+                            document.addEventListener("keydown", (e) => {
+                              if (e.key === "Escape") closeImg();
+                            });
+                          </script>
+                          <br>
+                            <b class="text-slate-100">Technical Breakdown of the HBP Attack:</b>
+                            <ul class="mt-3 list-decimal list-inside  pl-5">
+                              <li><b class="text-slate-100">The Hook: Setting the Hardware Breakpoint:</b> An attacker's code places a hardware breakpoint on the very first instruction of the <code class="px-1.5 py-0.5 rounded bg-black/40 border border-slate-600 font-mono text-sm">EtwEventWrite</code> function. This is achieved by writing to the CPU's debug registers, which are called DR0 through DR3. Whenever a thread that has the breakpoint set in its debug registers reaches that instruction, the CPU sends a single-step interrupt called <code class="px-1.5 py-0.5 rounded bg-black/40 border border-slate-600 font-mono text-sm">EXCEPTION_SINGLE_STEP</code>, which stops the normal execution of the program.</li>
+                              <li><b class="text-slate-100">The Handler: Seizing Control:</b> The attacker needed to set up a Vectored Exception Handler before attacking. This is a special part of their malware that the operating system runs when a breakpoint is hit. It lets them take control right when the system is about to log something.</li>
+                              <li><b class="text-slate-100">The Inspection: Analyzing the Caller:</b> Inside the exception handler, the attacker looks at the call stack. They go back through the return addresses to find out the important question: "Which part of this program is trying to record an event?" They check if the module that called the code is from a recognized security tool, like an EDR DLL, or if it's their own harmful code.</li>
+                              <li><b class="text-slate-100">The Filter: Selective Logging:</b> This is the core of the bypass. The attacker implements logic in their handler:
+                                <ul class="mt-3 list-disc list-inside  pl-5">
+                                  <li><b class="text-slate-100">If:</b> the caller is considered "Original" like a regular part of the system, so the handler takes away the breakpoint, lets the original <code class="px-1.5 py-0.5 rounded bg-black/40 border border-slate-600 font-mono text-sm">EtwEventWrite</code> run completely so the event gets logged, and then puts the breakpoint back in place.</li>
+                                  <li><b class="text-slate-100">If:</b> the caller is considered "Malicious," either because they are using their own code or trying to hide a security tool. The handler changes the thread's context. It usually sets the instruction pointer (RIP/EIP) to point to a RET instruction or directly to the end of <code class="px-1.5 py-0.5 rounded bg-black/40 border border-slate-600 font-mono text-sm">EtwEventWrite</code>, so none of the logging code is executed. The function then returns a "success" result without actually logging anything.</li>
+                                </ul>
+                              </li>
+                              <li><b class="text-slate-100">The Resumption: Continuing Execution:</b> After changing the context, the handler sends <code class="px-1.5 py-0.5 rounded bg-black/40 border border-slate-600 font-mono text-sm">EXCEPTION_CONTINUE_EXECUTION</code>. The CPU then continues running from that altered point, which means it ignores the unwanted ETW event.</li>
+                            </ul>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </section>
+              </div>
+            </section>
           </section>
         </div>
       </div>
