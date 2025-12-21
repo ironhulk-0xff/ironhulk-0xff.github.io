@@ -706,7 +706,7 @@ Get-CimInstance Win32_Process | Select @{n='PID';e={$_.ProcessId}}, @{n='PPID';e
       document.addEventListener('DOMContentLoaded', () => {
         const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
         const minutes = Math.max(1, Math.ceil(words / 230));
-        document.getElementById('reading-time').textContent = `${minutes} min reading`;
+        document.getElementById('reading-time').textContent = `${minutes} min`;
       });
     </script>
 </main>
