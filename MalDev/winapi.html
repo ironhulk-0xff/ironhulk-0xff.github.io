@@ -8,14 +8,47 @@
   <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </head>
 <body class="bg-[#0f172a] text-white font-sans min-h-screen">
-<!-- Header -->
-<header class="bg-[#1e293b] p-4 shadow flex items-center justify-between gap-4">
-    <div>
-    <h1 class="text-xl font-bold text-blue-400">WinAPI</h1>
-    <small id="reading-time" class="text-xs text-gray-400"></small>
-    </div>
-    <a href="../blog.html" class="text-gray-300 text-sm hover:underline">← Back to Blogs</a>
-</header>
+
+    <header class="relative overflow-hidden border-b border-blue-500/20 bg-gradient-to-r from-[#0b1220] via-[#0f172a] to-[#020617] px-5 py-4 sm:px-7 shadow-lg">
+        <div class="pointer-events-none absolute -top-20 -right-20 h-60 w-60 rounded-full bg-blue-500/15 blur-3xl"></div>
+        <div class="relative flex flex-wrap items-start justify-between gap-4">
+          <div class="min-w-0 space-y-2">
+            <h1 class="text-xl sm:text-2xl font-semibold tracking-tight text-blue-300">
+                WinAPI
+            </h1>
+            <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs sm:text-sm text-gray-400">
+              <span>
+                <span class="text-gray-400">Written by:</span>
+                <span class="font-semibold text-blue-300">Iron Hulk</span>
+              </span>
+              <span class="hidden sm:inline text-gray-600">•</span>
+              <span>
+                <span class="text-gray-400">Published:</span>
+                Jan 1, 2025 
+              </span>
+              <span class="hidden sm:inline text-gray-600">•</span>
+              <span>
+                <span class="text-gray-400">Reading time:</span>
+                <span id="reading-time"></span>
+              </span>
+              <span>
+                <a href="https://twitter.com/IronHulk_0xff" target="_blank" rel="noopener noreferrer"
+                  style="color:#ffffff; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="#60a5fa" aria-hidden="true">
+                    <path d="M22.46 6c-.77.35-1.6.58-2.46.69a4.27 4.27 0 001.88-2.35 8.48 8.48 0 01-2.7 1.04 4.23 4.23 0 00-7.24 3.86A12 12 0 013 4.79a4.23 4.23 0 001.31 5.64 4.18 4.18 0 01-1.91-.53v.05a4.23 4.23 0 003.39 4.14 4.3 4.3 0 01-1.9.07 4.24 4.24 0 003.95 2.93A8.5 8.5 0 012 19.54a12 12 0 006.29 1.84c7.55 0 11.68-6.26 11.68-11.68 0-.18 0-.36-.01-.54A8.35 8.35 0 0022.46 6z"/>
+                  </svg>
+                  <span class="text-gray-400">Iron Hulk</span>
+                </a>
+              </span>
+            </div>
+          </div>
+          <a href="../blog.html"
+             class="group inline-flex items-center gap-2 rounded-lg border border-blue-400/25 bg-blue-500/5 px-4 py-2 text-sm text-gray-200 transition hover:bg-blue-500/15">
+            <span class="text-blue-300 transition group-hover:-translate-x-0.5">←</span>
+            <span>Back to Blogs</span>
+          </a>
+        </div>
+      </header>
 <main id="article" class="p-6 space-y-6 sm:text-justify">
     <section class="relative group rounded-2xl bg-gradient-to-br from-[#0f172a] via-[#0b1120] to-[#0a0f1a] p-10 shadow-2xl ring-1 ring-purple-500/30 overflow-hidden transition-transform">
         <div class="pointer-events-none absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20"></div>
@@ -160,116 +193,27 @@
                 <p class="text-xs text-gray-400">(to your code)</p>
             </div>
         </div>
-        <br><br>
-        <div class="pointer-events-none absolute -top-24 -left-24 h-64 w-64 rounded-full "></div>
-        <h2 class="text-2xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 drop-shadow-sm">Example</h2>
-        <br>
-        <div class="space-y-6">
-            <details class="group rounded-xl bg-gray-800/60 ring-1 ring-gray-700/60 overflow-hidden">
-            <summary class="flex items-center justify-between px-6 py-4 cursor-pointer select-none">
-                <div class="max-w-full overflow-x-auto">
-                <span class="inline-block whitespace-nowrap font-semibold text-sky-300">
-                    Direct call
-                </span>
-                </div>
-                <svg class="w-5 h-5 text-gray-400 group-open:rotate-90 transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none"
-                    viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                </svg>
-            </summary>
-            <div class="px-6 pt-2 pb-6 text-gray-200 space-y-1">
-                <p class="text-[15px] leading-relaxed">
-                    You include the Windows headers and call <code class="bg-[#334155] text-blue-300 rounded px-1">MessageBox</code> directly. The linker automatically links your program to <code class="bg-[#334155] text-blue-300 rounded px-1">user32.dll</code>.
-                </p>
-                <pre class="mt-8 overflow-x-auto bg-gray-900 p-4 rounded-lg shadow-inner">
-                    <code class="language-cpp text-green-300">
-#include &lt;windows.h&gt;
-#include &lt;iostream&gt;
-int main() 
-{
-    std::cout &lt;&lt; "Using Direct WinAPI call to MessageBox...\n";
-    // Directly call the MessageBox function from user32.dll
-    MessageBox(NULL, L"Hello from Direct WinAPI!", L"Direct Call", MB_OK);
-    std::cout &lt;&lt; "MessageBox closed. Program finished.\n";
-    return 0;
-}
-                    </code>
-                </pre>
-            </div>
-            </details>
-            <details class="group rounded-xl bg-gray-800/60 ring-1 ring-gray-700/60 overflow-hidden">
-                <summary class="flex items-center justify-between px-6 py-4 cursor-pointer select-none">
-                    <div class="max-w-full overflow-x-auto">
-                    <span class="inline-block whitespace-nowrap font-semibold text-sky-300">
-                        Indirect call
-                    </span>
-                    </div>
-                    <svg class="w-5 h-5 text-gray-400 group-open:rotate-90 transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                    </svg>
-                </summary>
-                <div class="px-6 pt-2 pb-6 text-gray-200 space-y-1">
-                    <p class="text-[15px] leading-relaxed">
-                        You load <code class="bg-[#334155] text-blue-300 rounded px-1">user32.dll</code> manually at runtime with LoadLibrary, find the <code class="bg-[#334155] text-blue-300 rounded px-1">MessageBoxW</code> function address with <code class="bg-[#334155] text-blue-300 rounded px-1">GetProcAddress</code>, and call it through a
-                        function pointer. This method is useful if you want to delay-load DLLs or check if a function exists before calling it.
-                    </p>
-                    <pre class="overflow-x-auto bg-gray-900 p-4 rounded-lg shadow-inner">
-                        <code class="language-cpp text-green-300">
-#include &lt;windows.h&gt;
-#include &lt;iostream&gt;
-typedef int (WINAPI* MessageBoxW_t)(HWND, LPCWSTR, LPCWSTR, UINT);
-int main() 
-{
-    // Load the user32.dll library at runtime
-    HMODULE hUser32 = LoadLibrary(L"user32.dll");
-    if (!hUser32) 
-    {
-        std::cerr &lt;&lt; "Failed to load user32.dll\n";
-        return 1;
-    }
-    // Get the address of the MessageBoxW function
-    MessageBoxW_t pMessageBoxW = (MessageBoxW_t)GetProcAddress(hUser32, "MessageBoxW");
-    if (!pMessageBoxW) 
-    {
-        std::cerr &lt;&lt; "Failed to find MessageBoxW function\n";
-        FreeLibrary(hUser32);
-        return 1;
-    }
-    // Call MessageBoxW indirectly through the function pointer
-    pMessageBoxW(NULL, L"Hello from Indirect WinAPI!", L"Indirect Call", MB_OK);
-    // Free the loaded library
-    FreeLibrary(hUser32);
-    return 0;
-}
-                        </code>
-                    </pre>
-                </div>
-            </details>
-        </div>
     </section>
     <footer class="relative flex items-center justify-center text-[15px] text-slate-300 py-6">
-    <div class="text-center">
-        Crafted with Passion<br>
-        2025 Iron Hulk — No Rights Reserved.
-        <br>
-        <a href="../blog.html" class="text-slate-300 text-sm px-4 py-2 rounded transition">← Back to Blogs</a>
-    </div>
-    <a href="#top" class="absolute right-6 top-1/2 transform -translate-y-1/2 text-slate-300 hover:text-slate-700">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M3.707 10.707a1 1 0 01-1.414-1.414l7-7a1 1 0 011.414 0l7 7a1 1 0 11-1.414 1.414L11 4.414V19a1 1 0 11-2 0V4.414L3.707 10.707z" clip-rule="evenodd" />
-        </svg>
-    </a>
-    </footer>
-  <!-- Reading-time logic -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const dateWritten = '1/Jan/2025';
-      const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
-      const minutes = Math.max(1, Math.ceil(words / 230));
-      document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
-    });
-  </script>
+        <div class="text-center">
+            Crafted With Passion<br>
+            2025 Iron Hulk
+            <br>
+            <a href="../blog.html" class="text-slate-300 text-sm px-4 py-2 rounded transition">Back to Blogs</a>
+        </div>
+        <a href="#top" class="absolute right-6 top-1/2 transform -translate-y-1/2 text-slate-300 hover:text-slate-700">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M3.707 10.707a1 1 0 01-1.414-1.414l7-7a1 1 0 011.414 0l7 7a1 1 0 11-1.414 1.414L11 4.414V19a1 1 0 11-2 0V4.414L3.707 10.707z" clip-rule="evenodd" />
+            </svg>
+        </a>
+        </footer>
+          <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
+            const minutes = Math.max(1, Math.ceil(words / 230));
+            document.getElementById('reading-time').textContent = `${minutes} min reading`;
+          });
+        </script>
 </main>
 </body>
 </html>
