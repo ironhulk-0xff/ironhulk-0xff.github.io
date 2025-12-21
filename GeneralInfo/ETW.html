@@ -22,7 +22,7 @@
           <span class="hidden sm:inline text-gray-600">•</span>
           <span>
             <span class="text-gray-400">Published:</span>
-            - - - 
+            Dec 20, 2025 
           </span>
           <span class="hidden sm:inline text-gray-600">•</span>
           <span>
@@ -452,14 +452,14 @@ New-EtwTraceSession -Name "Hunt_Process" -ProviderName "Microsoft-Windows-Kernel
         <br>
         <section class="rounded-md border border-slate-600 bg-black/30 px-4 py-3">
           <h3 class="text-sm font-semibold text-slate-200 mb-2">ETW Diagram</h3>
-          <img id="inlineImg" src="../MalDev/images/ETW.png" alt="ETW Architecture" class="rounded-md border border-slate-700 transition-all duration-300 max-h-64 mx-auto" onclick="openImg(this.src, this.alt)" />
+          <img id="inlineImg" src="../GeneralInfo/Img/ETW.png" class="rounded-md border border-slate-700 transition-all duration-300 max-h-64 mx-auto" onclick="openImg(this.src, this.alt)" />
         </section>
         <div id="imgOverlay" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/85 p-6" onclick="closeImg()">
           <div class="relative" onclick="event.stopPropagation()">
             <button type="button" class="absolute -top-3 -right-3 rounded-full border border-slate-600 bg-slate-900/80 px-3 py-1 text-sm text-slate-200 hover:bg-slate-800" onclick="closeImg()" aria-label="Close">
               ✕
             </button>
-            <img id="imgOverlayPic" src="../MalDev/images/ETW.png" alt="ETW Architecture" class="max-h-[90vh] max-w-[90vw] rounded-md border border-slate-700 shadow-2xl object-contain"/>
+            <img id="imgOverlayPic" src="../GeneralInfo/Img/ETW.png" class="max-h-[90vh] max-w-[90vw] rounded-md border border-slate-700 shadow-2xl object-contain"/>
             <p id="imgOverlayCaption" class="mt-3 text-center text-xs text-slate-300/80"
             ></p>
           </div>
@@ -556,14 +556,14 @@ New-EtwTraceSession -Name "Hunt_Process" -ProviderName "Microsoft-Windows-Kernel
                         This approach avoids typical signs of code modification, but might leave other clues like strange debug register settings, new VEH handlers, or odd single-step exception behavior.</li>
                         <br>
                         <section class="rounded-md border border-slate-600 bg-black/30 px-4 py-3">
-                          <img id="inlineImg2" src="../MalDev/images/etwHBP.png" class="rounded-md border border-slate-700 transition-all duration-300 max-h-64 mx-auto" onclick="openImg(this.src, this.alt)" />
+                          <img id="inlineImg2" src="../GeneralInfo/Img/etwHBP.png" class="rounded-md border border-slate-700 transition-all duration-300 max-h-64 mx-auto" onclick="openImg(this.src, this.alt)" />
                         </section>
                         <div id="imgOverlay2" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/85 p-6" onclick="closeImg()">
                           <div class="relative" onclick="event.stopPropagation()">
                             <button type="button" class="absolute -top-3 -right-3 rounded-full border border-slate-600 bg-slate-900/80 px-3 py-1 text-sm text-slate-200 hover:bg-slate-800" onclick="closeImg()" aria-label="Close">
                               ✕
                             </button>
-                            <img id="imgOverlayPic2" src="../MalDev/images/etwHBP.png" class="max-h-[90vh] max-w-[90vw] rounded-md border border-slate-700 shadow-2xl object-contain"/>
+                            <img id="imgOverlayPic2" src="../GeneralInfo/Img/etwHBP.png" class="max-h-[90vh] max-w-[90vw] rounded-md border border-slate-700 shadow-2xl object-contain"/>
                             <p id="imgOverlayCaption2" class="mt-3 text-center text-xs text-slate-300/80"
                             ></p>
                           </div>
