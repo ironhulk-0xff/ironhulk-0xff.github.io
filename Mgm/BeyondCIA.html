@@ -11,18 +11,45 @@
 </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
-<!-- Header -->
-<header class="bg-slate-50 p-4 shadow flex items-center justify-between gap-4">
-  <div>
-    <h1 class="text-xl font-bold text-[color:var(--accent)]">Security Principles</h1>
-    <small id="reading-time" class="text-xs text-gray-900"></small>
-  </div>
-  <a href="../blog.html" class="text-gray-900 text-sm hover:underline">← Back to Blogs</a>
-</header>
+  <header id="top" role="banner" style="background:linear-gradient(120deg, #b3e5fc 0%, #c8e6c9 50%, #e1bee7 100%);color:#1e293b;border-bottom:1px solid rgba(30,41,59,.12);">
+    <div style=" margin:0 auto; padding:18px 20px 14px;">
+      <div style="display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:18px;">
+        <div style="display:flex; flex-direction:column; gap:10px; flex:1 1 auto; min-width:260px;">
+          <h1 style="margin:0; font-size:clamp(28px,5vw,40px);font-weight:700;letter-spacing:.3px;line-height:1.15;color:#1e293b;">
+            Security Principles
+          </h1>
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;font-size:13px;color:#475569;">
+            <span>
+              <span style="color:#64748b;">Written by</span>
+              <strong style="color:#1e293b;"> Iron Hulk</strong>
+            </span>
+            <span style="opacity:.5;">•</span>
+            <span>
+              <span style="color:#64748b;">Published</span>
+              <strong> July 14, 2025</strong>
+            </span>            
+            <span style="opacity:.5;">•</span>
+            <a href="https://twitter.com/IronHulk_0xff" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:#0f172a;font-weight:500;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="#38bdf8" aria-hidden="true">
+                <path d="M22.46 6c-.77.35-1.6.58-2.46.69a4.27 4.27 0 001.88-2.35 8.48 8.48 0 01-2.7 1.04 4.23 4.23 0 00-7.24 3.86A12 12 0 013 4.79a4.23 4.23 0 001.31 5.64 4.18 4.18 0 01-1.91-.53v.05a4.23 4.23 0 003.39 4.14 4.3 4.3 0 01-1.9.07 4.24 4.24 0 003.95 2.93A8.5 8.5 0 012 19.54a12 12 0 006.29 1.84c7.55 0 11.68-6.26 11.68-11.68 0-.18 0-.36-.01-.54A8.35 8.35 0 0022.46 6z"/>
+              </svg>
+              <span>Iron Hulk</span>
+            </a>
+          </div>
+        </div>
+        <div style="padding-top:6px;">
+          <a href="../blog.html" class="group" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:10px;border:1px solid rgba(59,130,246,.35);background:rgba(59,130,246,.08);font-size:14px;font-weight:500;color:#1e293b;text-decoration:none;transition:all .2s ease;" onmouseover="this.style.background='rgba(59,130,246,.18)'" onmouseout="this.style.background='rgba(59,130,246,.08)'">
+            <span style="color:#2563eb;display:inline-block;transition:transform .2s ease;" onmouseover="this.style.transform='translateX(-2px)'" onmouseout="this.style.transform='translateX(0)'">
+              ←
+            </span>
+            <span>Back to Blogs</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
 
-<main id="article" x-data="{tab:'CIA'}" class="max-w-[1880px] mx-auto p-6 sm:text-justify">
-
-  <!-- ── Tab bar ── -->
+<main id="article" x-data="{tab:'CIA'}" class=" mx-auto p-6 sm:text-justify">
   <div class="flex flex-wrap gap-2 mb-8">
     <template x-for="[id,label] of 
     [
@@ -30,14 +57,13 @@
       ['dad','DAD'],
       ['ident','Identification'],
       ['5A','The 5 A'],
-      ['nonrep','Non-Repudiation']
+      ['nonrep','Non-Repudiation'],
     ]">
       <button
         class="tab-btn px-3 py-1.5 rounded text-[15px] bg-white shadow"
        :data-active="tab===id" @click="tab=id" x-text="label"></button>
     </template>
   </div>
-  <!-- ── Confidentiality (expanded) ── -->
   <section x-show="tab==='CIA'" x-transition class="space-y-3 bg-white rounded-xl shadow p-5">
     <h2 class="text-3xl font-bold text-[color:var(--accent)]">Confidentiality:</h2>
     <p class="text-[15px] leading-relaxed">
@@ -469,26 +495,23 @@
         </p>
       </div>
     </dl>
-  </section>
-  <footer class="relative flex items-center justify-center text-[15px] text-slate-500 py-6">
-    <div class="text-center">
-      Executive Use Only<br>
-      2025 © Iron Hulk — All Rights Reserved
+    </section>
+    <div style="position:relative; text-align:center; color:#64748b; font-size:14px; margin-top:24px; padding:18px 0; border-top:1px solid #e5e7eb;">
+      <div>
+        <div style="margin-bottom:6px; font-weight:500;">Executive Use Only</div>
+        <div>2025 © Iron Hulk — All Rights Reserved.</div>
+        <div style="margin-top:6px;">
+          <a href="../blog.html" style="color:#94a3b8; font-size:13px; padding:6px 12px; border-radius:6px; text-decoration:none;">
+            Back to Blogs
+          </a>
+        </div>
+      </div>
+      <a href="#top" style="position:absolute; right:18px; top:50%; transform:translateY(-50%); color:#94a3b8; text-decoration:none;">
+        <svg xmlns="http://www.w3.org/2000/svg" style="width:20px; height:20px;" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M3.707 10.707a1 1 0 01-1.414-1.414l7-7a1 1 0 011.414 0l7 7a1 1 0 11-1.414 1.414L11 4.414V19a1 1 0 11-2 0V4.414L3.707 10.707z" clip-rule="evenodd" />
+        </svg>
+      </a>
     </div>
-    <a href="#top" class="absolute right-6 top-1/2 transform -translate-y-1/2 text-slate-500 hover:text-slate-700">
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M3.707 10.707a1 1 0 01-1.414-1.414l7-7a1 1 0 011.414 0l7 7a1 1 0 11-1.414 1.414L11 4.414V19a1 1 0 11-2 0V4.414L3.707 10.707z" clip-rule="evenodd" />
-      </svg>
-    </a>
-  </footer>
 </main>
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const dateWritten = '14/July/2025';
-    const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
-    const minutes = Math.max(1, Math.ceil(words / 230));
-    document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
-  });
-</script>
 </body>
 </html>
