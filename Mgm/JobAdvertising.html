@@ -8,18 +8,43 @@
   <body style="margin:0; font:16px/1.7 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; color:#22324d; background: radial-gradient(1200px 800px at 20% -10%, rgba(186,230,253,.35), transparent 60%),
   radial-gradient(1000px 700px at 110% 30%, rgba(209,250,229,.35), transparent 60%),
   #f8fafc;">
-    <header id="top" role="banner" style=" background:linear-gradient(120deg, #b3e5fc 0%, #c8e6c9 50%, #e1bee7 100%); color:#1e293b;">
-      <div style="margin:0 auto; padding:15px 18px 10px;">
-        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;">
-          <div style="display:flex; flex-direction:column; gap:4px; flex:1 1 auto; min-width:260px;">
-            <h1 style="margin:0; font-size:clamp(28px,5vw,40px); letter-spacing:.2px; color:#1e293b;">
-                A Leader's Guide to Job Lifecycle Protocols
+    <header id="top" role="banner" style="background:linear-gradient(120deg, #b3e5fc 0%, #c8e6c9 50%, #e1bee7 100%);color:#1e293b;border-bottom:1px solid rgba(30,41,59,.12);">
+      <div style=" margin:0 auto; padding:18px 20px 14px;">
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:18px;">
+          <div style="display:flex; flex-direction:column; gap:10px; flex:1 1 auto; min-width:260px;">
+            <h1 style="margin:0; font-size:clamp(28px,5vw,40px);font-weight:700;letter-spacing:.3px;line-height:1.15;color:#1e293b;">
+              A Leader's Guide to Job Lifecycle Protocols
             </h1>
-            <small id="reading-time" style="color:#475569; font-size:13px;"></small>
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;font-size:13px;color:#475569;">
+              <span>
+                <span style="color:#64748b;">Written by</span>
+                <strong style="color:#1e293b;"> Iron Hulk</strong>
+              </span>
+              <span style="opacity:.5;">•</span>
+              <span>
+                <span style="color:#64748b;">Published</span>
+                <strong> Sep 27, 2025</strong>
+              </span>
+              <span style="opacity:.5;">•</span>
+              <span>
+                <span style="color:#64748b;">Reading time</span>
+                <strong> <span id="reading-time"></span></strong>
+              </span>
+              <span style="opacity:.5;">•</span>
+              <a href="https://twitter.com/IronHulk_0xff" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:#0f172a;font-weight:500;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="#38bdf8" aria-hidden="true">
+                  <path d="M22.46 6c-.77.35-1.6.58-2.46.69a4.27 4.27 0 001.88-2.35 8.48 8.48 0 01-2.7 1.04 4.23 4.23 0 00-7.24 3.86A12 12 0 013 4.79a4.23 4.23 0 001.31 5.64 4.18 4.18 0 01-1.91-.53v.05a4.23 4.23 0 003.39 4.14 4.3 4.3 0 01-1.9.07 4.24 4.24 0 003.95 2.93A8.5 8.5 0 012 19.54a12 12 0 006.29 1.84c7.55 0 11.68-6.26 11.68-11.68 0-.18 0-.36-.01-.54A8.35 8.35 0 0022.46 6z"/>
+                </svg>
+                <span>Iron Hulk</span>
+              </a>
+            </div>
           </div>
-          <div>
-            <a href="../blog.html" style="color:#1e293b; font-size:14px; text-decoration:none;">
-              ← Back to Blogs
+          <div style="padding-top:6px;">
+            <a href="../blog.html" class="group" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:10px;border:1px solid rgba(59,130,246,.35);background:rgba(59,130,246,.08);font-size:14px;font-weight:500;color:#1e293b;text-decoration:none;transition:all .2s ease;" onmouseover="this.style.background='rgba(59,130,246,.18)'" onmouseout="this.style.background='rgba(59,130,246,.08)'">
+              <span style="color:#2563eb;display:inline-block;transition:transform .2s ease;" onmouseover="this.style.transform='translateX(-2px)'" onmouseout="this.style.transform='translateX(0)'">
+                ←
+              </span>
+              <span>Back to Blogs</span>
             </a>
           </div>
         </div>
@@ -787,10 +812,9 @@
         </section>        
       <script>
         document.addEventListener('DOMContentLoaded', () => {
-          const dateWritten = '27/Sep/2025';
           const words   = document.getElementById('content').innerText.trim().split(/\s+/).filter(Boolean).length;
           const minutes = Math.max(1, Math.ceil(words / 230));
-          document.getElementById('reading-time').textContent = `Written: ${dateWritten}: ${minutes} min reading`;
+          document.getElementById('reading-time').textContent = `${minutes} min`;
         });
       </script>
       <div style="position:relative; text-align:center; color:#64748b; font-size:14px; margin-top:24px; padding:18px 0; border-top:1px solid #e5e7eb;">
@@ -799,7 +823,7 @@
           <div>2025 © Iron Hulk — All Rights Reserved.</div>
           <div style="margin-top:6px;">
             <a href="../blog.html" style="color:#94a3b8; font-size:13px; padding:6px 12px; border-radius:6px; text-decoration:none;">
-              ← Back to Blogs
+              Back to Blogs
             </a>
           </div>
         </div>
