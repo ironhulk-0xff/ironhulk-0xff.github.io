@@ -12,44 +12,46 @@
     </style>
   </head>
   <body class="min-h-screen text-slate-100 bg-gradient-to-b from-slate-900 to-slate-950">
-    <header class="relative overflow-hidden bg-gradient-to-br from-sky-700 to-sky-500 text-white">
-      <div class="mx-auto px-5 py-3 flex items-center justify-between gap-4">
-        <div class="flex flex-col gap-1">
-          <h1 class="text-base sm:text-lg font-bold tracking-wide">
-            Protection Mechanisms
-          </h1>
-          <div class="flex flex-wrap items-center gap-2 text-xs text-slate-100/80">
-            <span>
-              Written by <strong class="text-white">Iron Hulk</strong>
-            </span>
-            <span class="opacity-50">•</span>
-            <span>Published Aug 29, 2025</span>
-            <span class="opacity-50">•</span>
-            <span id="reading-time"></span>
-            <span style="opacity:.5;">•</span>
-          <a href="https://twitter.com/IronHulk_0xff" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:#e6e4e4;font-weight:500;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="#38bdf8" aria-hidden="true">
-              <path d="M22.46 6c-.77.35-1.6.58-2.46.69a4.27 4.27 0 001.88-2.35 8.48 8.48 0 01-2.7 1.04 4.23 4.23 0 00-7.24 3.86A12 12 0 013 4.79a4.23 4.23 0 001.31 5.64 4.18 4.18 0 01-1.91-.53v.05a4.23 4.23 0 003.39 4.14 4.3 4.3 0 01-1.9.07 4.24 4.24 0 003.95 2.93A8.5 8.5 0 012 19.54a12 12 0 006.29 1.84c7.55 0 11.68-6.26 11.68-11.68 0-.18 0-.36-.01-.54A8.35 8.35 0 0022.46 6z"/>
-            </svg>
-            <span>Iron Hulk</span>
-          </a>
+    <header id="top" role="banner" style="background:linear-gradient(120deg, rgba(56,189,248,.18) 0%, rgba(34,197,94,.14) 50%, rgba(168,85,247,.16) 100%);color:#e5e7eb;border-bottom:1px solid rgba(148,163,184,.18);">
+      <div style=" margin:0 auto; padding:18px 20px 14px;">
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:18px;">
+          <div style="display:flex; flex-direction:column; gap:10px; flex:1 1 auto; min-width:260px;">
+            <h1 style="margin:0; font-size:clamp(28px,5vw,40px);font-weight:700;letter-spacing:.3px;line-height:1.15;color:#f1f5f9;">
+              Protection Mechanisms
+            </h1>
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;font-size:13px;color:#cbd5e1;">
+              <span>
+                <span style="color:#94a3b8;">Written by</span>
+                <strong style="color:#f1f5f9;"> Iron Hulk</strong>
+              </span>
+              <span style="opacity:.5;">•</span>
+              <span>
+                <span style="color:#94a3b8;">Published</span>
+                <strong> Aug 29, 2025</strong>
+              </span>
+              <span style="opacity:.5;">•</span>
+              <span>
+                <span style="color:#94a3b8;">Reading time</span>
+                <strong> <span id="reading-time"></span></strong>
+              </span>
+              <span style="opacity:.5;">•</span>
+              <a href="https://twitter.com/IronHulk_0xff" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:#e2e8f0;font-weight:500;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="#38bdf8" aria-hidden="true">
+                  <path d="M22.46 6c-.77.35-1.6.58-2.46.69a4.27 4.27 0 001.88-2.35 8.48 8.48 0 01-2.7 1.04 4.23 4.23 0 00-7.24 3.86A12 12 0 013 4.79a4.23 4.23 0 001.31 5.64 4.18 4.18 0 01-1.91-.53v.05a4.23 4.23 0 003.39 4.14 4.3 4.3 0 01-1.9.07 4.24 4.24 0 003.95 2.93A8.5 8.5 0 012 19.54a12 12 0 006.29 1.84c7.55 0 11.68-6.26 11.68-11.68 0-.18 0-.36-.01-.54A8.35 8.35 0 0022.46 6z"/>
+                </svg>
+                <span>Iron Hulk</span>
+              </a>
+            </div>
+          </div>
+          <div style="padding-top:6px;">
+            <a href="../blog.html" class="group" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:10px;border:1px solid rgba(56,189,248,.35);background:rgba(56,189,248,.10);font-size:14px;font-weight:500;color:#e5e7eb;text-decoration:none;transition:all .2s ease;" onmouseover="this.style.background='rgba(56,189,248,.18)'" onmouseout="this.style.background='rgba(56,189,248,.10)'">
+              <span style="color:#38bdf8;display:inline-block;transition:transform .2s ease;" onmouseover="this.style.transform='translateX(-2px)'" onmouseout="this.style.transform='translateX(0)'">
+                ←
+              </span>
+              <span>Back to Blogs</span>
+            </a>
           </div>
         </div>
-        <a href="../blog.html"
-           class="group inline-flex items-center gap-2 rounded-lg border border-blue-300/30 bg-blue-500/10 px-4 py-2 text-sm font-medium text-slate-50 transition hover:bg-blue-500/20">
-          <span class="text-blue-200 transition-transform group-hover:-translate-x-0.5">←</span>
-          <span>Back to Blogs</span>
-        </a>
-      </div>
-      <div class="mx-auto px-5 pb-12 sm:pb-16 pt-4 sm:pt-8 text-center">
-        <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight">
-          Protection Mechanisms
-        </h2>
-        <p class="sm:mt-4 text-slate-100/90 text-base sm:text-lg mx-auto">
-          As security leaders, we live in a world where one control is never enough. Attackers only need to succeed once,
-          while defenders must succeed every single time. That’s why the concept of protection mechanisms sits at the core
-          of cybersecurity strategy.
-        </p>
       </div>
     </header>
     <script>
