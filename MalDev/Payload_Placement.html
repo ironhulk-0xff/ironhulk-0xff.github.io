@@ -7,15 +7,47 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-[#0f172a] text-white font-sans min-h-screen">
-  <!-- Header -->
-  <header class="bg-[#1e293b] p-4 shadow flex items-center justify-between gap-4">
-    <div>
-      <h1 class="text-[17px] font-bold text-blue-400">Payload Placement in PE Files</h1>
-      <small id="reading-time" class="text-xs text-gray-400"></small>
+  
+<header class="relative overflow-hidden border-b border-blue-500/20 bg-gradient-to-r from-[#0b1220] via-[#0f172a] to-[#020617] px-5 py-4 sm:px-7 shadow-lg">
+  <div class="pointer-events-none absolute -top-20 -right-20 h-60 w-60 rounded-full bg-blue-500/15 blur-3xl"></div>
+  <div class="relative flex flex-wrap items-start justify-between gap-4">
+    <div class="min-w-0 space-y-2">
+      <h1 class="text-xl sm:text-2xl font-semibold tracking-tight text-blue-300">
+        Payload Placement in PE Files
+      </h1>
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs sm:text-sm text-gray-400">
+        <span>
+          <span class="text-gray-400">Written by:</span>
+          <span class="font-semibold text-blue-300">Iron Hulk</span>
+        </span>
+        <span class="hidden sm:inline text-gray-600">•</span>
+        <span>
+          <span class="text-gray-400">Published:</span>
+          May 1, 2025 
+        </span>
+        <span class="hidden sm:inline text-gray-600">•</span>
+        <span>
+          <span class="text-gray-400">Reading time:</span>
+          <span id="reading-time"></span>
+        </span>
+        <span>
+          <a href="https://twitter.com/IronHulk_0xff" target="_blank" rel="noopener noreferrer"
+            style="color:#ffffff; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="#60a5fa" aria-hidden="true">
+              <path d="M22.46 6c-.77.35-1.6.58-2.46.69a4.27 4.27 0 001.88-2.35 8.48 8.48 0 01-2.7 1.04 4.23 4.23 0 00-7.24 3.86A12 12 0 013 4.79a4.23 4.23 0 001.31 5.64 4.18 4.18 0 01-1.91-.53v.05a4.23 4.23 0 003.39 4.14 4.3 4.3 0 01-1.9.07 4.24 4.24 0 003.95 2.93A8.5 8.5 0 012 19.54a12 12 0 006.29 1.84c7.55 0 11.68-6.26 11.68-11.68 0-.18 0-.36-.01-.54A8.35 8.35 0 0022.46 6z"/>
+            </svg>
+            <span class="text-gray-400">Iron Hulk</span>
+          </a>
+        </span>
+      </div>
     </div>
-    <a href="../blog.html" class="text-gray-300 text-sm hover:underline">← Back to Blogs</a>
-  </header>
-  <!-- Article -->
+    <a href="../projects.html"
+       class="group inline-flex items-center gap-2 rounded-lg border border-blue-400/25 bg-blue-500/5 px-4 py-2 text-sm text-gray-200 transition hover:bg-blue-500/15">
+      <span class="text-blue-300 transition group-hover:-translate-x-0.5">←</span>
+      <span>Back to Projects</span>
+    </a>
+  </div>
+</header>
   <main id="article" class="p-6 space-y-6">
     <section class="relative rounded-2xl bg-gradient-to-br from-gray-900/80 to-gray-800/90 p-10 shadow-2xl ring-1 ring-blue-400/30 overflow-hidden">
       <div class="absolute inset-0 bg-[url('/images/payload-bg.png')] bg-cover bg-center opacity-5 pointer-events-none"></div>
@@ -243,29 +275,26 @@
         <p class="text-sm text-gray-400 mt-3">Mastering placement + execution techniques is a core skill for any red teamer, malware analyst, or loader developer.</p>
       </div>
     </section>
-  <!-- Footer -->
-  <footer class="relative flex items-center justify-center text-[15px] text-slate-300 py-6">
-    <div class="text-center">
-      Crafted with Passion<br>
-      2025 Iron Hulk — No Rights Reserved.
-      <br>
-      <a href="../blog.html" class="text-slate-300 text-sm px-4 py-2 rounded transition">← Back to Blogs</a>
-    </div>
-    <a href="#top" class="absolute right-6 top-1/2 transform -translate-y-1/2 text-slate-500 hover:text-slate-700">
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M3.707 10.707a1 1 0 01-1.414-1.414l7-7a1 1 0 011.414 0l7 7a1 1 0 11-1.414 1.414L11 4.414V19a1 1 0 11-2 0V4.414L3.707 10.707z" clip-rule="evenodd" />
-      </svg>
-    </a>
-  </footer>
+    <footer class="relative flex items-center justify-center text-[15px] text-slate-300 py-6">
+      <div class="text-center">
+          Crafted With Passion<br>
+          2025 Iron Hulk
+          <br>
+          <a href="../blog.html" class="text-slate-300 text-sm px-4 py-2 rounded transition">Back to Blogs</a>
+      </div>
+      <a href="#top" class="absolute right-6 top-1/2 transform -translate-y-1/2 text-slate-300 hover:text-slate-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M3.707 10.707a1 1 0 01-1.414-1.414l7-7a1 1 0 011.414 0l7 7a1 1 0 11-1.414 1.414L11 4.414V19a1 1 0 11-2 0V4.414L3.707 10.707z" clip-rule="evenodd" />
+          </svg>
+      </a>
+      </footer>
+        <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
+          const minutes = Math.max(1, Math.ceil(words / 230));
+          document.getElementById('reading-time').textContent = `${minutes} min reading`;
+        });
+      </script>
   </main>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const dateWritten = '1/May/2025';
-      const words = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
-      const minutes = Math.max(1, Math.ceil(words / 230));
-      document.getElementById('reading-time').textContent = `Written: ${dateWritten} – ${minutes} min reading`;
-    });
-  </script>
-  <div class="mt-6"></div>
 </body>
 </html>
