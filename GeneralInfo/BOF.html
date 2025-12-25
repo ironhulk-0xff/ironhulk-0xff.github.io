@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iron Hulk – Buffer Overflow </title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0f172a] text-white font-sans min-h-screen">
+  <header class="relative overflow-hidden border-b border-blue-500/20 bg-gradient-to-r from-[#0b1220] via-[#0f172a] to-[#020617] px-5 py-4 sm:px-7 shadow-lg">
+    <div class="pointer-events-none absolute -top-20 -right-20 h-60 w-60 rounded-full bg-blue-500/15 blur-3xl"></div>
+    <div class="relative flex flex-wrap items-start justify-between gap-4">
+      <div class="min-w-0 space-y-2">
+        <h1 class="text-xl sm:text-2xl font-semibold tracking-tight text-blue-300">
+          Buffer Overflow
+        </h1>
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs sm:text-sm text-gray-400">
+          <span>
+            <span class="text-gray-400">Written by:</span>
+            <span class="font-semibold text-blue-300">Iron Hulk</span>
+          </span>
+          <span class="hidden sm:inline text-gray-600">•</span>
+          <span>
+            <span class="text-gray-400">Published:</span>
+            Dec 25, 2025 
+          </span>
+          <span class="hidden sm:inline text-gray-600">•</span>
+          <span>
+            <span class="text-gray-400">Reading time:</span>
+            <span id="reading-time"></span>
+          </span>
+          <span>
+            <a href="https://twitter.com/IronHulk_0xff" target="_blank" rel="noopener noreferrer"
+              style="color:#ffffff; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="#60a5fa" aria-hidden="true">
+                <path d="M22.46 6c-.77.35-1.6.58-2.46.69a4.27 4.27 0 001.88-2.35 8.48 8.48 0 01-2.7 1.04 4.23 4.23 0 00-7.24 3.86A12 12 0 013 4.79a4.23 4.23 0 001.31 5.64 4.18 4.18 0 01-1.91-.53v.05a4.23 4.23 0 003.39 4.14 4.3 4.3 0 01-1.9.07 4.24 4.24 0 003.95 2.93A8.5 8.5 0 012 19.54a12 12 0 006.29 1.84c7.55 0 11.68-6.26 11.68-11.68 0-.18 0-.36-.01-.54A8.35 8.35 0 0022.46 6z"/>
+              </svg>
+              <span class="text-gray-400">Iron Hulk</span>
+            </a>
+          </span>
+        </div>
+      </div>
+      <a href="../blog.html"
+         class="group inline-flex items-center gap-2 rounded-lg border border-blue-400/25 bg-blue-500/5 px-4 py-2 text-sm text-gray-200 transition hover:bg-blue-500/15">
+        <span class="text-blue-300 transition group-hover:-translate-x-0.5">←</span>
+        <span>Back to Blogs</span>
+      </a>
+    </div>
+  </header>
+  <main id="article" class="p-6 space-y-3">
+    <section class="bg-[#1f2937] p-6 rounded-xl shadow-md">
+      <div class="relative rounded-3xl p-8 md:p-12 bg-[#0B0F14] border border-[#1F2A37] shadow-[0_30px_80px_rgba(0,0,0,0.7)] text-slate-100 overflow-hidden">
+        <div class="absolute inset-0 pointer-events-none">
+          <div class="absolute -top-32 -right-32 h-96 w-96 rounded-full bg-cyan-500/10 blur-3xl"></div>
+          <div class="absolute -bottom-32 -left-32 h-96 w-96 rounded-full bg-fuchsia-500/10 blur-3xl"></div>
+        </div>
+        <div class="relative space-y-16">
+          <section>
+            <h2 class="text-4xl md:text-5xl font-black tracking-tight leading-tight">
+              <span>What is a </span>
+              <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-indigo-300 to-fuchsia-300">
+                Buffer Overflow
+              </span>
+            </h2>
+            <p class="mt-6 text-slate-300 leading-relaxed text-lg">
+              A buffer overflow is a software vulnerability that occurs when a program writes more data
+              into a fixed-size memory buffer than it was designed to hold. The excess data spills into
+              adjacent memory regions, potentially overwriting critical program state.
+            </p>
+            <p class="mt-4 text-slate-300 leading-relaxed">
+              This can result in application crashes, data corruption, or most critically, arbitrary
+              code execution by redirecting the program’s control flow.
+            </p>
+            <p class="mt-4 text-slate-300 leading-relaxed">
+              Attackers use buffer overflow problems by filling up a program's memory area more than it can hold. 
+              This changes how the program runs, causing it to act in a way that can harm files or reveal sensitive information. For example, an attacker might add extra code that gives them control over the system.
+            </p>
+            <p class="mt-4 text-slate-300 leading-relaxed">
+              If attackers understand how a program uses memory, they can send input that's too big for the buffer to handle.
+              This lets them change parts of the program where instructions are stored, replacing them with their own commands. For example, they might change a pointer, which is like a sign that shows where something else is in memory, to point to their own harmful code, taking control of the program.
+            </p>
+            <div class="mt-6 grid md:grid-cols-2 gap-6">
+              <pre class="rounded-xl bg-[#020617] border border-[#1F2A37] p-5 text-sm text-slate-200 overflow-x-auto">
+<code>// Character buffer
+char buffer[64];   // 63 chars + null terminator</code>
+</pre>
+
+<pre class="rounded-xl bg-[#020617] border border-[#1F2A37] p-5 text-sm text-slate-200 overflow-x-auto">
+<code>// Integer buffer
+int data_buffer[256];</code>
+</pre>
+          </div>
+          </section>
+          <section>
+            <h2 class="text-4xl md:text-5xl font-black tracking-tight leading-tight">
+              <span>Types of </span>
+              <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-indigo-300 to-fuchsia-300">
+                Buffer Overflows
+              </span>
+            </h2>
+            <div class="mt-10 space-y-6">
+              <h3 class="text-2xl font-bold text-cyan-300">
+                1. Stack-Based Buffer Overflow
+              </h3>
+              <p class=" text-slate-300 leading-relaxed">
+                This is the most common and historically significant buffer overflow type. It occurs
+                in stack memory and allows attackers to overwrite local variables, saved frame pointers,
+                or return addresses.
+              </p>
+              <ul class="list-disc list-inside text-slate-300 space-y-2">
+                <li>Occurs in the call stack</li>
+                <li>Overwrites return addresses and control data</li>
+                <li>Directly enables control-flow hijacking</li>
+              </ul>
+              <pre class="rounded-xl bg-[#020617] border border-[#1F2A37] p-6 text-sm text-slate-200 overflow-x-auto">
+<code>void vulnerable_function(char *input)
+{
+  char buffer[64];          // Stack buffer
+  strcpy(buffer, input);    // No bounds checking
+}</code>
+</pre>
+<pre class="rounded-xl bg-[#020617] border border-[#1F2A37] p-6 text-sm text-slate-200 overflow-x-auto">
+<code>High Memory Addresses
+┌────────────────────┐
+│  Function A Frame  │
+├────────────────────┤
+│  Return Address    │ ← Hijack target
+├────────────────────┤
+│  Saved EBP         │
+├────────────────────┤
+│  Local Variables   │
+├────────────────────┤
+│  buffer[64]        │ ← Overflow starts here
+└────────────────────┘
+Low Memory Addresses</code>
+</pre>
+            </div>
+            <div class="mt-14 space-y-6">
+              <h3 class="text-2xl font-bold text-fuchsia-300">
+                2. Heap-Based Buffer Overflow
+              </h3>
+              <p class=" text-slate-300 leading-relaxed">
+                Heap-based buffer overflows occur in dynamically allocated memory regions. Instead of
+                overwriting return addresses directly, they corrupt heap metadata or adjacent objects,
+                enabling advanced exploitation techniques.
+              </p>
+              <ul class="list-disc list-inside text-slate-300 space-y-2">
+                <li>Affects memory allocated via <code>malloc</code>, <code>new</code>, etc.</li>
+                <li>Targets heap structures and object pointers</li>
+                <li>Common in long-running services and daemons</li>
+              </ul>
+
+              <pre class="rounded-xl bg-[#020617] border border-[#1F2A37] p-6 text-sm text-slate-200 overflow-x-auto">
+<code>char *buffer = (char *)malloc(64);
+strcpy(buffer, large_input);   // Overflows into adjacent heap memory</code>
+              </pre>
+            </div>
+          </section>
+
+        </div>
+      </div>
+      <br>
+      <div class="relative rounded-3xl p-6 sm:p-8 md:p-10 bg-[#0B0F14] text-slate-100 border border-[#1F2A37] shadow-[0_24px_70px_rgba(0,0,0,0.7)] overflow-hidden">
+        <div class="absolute inset-0 pointer-events-none">
+          <div class="absolute -top-24 -right-24 sm:-top-32 sm:-right-32 h-72 w-72 sm:h-96 sm:w-96 rounded-full bg-teal-500/10 blur-3xl"></div>
+          <div class="absolute -bottom-24 -left-24 sm:-bottom-32 sm:-left-32 h-72 w-72 sm:h-96 sm:w-96 rounded-full bg-sky-500/10 blur-3xl"></div>
+        </div>
+        <div class="relative space-y-8">
+          <div class="flex flex-col gap-4">
+            <div class="flex items-center gap-4">
+              <div class="h-11 w-11 rounded-2xl bg-white/5 border border-white/10 grid place-items-center shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-teal-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15h18M9 3v18m6-18v18" />
+                </svg>
+              </div>
+              <h2 class="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-tight">
+                Understanding the
+                <span class="block sm:inline text-transparent bg-clip-text bg-gradient-to-r from-teal-200 via-sky-200 to-indigo-200">
+                  Runtime Stack
+                </span>
+              </h2>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-3 py-1 text-xs font-semibold rounded-full bg-white/5 border border-white/10">
+                Call Stack
+              </span>
+              <span class="px-3 py-1 text-xs font-semibold rounded-full bg-white/5 border border-white/10">
+                Stack Frames
+              </span>
+              <span class="px-3 py-1 text-xs font-semibold rounded-full bg-white/5 border border-white/10">
+                Control Flow
+              </span>
+            </div>
+          </div>
+          <p class="text-slate-300 leading-relaxed text-base sm:text-lg ">
+            To understand stack-based buffer overflow attacks, you first need a clear
+            picture of how a running process uses the stack to manage execution.
+          </p>
+          <div class="grid gap-6 md:grid-cols-2">
+            <div class="rounded-2xl p-5 sm:p-6 bg-white/5 border border-white/10">
+              <div class="flex items-start gap-4">
+                <span class="mt-2 h-2.5 w-2.5 rounded-full bg-teal-300 shrink-0"></span>
+                <div class="space-y-3">
+                  <h3 class="text-lg font-bold">What “the stack” means</h3>
+                  <p class="text-slate-300 leading-relaxed text-sm sm:text-base">
+                    A call stack is like the detailed instructions a program follows, written in a special language called assembler. 
+                    It's a list of variables and frames that show the computer the correct order to carry out tasks. Each time a function starts running, it gets a frame on the stack, 
+                    and the function that's currently being worked on is at the top of the stack.
+                  </p>
+                  <ul class="list-disc list-inside text-slate-300 text-sm sm:text-base space-y-1">
+                    <li><b>Stack Pointer:</b> Points to the top of the process call stack.</li>
+                    <li><b>Instruction Pointer:</b> Points to the address of the next CPU instruction to be executed</li>
+                    <li><b>Base Pointer (BP):</b> Points to the base of the current stackframe</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="rounded-2xl p-5 sm:p-6 bg-white/5 border border-white/10">
+              <div class="flex items-start gap-4">
+                <span class="mt-2 h-2.5 w-2.5 rounded-full bg-sky-300 shrink-0"></span>
+                <div class="space-y-3">
+                  <h3 class="text-lg font-bold">Why it matters</h3>
+                  <p class="text-slate-300 leading-relaxed text-sm sm:text-base">
+                    Stack frames contain both data and control information.
+                    When a buffer overflows, execution flow can be redirected.
+                  </p>
+                  <div class="rounded-xl bg-[#020617] border border-[#1F2A37] p-4 text-xs sm:text-sm overflow-x-auto">
+<pre class="text-slate-200"><code>High Addresses
+┌───────────────┐
+│ Return Addr   │ ← control
+├───────────────┤   flow target
+│ Saved Frame   │
+├───────────────┤
+│ Locals        │
+├───────────────┤
+│ buffer[...]   │ ← overflow
+└───────────────┘   starts here
+Low Addresses</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <section class="mt-12">
+        <h2 class="text-3xl md:text-4xl font-black tracking-tight leading-tight">
+          Vulnerable C++ Example:
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-indigo-300 to-fuchsia-300">
+            Stack Buffer Overflow
+          </span>
+        </h2>
+        <p class="mt-4 text-slate-300 leading-relaxed">
+          This example shows a classic mistake: copying user-controlled data into a fixed-size stack buffer
+          without checking the input length. If the input exceeds the buffer size, it overwrites adjacent
+          stack memory and may corrupt control data (depending on build settings and mitigations).
+        </p>
+        <div class="mt-6 grid gap-6 lg:grid-cols-2">
+          <div class="rounded-2xl bg-[#020617] border border-[#1F2A37] p-6 overflow-hidden">
+            <div class="flex items-center justify-between gap-3">
+              <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Vulnerable</p>
+              <span class="px-2.5 py-1 rounded-full text-xs bg-rose-500/10 border border-rose-500/20 text-rose-200">
+                No bounds check
+              </span>
+            </div>
+            <pre class="mt-4 text-sm text-slate-200 overflow-x-auto whitespace-pre rounded-xl bg-[#020617] border border-[#1F2A37] p-5">
+              <code>
+#include &lt;stdio.h&gt;
+
+static void hi(void);
+int main(void)
+{
+  for (;;)
+  {
+    hi();
+  }
+}
+
+static void hi(void)
+{
+  char buffer[5];            // tiny stack buffer: only 5 bytes total
+  int i = 0;
+  int ch;
+
+  puts("Say something:");
+
+  /* Read until newline/EOF, but never check i against buffer size */
+  while ((ch = getchar()) != '\n' && ch != EOF) 
+  {
+    buffer[i++] = (char)ch;  // ❌ writes past buffer when i >= 5
+  }
+
+  buffer[i] = '\0';          // ❌ also out-of-bounds if i >= 5
+
+  printf("You said: %s\n", buffer);
+  printf("\n");
+}</code> </pre>
+            <div class="mt-6 rounded-xl bg-rose-500/10 border border-rose-500/20 p-5">
+              <h4 class="text-sm font-bold uppercase tracking-wider text-rose-300">
+                Why this code is vulnerable
+              </h4>
+              <ul class="mt-4 space-y-3 text-slate-200 text-sm leading-relaxed list-disc list-inside">
+                <li>
+                  The buffer has a fixed size of <code>5</code> bytes, which means it can store
+                  at most <b>4 characters plus a null terminator</b>.
+                </li>
+                <li>
+                  The input loop continuously writes characters into <code>buffer</code> using
+                  <code>buffer[i++]</code> without checking whether <code>i</code> is still within
+                  the valid range of the buffer.
+                </li>
+                <li>
+                  If the user types more than 4 characters before pressing Enter,
+                  subsequent writes occur <b>past the end of the buffer</b>, overwriting
+                  adjacent stack memory.
+                </li>
+                <li>
+                  The null terminator assignment
+                  (<code>buffer[i] = '\0'</code>) can also write out of bounds when
+                  <code>i &gt;= sizeof(buffer)</code>, causing additional memory corruption.
+                </li>
+                <li>
+                  Because the buffer lives on the stack, this overflow can corrupt nearby
+                  local variables, saved frame pointers, or even the function’s return address.
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="rounded-2xl bg-[#020617] border border-[#1F2A37] p-6 overflow-hidden">
+            <div class="flex items-center justify-between gap-3">
+              <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                Safer approach
+              </p>
+              <span class="px-2.5 py-1 rounded-full text-xs bg-emerald-500/10 border border-emerald-500/20 text-emerald-200">
+                Bounds enforced, Length checked, Overflow prevented
+              </span>
+            </div>
+            <pre class="mt-4 text-sm text-slate-200 overflow-x-auto whitespace-pre rounded-xl bg-[#020617] border border-[#1F2A37] p-5">
+              <code>
+#include &lt;stdio.h&gt;
+
+static void hi(void);
+int main(void)
+{
+  for (;;) 
+  {
+    hi();
+  }
+}
+
+static void hi(void)
+{
+  char buffer[5];
+  int i = 0;
+  int ch;
+  printf("Say something: ");
+  while ((ch = getchar()) != '\n' && ch != EOF) 
+  {
+    if (i < (int)sizeof(buffer) - 1) {
+      buffer[i++] = (char)ch;
+    }
+    else 
+    {
+      // Buffer full: keep reading to discard extra input
+      // until newline/EOF so next iteration starts clean.
+    }
+  }
+  buffer[i] = '\0';
+  printf("You said: %s\n", buffer);
+  printf("\n");
+}</code> </pre>
+            <div class="mt-6 rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-5">
+              <h4 class="text-sm font-bold uppercase tracking-wider text-emerald-300">
+                Why this approach is safe
+              </h4>
+              <ul class="mt-4 space-y-3 text-slate-200 text-sm leading-relaxed list-disc list-inside">
+                <li>
+                  The buffer has a fixed, known size (<code>char buffer[5]</code>), which allows the program
+                  to strictly control how many bytes may be written.
+                </li>
+                <li>
+                  Every write into the buffer is guarded by a bounds check
+                  (<code>i &lt; sizeof(buffer) - 1</code>), ensuring there is always space reserved
+                  for the null terminator.
+                </li>
+                <li>
+                  Once the buffer is full, additional input characters are deliberately discarded
+                  instead of being written to memory, preventing any overwrite of adjacent stack data.
+                </li>
+                <li>
+                  The string is always null-terminated at a valid index, guaranteeing that
+                  string operations such as <code>printf("%s")</code> remain well-defined.
+                </li>
+                <li>
+                  Because no writes occur outside the buffer boundary, nearby stack variables,
+                  saved frame pointers, and return addresses remain intact.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="mt-6">
+        <div class="rounded-2xl bg-[#020617] border border-[#1F2A37] p-6 overflow-hidden">
+          <h2 class="text-3xl md:text-4xl font-black tracking-tight leading-tight">
+            Common C/C++ Functions
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-300 via-orange-300 to-amber-300">
+              Vulnerable to Buffer Overflow
+            </span>
+          </h2>
+          <p class="mt-4 text-slate-300 leading-relaxed">
+            The following C/C++ standard library functions are inherently dangerous when used with
+            attacker-controlled or unbounded input. They perform little to no bounds checking and
+            can easily overwrite adjacent memory, leading to stack or heap corruption.
+          </p>
+          <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div class="rounded-2xl bg-[#020617] border border-[#1F2A37] p-6">
+              <h3 class="text-lg font-bold text-rose-300">Direct copy / input</h3>
+              <ul class="mt-4 space-y-2 text-slate-300 list-disc list-inside">
+                <li><code>gets</code></li>
+                <li><code>strcpy</code></li>
+                <li><code>strcat</code></li>
+                <li><code>sprintf</code></li>
+              </ul>
+            </div>
+            <div class="rounded-2xl bg-[#020617] border border-[#1F2A37] p-6">
+              <h3 class="text-lg font-bold text-orange-300">Formatted input</h3>
+              <ul class="mt-4 space-y-2 text-slate-300 list-disc list-inside">
+                <li><code>scanf</code></li>
+                <li><code>fscanf</code></li>
+                <li><code>vscanf</code></li>
+                <li><code>vfscanf</code></li>
+                <li><code>vsscanf</code></li>
+              </ul>
+            </div>
+            <div class="rounded-2xl bg-[#020617] border border-[#1F2A37] p-6">
+              <h3 class="text-lg font-bold text-amber-300">String read / copy</h3>
+              <ul class="mt-4 space-y-2 text-slate-300 list-disc list-inside">
+                <li><code>vsprintf</code></li>
+                <li><code>streadd</code></li>
+                <li><code>strecpy</code></li>
+              </ul>
+            </div>
+          </div>
+          <div class="mt-8 rounded-xl bg-rose-500/10 border border-rose-500/20 p-5 ">
+            <p class="text-slate-200 leading-relaxed text-sm sm:text-base">
+              <b class="text-rose-300">Important:</b> These functions are not vulnerable because of misuse,
+              they are dangerous by design. None of them know the size of the destination buffer unless the
+              programmer enforces strict external checks.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section class="mt-6">
+        <div class="rounded-2xl bg-[#020617] border border-[#1F2A37] p-6 overflow-hidden">
+          <h2 class="text-3xl md:text-4xl font-black tracking-tight leading-tight">
+            Typical Stack Buffer Overflow
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-fuchsia-300 to-rose-300">
+              Exploitation Workflow
+            </span>
+          </h2>
+          <p class="mt-4 text-slate-300 leading-relaxed">
+            This section outlines the <b>general methodology attackers historically followed</b> when
+            exploiting stack-based buffer overflows. The goal is to explain the reasoning behind each phase,
+            not to provide an exploit recipe.
+          </p>
+          <div class="mt-8 space-y-6 ">
+            <div class="rounded-2xl bg-[#020617] border border-[#1F2A37] p-6">
+              <h3 class="text-lg font-bold text-indigo-300">1. Fuzzing Input Size</h3>
+              <p class="mt-2 text-slate-300 leading-relaxed">
+                Attackers begin by supplying inputs of increasing size to determine when the application
+                crashes. A crash confirms that user-controlled data has exceeded a memory boundary and that
+                the vulnerable code path is reachable.
+              </p>
+            </div>
+            <div class="rounded-2xl bg-[#020617] border border-[#1F2A37] p-6">
+              <h3 class="text-lg font-bold text-fuchsia-300">2. Identifying Control Over Execution</h3>
+              <p class="mt-2 text-slate-300 leading-relaxed">
+                After a crash is reproducible, attackers analyze whether critical control data, such as the
+                instruction pointer has been overwritten with user-controlled values. 
+              </p>
+            </div>
+            <div class="rounded-2xl bg-[#020617] border border-[#1F2A37] p-6">
+              <h3 class="text-lg font-bold text-rose-300">3. Calculating the Exact Offset</h3>
+              <p class="mt-2 text-slate-300 leading-relaxed">
+                Attackers then determine the exact offset required to reach and overwrite critical control 
+                data in memory. This allows them to understand how many bytes of input are needed to overwrite 
+                the instruction pointer (EIP).
+              </p>
+            </div>
+            <div class="rounded-2xl bg-[#020617] border border-[#1F2A37] p-6">
+              <h3 class="text-lg font-bold text-amber-300">4. Locating Usable Memory Space</h3>
+              <p class="mt-2 text-slate-300 leading-relaxed">
+                At this stage, attackers evaluate where their input resides in memory and how much contiguous
+                space is available. This determines whether additional data can be stored reliably after the
+                overflow occurs.
+              </p>
+            </div>
+            <div class="rounded-2xl bg-[#020617] border border-[#1F2A37] p-6">
+              <h3 class="text-lg font-bold text-orange-300">5. Identifying Bad Characters</h3>
+              <p class="mt-2 text-slate-300 leading-relaxed">
+                Many programs modify or reject certain characters during input handling. Attackers test how
+                different byte values behave to understand which characters terminate input, and remove them
+                when creating a payload.
+              </p>
+            </div>
+            <div class="rounded-2xl bg-[#020617] border border-[#1F2A37] p-6">
+              <h3 class="text-lg font-bold text-cyan-300">6. Evaluating Security Protections</h3>
+              <p class="mt-2 text-slate-300 leading-relaxed">
+                Modern binaries include mitigations such as stack cookies, DEP/NX, ASLR, SafeSEH, and CFG.
+                Attackers assess which protections are enabled and how they impact the feasibility of
+                exploitation.
+              </p>
+            </div>
+            <div class="rounded-2xl bg-[#020617] border border-[#1F2A37] p-6">
+              <h3 class="text-lg font-bold text-sky-300">7. Identifying Redirection Opportunities</h3>
+              <p class="mt-2 text-slate-300 leading-relaxed">
+                If execution control is theoretically possible, attackers look for existing instruction
+                sequences or stable code paths that could be reused to redirect execution without injecting
+                new code.
+              </p>
+            </div>
+            <div class="rounded-2xl bg-[#020617] border border-[#1F2A37] p-6">
+              <h3 class="text-lg font-bold text-emerald-300">8. Payload Strategy (High-Level)</h3>
+              <p class="mt-2 text-slate-300 leading-relaxed">
+                In the end, attackers figure out how to use controlled execution by looking at how memory is organized, 
+                what inputs are allowed, and what protections are in place. Whether a payload works and how much damage 
+                it can do depends a lot on the system being targeted and the defenses it has. However, the mane goal is 
+                to take full control of the targeted system.
+              </p>
+            </div>
+          </div>
+          <div class="mt-8 rounded-xl bg-indigo-500/10 border border-indigo-500/20 p-5 ">
+            <p class="text-slate-200 leading-relaxed text-sm sm:text-base">
+              <b class="text-indigo-300">Key takeaway:</b> Exploiting a stack buffer overflow is a structured,
+              multi-stage process. Modern mitigations often break this chain early, which is why many buffer
+              overflows today result in crashes rather than reliable code execution.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section class="mt-12">
+        <h2 class="text-3xl md:text-4xl font-black tracking-tight leading-tight">
+          Hands-On
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-cyan-300 to-sky-300">
+            Practice Labs
+          </span>
+        </h2>
+        <p class="mt-4 text-slate-300 leading-relaxed">
+          Understanding buffer overflows conceptually is important, but real learning happens through
+          controlled, ethical, and well-designed practice environments. The following labs are intended
+          for <b>educational and defensive learning purposes</b>, allowing students to observe how memory
+          corruption occurs and how modern protections affect exploitability.
+        </p>
+        <div class="mt-8 grid gap-6 ">
+          <div class="rounded-2xl bg-[#020617] border border-[#1F2A37] p-6">
+            <h3 class="text-lg font-bold text-emerald-300">Labs</h3>
+            <p class="mt-2 text-slate-300 text-sm leading-relaxed">
+              Labs focusing on basic stack overflows, crashes, and understanding memory layout
+              without bypassing advanced protections.
+            </p>
+            <ul class="mt-4 space-y-2 text-slate-300 text-sm list-disc list-inside">
+              <li><a href="https://www.exploit-db.com/apps/687ef6f72dcbbf5b2506e80a375377fa-freefloatftpserver.zip" class="hover:text-emerald-300 underline">Freefloat FTP Server 1.0</a></li>
+              <li><a href="https://tryhackme.com/room/brainpan" class="hover:text-emerald-300 underline">Brainpan 1</a></li>
+              <li><a href="https://tryhackme.com/room/gatekeeper" class="hover:text-emerald-300 underline">Gatekeeper</a></li>
+              <li><a href="https://www.exploit-db.com/apps/0ffe5385147edd1f9e7b460c6d7cb0a6-minishare-1.4.1.zip" class="hover:text-emerald-300 underline">MiniShare 1.4.1</a></li>
+              <li><a href="https://www.exploit-db.com/apps/9fceb6fefd0f3ca1a8c36e97b6cc925d-PCMan.7z" class="hover:text-emerald-300 underline">PCMan FTP server 2.0.7</a></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <section class="mt-12">
+        <h2 class="text-3xl md:text-4xl font-black tracking-tight leading-tight">
+          References &
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-300 via-indigo-300 to-fuchsia-300">
+            Further Reading
+          </span>
+        </h2>
+        <p class="mt-4 max-w-4xl text-slate-300 leading-relaxed">
+          The following references provide authoritative explanations, historical context, and defensive
+          insights related to buffer overflows, memory corruption, and modern exploitation mitigations.
+          They are recommended for readers who want to deepen their understanding beyond this article.
+        </p>
+        <div class="mt-8 space-y-4 max-w-5xl">
+          <a href="http://phrack.org/issues/49/14.html" target="_blank" rel="noopener noreferrer" class="block rounded-xl bg-[#020617] border border-[#1F2A37] p-5 hover:border-indigo-400/40 hover:bg-[#020617]/80 transition">
+            <p class="text-slate-200">
+              <span class="font-semibold text-indigo-300">
+                Smashing the Stack for Fun and Profit
+              </span>
+            </p>
+          </a>
+          <a href="https://nostarch.com/hacking2.htm" target="_blank" rel="noopener noreferrer" class="block rounded-xl bg-[#020617] border border-[#1F2A37] p-5 hover:border-indigo-400/40 hover:bg-[#020617]/80 transition">
+            <p class="text-slate-200">
+              <span class="font-semibold text-indigo-300">
+                The Art of Exploitation
+              </span>
+            </p>
+          </a>
+        </div>
+        <div class="mt-8 rounded-xl bg-indigo-500/10 border border-indigo-500/20 p-5 max-w-4xl">
+          <p class="text-slate-200 leading-relaxed text-sm sm:text-base">
+            <b class="text-indigo-300">Tip:</b> When studying memory corruption topics, prioritize sources
+            that explain both the vulnerability mechanics and the defensive controls that mitigate them.
+            This balanced approach leads to better secure coding practices.
+          </p>
+        </div>
+      </section>
+    </section>
+  </main>
+  <footer class="relative flex items-center justify-center text-[15px] text-slate-300 py-6">
+    <div class="text-center">
+      Crafted with Passion<br>
+      2025 Iron Hulk
+      <br>
+      <a href="../blog.html" class="text-slate-300 text-sm px-4 py-2 rounded transition">Back to Blogs</a>
+    </div>
+    <a href="#top" class="absolute right-6 top-1/2 transform -translate-y-1/2 text-slate-300 hover:text-slate-700">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M3.707 10.707a1 1 0 01-1.414-1.414l7-7a1 1 0 011.414 0l7 7a1 1 0 11-1.414 1.414L11 4.414V19a1 1 0 11-2 0V4.414L3.707 10.707z" clip-rule="evenodd" />
+      </svg>
+    </a>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const words   = document.getElementById('article').innerText.trim().split(/\s+/).filter(Boolean).length;
+      const minutes = Math.max(1, Math.ceil(words / 230));
+      document.getElementById('reading-time').textContent = `${minutes} min`;
+    });
+  </script>
+</body>
+</html>
