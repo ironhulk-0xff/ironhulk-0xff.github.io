@@ -198,7 +198,7 @@
                     </div>
                     <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20">
                         <p class="font-semibold text-indigo-400">4) APC Queueing and Targeting</p>
-                        <p class="mt-1 leading-relaxed">The process is paused, waiting for an event (Ex: I/O operation).</p>
+                        <p class="mt-1 leading-relaxed">An APC is queued to a target thread. It will execute only when that thread enters an alertable wait (EX: <code>SleepEx/WaitForSingleObjectEx</code> with alertable enabled).</p>
                     </div>
                     <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20 sm:col-span-2">
                         <p class="font-semibold text-indigo-400">5) Trigger or await an alertable state and execute</p>
