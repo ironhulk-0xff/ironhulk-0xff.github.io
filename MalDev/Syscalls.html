@@ -427,122 +427,312 @@
             <button class="absolute top-2 right-2 bg-indigo-500 text-white px-3 py-1 rounded text-sm" onclick="copyCode(this)">Copy</button>
             <pre class=" overflow-x-auto bg-gray-900 p-4 rounded-lg shadow-inner ">
             <pre><code class="language-cpp text-green-300">
-// Project Name: Syscall-SSN Enumerator
-// By: Iron Hulk
+// -------------------------------------
+// Project Name: Syscall-SSN Enumerator |
+// By: Iron Hulk                        |
+// -------------------------------------
 
+#define WIN32_LEAN_AND_MEAN
 #include &lt;windows.h&gt;
-#include &lt;iostream&gt;
-#include &lt;vector&gt;
-#include &lt;string&gt;
-#include &lt;sstream&gt;
-#include &lt;iomanip&gt;
+#include &lt;winternl.h&gt;
 
-typedef LONG (NTAPI* RtlGetVersionPtr)(PRTL_OSVERSIONINFOEXW);
+#include &lt;iostream&gt;
+#include &lt;iomanip&gt;
+#include &lt;sstream&gt;
+#include &lt;string&gt;
+#include &lt;vector&gt;
+
+// ------------------------------------------------------------
+// Types
+// ------------------------------------------------------------
+typedef LONG(NTAPI* RtlGetVersionPtr)(PRTL_OSVERSIONINFOEXW);
 
 struct ExportInfo {
     std::string name;
     DWORD       ssn;
 };
 
+// ------------------------------------------------------------
+// SSN Enumeration (UNCHANGED LOGIC)
+// ------------------------------------------------------------
 std::vector&lt;ExportInfo&gt; GetNtExportsSSN() {
     HMODULE hNtdll = LoadLibraryW(L"ntdll.dll");
     if (!hNtdll) throw std::runtime_error("LoadLibrary failed");
 
-    auto dos     = reinterpret_cast&lt;PIMAGE_DOS_HEADER&gt;(hNtdll);
-    auto nt      = reinterpret_cast&lt;PIMAGE_NT_HEADERS&gt;(
-                        reinterpret_cast&lt;BYTE*&gt;(hNtdll) + dos-&gt;e_lfanew);
-    auto exports = reinterpret_cast&lt;PIMAGE_EXPORT_DIRECTORY&gt;(
-                        reinterpret_cast&lt;BYTE*&gt;(hNtdll) +
-                        nt-&gt;OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress);
+    auto dos = (IMAGE_DOS_HEADER*)hNtdll;
+    auto nt = (IMAGE_NT_HEADERS*)((BYTE*)hNtdll + dos-&gt;e_lfanew);
+    auto exports = (IMAGE_EXPORT_DIRECTORY*)((BYTE*)hNtdll +
+        nt-&gt;OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress);
 
-    auto names = reinterpret_cast&lt;DWORD*&gt;(
-                    reinterpret_cast&lt;BYTE*&gt;(hNtdll) + exports-&gt;AddressOfNames);
-    auto funcs = reinterpret_cast&lt;DWORD*&gt;(
-                    reinterpret_cast&lt;BYTE*&gt;(hNtdll) + exports-&gt;AddressOfFunctions);
-    auto ords  = reinterpret_cast&lt;WORD*&gt;(
-                    reinterpret_cast&lt;BYTE*&gt;(hNtdll) + exports-&gt;AddressOfNameOrdinals);
+    auto names = (DWORD*)((BYTE*)hNtdll + exports-&gt;AddressOfNames);
+    auto funcs = (DWORD*)((BYTE*)hNtdll + exports-&gt;AddressOfFunctions);
+    auto ords = (WORD*)((BYTE*)hNtdll + exports-&gt;AddressOfNameOrdinals);
 
     std::vector&lt;ExportInfo&gt; list;
-    for (DWORD i = 0; i &lt; exports-&gt;NumberOfNames; ++i) {
-        const char* fnName = reinterpret_cast&lt;const char*&gt;(hNtdll) + names[i];
-        DWORD       rva    = funcs[ords[i]];
-        BYTE*       stub   = reinterpret_cast&lt;BYTE*&gt;(hNtdll) + rva;
+    for (DWORD i = 0; i &lt; exports-&gt;NumberOfNames; i++) {
+        const char* fnName = (const char*)hNtdll + names[i];
+        DWORD       rva = funcs[ords[i]];
+        BYTE* stub = (BYTE*)hNtdll + rva;
 
-        /* mov r10, rcx ; mov eax, imm32 ; syscall */
-        if (stub[0] == 0x4C &amp;&amp; stub[1] == 0x8B &amp;&amp; stub[2] == 0xD1 &amp;&amp; stub[3] == 0xB8) {
-            DWORD ssn = *reinterpret_cast&lt;DWORD*&gt;(stub + 4);
+        // mov r10,rcx; mov eax,imm32; syscall
+        if (stub[0] == 0x4C && stub[1] == 0x8B && stub[2] == 0xD1 && stub[3] == 0xB8) {
+            DWORD ssn = *(DWORD*)(stub + 4);
             list.push_back({ fnName, ssn });
         }
     }
     return list;
 }
 
-int main() {
-    OSVERSIONINFOEXW osvi = {};
-    osvi.dwOSVersionInfoSize = sizeof(osvi);
+// ------------------------------------------------------------
+// Registry Helpers (C++11-friendly)
+// ------------------------------------------------------------
+static bool RegGetStringView(
+    HKEY root,
+    const wchar_t* subKey,
+    const wchar_t* valueName,
+    REGSAM viewFlag,
+    std::wstring& out
+) {
+    out.clear();
 
-    if (auto hNtDll = GetModuleHandleW(L"ntdll.dll")) {
-        auto rtlGetVersion = reinterpret_cast&lt;RtlGetVersionPtr&gt;(
-                                GetProcAddress(hNtDll, "RtlGetVersion"));
-        if (rtlGetVersion)
-            rtlGetVersion(&amp;osvi);
-        else
-            GetVersionExW(reinterpret_cast&lt;OSVERSIONINFOW*&gt;(&amp;osvi)); // legacy
+    HKEY hKey = nullptr;
+    if (RegOpenKeyExW(root, subKey, 0, KEY_QUERY_VALUE | viewFlag, &hKey) != ERROR_SUCCESS)
+        return false;
+
+    DWORD type = 0;
+    DWORD cb = 0;
+
+    LONG st = RegQueryValueExW(hKey, valueName, nullptr, &type, nullptr, &cb);
+    if (st != ERROR_SUCCESS || type != REG_SZ || cb &lt; sizeof(wchar_t)) {
+        RegCloseKey(hKey);
+        return false;
     }
 
-    std::wstring osName;
-    if (osvi.dwMajorVersion == 10)
-        osName = (osvi.dwBuildNumber &gt;= 22000) ? L"Windows 11" : L"Windows 10";
-    else if (osvi.dwMajorVersion == 6 &amp;&amp; osvi.dwMinorVersion == 3) osName = L"Windows 8.1";
-    else if (osvi.dwMajorVersion == 6 &amp;&amp; osvi.dwMinorVersion == 2) osName = L"Windows 8";
-    else if (osvi.dwMajorVersion == 6 &amp;&amp; osvi.dwMinorVersion == 1) osName = L"Windows 7";
-    else                                                         osName = L"Windows (unknown)";
+    std::wstring buf(cb / sizeof(wchar_t), L'\0');
+    st = RegQueryValueExW(hKey, valueName, nullptr, &type, reinterpret_cast&lt;LPBYTE&gt;(&buf[0]), &cb);
+    RegCloseKey(hKey);
 
-    std::wcout &lt;&lt; L"OS Name:    " &lt;&lt; osName &lt;&lt; L"\n"
-                &lt;&lt; L"OS Version: "
-                &lt;&lt; osvi.dwMajorVersion &lt;&lt; L'.'
-                &lt;&lt; osvi.dwMinorVersion &lt;&lt; L" (Build "
-                &lt;&lt; osvi.dwBuildNumber  &lt;&lt; L")\n";
+    if (st != ERROR_SUCCESS || type != REG_SZ)
+        return false;
 
-    BOOL isWow64 = FALSE;
-    auto fnIsWow64 = reinterpret_cast&lt;BOOL (WINAPI*)(HANDLE,PBOOL)&gt;(
-                        GetProcAddress(GetModuleHandleA("kernel32"), "IsWow64Process"));
+    if (!buf.empty() && buf.back() == L'\0') buf.pop_back();
+    out = buf;
+    return true;
+}
 
-#ifdef _WIN64
-    std::cout &lt;&lt; "Process architecture: x64\nOS architecture:      x64\n";
+static bool RegGetDWORDView(
+    HKEY root,
+    const wchar_t* subKey,
+    const wchar_t* valueName,
+    REGSAM viewFlag,
+    DWORD& out
+) {
+    out = 0;
+
+    HKEY hKey = nullptr;
+    if (RegOpenKeyExW(root, subKey, 0, KEY_QUERY_VALUE | viewFlag, &hKey) != ERROR_SUCCESS)
+        return false;
+
+    DWORD type = 0;
+    DWORD cb = sizeof(DWORD);
+    DWORD data = 0;
+
+    LONG st = RegQueryValueExW(hKey, valueName, nullptr, &type, reinterpret_cast&lt;LPBYTE&gt;(&data), &cb);
+    RegCloseKey(hKey);
+
+    if (st != ERROR_SUCCESS || type != REG_DWORD)
+        return false;
+
+    out = data;
+    return true;
+}
+
+// ------------------------------------------------------------
+// WOW64 / Architecture Helpers
+// ------------------------------------------------------------
+static bool IsProcessWow64() {
+    BOOL wow = FALSE;
+    typedef BOOL(WINAPI* IsWow64Process_t)(HANDLE, PBOOL);
+
+    auto p = reinterpret_cast&lt;IsWow64Process_t&gt;(
+        GetProcAddress(GetModuleHandleW(L"kernel32.dll"), "IsWow64Process")
+        );
+
+    return (p && p(GetCurrentProcess(), &wow)) ? (wow == TRUE) : false;
+}
+
+static void PrintArchitecture() {
+    // Process architecture (compile-time)
+#if defined(_WIN64)
+    const char* procArch = "x64";
 #else
-    std::cout &lt;&lt; "Process architecture: x86\n";
-    if (fnIsWow64 &amp;&amp; fnIsWow64(GetCurrentProcess(), &amp;isWow64) &amp;&amp; isWow64)
-        std::cout &lt;&lt; "OS architecture:      x64 (WOW64)\n";
-    else
-        std::cout &lt;&lt; "OS architecture:      x86\n";
+    const char* procArch = "x86";
 #endif
 
+    // OS architecture (runtime best-effort)
+    std::string osArch = "unknown";
+
+    typedef BOOL(WINAPI* IsWow64Process2_t)(HANDLE, USHORT*, USHORT*);
+    auto p2 = reinterpret_cast&lt;IsWow64Process2_t&gt;(
+        GetProcAddress(GetModuleHandleW(L"kernel32.dll"), "IsWow64Process2")
+        );
+
+    if (p2) {
+        USHORT pm = 0, nm = 0;
+        if (p2(GetCurrentProcess(), &pm, &nm)) {
+            switch (nm) {
+            case IMAGE_FILE_MACHINE_AMD64: osArch = "x64"; break;
+            case IMAGE_FILE_MACHINE_ARM64: osArch = "arm64"; break;
+            case IMAGE_FILE_MACHINE_I386:  osArch = "x86"; break;
+            default: osArch = "unknown"; break;
+            }
+
+#if !defined(_WIN64)
+            if (pm != IMAGE_FILE_MACHINE_UNKNOWN && osArch == "x64") {
+                osArch = "x64 (WOW64)";
+            }
+#endif
+        }
+    }
+    else {
+#if defined(_WIN64)
+        osArch = "x64";
+#else
+        osArch = IsProcessWow64() ? "x64 (WOW64)" : "x86";
+#endif
+    }
+    std::cout &lt;&lt; "Process architecture: " &lt;&lt; procArch &lt;&lt; "\n"
+        &lt;&lt; "OS architecture:      " &lt;&lt; osArch &lt;&lt; "\n";
+}
+
+// ------------------------------------------------------------
+// Windows Marketing / Build Info
+// ------------------------------------------------------------
+struct WinMarketingInfo {
+    std::wstring productName;     // e.g. "Windows 11 Pro"
+    std::wstring displayVersion;  // e.g. "22H2" / "24H2" / "25H2"
+    DWORD currentBuild = 0;       // e.g. 19045 / 22631 / 26100...
+    DWORD ubr = 0;                // revision
+};
+
+static WinMarketingInfo GetWindowsMarketingInfo() {
+    constexpr const wchar_t* kSubKey = L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion";
+
+    // Choose native registry view when on 64-bit OS
+    REGSAM view =
+#if defined(_WIN64)
+        KEY_WOW64_64KEY;
+#else
+        (IsProcessWow64() ? KEY_WOW64_64KEY : KEY_WOW64_32KEY);
+#endif
+
+    WinMarketingInfo info;
+
+    RegGetStringView(HKEY_LOCAL_MACHINE, kSubKey, L"ProductName", view, info.productName);
+    RegGetStringView(HKEY_LOCAL_MACHINE, kSubKey, L"DisplayVersion", view, info.displayVersion);
+
+    std::wstring buildStr;
+    if (RegGetStringView(HKEY_LOCAL_MACHINE, kSubKey, L"CurrentBuildNumber", view, buildStr) ||
+        RegGetStringView(HKEY_LOCAL_MACHINE, kSubKey, L"CurrentBuild", view, buildStr)) {
+        info.currentBuild = static_cast&lt;DWORD&gt;(_wtoi(buildStr.c_str()));
+    }
+
+    RegGetDWORDView(HKEY_LOCAL_MACHINE, kSubKey, L"UBR", view, info.ubr);
+    return info;
+}
+
+// ------------------------------------------------------------
+// OS Version (RtlGetVersion)
+// ------------------------------------------------------------
+static RTL_OSVERSIONINFOEXW GetOsVersion() {
+    RTL_OSVERSIONINFOEXW osvi = {};
+    osvi.dwOSVersionInfoSize = sizeof(osvi);
+
+    HMODULE hNtDll = GetModuleHandleW(L"ntdll.dll");
+    if (!hNtDll) hNtDll = LoadLibraryW(L"ntdll.dll");
+    if (!hNtDll) return osvi;
+
+    auto rtlGetVersion = reinterpret_cast&lt;RtlGetVersionPtr&gt;(
+        GetProcAddress(hNtDll, "RtlGetVersion")
+        );
+
+    if (rtlGetVersion) rtlGetVersion(&osvi);
+    return osvi;
+}
+
+static std::wstring GetWindowsFamily(const RTL_OSVERSIONINFOEXW& osvi) {
+    if (osvi.dwMajorVersion == 10) {
+        return (osvi.dwBuildNumber &gt;= 22000) ? L"Windows 11" : L"Windows 10";
+    }
+    if (osvi.dwMajorVersion == 6 && osvi.dwMinorVersion == 3) return L"Windows 8.1";
+    if (osvi.dwMajorVersion == 6 && osvi.dwMinorVersion == 2) return L"Windows 8";
+    if (osvi.dwMajorVersion == 6 && osvi.dwMinorVersion == 1) return L"Windows 7";
+    return L"Windows (unknown)";
+}
+
+// ------------------------------------------------------------
+// main
+// ------------------------------------------------------------
+int main() {
+    // --- OS / Build identification ---
+    const auto osvi = GetOsVersion();
+    const auto mk = GetWindowsMarketingInfo();
+
+    const std::wstring family = GetWindowsFamily(osvi);
+
+    // Keep ProductName if present, but correct Win11 family if build indicates Win11
+    std::wstring marketing = mk.productName.empty() ? family : mk.productName;
+    if (osvi.dwBuildNumber &gt;= 22000 && marketing.find(L"Windows 11") == std::wstring::npos)
+        marketing = L"Windows 11";
+
+    const std::wstring hv = mk.displayVersion.empty() ? L"(unknown)" : mk.displayVersion;
+
+    const DWORD buildBase = mk.currentBuild ? mk.currentBuild : static_cast&lt;DWORD&gt;(osvi.dwBuildNumber);
+    const DWORD ubr = mk.ubr;
+
+    std::wcout &lt;&lt; L"OS Family:    " &lt;&lt; family &lt;&lt; L"\n"
+        &lt;&lt; L"OS Version:   " &lt;&lt; osvi.dwMajorVersion &lt;&lt; L"." &lt;&lt; osvi.dwMinorVersion
+        &lt;&lt; L" (Build " &lt;&lt; osvi.dwBuildNumber &lt;&lt; L")\n"
+        &lt;&lt; L"OS Marketing: " &lt;&lt; marketing &lt;&lt; L" " &lt;&lt; hv &lt;&lt; L"\n"
+        &lt;&lt; L"OS Build:     " &lt;&lt; buildBase
+        &lt;&lt; (ubr ? (L"." + std::to_wstring(ubr)) : L"")
+        &lt;&lt; L"\n\n";
+
+    // --- Architecture (printed once) ---
+    PrintArchitecture();
+
+    // --- SSN enumeration output ---
     std::cout &lt;&lt; "\nSyscall SSNs:\n\n";
 
     try {
-        auto exports = GetNtExportsSSN();
+        const auto exports = GetNtExportsSSN();
 
-        std::cout &lt;&lt; std::left  &lt;&lt; std::setw(60) &lt;&lt; "Syscall"
-                    &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(7) &lt;&lt; "Decimal"
-                    &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(7) &lt;&lt; "Hex\n"
-                    &lt;&lt; std::string(60,'-') &lt;&lt; "-+-"
-                    &lt;&lt; std::string(7,'-')  &lt;&lt; "-+-"
-                    &lt;&lt; std::string(7,'-')  &lt;&lt; '\n';
+        std::cout &lt;&lt; std::left &lt;&lt; std::setw(60) &lt;&lt; "Syscall"
+            &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(7) &lt;&lt; "Decimal"
+            &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(7) &lt;&lt; "Hex"
+            &lt;&lt; "\n";
 
-        for (const auto&amp; e : exports) {
-            std::ostringstream hex; hex &lt;&lt; "0x" &lt;&lt; std::hex &lt;&lt; std::uppercase &lt;&lt; e.ssn;
-            std::cout &lt;&lt; std::left  &lt;&lt; std::setw(60) &lt;&lt; e.name
-                        &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(7) &lt;&lt; std::dec &lt;&lt; e.ssn
-                        &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(7) &lt;&lt; hex.str() &lt;&lt; '\n';
+        std::cout &lt;&lt; std::string(60, '-') &lt;&lt; "-+-"
+            &lt;&lt; std::string(7, '-') &lt;&lt; "-+-"
+            &lt;&lt; std::string(7, '-') &lt;&lt; "\n";
+
+        for (const auto& e : exports) {
+            std::ostringstream hexstr;
+            hexstr &lt;&lt; "0x" &lt;&lt; std::hex &lt;&lt; std::uppercase &lt;&lt; e.ssn;
+
+            std::cout &lt;&lt; std::left &lt;&lt; std::setw(60) &lt;&lt; e.name
+                &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(7) &lt;&lt; std::dec &lt;&lt; e.ssn
+                &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(7) &lt;&lt; hexstr.str()
+                &lt;&lt; std::dec &lt;&lt; "\n";
         }
-    } catch (const std::exception&amp; ex) {
-        std::cerr &lt;&lt; "Error: " &lt;&lt; ex.what() &lt;&lt; '\n';
+    }
+    catch (const std::exception& ex) {
+        std::cerr &lt;&lt; "Error: " &lt;&lt; ex.what() &lt;&lt; "\n";
         return 1;
     }
+
     return 0;
-}
-                </code>
+}</code>
             </pre>
             </pre>
         </div>
