@@ -442,18 +442,18 @@
 #include &lt;string&gt;
 #include &lt;vector&gt;
 
-// ------------------------------------------------------------
-// Types
-// ------------------------------------------------------------
-typedef LONG(NTAPI* RtlGetVersionPtr)(PRTL_OSVERSIONINFOEXW);
 
-struct ExportInfo {
+typedef LONG(NTAPI* RtlGetVersionPtr)(PRTL_OSVERSIONINFOEXW);
+struct ExportInfo 
+{
     std::string name;
     DWORD       ssn;
+    DWORD       syscallOffset;
 };
 
+
 // ------------------------------------------------------------
-// SSN Enumeration (UNCHANGED LOGIC)
+// SSN Enumeration
 // ------------------------------------------------------------
 std::vector&lt;ExportInfo&gt; GetNtExportsSSN() {
     HMODULE hNtdll = LoadLibraryW(L"ntdll.dll");
@@ -474,17 +474,33 @@ std::vector&lt;ExportInfo&gt; GetNtExportsSSN() {
         DWORD       rva = funcs[ords[i]];
         BYTE* stub = (BYTE*)hNtdll + rva;
 
-        // mov r10,rcx; mov eax,imm32; syscall
-        if (stub[0] == 0x4C && stub[1] == 0x8B && stub[2] == 0xD1 && stub[3] == 0xB8) {
+        // mov r10,rcx; mov eax,imm32
+        if (stub[0] == 0x4C && stub[1] == 0x8B &&
+            stub[2] == 0xD1 && stub[3] == 0xB8)
+        {
             DWORD ssn = *(DWORD*)(stub + 4);
-            list.push_back({ fnName, ssn });
+
+            DWORD syscallOffset = 0xFFFFFFFF;
+
+            // Scan first 32 bytes for syscall (0F 05)
+            for (DWORD j = 0; j &lt; 32; j++) {
+                if (stub[j] == 0x0F && stub[j + 1] == 0x05) {
+                    syscallOffset = j;
+                    break;
+                }
+            }
+
+            if (syscallOffset != 0xFFFFFFFF) {
+                list.push_back({ fnName, ssn, syscallOffset });
+            }
         }
+
     }
     return list;
 }
 
 // ------------------------------------------------------------
-// Registry Helpers (C++11-friendly)
+// Registry Helpers
 // ------------------------------------------------------------
 static bool RegGetStringView(
     HKEY root,
@@ -682,14 +698,10 @@ int main() {
 
     // Keep ProductName if present, but correct Win11 family if build indicates Win11
     std::wstring marketing = mk.productName.empty() ? family : mk.productName;
-    if (osvi.dwBuildNumber &gt;= 22000 && marketing.find(L"Windows 11") == std::wstring::npos)
-        marketing = L"Windows 11";
-
+    if (osvi.dwBuildNumber &gt;= 22000 && marketing.find(L"Windows 11") == std::wstring::npos) marketing = L"Windows 11";
     const std::wstring hv = mk.displayVersion.empty() ? L"(unknown)" : mk.displayVersion;
-
     const DWORD buildBase = mk.currentBuild ? mk.currentBuild : static_cast&lt;DWORD&gt;(osvi.dwBuildNumber);
     const DWORD ubr = mk.ubr;
-
     std::wcout &lt;&lt; L"OS Family:    " &lt;&lt; family &lt;&lt; L"\n"
         &lt;&lt; L"OS Version:   " &lt;&lt; osvi.dwMajorVersion &lt;&lt; L"." &lt;&lt; osvi.dwMinorVersion
         &lt;&lt; L" (Build " &lt;&lt; osvi.dwBuildNumber &lt;&lt; L")\n"
@@ -708,21 +720,24 @@ int main() {
         const auto exports = GetNtExportsSSN();
 
         std::cout &lt;&lt; std::left &lt;&lt; std::setw(60) &lt;&lt; "Syscall"
-            &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(7) &lt;&lt; "Decimal"
+            &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(7) &lt;&lt; "Dec"
             &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(7) &lt;&lt; "Hex"
+            &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(8) &lt;&lt; "Offset"
             &lt;&lt; "\n";
-
         std::cout &lt;&lt; std::string(60, '-') &lt;&lt; "-+-"
             &lt;&lt; std::string(7, '-') &lt;&lt; "-+-"
-            &lt;&lt; std::string(7, '-') &lt;&lt; "\n";
-
-        for (const auto& e : exports) {
-            std::ostringstream hexstr;
-            hexstr &lt;&lt; "0x" &lt;&lt; std::hex &lt;&lt; std::uppercase &lt;&lt; e.ssn;
-
+            &lt;&lt; std::string(7, '-') &lt;&lt; "-+-"
+            &lt;&lt; std::string(8, '-') &lt;&lt; "\n";
+        for (const auto& e : exports) 
+        {
+            std::ostringstream hexssn;
+            hexssn &lt;&lt; "0x" &lt;&lt; std::hex &lt;&lt; std::uppercase &lt;&lt; e.ssn;
+            std::ostringstream hexoff;
+            hexoff &lt;&lt; "0x" &lt;&lt; std::hex &lt;&lt; std::uppercase &lt;&lt; e.syscallOffset;
             std::cout &lt;&lt; std::left &lt;&lt; std::setw(60) &lt;&lt; e.name
                 &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(7) &lt;&lt; std::dec &lt;&lt; e.ssn
-                &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(7) &lt;&lt; hexstr.str()
+                &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(7) &lt;&lt; hexssn.str()
+                &lt;&lt; " | " &lt;&lt; std::right &lt;&lt; std::setw(8) &lt;&lt; hexoff.str()
                 &lt;&lt; std::dec &lt;&lt; "\n";
         }
     }
@@ -730,7 +745,6 @@ int main() {
         std::cerr &lt;&lt; "Error: " &lt;&lt; ex.what() &lt;&lt; "\n";
         return 1;
     }
-
     return 0;
 }</code>
             </pre>
