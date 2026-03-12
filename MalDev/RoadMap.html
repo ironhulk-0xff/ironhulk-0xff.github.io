@@ -204,8 +204,8 @@
                         Assembly & Debugging
                     </h3>
                     <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-6">
-                        To understand compiled software behavior, you must be able to read machine instructions and trace program execution at runtime.
-                        Develop proficiency in debugging tools and learn how compiled code maps to processor instructions.
+                        To understand compiled software behavior, you must be able to read machine instructions and trace execution at runtime. This stage focuses on how compiled code 
+                        maps to processor instructions and how program state changes during execution.
                     </p>
                     <div class="grid gap-6">
                         <div class="grid md:grid-cols-2 gap-5">
@@ -215,16 +215,22 @@
                                 </h4>
                                 <ul class="grid gap-3 text-gray-300 text-sm md:text-base">
                                     <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                        <span class="text-rose-200 font-medium">reading x86 and x64 assembly instructions</span>
+                                        <span class="text-rose-200 font-medium">Reading x86 and x64 assembly instructions</span>
                                     </li>
                                     <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                        <span class="text-rose-200 font-medium">understanding stack frames and calling conventions</span>
+                                        <span class="text-rose-200 font-medium">Understanding stack frames and calling conventions</span>
                                     </li>
                                     <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                        <span class="text-rose-200 font-medium">tracing execution flow in debuggers</span>
+                                        <span class="text-rose-200 font-medium">Tracing execution flow in debuggers</span>
                                     </li>
                                     <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                        <span class="text-rose-200 font-medium">identifying function boundaries and control flow</span>
+                                        <span class="text-rose-200 font-medium">Identifying function boundaries and control flow</span>
+                                    </li>
+                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                        <span class="text-rose-200 font-medium">Setting breakpoints and inspecting runtime state</span>
+                                    </li>
+                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                        <span class="text-rose-200 font-medium">Observing memory, thread, and register behavior during execution</span>
                                     </li>
                                 </ul>
                             </div>
@@ -239,12 +245,6 @@
                                     <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
                                         <span class="text-rose-200 font-medium">x64dbg</span>
                                     </li>
-                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                        <span class="text-rose-200 font-medium">IDA</span>
-                                    </li>
-                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                        <span class="text-rose-200 font-medium">Ghidra</span>
-                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -256,7 +256,8 @@
                                 <ul class="space-y-2 text-gray-300 text-sm md:text-base">
                                     <li>Stack and register usage</li>
                                     <li>Instruction flow</li>
-                                    <li>Breakpoints and runtime analysis</li>
+                                    <li>Breakpoints and stepping</li>
+                                    <li>Runtime state inspection</li>
                                 </ul>
                             </div>
                             <div class="rounded-xl border border-rose-500/20 bg-rose-500/5 p-5">
@@ -264,92 +265,114 @@
                                     Goal of This Stage
                                 </h4>
                                 <p class="text-gray-300 text-sm md:text-base leading-relaxed">
-                                    These skills are essential for analyzing compiled programs and understanding shellcode behavior.
+                                    The goal is to understand how compiled code behaves at runtime and to develop the ability to trace, inspect, and reason about program execution at the instruction level.
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-gray-700/50 hover:border-rose-500/30 transition-all duration-300 shadow-xl">
-                <h3 class="text-xl md:text-2xl font-bold text-rose-300 mb-4">
-                    EDR Evasion
-                </h3>
-                <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-6">
-                    Modern endpoint detection platforms rely heavily on telemetry collection, behavioral analysis, memory inspection, and execution tracing. Studying evasion therefore begins with understanding 
-                    how security products observe processes, monitor execution paths, and correlate suspicious behavior. The goal is not to memorize isolated tricks, but to understand how visibility is created 
-                    and how offensive tooling can reduce its detection surface.
-                </p>
-                <div class="grid gap-6">
-                    <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
-                        <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-4">
-                            Core Areas
-                        </h4>
-                        <ul class="grid sm:grid-cols-2 gap-3 text-gray-300 text-sm md:text-base">
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                <span class="text-rose-200 font-medium">User-mode API hooks</span>
-                            </li>
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                <span class="text-rose-200 font-medium">System call monitoring</span>
-                            </li>
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3 sm:col-span-2">
-                                <span class="text-rose-200 font-medium">Telemetry sources such as ETW and AMSI</span>
-                            </li>
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3 sm:col-span-2">
-                                <span class="text-rose-200 font-medium">Behavioral and memory-based inspection</span>
-                            </li>
-                        </ul>
+            <div class="relative group">
+                <div class="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-gray-700/50 hover:border-rose-500/30 transition-all duration-300 shadow-xl">
+                    <h3 class="text-xl md:text-2xl font-bold text-rose-300 mb-4">
+                        Loader
+                    </h3>
+                    <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-6">
+                        A critical skill in offensive development is understanding how executable code can be loaded, prepared, and executed in memory. Loader focuses on designing mechanisms that prepare payloads 
+                        for execution while controlling how they appear in memory and how they interact with the operating system. Begin by studying how the Windows loader processes Portable Executable (PE) files: 
+                        mapping sections into memory, resolving imports, applying relocations, and transferring execution to the program entry point. Understanding this process is essential before attempting to 
+                        replicate or modify it. After mastering the standard loading process, experiment with custom loading mechanisms that perform these steps manually.
+                    </p>
+                    <div class="grid gap-5">
+                        <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
+                            <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-4">
+                                Core Loader Concepts
+                            </h4>
+                            <ul class="grid sm:grid-cols-2 gap-3 text-gray-300 text-sm md:text-base mb-4">
+                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                    <span class="text-rose-200 font-medium">Shellcode loaders</span>
+                                </li>
+                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                    <span class="text-rose-200 font-medium">Reflective DLL loading</span>
+                                </li>
+                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                    <span class="text-rose-200 font-medium">Manual PE mapping</span>
+                                </li>
+                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                    <span class="text-rose-200 font-medium">Module replacement techniques</span>
+                                </li>
+                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3 sm:col-span-2">
+                                    <span class="text-rose-200 font-medium">Staged payload loading</span>
+                                </li>
+                            </ul>
+                            <p class="text-gray-300 leading-relaxed text-sm md:text-base">
+                                These techniques demonstrate how executable code can be prepared and executed directly from memory without writing files to disk.
+                            </p>
+                        </div>
+                        <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
+                            <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-4">
+                                Payload Protection
+                            </h4>
+                            <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-4">
+                                Loaders often incorporate mechanisms to protect embedded payloads until execution time. Common approaches include:
+                            </p>
+                            <ul class="grid sm:grid-cols-2 gap-3 text-gray-300 text-sm md:text-base mb-4">
+                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                    <span class="text-rose-200 font-medium">XOR-based payload encoding</span>
+                                </li>
+                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                    <span class="text-rose-200 font-medium">RC4 or AES encryption for embedded payloads</span>
+                                </li>
+                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3 sm:col-span-2">
+                                    <span class="text-rose-200 font-medium">staged payload retrieval from external sources</span>
+                                </li>
+                            </ul>
+                            <p class="text-gray-300 leading-relaxed text-sm md:text-base">
+                                The goal is to control when and how payloads become visible in memory and to understand how these transformations affect detection.
+                            </p>
+                        </div>
+                        <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
+                            <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-4">
+                                Execution Flow Control
+                            </h4>
+                            <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-4">
+                                Effective loaders carefully manage execution flow and memory layout. Areas to explore include:
+                            </p>
+                            <ul class="grid sm:grid-cols-2 gap-3 text-gray-300 text-sm md:text-base mb-4">
+                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                    <span class="text-rose-200 font-medium">allocating and preparing executable memory regions</span>
+                                </li>
+                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                    <span class="text-rose-200 font-medium">transferring execution to dynamically loaded payloads</span>
+                                </li>
+                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                    <span class="text-rose-200 font-medium">managing thread creation and execution context</span>
+                                </li>
+                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                    <span class="text-rose-200 font-medium">understanding how loaded modules appear in process memory</span>
+                                </li>
+                            </ul>
+                            <p class="text-gray-300 leading-relaxed text-sm md:text-base">
+                                These exercises build a deep understanding of how programs transition from raw binary data to running code.
+                            </p>
+                        </div>
                     </div>
-                    <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
-                        <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-4">
-                            Evasion Fundamentals
-                        </h4>
-                        <p class="text-gray-300 text-sm md:text-base mb-4">
-                            Begin with foundational methods that reduce static and runtime visibility, such as:
-                        </p>
-                        <ul class="grid sm:grid-cols-2 gap-3 text-gray-300 text-sm md:text-base mb-5">
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                <span class="text-rose-200 font-medium">String and import hashing</span>
-                            </li>
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                <span class="text-rose-200 font-medium">Encrypted payload storage</span>
-                            </li>
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3 sm:col-span-2">
-                                <span class="text-rose-200 font-medium">Staged payload loading</span>
-                            </li>
-                        </ul>
-                        <p class="text-gray-300 text-sm md:text-base mb-4">
-                            Then study execution-level mechanisms that aim to reduce visibility during runtime, including:
-                        </p>
-                        <ul class="grid sm:grid-cols-2 gap-3 text-gray-300 text-sm md:text-base">
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                <span class="text-rose-200 font-medium">Direct or indirect system call strategies</span>
-                            </li>
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                <span class="text-rose-200 font-medium">User-mode hook bypass techniques</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="grid md:grid-cols-3 gap-4">
+                    <div class="mt-6 grid md:grid-cols-2 gap-4">
                         <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5">
-                            <h4 class="text-rose-200 font-semibold mb-3">Concepts to Study</h4>
+                            <h4 class="text-rose-200 font-semibold mb-3">Core Concepts to Understand</h4>
                             <ul class="space-y-2 text-gray-300 text-sm md:text-base">
-                                <li>Hooking mechanisms</li>
-                                <li>System call flow</li>
-                                <li>Telemetry generation</li>
-                                <li>Behavioral monitoring</li>
+                                <li>PE loading process</li>
+                                <li>Memory section mapping</li>
+                                <li>Import resolution</li>
+                                <li>Relocations</li>
+                                <li>In-memory payload execution</li>
                             </ul>
                         </div>
                         <div class="rounded-xl border border-rose-500/20 bg-rose-500/5 p-5">
-                            <h4 class="text-rose-200 font-semibold mb-3">Practical Learning Approach</h4>
+                            <h4 class="text-rose-200 font-semibold mb-3">Why This Matters</h4>
                             <p class="text-gray-300 text-sm md:text-base leading-relaxed">
-                                Each exercise should include detection measurement by observing how implementations appear to Defender or other controlled EDR environments.
-                            </p>
-                        </div>
-                        <div class="rounded-xl border border-rose-500/20 bg-rose-500/5 p-5">
-                            <h4 class="text-rose-200 font-semibold mb-3">Goal of This Stage</h4>
-                            <p class="text-gray-300 text-sm md:text-base leading-relaxed">
-                                The goal is to understand how security products observe execution and how offensive tooling can adapt its behavior to reduce detection opportunities.
+                                Loaders teaches how executable code is prepared and executed independently of the operating system’s default loading mechanisms. 
+                                This knowledge underpins many advanced techniques used in offensive tooling and provides a deeper understanding of how software behaves at runtime.
                             </p>
                         </div>
                     </div>
@@ -475,7 +498,7 @@
                                 system configuration, and forensic analysis.
                             </p>
                         </div>
-                        <div class="mt-8 grid md:grid-cols-2 gap-4">
+                        <div class="grid md:grid-cols-2 gap-4">
                             <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5">
                                 <h4 class="text-rose-200 font-semibold mb-3">Core Concepts to Understand</h4>
                                 <ul class="space-y-2 text-gray-300 text-sm md:text-base">
@@ -496,69 +519,9 @@
                 </div>
             </div>
             <div class="relative group">
-                <div class="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-8 border border-gray-700/50 hover:border-rose-500/40 transition shadow-xl">
-                    <h3 class="text-2xl font-bold text-rose-300 mb-6">
-                        C2 & Networking
-                    </h3>
-                    <div class="flex flex-wrap gap-3 mb-8">
-                        <span class="px-3 py-1 rounded-lg bg-rose-500/10 border border-rose-400/30 text-rose-200 text-sm">http</span>
-                        <span class="px-3 py-1 rounded-lg bg-rose-500/10 border border-rose-400/30 text-rose-200 text-sm">https</span>
-                        <span class="px-3 py-1 rounded-lg bg-rose-500/10 border border-rose-400/30 text-rose-200 text-sm">DNS</span>
-                    </div>
-                    <div class="space-y-6 text-gray-300 leading-relaxed text-sm md:text-base">
-                        <p>
-                            Develop a solid understanding of how command-and-control systems are designed and how implants communicate with remote infrastructure. Begin by implementing a minimal agent and server that exchange
-                            tasks and results over encrypted channels such as HTTPS. Focus on building the underlying communication workflow: establishing sessions, transmitting tasks, returning output, and maintaining stable 
-                            connectivity.
-                        </p>
-                        <p>
-                            Once the basics are understood, experiment with techniques that influence how network traffic appears and behaves. Implement features such as request jitter, variable sleep intervals, 
-                            and user-agent rotation to simulate normal application traffic patterns. Study how different protocols affect visibility and reliability.
-                        </p>
-                    </div>
-                    <div class="mt-8 rounded-xl border border-gray-700/60 bg-gray-900/40 p-6">
-                        <p class="text-gray-300 mb-4 text-sm md:text-base">
-                            Expand the architecture beyond simple client-server communication by exploring alternate network models and transport methods, such as:
-                        </p>
-                        <ul class="grid gap-2 text-gray-300 text-sm md:text-base">
-                            <li class="bg-gray-800/60 border border-gray-700/50 rounded-lg px-4 py-2">
-                                peer-to-peer communication between agents
-                            </li>
-                            <li class="bg-gray-800/60 border border-gray-700/50 rounded-lg px-4 py-2">
-                                DNS-based communication channels
-                            </li>
-                            <li class="bg-gray-800/60 border border-gray-700/50 rounded-lg px-4 py-2">
-                                DNS-over-HTTPS or other tunneled transports
-                            </li>
-                            <li class="bg-gray-800/60 border border-gray-700/50 rounded-lg px-4 py-2">
-                                multi-hop relay or redirector architectures
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="mt-8 grid md:grid-cols-2 gap-4">
-                        <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5">
-                            <h4 class="text-rose-200 font-semibold mb-3">Core Concepts to Explore</h4>
-                            <ul class="space-y-2 text-gray-300 text-sm md:text-base">
-                                <li>Agent ↔ Server tasking workflow</li>
-                                <li>Encrypted communication channels</li>
-                                <li>Beacon scheduling and jitter</li>
-                                <li>Protocol selection and traffic patterns</li>
-                                <li>Alternative network topologies</li>
-                            </ul>
-                        </div>
-                        <div class="rounded-xl border border-rose-500/20 bg-rose-500/5 p-5">
-                            <h4 class="text-rose-200 font-semibold mb-3">Goal of This Stage</h4>
-                            <p class="text-gray-300 text-sm md:text-base leading-relaxed">
-                                The goal of this stage is not simply to build a beacon, but to understand how communication protocols and infrastructure choices shape the behavior and visibility of remote agents.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="relative group">
                 <div class="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-gray-700/50 hover:border-rose-500/30 transition-all duration-300 shadow-xl">
                     <h3 class="text-xl md:text-2xl font-bold text-rose-300 mb-4">
-                        Detection Engineering Perspective
+                        Telemetry & Detection
                     </h3>
                     <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-6">
                         Before focusing on evasion techniques, develop an understanding of how modern defensive systems detect malicious activity. Study the telemetry sources that defenders rely on and how that data 
@@ -625,112 +588,225 @@
                     </div>
                 </div>
             </div>
-            <div class="relative group">
-                <div class="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-gray-700/50 hover:border-rose-500/30 transition-all duration-300 shadow-xl">
-                    <h3 class="text-xl md:text-2xl font-bold text-rose-300 mb-4">
-                        Loader
-                    </h3>
-                    <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-6">
-                        A critical skill in offensive development is understanding how executable code can be loaded, prepared, and executed in memory. Loader focuses on designing mechanisms that prepare payloads 
-                        for execution while controlling how they appear in memory and how they interact with the operating system. Begin by studying how the Windows loader processes Portable Executable (PE) files: 
-                        mapping sections into memory, resolving imports, applying relocations, and transferring execution to the program entry point. Understanding this process is essential before attempting to 
-                        replicate or modify it. After mastering the standard loading process, experiment with custom loading mechanisms that perform these steps manually.
-                    </p>
-                    <div class="grid gap-5">
-                        <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
-                            <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-4">
-                                Core Loader Concepts
-                            </h4>
-                            <ul class="grid sm:grid-cols-2 gap-3 text-gray-300 text-sm md:text-base mb-4">
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">Shellcode loaders</span>
-                                </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">Reflective DLL loading</span>
-                                </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">Manual PE mapping</span>
-                                </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">Module replacement techniques</span>
-                                </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3 sm:col-span-2">
-                                    <span class="text-rose-200 font-medium">Staged payload loading</span>
-                                </li>
-                            </ul>
-                            <p class="text-gray-300 leading-relaxed text-sm md:text-base">
-                                These techniques demonstrate how executable code can be prepared and executed directly from memory without writing files to disk.
-                            </p>
-                        </div>
-                        <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
-                            <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-4">
-                                Payload Protection
-                            </h4>
-                            <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-4">
-                                Loaders often incorporate mechanisms to protect embedded payloads until execution time. Common approaches include:
-                            </p>
-                            <ul class="grid sm:grid-cols-2 gap-3 text-gray-300 text-sm md:text-base mb-4">
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">XOR-based payload encoding</span>
-                                </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">RC4 or AES encryption for embedded payloads</span>
-                                </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3 sm:col-span-2">
-                                    <span class="text-rose-200 font-medium">staged payload retrieval from external sources</span>
-                                </li>
-                            </ul>
-                            <p class="text-gray-300 leading-relaxed text-sm md:text-base">
-                                The goal is to control when and how payloads become visible in memory and to understand how these transformations affect detection.
-                            </p>
-                        </div>
-                        <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
-                            <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-4">
-                                Execution Flow Control
-                            </h4>
-                            <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-4">
-                                Effective loaders carefully manage execution flow and memory layout. Areas to explore include:
-                            </p>
-                            <ul class="grid sm:grid-cols-2 gap-3 text-gray-300 text-sm md:text-base mb-4">
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">allocating and preparing executable memory regions</span>
-                                </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">transferring execution to dynamically loaded payloads</span>
-                                </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">managing thread creation and execution context</span>
-                                </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">understanding how loaded modules appear in process memory</span>
-                                </li>
-                            </ul>
-                            <p class="text-gray-300 leading-relaxed text-sm md:text-base">
-                                These exercises build a deep understanding of how programs transition from raw binary data to running code.
-                            </p>
-                        </div>
+            <div class="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-gray-700/50 hover:border-rose-500/30 transition-all duration-300 shadow-xl">
+                <h3 class="text-xl md:text-2xl font-bold text-rose-300 mb-4">
+                    EDR Evasion
+                </h3>
+                <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-6">
+                    Modern endpoint detection platforms rely heavily on telemetry collection, behavioral analysis, memory inspection, and execution tracing. Studying evasion therefore begins with understanding 
+                    how security products observe processes, monitor execution paths, and correlate suspicious behavior. The goal is not to memorize isolated tricks, but to understand how visibility is created 
+                    and how offensive tooling can reduce its detection surface.
+                </p>
+                <div class="grid gap-6">
+                    <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
+                        <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-4">
+                            Core Areas
+                        </h4>
+                        <ul class="grid sm:grid-cols-2 gap-3 text-gray-300 text-sm md:text-base">
+                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                <span class="text-rose-200 font-medium">User-mode API hooks</span>
+                            </li>
+                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                <span class="text-rose-200 font-medium">System call monitoring</span>
+                            </li>
+                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3 sm:col-span-2">
+                                <span class="text-rose-200 font-medium">Telemetry sources such as ETW and AMSI</span>
+                            </li>
+                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3 sm:col-span-2">
+                                <span class="text-rose-200 font-medium">Behavioral and memory-based inspection</span>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="mt-6 grid md:grid-cols-2 gap-4">
+                    <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
+                        <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-4">
+                            Evasion Fundamentals
+                        </h4>
+                        <p class="text-gray-300 text-sm md:text-base mb-4">
+                            Begin with foundational methods that reduce static and runtime visibility, such as:
+                        </p>
+                        <ul class="grid sm:grid-cols-2 gap-3 text-gray-300 text-sm md:text-base mb-5">
+                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                <span class="text-rose-200 font-medium">String and import hashing</span>
+                            </li>
+                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                <span class="text-rose-200 font-medium">Encrypted payload storage</span>
+                            </li>
+                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3 sm:col-span-2">
+                                <span class="text-rose-200 font-medium">Staged payload loading</span>
+                            </li>
+                        </ul>
+                        <p class="text-gray-300 text-sm md:text-base mb-4">
+                            Then study execution-level mechanisms that aim to reduce visibility during runtime, including:
+                        </p>
+                        <ul class="grid sm:grid-cols-2 gap-3 text-gray-300 text-sm md:text-base">
+                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                <span class="text-rose-200 font-medium">Direct or indirect system call strategies</span>
+                            </li>
+                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                <span class="text-rose-200 font-medium">User-mode hook bypass techniques</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-4">
                         <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5">
-                            <h4 class="text-rose-200 font-semibold mb-3">Core Concepts to Understand</h4>
+                            <h4 class="text-rose-200 font-semibold mb-3">Concepts to Study</h4>
                             <ul class="space-y-2 text-gray-300 text-sm md:text-base">
-                                <li>PE loading process</li>
-                                <li>Memory section mapping</li>
-                                <li>Import resolution</li>
-                                <li>Relocations</li>
-                                <li>In-memory payload execution</li>
+                                <li>Hooking mechanisms</li>
+                                <li>System call flow</li>
+                                <li>Telemetry generation</li>
+                                <li>Behavioral monitoring</li>
                             </ul>
                         </div>
                         <div class="rounded-xl border border-rose-500/20 bg-rose-500/5 p-5">
-                            <h4 class="text-rose-200 font-semibold mb-3">Why This Matters</h4>
+                            <h4 class="text-rose-200 font-semibold mb-3">Practical Learning Approach</h4>
                             <p class="text-gray-300 text-sm md:text-base leading-relaxed">
-                                Loaders teaches how executable code is prepared and executed independently of the operating system’s default loading mechanisms. 
-                                This knowledge underpins many advanced techniques used in offensive tooling and provides a deeper understanding of how software behaves at runtime.
+                                Each exercise should include detection measurement by observing how implementations appear to Defender or other controlled EDR environments.
+                            </p>
+                        </div>
+                        <div class="rounded-xl border border-rose-500/20 bg-rose-500/5 p-5">
+                            <h4 class="text-rose-200 font-semibold mb-3">Goal of This Stage</h4>
+                            <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                                The goal is to understand how security products observe execution and how offensive tooling can adapt its behavior to reduce detection opportunities.
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="relative group">
+                <div class="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-8 border border-gray-700/50 hover:border-rose-500/40 transition shadow-xl">
+                    <h3 class="text-2xl font-bold text-rose-300 mb-6">
+                        C2 & Networking
+                    </h3>
+                    <div class="flex flex-wrap gap-3 mb-8">
+                        <span class="px-3 py-1 rounded-lg bg-rose-500/10 border border-rose-400/30 text-rose-200 text-sm">http</span>
+                        <span class="px-3 py-1 rounded-lg bg-rose-500/10 border border-rose-400/30 text-rose-200 text-sm">https</span>
+                        <span class="px-3 py-1 rounded-lg bg-rose-500/10 border border-rose-400/30 text-rose-200 text-sm">DNS</span>
+                    </div>
+                    <div class="space-y-6 text-gray-300 leading-relaxed text-sm md:text-base">
+                        <p>
+                            Develop a solid understanding of how command-and-control systems are designed and how implants communicate with remote infrastructure. Begin by implementing a minimal agent and server that exchange
+                            tasks and results over encrypted channels such as HTTPS. Focus on building the underlying communication workflow: establishing sessions, transmitting tasks, returning output, and maintaining stable 
+                            connectivity.
+                        </p>
+                        <p>
+                            Once the basics are understood, experiment with techniques that influence how network traffic appears and behaves. Implement features such as request jitter, variable sleep intervals, 
+                            and user-agent rotation to simulate normal application traffic patterns. Study how different protocols affect visibility and reliability.
+                        </p>
+                    </div>
+                    <div class="mt-8 rounded-xl border border-gray-700/60 bg-gray-900/40 p-6">
+                        <p class="text-gray-300 mb-4 text-sm md:text-base">
+                            Expand the architecture beyond simple client-server communication by exploring alternate network models and transport methods, such as:
+                        </p>
+                        <ul class="grid gap-2 text-gray-300 text-sm md:text-base">
+                            <li class="bg-gray-800/60 border border-gray-700/50 rounded-lg px-4 py-2">
+                                peer-to-peer communication between agents
+                            </li>
+                            <li class="bg-gray-800/60 border border-gray-700/50 rounded-lg px-4 py-2">
+                                DNS-based communication channels
+                            </li>
+                            <li class="bg-gray-800/60 border border-gray-700/50 rounded-lg px-4 py-2">
+                                DNS-over-HTTPS or other tunneled transports
+                            </li>
+                            <li class="bg-gray-800/60 border border-gray-700/50 rounded-lg px-4 py-2">
+                                multi-hop relay or redirector architectures
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-3 grid md:grid-cols-2 gap-4">
+                        <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5">
+                            <h4 class="text-rose-200 font-semibold mb-3">Core Concepts to Explore</h4>
+                            <ul class="space-y-2 text-gray-300 text-sm md:text-base">
+                                <li>Agent ↔ Server tasking workflow</li>
+                                <li>Encrypted communication channels</li>
+                                <li>Beacon scheduling and jitter</li>
+                                <li>Protocol selection and traffic patterns</li>
+                                <li>Alternative network topologies</li>
+                            </ul>
+                        </div>
+                        <div class="rounded-xl border border-rose-500/20 bg-rose-500/5 p-5">
+                            <h4 class="text-rose-200 font-semibold mb-3">Goal of This Stage</h4>
+                            <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                                The goal of this stage is not simply to build a beacon, but to understand how communication protocols and infrastructure choices shape the behavior and visibility of remote agents.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="relative group">
+                <div class="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-gray-700/50 hover:border-rose-500/30 transition-all duration-300 shadow-xl">
+                    <h3 class="text-xl md:text-2xl font-bold text-rose-300 mb-4">
+                        Reverse Engineering
+                    </h3>
+                    <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-6">
+                        Reverse engineering focuses on analyzing compiled binaries to understand their structure, logic, and behavior without access to source code. This stage emphasizes static and dynamic 
+                        analysis techniques used to reconstruct how software works internally.
+                    </p>
+                    <div class="grid gap-6">
+                        <div class="grid md:grid-cols-2 gap-5">
+                            <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
+                                <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-4">
+                                    Skills to Develop
+                                </h4>
+                                <ul class="grid gap-3 text-gray-300 text-sm md:text-base">
+                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                        <span class="text-rose-200 font-medium">Identifying function boundaries</span>
+                                    </li>
+                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                        <span class="text-rose-200 font-medium">Reconstructing control flow</span>
+                                    </li>
+                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                        <span class="text-rose-200 font-medium">Analyzing imports, exports, and binary structure</span>
+                                    </li>
+                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                        <span class="text-rose-200 font-medium">Combining static and dynamic analysis</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
+                                <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-4">
+                                    Tools to Practice With
+                                </h4>
+                                <ul class="grid gap-3 text-gray-300 text-sm md:text-base">
+                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                        <span class="text-rose-200 font-medium">WinDbg</span>
+                                    </li>
+                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                        <span class="text-rose-200 font-medium">x64dbg</span>
+                                    </li>
+                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                        <span class="text-rose-200 font-medium">IDA</span>
+                                    </li>
+                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                        <span class="text-rose-200 font-medium">Ghidra</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5">
+                                <h4 class="text-rose-200 font-semibold mb-3">
+                                    Core Concepts to Understand
+                                </h4>
+                                <ul class="space-y-2 text-gray-300 text-sm md:text-base">
+                                    <li>Control flow graphs</li>
+                                    <li>Function reconstruction</li>
+                                    <li>Static versus dynamic analysis</li>
+                                    <li>Binary layout and program logic</li>
+                                </ul>
+                            </div>
+                            <div class="rounded-xl border border-rose-500/20 bg-rose-500/5 p-5">
+                                <h4 class="text-rose-200 font-semibold mb-3">
+                                    Goal of This Stage
+                                </h4>
+                                <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                                    The goal is to understand how to analyze compiled binaries, recover program logic, and study software behavior when source code is unavailable.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
         </div>
     </section>
     <section class="relative rounded-2xl border border-cyan-500/60 bg-gradient-to-br from-gray-800/70 to-gray-900/90 p-8 shadow-2xl ring-1 ring-cyan-500/20 space-y-8">
