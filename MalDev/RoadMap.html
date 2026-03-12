@@ -117,7 +117,7 @@
             <div class="relative group">
                 <div class="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-8 border border-gray-700/50 hover:border-rose-500/40 transition">
                     <h3 class="text-2xl font-bold text-rose-300 mb-6">
-                        Groundwork in Systems Programming
+                        Programming & Compiler Fundamentals
                     </h3>
                     <div class="flex flex-wrap gap-3 mb-6">
                         <span class="px-3 py-1 rounded-lg bg-rose-500/10 border border-rose-400/30 text-rose-200 text-sm">
@@ -198,50 +198,6 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-gray-700/50 hover:border-rose-500/30 transition-all duration-300 shadow-xl">
-                <h3 class="text-xl md:text-2xl font-bold text-rose-300 mb-4">
-                    EDR Evasion
-                </h3>
-                <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-6">
-                    Modern endpoint detection platforms rely heavily on telemetry, behavioral analysis, and memory inspection. Understanding how these systems observe program behavior is essential when studying evasion techniques.
-                    Focus on the mechanisms that defensive tools use to monitor execution and how software can interact with those mechanisms.
-                </p>
-                <div class="grid gap-6">
-                    <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
-                        <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-4">
-                            Core Areas
-                        </h4>
-                        <ul class="grid sm:grid-cols-2 gap-3 text-gray-300 text-sm md:text-base">
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                <span class="text-rose-200 font-medium">User-mode API hooks</span>
-                            </li>
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                <span class="text-rose-200 font-medium">System call monitoring</span>
-                            </li>
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3 sm:col-span-2">
-                                <span class="text-rose-200 font-medium">Telemetry sources such as ETW and AMSI</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="grid md:grid-cols-2 gap-4">
-                        <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5">
-                            <h4 class="text-rose-200 font-semibold mb-3">Concepts to Study</h4>
-                            <ul class="space-y-2 text-gray-300 text-sm md:text-base">
-                                <li>Hooking mechanisms</li>
-                                <li>System call flow</li>
-                                <li>Telemetry generation</li>
-                                <li>Behavioral monitoring</li>
-                            </ul>
-                        </div>
-                        <div class="rounded-xl border border-rose-500/20 bg-rose-500/5 p-5">
-                            <h4 class="text-rose-200 font-semibold mb-3">Goal of This Stage</h4>
-                            <p class="text-gray-300 text-sm md:text-base leading-relaxed">
-                                This stage builds an understanding of how security products observe execution paths and system interactions.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="relative group">
                 <div class="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-gray-700/50 hover:border-rose-500/30 transition-all duration-300 shadow-xl">
                     <h3 class="text-xl md:text-2xl font-bold text-rose-300 mb-4">
@@ -291,13 +247,12 @@
                                     </li>
                                 </ul>
                             </div>
-                        </div>>
+                        </div>
                         <div class="grid md:grid-cols-2 gap-4">
                             <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5">
                                 <h4 class="text-rose-200 font-semibold mb-3">
                                     Core Concepts to Understand
                                 </h4>
-            
                                 <ul class="space-y-2 text-gray-300 text-sm md:text-base">
                                     <li>Stack and register usage</li>
                                     <li>Instruction flow</li>
@@ -308,7 +263,6 @@
                                 <h4 class="text-rose-200 font-semibold mb-3">
                                     Goal of This Stage
                                 </h4>
-            
                                 <p class="text-gray-300 text-sm md:text-base leading-relaxed">
                                     These skills are essential for analyzing compiled programs and understanding shellcode behavior.
                                 </p>
@@ -317,92 +271,85 @@
                     </div>
                 </div>
             </div>
-            <div class="relative group">
-                <div class="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-gray-700/50 hover:border-rose-500/30 transition-all duration-300 shadow-xl">
-                    <h3 class="text-xl md:text-2xl font-bold text-rose-300 mb-4">Offensive Building Blocks</h3>
-                    <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-6">
-                        At this stage the goal is to understand the core primitives used by offensive tooling rather than memorizing individual techniques. Focus on how processes, threads, memory regions, and modules can 
-                        be manipulated to execute code inside another context.
-                    </p>
-                    <div class="grid gap-5">
-                        <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
-                            <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-3">Code Injection</h4>
-                            <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-4">
-                                Study the mechanisms that allow code to execute inside local or remote processes. Begin with classic techniques such as CreateRemoteThread, APC queuing, and process hollowing to understand the 
-                                fundamentals of remote memory allocation, thread creation, and context manipulation. From there, expand into more advanced approaches built on the same primitives:
-                            </p>
-                            <ul class="grid gap-2 text-gray-300 text-sm md:text-base">
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">Thread hijacking and context manipulation</span>
-                                </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">Section mapping and shared memory injection</span>
-                                </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">Reflective loading and manual PE mapping</span>
-                                </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">Early-Bird APC and other thread-based execution techniques</span>
-                                </li>
+            <div class="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-gray-700/50 hover:border-rose-500/30 transition-all duration-300 shadow-xl">
+                <h3 class="text-xl md:text-2xl font-bold text-rose-300 mb-4">
+                    EDR Evasion
+                </h3>
+                <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-6">
+                    Modern endpoint detection platforms rely heavily on telemetry collection, behavioral analysis, memory inspection, and execution tracing. Studying evasion therefore begins with understanding 
+                    how security products observe processes, monitor execution paths, and correlate suspicious behavior. The goal is not to memorize isolated tricks, but to understand how visibility is created 
+                    and how offensive tooling can reduce its detection surface.
+                </p>
+                <div class="grid gap-6">
+                    <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
+                        <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-4">
+                            Core Areas
+                        </h4>
+                        <ul class="grid sm:grid-cols-2 gap-3 text-gray-300 text-sm md:text-base">
+                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                <span class="text-rose-200 font-medium">User-mode API hooks</span>
+                            </li>
+                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                <span class="text-rose-200 font-medium">System call monitoring</span>
+                            </li>
+                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3 sm:col-span-2">
+                                <span class="text-rose-200 font-medium">Telemetry sources such as ETW and AMSI</span>
+                            </li>
+                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3 sm:col-span-2">
+                                <span class="text-rose-200 font-medium">Behavioral and memory-based inspection</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
+                        <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-4">
+                            Evasion Fundamentals
+                        </h4>
+                        <p class="text-gray-300 text-sm md:text-base mb-4">
+                            Begin with foundational methods that reduce static and runtime visibility, such as:
+                        </p>
+                        <ul class="grid sm:grid-cols-2 gap-3 text-gray-300 text-sm md:text-base mb-5">
+                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                <span class="text-rose-200 font-medium">String and import hashing</span>
+                            </li>
+                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                <span class="text-rose-200 font-medium">Encrypted payload storage</span>
+                            </li>
+                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3 sm:col-span-2">
+                                <span class="text-rose-200 font-medium">Staged payload loading</span>
+                            </li>
+                        </ul>
+                        <p class="text-gray-300 text-sm md:text-base mb-4">
+                            Then study execution-level mechanisms that aim to reduce visibility during runtime, including:
+                        </p>
+                        <ul class="grid sm:grid-cols-2 gap-3 text-gray-300 text-sm md:text-base">
+                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                <span class="text-rose-200 font-medium">Direct or indirect system call strategies</span>
+                            </li>
+                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                <span class="text-rose-200 font-medium">User-mode hook bypass techniques</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5">
+                            <h4 class="text-rose-200 font-semibold mb-3">Concepts to Study</h4>
+                            <ul class="space-y-2 text-gray-300 text-sm md:text-base">
+                                <li>Hooking mechanisms</li>
+                                <li>System call flow</li>
+                                <li>Telemetry generation</li>
+                                <li>Behavioral monitoring</li>
                             </ul>
-                            <p class="text-gray-400 leading-relaxed text-sm md:text-base mt-4">
-                                The objective is to understand how code reaches execution, not just to replicate specific techniques.
+                        </div>
+                        <div class="rounded-xl border border-rose-500/20 bg-rose-500/5 p-5">
+                            <h4 class="text-rose-200 font-semibold mb-3">Practical Learning Approach</h4>
+                            <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                                Each exercise should include detection measurement by observing how implementations appear to Defender or other controlled EDR environments.
                             </p>
                         </div>
-                        <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
-                            <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-3">Persistence Mechanisms</h4>
-                            <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-4">
-                                Learn how systems maintain execution across reboots and logins. Start with common persistence mechanisms such as:
-                            </p>
-                            <ul class="grid gap-2 text-gray-300 text-sm md:text-base">
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">Registry run keys</span>
-                                </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">Scheduled tasks</span>
-                                </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">WMI event consumers</span>
-                                </li>
-                            </ul>
-                            <p class="text-gray-400 leading-relaxed text-sm md:text-base mt-4">
-                                Then study how persistence interacts with system components such as services, startup folders, and system configuration mechanisms. The goal is to understand how operating systems maintain 
-                                long-term execution contexts and how persistence artifacts appear from a defensive perspective.
-                            </p>
-                        </div>
-                        <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
-                            <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-3">Obfuscation &amp; Evasion Fundamentals</h4>
-                            <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-4">
-                                Modern defensive tooling relies heavily on behavioral analysis, memory inspection, and telemetry pipelines. Offensive tooling therefore requires techniques that obscure execution and reduce 
-                                detection surface. Begin with foundational techniques:
-                            </p>
-                            <ul class="grid gap-2 text-gray-300 text-sm md:text-base mb-4">
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">string and import hashing</span>
-                                </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">encrypted payload storage</span>
-                                </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">staged payload loading</span>
-                                </li>
-                            </ul>
-                            <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-4">
-                                Then explore mechanisms used to reduce visibility during execution:
-                            </p>
-                            <ul class="grid gap-2 text-gray-300 text-sm md:text-base">
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">indirect or direct system calls</span>
-                                </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">user-mode hook bypass techniques</span>
-                                </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">telemetry interference such as ETW or AMSI manipulation</span>
-                                </li>
-                            </ul>
-                            <p class="text-gray-400 leading-relaxed text-sm md:text-base mt-4">
-                                Each exercise should include detection measurement, testing the technique against Defender and modern EDR environments to understand how behavior, memory patterns, and telemetry influence detection.
+                        <div class="rounded-xl border border-rose-500/20 bg-rose-500/5 p-5">
+                            <h4 class="text-rose-200 font-semibold mb-3">Goal of This Stage</h4>
+                            <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                                The goal is to understand how security products observe execution and how offensive tooling can adapt its behavior to reduce detection opportunities.
                             </p>
                         </div>
                     </div>
@@ -411,15 +358,14 @@
             <div class="relative group">
                 <div class="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-gray-700/50 hover:border-rose-500/30 transition-all duration-300 shadow-xl">
                     <h3 class="text-xl md:text-2xl font-bold text-rose-300 mb-4">
-                        Process Injection
+                        Process Injection & Code Execution
                     </h3>
                     <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-6">
-                        Process injection focuses on executing code inside the context of another running process by manipulating memory, threads, or modules.
-                        Instead of memorizing specific techniques, learn the execution primitives that enable them.
+                        This stage focuses on how code is introduced and executed inside the context of a local or remote process by manipulating memory, threads, modules, and execution state. Rather than memorizing isolated techniques, 
+                        study the execution primitives that make injection possible and learn how different techniques are built from them.
                     </p>
                     <div class="grid gap-6">
                         <div class="grid md:grid-cols-2 gap-5">
-            
                             <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
                                 <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-4">
                                     Core Injection Primitives
@@ -443,18 +389,19 @@
                                 <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-4">
                                     Techniques to Explore
                                 </h4>
+                                <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-6">
+                                    Begin with foundational techniques such as remote thread execution, APC-based execution, and process hollowing to understand how execution is transferred into another process. 
+                                    From there, expand into more advanced approaches built on the same primitives, including:
+                                </p>
                                 <ul class="grid gap-3 text-gray-300 text-sm md:text-base">
                                     <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                        <span class="text-rose-200 font-medium">Remote thread execution</span>
+                                        <span class="text-rose-200 font-medium">Thread hijacking and context manipulation</span>
                                     </li>
                                     <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                        <span class="text-rose-200 font-medium">APC-based execution</span>
+                                        <span class="text-rose-200 font-medium">Section mapping and shared memory injection</span>
                                     </li>
                                     <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                        <span class="text-rose-200 font-medium">Thread context hijacking</span>
-                                    </li>
-                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                        <span class="text-rose-200 font-medium">Process hollowing</span>
+                                        <span class="text-rose-200 font-medium">Early-Bird APC and other thread-based execution techniques</span>
                                     </li>
                                 </ul>
                             </div>
@@ -480,13 +427,74 @@
                                 </p>
                             </div>
                         </div>
-            
                     </div>
                 </div>
             </div>
-
-
-
+            <div class="relative group">
+                <div class="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-gray-700/50 hover:border-rose-500/30 transition-all duration-300 shadow-xl">
+                    <h3 class="text-xl md:text-2xl font-bold text-rose-300 mb-4">Persistence Mechanisms</h3>
+                    <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-6">
+                        At this stage the goal is to understand the core primitives used by offensive tooling rather than memorizing individual techniques. Focus on how processes, threads, memory regions, and modules can 
+                        be manipulated to execute code inside another context.
+                    </p>
+                    <div class="grid gap-5">
+                        <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
+                            <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-3">Obfuscation &amp; Evasion Fundamentals</h4>
+                            <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-4">
+                                Persistence focuses on how software maintains execution across reboots, logins, and system state changes. Rather than memorizing isolated techniques, study the operating system features that 
+                                allow programs to regain execution over time and understand how those mechanisms appear from both an administrative and defensive perspective.
+                                Begin with common persistence mechanisms such as:
+                            </p>
+                            <ul class="grid gap-2 text-gray-300 text-sm md:text-base mb-4">
+                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                    <span class="text-rose-200 font-medium">Registry run keys</span>
+                                </li>
+                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                    <span class="text-rose-200 font-medium">Scheduled tasks</span>
+                                </li>
+                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                    <span class="text-rose-200 font-medium">WMI event consumers</span>
+                                </li>
+                            </ul>
+                            <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-4">
+                                Then expand into other operating-system integration points, including:
+                            </p>
+                            <ul class="grid gap-2 text-gray-300 text-sm md:text-base">
+                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                    <span class="text-rose-200 font-medium">Services</span>
+                                </li>
+                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                    <span class="text-rose-200 font-medium">Startup folders</span>
+                                </li>
+                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                    <span class="text-rose-200 font-medium">Logon and system configuration mechanisms</span>
+                                </li>
+                            </ul>
+                            <p class="text-gray-400 leading-relaxed text-sm md:text-base mt-4">
+                                The objective is to understand how execution continuity is established, how persistence artifacts are recorded by the operating system, and how these mechanisms are observed through host telemetry, 
+                                system configuration, and forensic analysis.
+                            </p>
+                        </div>
+                        <div class="mt-8 grid md:grid-cols-2 gap-4">
+                            <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5">
+                                <h4 class="text-rose-200 font-semibold mb-3">Core Concepts to Understand</h4>
+                                <ul class="space-y-2 text-gray-300 text-sm md:text-base">
+                                    <li>Execution across reboots and logins</li>
+                                    <li>Operating-system startup and logon pathways</li>
+                                    <li>Long-term execution contexts</li>
+                                    <li>Persistence artifacts and defensive visibility</li>
+                                </ul>
+                            </div>
+                            <div class="rounded-xl border border-rose-500/20 bg-rose-500/5 p-5">
+                                <h4 class="text-rose-200 font-semibold mb-3">Goal of This Stage</h4>
+                                <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                                    The goal is to understand how software maintains continued execution over time and how persistence mechanisms appear to defenders during monitoring, investigation, and incident response.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="relative group">
                 <div class="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-8 border border-gray-700/50 hover:border-rose-500/40 transition shadow-xl">
                     <h3 class="text-2xl font-bold text-rose-300 mb-6">
@@ -723,10 +731,7 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
-    
     </section>
     <section class="relative rounded-2xl border border-cyan-500/60 bg-gradient-to-br from-gray-800/70 to-gray-900/90 p-8 shadow-2xl ring-1 ring-cyan-500/20 space-y-8">
         <h2 class="text-3xl md:text-4xl font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-sky-400 to-blue-400">
