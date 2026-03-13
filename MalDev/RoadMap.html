@@ -49,8 +49,15 @@
       </header>
   <main id="article" class="p-6 space-y-6">
     <section class="relative overflow-hidden rounded-2xl shadow-2xl ring-1 ring-red-500/30 isolate">
-        <div class="absolute inset-0 bg-gradient-to-br from-red-800/40 via-gray-900/50 to-gray-900"></div>
-        <div class="grid md:grid-cols-2 gap-8 p-8 ">
+        <div class="grid md:grid-cols-2 gap-8 p-8 py-3">
+            <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+            <div class="col-span-2 flex items-center justify-center gap-6">
+                <div class="h-[1px] flex-1 bg-gradient-to-r from-transparent via-red-500/40 to-transparent py-3"></div>
+                <h1 dir="rtl" class="text-4xl md:text-5xl text-center tracking-wide py-4 bg-clip-text text-transparent bg-gradient-to-r from-red-400 via-rose-400 to-pink-500" style="font-family: 'Amiri', serif;">
+                    بسم الله الرحمن الرحيـــم
+                </h1>
+                <div class="h-[1px] flex-1 bg-gradient-to-r from-transparent via-red-500/40 to-transparent py-3"></div>
+            </div>
             <div class="backdrop-blur-sm bg-gray-800/70 rounded-xl p-6 border border-red-500/40 shadow-lg">
                 <h2 class="mb-4 text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-red-400 via-rose-400 to-pink-500">
                     What Is Malware Development?</h2>
@@ -135,7 +142,7 @@
                     </div>
                     <p class="text-gray-300 leading-relaxed mb-6">
                         Start with C and C++ as the foundation, because they remain the most important languages for understanding low-level Windows behavior. Add Rust later for modern systems programming, 
-                        and treat Go as a useful support language for tooling and infrastructure rather than a primary language for internals work. Focus on the core concepts that matter most: memory layout, 
+                        and treat Go as a useful support language for tooling and infrastructure rather than a primary language for internals work. Focus on the core concepts that matter most such as memory layout, 
                         pointers, structs, calling conventions, threads, process memory, linking, and executable formats. In parallel, develop a deep understanding of Windows internals, the Win32 API, and the 
                         Native API, including how processes, threads, virtual memory, and PE loading actually work. The objective is to move beyond simply using APIs and toward understanding the execution 
                         model underneath them.
@@ -317,7 +324,6 @@
                                         </p>
                                         <p class="mb-2 text-gray-400">You should learn to spot:</p>
                                         <ul class="grid gap-2">
-                                            <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">function prologues and epilogues</li>
                                             <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">calls and returns</li>
                                             <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">loops</li>
                                             <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">conditional branches</li>
@@ -377,8 +383,8 @@
                     </h3>
                     <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-6">
                         A critical skill in offensive development is understanding how executable code can be loaded, prepared, and executed in memory. Loader focuses on designing mechanisms that prepare payloads 
-                        for execution while controlling how they appear in memory and how they interact with the operating system. Begin by studying how the Windows loader processes Portable Executable (PE) files: 
-                        mapping sections into memory, resolving imports, applying relocations, and transferring execution to the program entry point. Understanding this process is essential before attempting to 
+                        for execution while controlling how they appear in memory and how they interact with the operating system. Begin by studying how the Windows loader processes Portable Executable (PE) files  
+                        such as mapping sections into memory, resolving imports, applying relocations, and transferring execution to the program entry point. Understanding this process is essential before attempting to 
                         replicate or modify it. After mastering the standard loading process, experiment with custom loading mechanisms that perform these steps manually.
                     </p>
                     <div class="grid gap-5">
@@ -419,7 +425,7 @@
                                 <div class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4 sm:col-span-2">
                                     <h5 class="text-rose-200 font-medium mb-2">Staged payload:</h5>
                                     <p class="leading-relaxed">
-                                        A staged payload model where execution is broken into phases rather than delivered as a single unit. One component establishes execution or context first, while later components provide additional 
+                                        Where execution is broken into phases rather than delivered as a single unit. One component establishes execution or context first, while later components provide additional 
                                         capability or content. In architectural terms, this is a workflow decision about how loading and execution are structured rather than a specific file format feature.
                                     </p>
                                 </div>
@@ -811,7 +817,7 @@
                                     Writing YARA rules for binaries and memory artifacts:
                                 </h5>
                                 <p class="leading-relaxed">
-                                    The real lesson is not simply writing a large signature. It is learning to distinguish
+                                    The real lesson is not simply writing a large signature, it is learning to distinguish
                                     between fragile indicators and stable indicators.
                                 </p>
                         
@@ -1222,8 +1228,6 @@
                                     </h4>
                                     <p class="text-gray-300 text-sm md:text-base leading-relaxed mb-4">
                                         Configuration management refers to how the framework stores and uses its settings. These settings may control how the system behaves, such as communication preferences, feature toggles, identifiers, retry logic, or timing behavior.
-                                    </p>
-                                    <p class="text-gray-300 text-sm md:text-base leading-relaxed mb-4">
                                         Runtime state management refers to the information the system tracks while it is running. This includes the current session state, task status, loaded modules, execution context, connection status, and other data the program needs in order to function consistently over time.
                                     </p>
                                     <p class="text-gray-300 text-sm md:text-base leading-relaxed mb-4">
@@ -1326,19 +1330,19 @@
                     <div class="grid md:grid-cols-2 gap-5 mb-6">
                         <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5">
                             <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-3">
-                                C2 &amp; Networking
+                                C2:
                             </h4>
                             <p class="text-gray-300 leading-relaxed text-sm md:text-base">
-                                C2 &amp; Networking focuses on communication: how an implant exchanges data with remote infrastructure, how tasks and results are transmitted, which transport protocols are used, and how traffic behaves 
+                                Focuses on communication: how an implant exchanges data with remote infrastructure, how tasks and results are transmitted, which transport protocols are used, and how traffic behaves 
                                 across the network. This includes areas such as HTTP, HTTPS, DNS, encrypted channels, beacon timing, jitter, protocol selection, and alternate communication topologies.
                             </p>
                         </div>
                         <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5">
                             <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-3">
-                                Malware Architecture
+                                Malware Architecture:
                             </h4>
                             <p class="text-gray-300 leading-relaxed text-sm md:text-base">
-                                Malware Architecture focuses on the internal design of the framework as a whole: how the implant, tasking logic, modules, loaders, configuration, and backend components are organized into a complete 
+                                Focuses on the internal design of the framework as a whole: how the implant, tasking logic, modules, loaders, configuration, and backend components are organized into a complete 
                                 software system. This includes how responsibilities are separated, how capabilities are added or extended, how state is maintained, and how the overall framework remains modular, scalable, and 
                                 maintainable.
                             </p>
@@ -1452,7 +1456,6 @@
                     </div>
                 </div>
             </div>
-            
         </div>
     </section>
     <section class="relative rounded-2xl border border-cyan-500/60 bg-gradient-to-br from-gray-800/70 to-gray-900/90 p-8 shadow-2xl ring-1 ring-cyan-500/20 space-y-8">
