@@ -50,7 +50,14 @@
   </header>
 <main id="article" class="p-6 space-y-2">
   <section class="relative w-full my-10 overflow-hidden rounded-3xl bg-gradient-to-br from-slate-800 via-slate-900 to-black shadow-2xl ring-1 ring-cyan-400/30">
-    <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_1%,rgba(255,255,255,0.04)_1%)] [background-size:22px_22px]"></div>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <div class="col-span-2 flex items-center justify-center gap-6">
+        <div class="h-[1px] flex-1 min-w-0 bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent py-3"></div>
+        <h1 dir="rtl" class="text-4xl md:text-5xl text-center tracking-wide py-4 min-w-0 shrink bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-cyan-400 to-cyan-500" style="font-family:'Amiri', serif;">
+            بسم الله الرحمن الرحيم
+        </h1>
+        <div class="h-[1px] flex-1 min-w-0 bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent py-3"></div>
+    </div>
     <div class="relative z-10 flex flex-col  px-10 py-10 sm:gap-10 md:flex-row md:items-center">
       <div class="w-full md:w-2/3">
         <h2 class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400">
@@ -69,66 +76,66 @@
         <img src="../MalDev/images/PayObs.png" class="mx-auto rounded-2xl shadow-lg ring-1 ring-cyan-400/20 max-h-64 md:max-h-72 object-contain" />
       </div>
     </div>
+    <section class="relative w-full px-6">
+      <h2 class="mb-16 text-center text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400 drop-shadow-lg">
+        Why Malware Developers Rely on Obfuscation</h2>
+        <div class="grid gap-12 sm:grid-cols-2 xl:grid-cols-2">
+          <article class="group relative rounded-3xl bg-slate-900/60 p-8 ring-1 ring-slate-700/60 shadow-xl transition-transform duration-300 hover:scale-[1.04] hover:ring-cyan-400/50">
+            <h3 class="mb-4 flex items-center gap-3 text-lg font-semibold text-cyan-300">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-400/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M12 3l7.5 4v5c0 5-3.5 9.6-7.5 10-4-0.4-7.5-5-7.5-10V7l7.5-4zm4.95 4.95L7.05 17.85" />
+              </svg>
+              Bypassing Static Detection</h3>
+            <p class=" leading-relaxed text-gray-400 sm:text-justify">
+              Signature scanners, YARA rules, and reputation systems depend on predictable byte sequences; obfuscation reshapes those sequences so thoroughly that the hash, the entropy 
+              profile, and even the printable strings lose their diagnostic value. Agent Tesla, XWorm, and FormBook variants routinely achieve multiday detection gaps by rotating fresh 
+              encryption keys and junk instructions.
+            </p>
+          </article>
+          <article class="group relative rounded-3xl bg-slate-900/60 p-8 ring-1 ring-slate-700/60 shadow-xl transition-transform duration-300 hover:scale-[1.04] hover:ring-cyan-400/50">
+            <h3 class="mb-4 flex items-center gap-3 text-lg font-semibold text-cyan-300">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-400/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M6 3h12M6 21h12M17 3v3.5a4.5 4.5 0 01-2 3.75l-3 2-3-2A4.5 4.5 0 017 6.5V3m10 18v-3.5a4.5 4.5 0 00-2-3.75l-3-2-3 2a4.5 4.5 0 00-2 3.75V21" />
+              </svg>
+              Slowing Reverse-Engineering </h3>
+            <p class=" leading-relaxed text-gray-400 sm:text-justify">
+              Human analysts work against the clock; every hour spent disentangling opaque control flow or decrypting strings is time the attacker can use to harvest data or pivot. 
+              Black Hat research on DOSfuscation showed that even simple command-line payloads can expand into multi-kilobyte, character-inserted tangles that frustrate quick triage.
+            </p>
+          </article>
+        </div>
+        <br>
+        <div class="grid gap-12 sm:grid-cols-2 xl:grid-cols-2">
+          <article class="group relative rounded-3xl bg-slate-900/60 p-8 ring-1 ring-slate-700/60 shadow-xl transition-transform duration-300 hover:scale-[1.04] hover:ring-cyan-400/50">
+            <h3 class="mb-4 flex items-center gap-3 text-lg font-semibold text-cyan-300">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-400/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M21 8l-9-5-9 5 9 5 9-5zm0 0v6m-18-6v6m9 5v-6m0-5l-9 5m9-5l9 5" />
+              </svg>
+              Defeating Automated Sandboxes</h3>
+            <p class=" leading-relaxed text-gray-400 sm:text-justify">
+              Many sandboxes impose tight execution windows and limited emulation depth. Obfuscated samples embed stalling loops, environment checks, or staged decryptors that withhold 
+              the real code until the sandbox gives up, allowing the file to look inert during automated scoring yet detonate on a live host.
+            </p>
+          </article>
+          <article class="group relative rounded-3xl bg-slate-900/60 p-8 ring-1 ring-slate-700/60 shadow-xl transition-transform duration-300 hover:scale-[1.04] hover:ring-cyan-400/50">
+            <h3 class="mb-4 flex items-center gap-3 text-lg font-semibold text-cyan-300">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-400/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M3 7l9-4 9 4-9 4-9-4zm0 6l9 4 9-4m-18 6l9 4 9-4" />
+              </svg>
+              Layered Defence in Depth</h3>
+            <p class=" leading-relaxed text-gray-400 sm:text-justify sm:text-justify">
+              If any single layer like packer, loader, dropper is caught, the upstream layers can be swapped without touching core functionality, giving threat actors an agile way to iterate 
+              faster than defenders can blacklist. Recent steganographic loaders that stash AES-encrypted DLLs inside bitmaps exemplify this modular approach.
+            </p>
+          </article>
+        </div>
+    </section>
+    <br>
   </section>
-  <section class="relative w-full px-6">
-    <h2 class="mb-16 text-center text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400 drop-shadow-lg">
-      Why Malware Developers Rely on Obfuscation</h2>
-      <div class="grid gap-12 sm:grid-cols-2 xl:grid-cols-2">
-        <article class="group relative rounded-3xl bg-slate-900/60 p-8 ring-1 ring-slate-700/60 shadow-xl transition-transform duration-300 hover:scale-[1.04] hover:ring-cyan-400/50">
-          <h3 class="mb-4 flex items-center gap-3 text-lg font-semibold text-cyan-300">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-400/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                d="M12 3l7.5 4v5c0 5-3.5 9.6-7.5 10-4-0.4-7.5-5-7.5-10V7l7.5-4zm4.95 4.95L7.05 17.85" />
-            </svg>
-            Bypassing Static Detection</h3>
-          <p class=" leading-relaxed text-gray-400 sm:text-justify">
-            Signature scanners, YARA rules, and reputation systems depend on predictable byte sequences; obfuscation reshapes those sequences so thoroughly that the hash, the entropy 
-            profile, and even the printable strings lose their diagnostic value. Agent Tesla, XWorm, and FormBook variants routinely achieve multiday detection gaps by rotating fresh 
-            encryption keys and junk instructions.
-          </p>
-        </article>
-        <article class="group relative rounded-3xl bg-slate-900/60 p-8 ring-1 ring-slate-700/60 shadow-xl transition-transform duration-300 hover:scale-[1.04] hover:ring-cyan-400/50">
-          <h3 class="mb-4 flex items-center gap-3 text-lg font-semibold text-cyan-300">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-400/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                d="M6 3h12M6 21h12M17 3v3.5a4.5 4.5 0 01-2 3.75l-3 2-3-2A4.5 4.5 0 017 6.5V3m10 18v-3.5a4.5 4.5 0 00-2-3.75l-3-2-3 2a4.5 4.5 0 00-2 3.75V21" />
-            </svg>
-            Slowing Reverse-Engineering </h3>
-          <p class=" leading-relaxed text-gray-400 sm:text-justify">
-            Human analysts work against the clock; every hour spent disentangling opaque control flow or decrypting strings is time the attacker can use to harvest data or pivot. 
-            Black Hat research on DOSfuscation showed that even simple command-line payloads can expand into multi-kilobyte, character-inserted tangles that frustrate quick triage.
-          </p>
-        </article>
-      </div>
-      <br>
-      <div class="grid gap-12 sm:grid-cols-2 xl:grid-cols-2">
-        <article class="group relative rounded-3xl bg-slate-900/60 p-8 ring-1 ring-slate-700/60 shadow-xl transition-transform duration-300 hover:scale-[1.04] hover:ring-cyan-400/50">
-          <h3 class="mb-4 flex items-center gap-3 text-lg font-semibold text-cyan-300">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-400/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                d="M21 8l-9-5-9 5 9 5 9-5zm0 0v6m-18-6v6m9 5v-6m0-5l-9 5m9-5l9 5" />
-            </svg>
-            Defeating Automated Sandboxes</h3>
-          <p class=" leading-relaxed text-gray-400 sm:text-justify">
-            Many sandboxes impose tight execution windows and limited emulation depth. Obfuscated samples embed stalling loops, environment checks, or staged decryptors that withhold 
-            the real code until the sandbox gives up, allowing the file to look inert during automated scoring yet detonate on a live host.
-          </p>
-        </article>
-        <article class="group relative rounded-3xl bg-slate-900/60 p-8 ring-1 ring-slate-700/60 shadow-xl transition-transform duration-300 hover:scale-[1.04] hover:ring-cyan-400/50">
-          <h3 class="mb-4 flex items-center gap-3 text-lg font-semibold text-cyan-300">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-400/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                d="M3 7l9-4 9 4-9 4-9-4zm0 6l9 4 9-4m-18 6l9 4 9-4" />
-            </svg>
-            Layered Defence in Depth</h3>
-          <p class=" leading-relaxed text-gray-400 sm:text-justify sm:text-justify">
-            If any single layer like packer, loader, dropper is caught, the upstream layers can be swapped without touching core functionality, giving threat actors an agile way to iterate 
-            faster than defenders can blacklist. Recent steganographic loaders that stash AES-encrypted DLLs inside bitmaps exemplify this modular approach.
-          </p>
-        </article>
-      </div>
-  </section>
-  <br>
   <section class="px-6 relative w-full my-20  overflow-hidden rounded-3xl bg-gradient-to-br from-slate-800 via-slate-900 to-black shadow-2xl ring-1 ring-cyan-400/30">
     <div class="w-full flex justify-center">
       <h2 class="relative z-10 flex flex-col px-2 md:flex-row md:items-start md:py-10 text-center text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400 drop-shadow-lg">
