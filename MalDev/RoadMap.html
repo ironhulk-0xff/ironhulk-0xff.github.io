@@ -148,33 +148,71 @@
                         Windows Internals
                     </h3>
                     <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-6">
-                        Develop a deep understanding of how the Windows operating system manages processes, memory, and system resources. This knowledge forms the foundation for advanced debugging, loader 
-                        development, and execution techniques. Focus on the internal structures and mechanisms that control program execution and system interaction.
+                        Develop a deep understanding of how Windows manages processes, threads, memory, handles, and security context at the operating-system level. This stage provides the foundation for later work 
+                        in debugging, shellcode development, loader engineering, process injection, and evasion techniques. Focus on the internal structures and execution paths that govern how programs start, run, 
+                        interact with the system, and transition between user mode and kernel mode.
                     </p>
                     <div class="grid gap-5">
                         <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
                             <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-4">
                                 Core Areas
                             </h4>
-                            <ul class="grid sm:grid-cols-2 gap-3 text-gray-300 text-sm md:text-base">
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">Process and thread creation</span>
+                            <ul class="grid sm:grid-cols-2 gap-4 text-gray-300 text-sm md:text-base">
+
+                                <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4">
+                                    <h5 class="text-rose-200 font-medium mb-2">
+                                        Process and thread creation:
+                                    </h5>
+                                    <p>
+                                        How execution starts, how threads are initialized, and how process state is managed over time.
+                                    </p>
                                 </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">Virtual memory management</span>
+                            
+                                <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4">
+                                    <h5 class="text-rose-200 font-medium mb-2">
+                                        Virtual memory management:
+                                    </h5>
+                                    <p>
+                                        How memory is reserved, committed, protected, and organized inside a process.
+                                    </p>
                                 </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">Handle tables and object manager</span>
+                            
+                                <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4">
+                                    <h5 class="text-rose-200 font-medium mb-2">
+                                        Handle tables and object manager:
+                                    </h5>
+                                    <p>
+                                        How processes reference files, events, threads, sections, and other kernel-managed objects.
+                                    </p>
                                 </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">Security tokens and privileges</span>
+                            
+                                <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4">
+                                    <h5 class="text-rose-200 font-medium mb-2">
+                                        Access tokens, privileges, and security context:
+                                    </h5>
+                                    <p>
+                                        How identity, privileges, and execution rights are assigned and enforced.
+                                    </p>
                                 </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3 sm:col-span-2">
-                                    <span class="text-rose-200 font-medium">Process Environment Block (PEB) and Thread Environment Block (TEB)</span>
+                            
+                                <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4 sm:col-span-2">
+                                    <h5 class="text-rose-200 font-medium mb-2">
+                                        Process Environment Block (PEB) and Thread Environment Block (TEB):
+                                    </h5>
+                                    <p>
+                                        Per-process and per-thread structures that expose loader data, environment state, and execution-related information.
+                                    </p>
                                 </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3 sm:col-span-2">
-                                    <span class="text-rose-200 font-medium">Windows Native API and system call interface</span>
+                            
+                                <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4 sm:col-span-2">
+                                    <h5 class="text-rose-200 font-medium mb-2">
+                                        Windows Native API and system call interface
+                                    </h5>
+                                    <p>
+                                        How execution moves beneath higher-level APIs into lower-level operating-system interfaces.
+                                    </p>
                                 </li>
+                            
                             </ul>
                         </div>
                         <div class="grid md:grid-cols-2 gap-4">
@@ -208,44 +246,104 @@
                         maps to processor instructions and how program state changes during execution.
                     </p>
                     <div class="grid gap-6">
-                        <div class="grid md:grid-cols-2 gap-5">
+                        <div class="grid md:grid-cols-1 gap-5">
                             <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
                                 <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-4">
                                     Skills to Develop
                                 </h4>
-                                <ul class="grid gap-3 text-gray-300 text-sm md:text-base">
-                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                        <span class="text-rose-200 font-medium">Reading x86 and x64 assembly instructions</span>
-                                    </li>
-                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                        <span class="text-rose-200 font-medium">Understanding stack frames and calling conventions</span>
-                                    </li>
-                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                        <span class="text-rose-200 font-medium">Tracing execution flow in debuggers</span>
-                                    </li>
-                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                        <span class="text-rose-200 font-medium">Identifying function boundaries and control flow</span>
-                                    </li>
-                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                        <span class="text-rose-200 font-medium">Setting breakpoints and inspecting runtime state</span>
-                                    </li>
-                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                        <span class="text-rose-200 font-medium">Observing memory, thread, and register behavior during execution</span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
-                                <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-4">
-                                    Tools to Practice With
-                                </h4>
-                                <ul class="grid gap-3 text-gray-300 text-sm md:text-base">
-                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                        <span class="text-rose-200 font-medium">WinDbg</span>
-                                    </li>
-                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                        <span class="text-rose-200 font-medium">x64dbg</span>
-                                    </li>
-                                </ul>
+                                <div class="grid gap-5 text-gray-300 text-sm md:text-base">
+                                    <div class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-5">
+                                        <h5 class="text-rose-200 font-medium mb-3">
+                                            Reading x86 and x64 assembly instructions
+                                        </h5>
+                                        <p class="mb-3 leading-relaxed">
+                                            This means being able to look at machine-level instructions and understand what the CPU is being told to do.
+                                        </p>
+                                        <p class="mb-2 text-gray-400">You should learn how to read instructions such as:</p>
+                                        <ul class="grid gap-2">
+                                            <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">data movement</li>
+                                            <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">arithmetic and logic</li>
+                                            <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">comparisons and jumps</li>
+                                            <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">function calls and returns</li>
+                                            <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">memory access through registers and offsets</li>
+                                        </ul>
+                                        <p class="mt-3 text-gray-400 leading-relaxed">
+                                            The goal is to recognize what a block of instructions is doing without needing the original source code.
+                                        </p>
+                                    </div>
+                                    <div class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-5">
+                                        <h5 class="text-rose-200 font-medium mb-3">
+                                            Understanding stack frames and calling conventions
+                                        </h5>
+                                        <p class="mb-3 leading-relaxed">
+                                            This focuses on how functions receive arguments, store local variables, preserve registers, and return control to the caller.
+                                        </p>
+                                        <p class="mb-2 text-gray-400">You should understand:</p>
+                                        <ul class="grid gap-2">
+                                            <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">how a function sets up and tears down its stack frame</li>
+                                            <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">where arguments are passed</li>
+                                            <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">where return addresses are stored</li>
+                                            <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">which registers must be preserved</li>
+                                            <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">how x86 and x64 calling conventions differ</li>
+                                        </ul>
+                                        <p class="mt-3 text-gray-400 leading-relaxed">
+                                            This is essential for following function execution, debugging crashes, and understanding shellcode or compiled binaries at runtime.
+                                        </p>
+                                    </div>
+                                    <div class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-5">
+                                        <h5 class="text-rose-200 font-medium mb-3">
+                                            Tracing execution flow in debuggers
+                                        </h5>
+                                        <p class="mb-3 leading-relaxed">
+                                            This means following a program step by step while it runs to see how execution moves through instructions, functions, branches, and system interactions.
+                                        </p>
+                                        <p class="mb-2 text-gray-400">You should practice:</p>
+                                        <ul class="grid gap-2">
+                                            <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">stepping into and over instructions</li>
+                                            <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">following function calls</li>
+                                            <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">watching conditional branches</li>
+                                            <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">observing how execution reaches important routines</li>
+                                        </ul>
+                                        <p class="mt-3 text-gray-400 leading-relaxed">
+                                            The goal is to understand not just what the code looks like, but how it behaves as it executes.
+                                        </p>
+                                    </div>
+                                    <div class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-5">
+                                        <h5 class="text-rose-200 font-medium mb-3">
+                                            Identifying function boundaries and control flow
+                                        </h5>
+                                        <p class="mb-3 leading-relaxed">
+                                            This means recognizing where functions begin and end, and how execution moves between them.
+                                        </p>
+                                        <p class="mb-2 text-gray-400">You should learn to spot:</p>
+                                        <ul class="grid gap-2">
+                                            <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">function prologues and epilogues</li>
+                                            <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">calls and returns</li>
+                                            <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">loops</li>
+                                            <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">conditional branches</li>
+                                            <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">jump tables and indirect control flow</li>
+                                        </ul>
+                                        <p class="mt-3 text-gray-400 leading-relaxed">
+                                            This skill helps reconstruct the program’s logic and understand how different pieces of code are connected.
+                                        </p>
+                                    </div>
+                                    <div class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-5">
+                                        <h5 class="text-rose-200 font-medium mb-3">
+                                            Setting breakpoints and inspecting runtime state
+                                        </h5>
+                                        <p class="mb-3 leading-relaxed">
+                                            This means pausing execution at meaningful points so you can observe what the program is doing at that exact moment.
+                                        </p>
+                                        <p class="mb-2 text-gray-400">You should learn how to inspect:</p>
+                                        <ul class="grid gap-2">
+                                            <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">register values</li>
+                                            <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">stack contents</li>
+                                            <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">function arguments</li>
+                                            <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">memory buffers</li>
+                                            <li class="rounded-lg bg-gray-900/40 border border-gray-700/50 px-3 py-2">thread state</li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="grid md:grid-cols-2 gap-4">
@@ -288,23 +386,44 @@
                             <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-4">
                                 Core Loader Concepts
                             </h4>
-                            <ul class="grid sm:grid-cols-2 gap-3 text-gray-300 text-sm md:text-base mb-4">
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">Shellcode loaders</span>
-                                </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">Reflective DLL loading</span>
-                                </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">Manual PE mapping</span>
-                                </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">Module replacement techniques</span>
-                                </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3 sm:col-span-2">
-                                    <span class="text-rose-200 font-medium">Staged payload loading</span>
-                                </li>
-                            </ul>
+                            <div class="grid sm:grid-cols-2 gap-4 text-gray-300 text-sm md:text-base mb-4">
+                                <div class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4">
+                                    <h5 class="text-rose-200 font-medium mb-2">Shellcode loaders:</h5>
+                                    <p class="leading-relaxed">
+                                        Mechanisms that take raw executable bytes and prepare them to run in memory. In roadmap terms, this is the simplest way to study how code moves from a byte buffer into active execution, 
+                                        and it naturally introduces memory permissions, entry-point transfer, and runtime context. Windows PE/DLL loading concepts provide the broader context for understanding how this differs 
+                                        from normal OS-managed loading.
+                                    </p>
+                                </div>
+                                <div class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4">
+                                    <h5 class="text-rose-200 font-medium mb-2">Reflective DLL loading:</h5>
+                                    <p class="leading-relaxed">
+                                        A DLL-loading model where the library is loaded from memory and performs the essential parts of its own loading instead of relying fully on the standard OS loader path. Stephen Fewer’s 
+                                        classic description frames it as a DLL responsible for loading itself by implementing a minimal PE loader, which makes it a useful concept for understanding loader self-sufficiency.
+                                    </p>
+                                </div>
+                                <div class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4">
+                                    <h5 class="text-rose-200 font-medium mb-2">Manual PE mapping:</h5>
+                                    <p class="leading-relaxed">
+                                        Studying how a PE image is prepared in memory by reproducing the key responsibilities normally handled by the Windows loader, such as mapping sections, resolving imports, and applying relocations. 
+                                        Microsoft’s PE documentation provides the foundation here because it defines the file structures and data directories that make that loading process possible.
+                                    </p>
+                                </div>
+                                <div class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4">
+                                    <h5 class="text-rose-200 font-medium mb-2">Module replacement techniques:</h5>
+                                    <p class="leading-relaxed">
+                                        Approaches centered on reusing, redirecting, or repurposing an existing module-related footprint rather than treating every payload as a new standalone image. At a high level, this concept sits 
+                                        at the intersection of PE loading, DLL selection, and module lifecycle behavior, making it best understood as a design pattern about where code resides and how it appears inside a process.
+                                    </p>
+                                </div>
+                                <div class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4 sm:col-span-2">
+                                    <h5 class="text-rose-200 font-medium mb-2">Staged payload:</h5>
+                                    <p class="leading-relaxed">
+                                        A staged payload model where execution is broken into phases rather than delivered as a single unit. One component establishes execution or context first, while later components provide additional 
+                                        capability or content. In architectural terms, this is a workflow decision about how loading and execution are structured rather than a specific file format feature.
+                                    </p>
+                                </div>
+                            </div>
                             <p class="text-gray-300 leading-relaxed text-sm md:text-base">
                                 These techniques demonstrate how executable code can be prepared and executed directly from memory without writing files to disk.
                             </p>
@@ -316,15 +435,31 @@
                             <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-4">
                                 Loaders often incorporate mechanisms to protect embedded payloads until execution time. Common approaches include:
                             </p>
-                            <ul class="grid sm:grid-cols-2 gap-3 text-gray-300 text-sm md:text-base mb-4">
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">XOR-based payload encoding</span>
+                            <ul class="grid sm:grid-cols-2 gap-4 text-gray-300 text-sm md:text-base mb-4">
+
+                                <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4">
+                                    <h5 class="text-rose-200 font-medium mb-1">
+                                        XOR-based payload encoding:
+                                    </h5>
+                                    <p class="leading-relaxed">
+                                        A lightweight transformation used to obscure raw payload bytes before they are prepared for execution.
+                                    </p>
                                 </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">RC4 or AES encryption for embedded payloads</span>
+                                <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4">
+                                    <h5 class="text-rose-200 font-medium mb-1">
+                                        RC4 or AES encryption for embedded payloads:
+                                    </h5>
+                                    <p class="leading-relaxed">
+                                        Stronger cryptographic protection used to keep payload content unreadable until the appropriate execution stage.
+                                    </p>
                                 </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3 sm:col-span-2">
-                                    <span class="text-rose-200 font-medium">staged payload retrieval from external sources</span>
+                                <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4 sm:col-span-2">
+                                    <h5 class="text-rose-200 font-medium mb-1">
+                                        Staged payload retrieval from external sources:
+                                    </h5>
+                                    <p class="leading-relaxed">
+                                        Separating the initial loader from later payload content so that not all components are present at once.
+                                    </p>
                                 </li>
                             </ul>
                             <p class="text-gray-300 leading-relaxed text-sm md:text-base">
@@ -338,18 +473,38 @@
                             <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-4">
                                 Effective loaders carefully manage execution flow and memory layout. Areas to explore include:
                             </p>
-                            <ul class="grid sm:grid-cols-2 gap-3 text-gray-300 text-sm md:text-base mb-4">
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">allocating and preparing executable memory regions</span>
+                            <ul class="grid sm:grid-cols-2 gap-4 text-gray-300 text-sm md:text-base mb-4">
+                                <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4">
+                                    <h5 class="text-rose-200 font-medium mb-1">
+                                        Allocating and preparing executable memory regions:
+                                    </h5>
+                                    <p class="leading-relaxed">
+                                        Understanding how memory is reserved, committed, protected, and prepared for later execution.
+                                    </p>
                                 </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">transferring execution to dynamically loaded payloads</span>
+                                <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4">
+                                    <h5 class="text-rose-200 font-medium mb-1">
+                                        Transferring execution to dynamically loaded payloads:
+                                    </h5>
+                                    <p class="leading-relaxed">
+                                        Studying how control moves from the loader to the loaded code once preparation is complete.
+                                    </p>
                                 </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">managing thread creation and execution context</span>
+                                <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4">
+                                    <h5 class="text-rose-200 font-medium mb-1">
+                                        Managing thread creation and execution context:
+                                    </h5>
+                                    <p class="leading-relaxed">
+                                        Understanding how threads are created, resumed, or redirected so execution begins in the intended context.
+                                    </p>
                                 </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">understanding how loaded modules appear in process memory</span>
+                                <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4">
+                                    <h5 class="text-rose-200 font-medium mb-1">
+                                        How loaded modules appear in process memory:
+                                    </h5>
+                                    <p class="leading-relaxed">
+                                        Examining how in-memory code and mapped content are represented during runtime and how that affects analysis and visibility.
+                                    </p>
                                 </li>
                             </ul>
                             <p class="text-gray-300 leading-relaxed text-sm md:text-base">
@@ -384,49 +539,50 @@
                         Process Injection & Code Execution
                     </h3>
                     <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-6">
-                        This stage focuses on how code is introduced and executed inside the context of a local or remote process by manipulating memory, threads, modules, and execution state. Rather than memorizing isolated techniques, 
+                        This stage focuses on how code is introduced and executed inside the context of a local or remote process by manipulating memory, threads, modules, and execution state. Rather than memorizing isolated techniques,
                         study the execution primitives that make injection possible and learn how different techniques are built from them.
                     </p>
                     <div class="grid gap-6">
-                        <div class="grid md:grid-cols-2 gap-5">
+                        <div class="grid md:grid-cols-1 gap-5">
                             <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
                                 <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-4">
                                     Core Injection Primitives
                                 </h4>
-                                <ul class="grid gap-3 text-gray-300 text-sm md:text-base">
-                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                        <span class="text-rose-200 font-medium">Remote memory allocation</span>
-                                    </li>
-                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                        <span class="text-rose-200 font-medium">Thread creation and manipulation</span>
-                                    </li>
-                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                        <span class="text-rose-200 font-medium">Shared memory sections</span>
-                                    </li>
-                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                        <span class="text-rose-200 font-medium">Execution context modification</span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
-                                <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-4">
-                                    Techniques to Explore
-                                </h4>
-                                <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-6">
-                                    Begin with foundational techniques such as remote thread execution, APC-based execution, and process hollowing to understand how execution is transferred into another process. 
-                                    From there, expand into more advanced approaches built on the same primitives, including:
-                                </p>
-                                <ul class="grid gap-3 text-gray-300 text-sm md:text-base">
-                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                        <span class="text-rose-200 font-medium">Thread hijacking and context manipulation</span>
-                                    </li>
-                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                        <span class="text-rose-200 font-medium">Section mapping and shared memory injection</span>
-                                    </li>
-                                    <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                        <span class="text-rose-200 font-medium">Early-Bird APC and other thread-based execution techniques</span>
-                                    </li>
-                                </ul>
+                                <div class="grid gap-4 text-gray-300 text-sm md:text-base">
+                                    <div class="bg-gray-800/60 border border-gray-700/50 rounded-xl p-4">
+                                        <h5 class="text-rose-200 font-medium mb-2">Remote memory allocation:</h5>
+                                        <p>
+                                            Creating or reserving memory inside another process so code or data can be placed there.
+                                            This is often the first step in injection workflows because execution usually requires
+                                            a location in the target process where transferred content can reside.
+                                        </p>
+                                    </div>
+                                    <div class="bg-gray-800/60 border border-gray-700/50 rounded-xl p-4">
+                                        <h5 class="text-rose-200 font-medium mb-2">Thread creation and manipulation:</h5>
+                                        <p>
+                                            Threads act as execution paths for injected content. This includes creating a new
+                                            execution path inside the target process or redirecting an existing thread so
+                                            execution reaches the intended code.
+                                        </p>
+                                    </div>
+                                    <div class="bg-gray-800/60 border border-gray-700/50 rounded-xl p-4">
+                                        <h5 class="text-rose-200 font-medium mb-2">Shared memory sections:</h5>
+                                        <p>
+                                            Memory regions that can be mapped into multiple process contexts.
+                                            Instead of copying bytes directly into a target process, shared mappings
+                                            allow the same underlying memory content to appear in multiple processes.
+                                        </p>
+                                    </div>
+                                    <div class="bg-gray-800/60 border border-gray-700/50 rounded-xl p-4">
+                                        <h5 class="text-rose-200 font-medium mb-2">Execution context modification:</h5>
+                                        <p>
+                                            Redirecting execution flow by modifying the state that determines where
+                                            a thread continues running. This allows execution to reach injected code
+                                            without necessarily creating a new thread.
+                                        </p>
+                                    </div>
+            
+                                </div>
                             </div>
                         </div>
                         <div class="grid md:grid-cols-2 gap-4">
@@ -462,37 +618,96 @@
                     </p>
                     <div class="grid gap-5">
                         <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
-                            <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-3">Obfuscation &amp; Evasion Fundamentals</h4>
                             <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-4">
                                 Persistence focuses on how software maintains execution across reboots, logins, and system state changes. Rather than memorizing isolated techniques, study the operating system features that 
                                 allow programs to regain execution over time and understand how those mechanisms appear from both an administrative and defensive perspective.
                                 Begin with common persistence mechanisms such as:
                             </p>
-                            <ul class="grid gap-2 text-gray-300 text-sm md:text-base mb-4">
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">Registry run keys</span>
-                                </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">Scheduled tasks</span>
-                                </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">WMI event consumers</span>
-                                </li>
-                            </ul>
+                            <div class="grid gap-4 text-gray-300 text-sm md:text-base mb-4">
+
+                                <div class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-5">
+                                    <h5 class="text-rose-200 font-medium mb-2">
+                                        Across reboots, logins, and system state changes:
+                                    </h5>
+                                    <p class="leading-relaxed">
+                                        These phrases refer to different execution trigger classes.
+                                    </p>
+                                    <ul class="mt-3 space-y-2 list-disc list-inside text-gray-300">
+                                        <li>
+                                            <span class="text-rose-200 font-medium">Across reboots:</span>
+                                            execution begins when Windows restarts. Services are the clearest example because they can be configured to start automatically during system boot.
+                                        </li>
+                                        <li>
+                                            <span class="text-rose-200 font-medium">Across logins:</span>
+                                            execution occurs when a user signs in. Registry Run keys and Startup folders are typical mechanisms for launching programs at logon.
+                                        </li>
+                                        <li>
+                                            <span class="text-rose-200 font-medium">Across system state changes:</span>
+                                            execution is triggered by events other than boot or login. Task Scheduler and WMI event consumers are examples of systems that react to system events.
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-5">
+                                    <h5 class="text-rose-200 font-medium mb-2">
+                                        Registry Run Keys:
+                                    </h5>
+                                    <p class="leading-relaxed">
+                                        Windows Run and RunOnce registry keys allow programs to start automatically when a user logs on. 
+                                        Run executes each time the user signs in, while RunOnce runs a single time and then removes itself.
+                                    </p>
+                                    <ul class="mt-3 space-y-2 list-disc list-inside">
+                                        <li>Logon-triggered execution</li>
+                                        <li>Configuration-driven persistence</li>
+                                        <li>Registry artifacts that defenders can inspect</li>
+                                        <li>Clear distinction between user-scope and machine-scope autostart behavior</li>
+                                    </ul>
+                                </div>
+                                <div class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-5">
+                                    <h5 class="text-rose-200 font-medium mb-2">
+                                        Scheduled Tasks:
+                                    </h5>
+                                    <p class="leading-relaxed">
+                                        Task Scheduler provides flexible persistence through defined triggers and actions. Tasks can run at system startup, user logon, specific times, or in response to system events.
+                                    </p>
+                                    <ul class="mt-3 space-y-2 list-disc list-inside">
+                                        <li>Persistence based on trigger + action + execution context</li>
+                                        <li>Supports multiple launch conditions</li>
+                                        <li>Creates structured artifacts such as task definitions and trigger metadata</li>
+                                    </ul>
+                                </div>
+                            </div>
                             <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-4">
                                 Then expand into other operating-system integration points, including:
                             </p>
-                            <ul class="grid gap-2 text-gray-300 text-sm md:text-base">
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">Services</span>
-                                </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">Startup folders</span>
-                                </li>
-                                <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                    <span class="text-rose-200 font-medium">Logon and system configuration mechanisms</span>
-                                </li>
-                            </ul>
+                            <div class="grid md:grid-cols-2 gap-4 text-gray-300 text-sm md:text-base">
+                                <div class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-5">
+                                    <h5 class="text-rose-200 font-medium mb-2">
+                                        Services:
+                                    </h5>
+                                    <p class="leading-relaxed">
+                                        Windows services are long-running background executables that can start automatically when the system boots and run without user interaction.
+                                    </p>
+                                    <ul class="mt-3 space-y-2 list-disc list-inside">
+                                        <li>Persistence before interactive user logon</li>
+                                        <li>Integrated with Windows lifecycle management</li>
+                                        <li>Configured through service metadata and start modes</li>
+                                        <li>Common administrative infrastructure but also a durable persistence point</li>
+                                    </ul>
+                                </div>
+                                <div class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-5">
+                                    <h5 class="text-rose-200 font-medium mb-2">
+                                        Startup Folders:
+                                    </h5>
+                                    <p class="leading-relaxed">
+                                        Startup folders are simple file-system-based autostart locations. Any shortcut placed in the Startup directory will launch when the user signs in.
+                                    </p>
+                                    <ul class="mt-3 space-y-2 list-disc list-inside">
+                                        <li>User-session based persistence</li>
+                                        <li>File-system autostart mechanism</li>
+                                        <li>Easy to enumerate during system inspection</li>
+                                    </ul>
+                                </div>
+                            </div>
                             <p class="text-gray-400 leading-relaxed text-sm md:text-base mt-4">
                                 The objective is to understand how execution continuity is established, how persistence artifacts are recorded by the operating system, and how these mechanisms are observed through host telemetry, 
                                 system configuration, and forensic analysis.
@@ -529,18 +744,55 @@
                     </p>
                     <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 mb-6">
                         <h4 class="text-rose-200 font-semibold mb-4">Host-Level Telemetry Sources</h4>
-                        <ul class="grid sm:grid-cols-2 gap-3 text-gray-300 text-sm md:text-base">
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                <span class="text-rose-200 font-medium">Windows Event Logs</span>
+                        <ul class="grid sm:grid-cols-2 gap-4 text-gray-300 text-sm md:text-base">
+
+                            <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4">
+                                <h5 class="text-rose-200 font-medium mb-2">
+                                    Windows Event Logs:
+                                </h5>
+                                <p class="leading-relaxed">
+                                    The centralized Windows logging system used by the operating system and applications to record
+                                    important software and hardware events. These logs are accessible through Event Viewer and
+                                    provide baseline host records for service activity, application events, audit events, and
+                                    other system behavior. While broad in scope, they usually provide less detailed process-level
+                                    telemetry compared to specialized tools.
+                                </p>
                             </li>
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                <span class="text-rose-200 font-medium">Sysmon</span>
+                            <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4">
+                                <h5 class="text-rose-200 font-medium mb-2">
+                                    Sysmon:
+                                </h5>
+                                <p class="leading-relaxed">
+                                    A Sysinternals system service and driver that logs detailed system activity into the Windows
+                                    Event Log. Sysmon captures high-fidelity security telemetry such as process creation,
+                                    network connections, DLL loads, file creation changes, and correlation identifiers like
+                                    process GUIDs and session GUIDs. This makes it a powerful tool for understanding how
+                                    processes start, what they connect to, and what components they load.
+                                </p>
                             </li>
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                <span class="text-rose-200 font-medium">AMSI</span>
+                            <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4">
+                                <h5 class="text-rose-200 font-medium mb-2">
+                                    AMSI:
+                                </h5>
+                                <p class="leading-relaxed">
+                                    The Antimalware Scan Interface allows applications and system components to submit content
+                                    to the installed antimalware engine for inspection. This includes files, memory buffers,
+                                    and script content. Windows components such as PowerShell, Windows Script Host, Office VBA,
+                                    and certain execution paths integrate with AMSI, giving visibility into script-based and
+                                    dynamically generated content before or during execution.
+                                </p>
                             </li>
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                <span class="text-rose-200 font-medium">ETW providers</span>
+                            <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4">
+                                <h5 class="text-rose-200 font-medium mb-2">
+                                    ETW Providers:
+                                </h5>
+                                <p class="leading-relaxed">
+                                    Event Tracing for Windows (ETW) is the underlying tracing framework used by Windows for
+                                    high-performance event logging. Providers emit telemetry events, controllers enable or
+                                    configure them, and consumers read the resulting traces. Many Windows and application
+                                    telemetry streams originate from ETW events, making it a fundamental source for observing
+                                    system behavior and runtime activity.
+                                </p>
                             </li>
                         </ul>
                         <p class="text-gray-300 leading-relaxed text-sm md:text-base py-3">
@@ -552,16 +804,64 @@
                         <p class="text-gray-300 leading-relaxed text-sm md:text-base mb-4">
                             To build practical intuition, analyze the behavior of your own tools from a defensive perspective. Create simple detection logic using techniques such as:
                         </p>
-                        <ul class="grid gap-3 text-gray-300 text-sm md:text-base">
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                <span class="text-rose-200 font-medium">writing YARA rules for binaries and memory artifacts</span>
+                        <ul class="grid gap-4 text-gray-300 text-sm md:text-base">
+
+                            <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-5">
+                                <h5 class="text-rose-200 font-medium mb-2">
+                                    Writing YARA rules for binaries and memory artifacts:
+                                </h5>
+                                <p class="leading-relaxed">
+                                    The real lesson is not simply writing a large signature. It is learning to distinguish
+                                    between fragile indicators and stable indicators.
+                                </p>
+                        
+                                <ul class="mt-3 space-y-2 list-disc list-inside text-gray-300">
+                                    <li>A fragile indicator might be a single filename or one obvious string that changes every build.</li>
+                                    <li>A stable indicator might be recurring string groups, PE characteristics, path patterns, or mutex naming patterns.</li>
+                                    <li>YARA’s condition logic allows combining multiple patterns, size limits, and constraints before triggering a match.</li>
+                                </ul>
                             </li>
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                <span class="text-rose-200 font-medium">building Sysmon dashboards to visualize process activity</span>
+                        
+                            <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-5">
+                                <h5 class="text-rose-200 font-medium mb-2">
+                                    Building Sysmon dashboards to visualize process activity:
+                                </h5>
+                                <p class="leading-relaxed">
+                                    This exercise teaches how to move from raw telemetry to behavioral visibility.
+                                    Sysmon logs detailed system activity such as process creation, network connections,
+                                    and other security-relevant events into the Windows Event Log.
+                                </p>
+                        
+                                <ul class="mt-3 space-y-2 list-disc list-inside text-gray-300">
+                                    <li>Process creation events include command line arguments and unique ProcessGUID values.</li>
+                                    <li>Network events can be correlated back to processes using ProcessId or ProcessGuid.</li>
+                                    <li>Dashboards help visualize relationships between processes, commands, and connections.</li>
+                                </ul>
                             </li>
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                <span class="text-rose-200 font-medium">tracing execution patterns and system interactions</span>
+                        
+                            <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-5">
+                                <h5 class="text-rose-200 font-medium mb-2">
+                                    Tracing execution patterns and system interactions:
+                                </h5>
+                                <p class="leading-relaxed">
+                                    This exercise focuses on following a program’s behavior from launch through its
+                                    interactions with the operating system.
+                                </p>
+                        
+                                <ul class="mt-3 space-y-2 list-disc list-inside text-gray-300">
+                                    <li>Which processes it spawns</li>
+                                    <li>Which files or registry keys it touches</li>
+                                    <li>Which modules it loads</li>
+                                    <li>Which network connections it establishes</li>
+                                </ul>
+                        
+                                <p class="mt-3 leading-relaxed">
+                                    Tools like Process Monitor are useful here because they provide real-time visibility
+                                    into file system, registry, and process/thread activity, making it easier to understand
+                                    how software interacts with the system beyond its final output.
+                                </p>
                             </li>
+                        
                         </ul>
                         <p class="text-gray-300 leading-relaxed text-sm md:text-base py-3">
                             This approach helps develop an understanding of how behaviors appear in defensive telemetry. As offensive techniques evolve, defenders adapt detection strategies, 
@@ -602,19 +902,57 @@
                         <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-4">
                             Core Areas
                         </h4>
-                        <ul class="grid sm:grid-cols-2 gap-3 text-gray-300 text-sm md:text-base">
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                <span class="text-rose-200 font-medium">User-mode API hooks</span>
+                        <ul class="grid sm:grid-cols-2 gap-4 text-gray-300 text-sm md:text-base">
+
+                            <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4">
+                                <h5 class="text-rose-200 font-medium mb-2">
+                                    User-mode API hooks:
+                                </h5>
+                                <p class="leading-relaxed">
+                                    Interception points placed on Windows API calls inside a process. 
+                                    They allow security software to observe or instrument API calls before
+                                    the original function completes, making them useful for monitoring
+                                    process behavior and identifying suspicious actions.
+                                </p>
                             </li>
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                <span class="text-rose-200 font-medium">System call monitoring</span>
+                            <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4">
+                                <h5 class="text-rose-200 font-medium mb-2">
+                                    System call monitoring:
+                                </h5>
+                                <p class="leading-relaxed">
+                                    Observing how higher-level program actions translate into lower-level
+                                    operating system behavior. Windows exposes structured telemetry for
+                                    events such as process creation, memory allocation, and kernel-level
+                                    activity, allowing defenders to trace how execution moves through
+                                    the system.
+                                </p>
                             </li>
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3 sm:col-span-2">
-                                <span class="text-rose-200 font-medium">Telemetry sources such as ETW and AMSI</span>
+                            <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4 sm:col-span-2">
+                                <h5 class="text-rose-200 font-medium mb-2">
+                                    Telemetry sources such as ETW and AMSI:
+                                </h5>
+                                <p class="leading-relaxed">
+                                    These represent two different forms of runtime visibility. ETW is the
+                                    built-in Windows tracing framework where providers emit events,
+                                    controllers enable tracing, and consumers read the results.
+                                    AMSI is an antimalware inspection interface that allows applications
+                                    and services to submit content for scanning, including scripts,
+                                    memory streams, and file content.
+                                </p>
                             </li>
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3 sm:col-span-2">
-                                <span class="text-rose-200 font-medium">Behavioral and memory-based inspection</span>
+                            <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4 sm:col-span-2">
+                                <h5 class="text-rose-200 font-medium mb-2">
+                                    Behavioral and memory-based inspection:
+                                </h5>
+                                <p class="leading-relaxed">
+                                    Detection techniques that analyze runtime behavior rather than
+                                    relying solely on file signatures. This includes observing process
+                                    activity, filesystem interactions, suspicious execution patterns,
+                                    and scanning the memory space of running processes to identify
+                                    hidden or obfuscated threats.
+                                </p>
                             </li>
+                        
                         </ul>
                     </div>
                     <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
@@ -624,26 +962,57 @@
                         <p class="text-gray-300 text-sm md:text-base mb-4">
                             Begin with foundational methods that reduce static and runtime visibility, such as:
                         </p>
-                        <ul class="grid sm:grid-cols-2 gap-3 text-gray-300 text-sm md:text-base mb-5">
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                <span class="text-rose-200 font-medium">String and import hashing</span>
+                        <ul class="grid sm:grid-cols-2 gap-4 text-gray-300 text-sm md:text-base mb-5">
+                            <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4">
+                                <h5 class="text-rose-200 font-medium mb-1">
+                                    String and import hashing:
+                                </h5>
+                                <p class="leading-relaxed">
+                                    Reducing obvious static indicators by avoiding clear-text strings or direct,
+                                    easy-to-spot references inside a binary.
+                                </p>
                             </li>
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                <span class="text-rose-200 font-medium">Encrypted payload storage</span>
+                            <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4">
+                                <h5 class="text-rose-200 font-medium mb-1">
+                                    Encrypted payload storage:
+                                </h5>
+                                <p class="leading-relaxed">
+                                    Keeping embedded content protected until a later stage so it is not exposed
+                                    in its final form from the start.
+                                </p>
                             </li>
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3 sm:col-span-2">
-                                <span class="text-rose-200 font-medium">Staged payload loading</span>
+                            <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4 sm:col-span-2">
+                                <h5 class="text-rose-200 font-medium mb-1">
+                                    Staged payload loading:
+                                </h5>
+                                <p class="leading-relaxed">
+                                    Separating execution into phases so the full capability is not present
+                                    or visible all at once.
+                                </p>
                             </li>
+                        
                         </ul>
                         <p class="text-gray-300 text-sm md:text-base mb-4">
                             Then study execution-level mechanisms that aim to reduce visibility during runtime, including:
                         </p>
-                        <ul class="grid sm:grid-cols-2 gap-3 text-gray-300 text-sm md:text-base">
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                <span class="text-rose-200 font-medium">Direct or indirect system call strategies</span>
+                        <ul class="grid sm:grid-cols-2 gap-4 text-gray-300 text-sm md:text-base">
+                            <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4">
+                                <h5 class="text-rose-200 font-medium mb-1">
+                                    Direct or indirect system call strategies:
+                                </h5>
+                                <p class="leading-relaxed">
+                                    Understanding how execution reaches lower-level OS services and how that
+                                    affects what defenders can observe.
+                                </p>
                             </li>
-                            <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
-                                <span class="text-rose-200 font-medium">User-mode hook bypass techniques</span>
+                            <li class="rounded-xl bg-gray-800/60 border border-gray-700/50 p-4">
+                                <h5 class="text-rose-200 font-medium mb-1">
+                                    User-mode hook bypass techniques:
+                                </h5>
+                                <p class="leading-relaxed">
+                                    Studying how monitoring logic can be inserted into common API paths and
+                                    how that changes visibility.
+                                </p>
                             </li>
                         </ul>
                     </div>
@@ -697,20 +1066,52 @@
                         <p class="text-gray-300 mb-4 text-sm md:text-base">
                             Expand the architecture beyond simple client-server communication by exploring alternate network models and transport methods, such as:
                         </p>
-                        <ul class="grid gap-2 text-gray-300 text-sm md:text-base">
-                            <li class="bg-gray-800/60 border border-gray-700/50 rounded-lg px-4 py-2">
-                                peer-to-peer communication between agents
-                            </li>
-                            <li class="bg-gray-800/60 border border-gray-700/50 rounded-lg px-4 py-2">
-                                DNS-based communication channels
-                            </li>
-                            <li class="bg-gray-800/60 border border-gray-700/50 rounded-lg px-4 py-2">
-                                DNS-over-HTTPS or other tunneled transports
-                            </li>
-                            <li class="bg-gray-800/60 border border-gray-700/50 rounded-lg px-4 py-2">
-                                multi-hop relay or redirector architectures
-                            </li>
-                        </ul>
+                        <div class="grid gap-4 text-gray-300 text-sm md:text-base">
+
+                            <div class="bg-gray-800/60 border border-gray-700/50 rounded-xl p-4">
+                                <h5 class="text-rose-200 font-medium mb-2">
+                                    Peer-to-peer communication between agents:
+                                </h5>
+                                <p class="leading-relaxed">
+                                    Instead of having every agent communicate directly with a central server, agents can exchange data or relay messages through other agents. 
+                                    This introduces a distributed communication model where not all traffic depends on a single central endpoint.
+                                </p>
+                            </div>
+                        
+                            <div class="bg-gray-800/60 border border-gray-700/50 rounded-xl p-4">
+                                <h5 class="text-rose-200 font-medium mb-2">
+                                    DNS-based communication channels:
+                                </h5>
+                                <p class="leading-relaxed">
+                                    Communication is carried through DNS-related requests and responses rather than traditional web traffic. 
+                                    This demonstrates how data exchange can be embedded into alternate protocol channels and how protocol choice 
+                                    affects visibility, reliability, and control.
+                                </p>
+                            </div>
+                        
+                            <div class="bg-gray-800/60 border border-gray-700/50 rounded-xl p-4">
+                                <h5 class="text-rose-200 font-medium mb-2">
+                                    DNS-over-HTTPS or tunneled transports:
+                                </h5>
+                                <p class="leading-relaxed">
+                                    Traffic is wrapped inside another protocol or transport layer rather than being sent in a more direct form. 
+                                    This helps illustrate how communication can be shaped by the behavior of the surrounding protocol and how 
+                                    transport encapsulation changes network appearance.
+                                </p>
+                            </div>
+                        
+                            <div class="bg-gray-800/60 border border-gray-700/50 rounded-xl p-4">
+                                <h5 class="text-rose-200 font-medium mb-2">
+                                    Multi-hop relay or redirector architectures:
+                                </h5>
+                                <p class="leading-relaxed">
+                                    Communication passes through one or more intermediate systems before reaching its final destination. 
+                                    This separates the endpoint seen by the communicating agent from the final backend infrastructure and 
+                                    highlights how routing layers influence exposure, resiliency, and system design.
+                                </p>
+                            </div>
+                        
+                        </div>
                     </div>
                     <div class="mt-3 grid md:grid-cols-2 gap-4">
                         <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5">
@@ -727,6 +1128,251 @@
                             <h4 class="text-rose-200 font-semibold mb-3">Goal of This Stage</h4>
                             <p class="text-gray-300 text-sm md:text-base leading-relaxed">
                                 The goal of this stage is not simply to build a beacon, but to understand how communication protocols and infrastructure choices shape the behavior and visibility of remote agents.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="relative group">
+                <div class="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-gray-700/50 hover:border-rose-500/40 transition-all duration-300 shadow-xl">
+                    <h3 class="text-xl md:text-2xl font-bold text-rose-300 mb-4">
+                        Malware Architecture
+                    </h3>
+                    <div class="space-y-5 text-gray-300 leading-relaxed text-sm md:text-base mb-6">
+                        <p>
+                            Malware architecture focuses on how offensive tooling is designed, organized, and maintained as a complete software system. Rather than concentrating on transport protocols or network communication,
+                            this stage examines how the agent core, tasking logic, module system, execution flow, configuration handling, and backend coordination fit together into a modular and extensible framework.
+                            Study how different components are separated and how they interact with each other. This includes how tasks are received and dispatched, how new capabilities are added through modules or plugins, how 
+                            runtime state is tracked, and how the implant and backend remain maintainable as the framework grows in complexity.
+                        </p>
+                        <p>
+                            Once the basics are understood, experiment with techniques that influence how network traffic appears and behaves. Implement features such as request jitter, variable sleep intervals, 
+                            and user-agent rotation to simulate normal application traffic patterns. Study how different protocols affect visibility and reliability.
+                        </p>
+                    </div>
+                    <div class="grid gap-5">
+                        <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 hover:border-rose-500/20 transition-all duration-300">
+                            <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-4">
+                                Core Concepts to Explore
+                            </h4>
+                            <div class="grid gap-5">
+                                <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5">
+                                    <h4 class="text-lg font-semibold text-rose-200 mb-3">
+                                        Agent core and execution flow
+                                    </h4>
+                                    <p class="text-gray-300 text-sm md:text-base leading-relaxed mb-4">
+                                        The agent core is the main runtime component of the implant or client-side tool. It is responsible for the basic lifecycle of the program: starting up, initializing internal components, maintaining communication, receiving tasks, dispatching actions, and handling shutdown or recovery logic.
+                                    </p>
+                                    <p class="text-gray-300 text-sm md:text-base leading-relaxed mb-4">
+                                        Execution flow refers to the order in which those actions happen. In other words, it answers questions such as:
+                                    </p>
+                                    <ul class="grid gap-2 text-gray-300 text-sm md:text-base mb-4">
+                                        <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">What runs first when the agent starts?</li>
+                                        <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">How are tasks received and validated?</li>
+                                        <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">How are commands routed to the correct internal component?</li>
+                                        <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">How does the agent return results and continue operating?</li>
+                                    </ul>
+                                    <div class="rounded-lg border border-rose-500/20 bg-rose-500/5 px-4 py-3">
+                                        <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                                            <span class="text-rose-200 font-medium">Goal:</span>
+                                            The goal is to understand how the main runtime behaves as a coordinated system rather than as a collection of disconnected features.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5">
+                                    <h4 class="text-lg font-semibold text-rose-200 mb-3">
+                                        Module or plugin architecture
+                                    </h4>
+                                    <p class="text-gray-300 text-sm md:text-base leading-relaxed mb-4">
+                                        A module or plugin architecture means that capabilities are implemented as separate components instead of embedding everything inside one large program. The core system handles coordination, while individual modules provide specific functionality.
+                                    </p>
+                                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                                        <div class="rounded-lg border border-gray-700/50 bg-gray-800/50 p-4">
+                                            <h5 class="text-rose-200 font-medium mb-2">The core may manage:</h5>
+                                            <ul class="space-y-2 text-gray-300 text-sm md:text-base">
+                                                <li>communication</li>
+                                                <li>task dispatching</li>
+                                                <li>lifecycle management</li>
+                                                <li>state tracking</li>
+                                            </ul>
+                                        </div>
+                                        <div class="rounded-lg border border-gray-700/50 bg-gray-800/50 p-4">
+                                            <h5 class="text-rose-200 font-medium mb-2">Modules may provide:</h5>
+                                            <ul class="space-y-2 text-gray-300 text-sm md:text-base">
+                                                <li>system enumeration</li>
+                                                <li>file operations</li>
+                                                <li>screenshot capture</li>
+                                                <li>command execution</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <p class="text-gray-300 text-sm md:text-base leading-relaxed mb-4">
+                                        This design makes the framework easier to extend, maintain, and organize. Instead of modifying the entire project every time a new capability is added, new functionality can be introduced as a separate module.
+                                    </p>
+                                    <div class="rounded-lg border border-rose-500/20 bg-rose-500/5 px-4 py-3">
+                                        <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                                            <span class="text-rose-200 font-medium">Goal:</span>
+                                            The goal is to understand how modular design improves flexibility, separation of concerns, and long-term maintainability.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5">
+                                    <h4 class="text-lg font-semibold text-rose-200 mb-3">
+                                        Configuration and runtime state management
+                                    </h4>
+                                    <p class="text-gray-300 text-sm md:text-base leading-relaxed mb-4">
+                                        Configuration management refers to how the framework stores and uses its settings. These settings may control how the system behaves, such as communication preferences, feature toggles, identifiers, retry logic, or timing behavior.
+                                    </p>
+                                    <p class="text-gray-300 text-sm md:text-base leading-relaxed mb-4">
+                                        Runtime state management refers to the information the system tracks while it is running. This includes the current session state, task status, loaded modules, execution context, connection status, and other data the program needs in order to function consistently over time.
+                                    </p>
+                                    <p class="text-gray-300 text-sm md:text-base leading-relaxed mb-4">
+                                        Together, these concepts answer questions such as:
+                                    </p>
+                                    <ul class="grid gap-2 text-gray-300 text-sm md:text-base mb-4">
+                                        <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">What settings control behavior?</li>
+                                        <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">What information must persist while the program is running?</li>
+                                        <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">How does the framework track active tasks or internal status?</li>
+                                        <li class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">How does it recover or continue after interruptions?</li>
+                                    </ul>
+                                    <div class="rounded-lg border border-rose-500/20 bg-rose-500/5 px-4 py-3">
+                                        <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                                            <span class="text-rose-200 font-medium">Goal:</span>
+                                            The goal is to understand how a framework remains stable, predictable, and coordinated during execution.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5">
+                                    <h4 class="text-lg font-semibold text-rose-200 mb-3">
+                                        Separation of implant, loader, and backend responsibilities
+                                    </h4>
+                                    <p class="text-gray-300 text-sm md:text-base leading-relaxed mb-4">
+                                        This concept focuses on clear boundaries between major system components.
+                                    </p>
+                                    <div class="grid md:grid-cols-3 gap-4 mb-4">
+                                        <div class="rounded-lg border border-gray-700/50 bg-gray-800/50 p-4">
+                                            <h5 class="text-rose-200 font-medium mb-2">Implant</h5>
+                                            <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                                                The main client-side runtime that performs task handling and execution.
+                                            </p>
+                                        </div>
+                                        <div class="rounded-lg border border-gray-700/50 bg-gray-800/50 p-4">
+                                            <h5 class="text-rose-200 font-medium mb-2">Loader</h5>
+                                            <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                                                The component responsible for preparing, placing, or starting executable content.
+                                            </p>
+                                        </div>
+                                        <div class="rounded-lg border border-gray-700/50 bg-gray-800/50 p-4">
+                                            <h5 class="text-rose-200 font-medium mb-2">Backend</h5>
+                                            <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                                                The server-side or control-side component that manages coordination, tasking, storage, or operator interaction.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <p class="text-gray-300 text-sm md:text-base leading-relaxed mb-4">
+                                        These parts should not all be treated as the same thing, because each has a different responsibility.
+                                    </p>
+                                    <div class="rounded-lg border border-gray-700/50 bg-gray-800/50 p-4 mb-4">
+                                        <h5 class="text-rose-200 font-medium mb-2">A clean design keeps those roles separate</h5>
+                                        <ul class="space-y-2 text-gray-300 text-sm md:text-base">
+                                            <li>the loader handles preparation and startup</li>
+                                            <li>the implant handles runtime execution and task processing</li>
+                                            <li>the backend handles coordination and infrastructure logic</li>
+                                        </ul>
+                                    </div>
+                                    <p class="text-gray-300 text-sm md:text-base leading-relaxed mb-4">
+                                        This separation makes the framework easier to reason about, debug, extend, and maintain. It also prevents one component from becoming overloaded with unrelated responsibilities.
+                                    </p>
+                            
+                                    <div class="rounded-lg border border-rose-500/20 bg-rose-500/5 px-4 py-3">
+                                        <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                                            <span class="text-rose-200 font-medium">Goal:</span>
+                                            The goal is to understand how different parts of the overall system fit together without collapsing into a single monolithic design.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5">
+                                <h4 class="text-rose-200 font-semibold mb-3">
+                                    Architectural Themes
+                                </h4>
+                                <ul class="space-y-2 text-gray-300 text-sm md:text-base">
+                                    <li>Component separation</li>
+                                    <li>Task dispatch and coordination</li>
+                                    <li>Extensibility through modules</li>
+                                    <li>Runtime state tracking</li>
+                                </ul>
+                            </div>
+                            <div class="rounded-xl border border-rose-500/20 bg-rose-500/5 p-5">
+                                <h4 class="text-rose-200 font-semibold mb-3">
+                                    Goal of This Stage
+                                </h4>
+                                <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                                    The goal of this stage is to understand how offensive tooling is structured as a complete system, and how architectural decisions affect flexibility, maintainability, scalability, and operational behavior.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="relative group">
+                <div class="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-gray-700/50 hover:border-rose-500/40 transition-all duration-300 shadow-xl">
+                    
+                    <h3 class="text-xl md:text-2xl font-bold text-rose-300 mb-4">
+                        C2 vs Malware Architecture
+                    </h3>
+                    <div class="grid md:grid-cols-2 gap-5 mb-6">
+                        <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5">
+                            <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-3">
+                                C2 &amp; Networking
+                            </h4>
+                            <p class="text-gray-300 leading-relaxed text-sm md:text-base">
+                                C2 &amp; Networking focuses on communication: how an implant exchanges data with remote infrastructure, how tasks and results are transmitted, which transport protocols are used, and how traffic behaves 
+                                across the network. This includes areas such as HTTP, HTTPS, DNS, encrypted channels, beacon timing, jitter, protocol selection, and alternate communication topologies.
+                            </p>
+                        </div>
+                        <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5">
+                            <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-3">
+                                Malware Architecture
+                            </h4>
+                            <p class="text-gray-300 leading-relaxed text-sm md:text-base">
+                                Malware Architecture focuses on the internal design of the framework as a whole: how the implant, tasking logic, modules, loaders, configuration, and backend components are organized into a complete 
+                                software system. This includes how responsibilities are separated, how capabilities are added or extended, how state is maintained, and how the overall framework remains modular, scalable, and 
+                                maintainable.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5 mb-5">
+                        <h4 class="text-base md:text-lg font-semibold text-rose-200 mb-3">
+                            In Simple Terms
+                        </h4>
+                        <div class="grid sm:grid-cols-2 gap-3 text-gray-300 text-sm md:text-base">
+                            <div class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                <span class="text-rose-200 font-medium">C2 &amp; Networking</span> = how the system communicates
+                            </div>
+                            <div class="rounded-lg bg-gray-800/60 border border-gray-700/50 px-4 py-3">
+                                <span class="text-rose-200 font-medium">Malware Architecture</span> = how the system is structured
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="rounded-xl border border-gray-700/60 bg-gray-900/40 p-5">
+                            <h4 class="text-rose-200 font-semibold mb-3">
+                                Core Difference
+                            </h4>
+                            <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                                C2 is one component of malware architecture, not a replacement for it. A framework may have a strong communication layer, but malware architecture also includes the agent core, task dispatcher, execution flow, module system, 
+                                configuration handling, and backend design.
+                            </p>
+                        </div>
+                        <div class="rounded-xl border border-rose-500/20 bg-rose-500/5 p-5">
+                            <h4 class="text-rose-200 font-semibold mb-3">
+                                Goal of This Stage
+                            </h4>
+                            <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                                The goal is to separate transport design from framework design. One stage studies how data moves between an agent and its infrastructure, while the other studies how the entire offensive platform is built as a complete and maintainable system.
                             </p>
                         </div>
                     </div>
