@@ -286,7 +286,7 @@
             <h3 class="text-2xl md:text-3xl font-bold text-blue-300 mb-4">EDR Works as a Pipeline, each Component Plays a Role </h3>
             <p class=" text-slate-300 text-lg leading-relaxed">
                 An Endpoint Detection & Response platform isn’t a single agent, it’s a loop. A sensor collects raw events, analytics convert noise into high-fidelity alerts, and 
-                automated playbooks act before damage spreads. Remove one stage and the protection chain breaks. I'll take kaspersky EDR Optimum as an example and few of it's components.
+                automated playbooks act before damage spreads. Remove one stage and the protection chain breaks.
             </p>
             <br>
             <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -300,69 +300,221 @@
                 <h4 class="text-lg font-semibold text-white">Endpoint Agent</h4>
                 </header>
                 <p class="text-slate-400 text-sm leading-relaxed">
-                    This is the lightweight software installed on individual devices like PCs, servers, or virtual machines integrated into Kaspersky Endpoint Security . It's used for continuous
-                    data collection, monitoring endpoint activities in real-time, such as file changes, network traffic, memory activity and process behaviors. The agent sends this telemetry to 
-                    the central console, enabling early threat detection and helping to spot anomalies without impacting device performance. However, it can kill or isolate locally within seconds.
+                    The endpoint agent, sometimes called the sensor, is the lightweight component installed on workstations, servers, and sometimes virtual or cloud workloads. It continuously monitors 
+                    endpoint activity in real time, including process execution, file changes, registry modifications, user activity, network connections, and memory-related behavior. This is the visibility 
+                    layer of EDR. Without the agent, there is no local telemetry to analyze. A well-designed sensor collects rich data while keeping performance overhead low. In many platforms, the agent 
+                    can also take immediate local action, such as killing a malicious process, quarantining a file, or isolating the host from the network within seconds.
+                </p>
+            </article>
+            <article class="bg-[#101e33] ring-1 ring-white/10 rounded-2xl p-6 flex flex-col">
+                <header class="flex items-center gap-3 mb-3">
+                <svg class="w-8 h-8 text-teal-300" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <ellipse cx="12" cy="5" rx="7" ry="3"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 5v6c0 1.7 3.1 3 7 3s7-1.3 7-3V5"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 11v6c0 1.7 3.1 3 7 3"/>
+                    <circle cx="18" cy="17" r="3"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M20.5 19.5L22 21"/>
+                </svg>
+                <h4 class="text-lg font-semibold text-white">Telemetry Collection, Retention, and Search</h4>
+                </header>
+                <p class="text-slate-400 text-sm leading-relaxed">
+                    Collecting telemetry is only the first step. EDR also requires a backend that can normalize, store, index, and make endpoint data searchable. This allows defenders to go beyond live alerts and 
+                    perform historical investigation, threat hunting, and incident reconstruction. This component is what gives EDR its forensic value. Security teams can review what happened before, during, and 
+                    after an alert, search across multiple endpoints, and reconstruct attacker activity over time rather than relying only on point-in-time detections.
                 </p>
             </article>
             <article class="bg-[#101e33] ring-1 ring-white/10 rounded-2xl p-6 flex flex-col">
                 <header class="flex items-center gap-3 mb-3">
                 <svg class="w-8 h-8 text-sky-300" xmlns="http://www.w3.org/2000/svg" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                    <rect x="4" y="3" width="16" height="6" rx="1.5"/>
-                    <rect x="4" y="9" width="16" height="6" rx="1.5"/>
-                    <rect x="4" y="15" width="16" height="6" rx="1.5"/>
+                    <rect x="9" y="9" width="6" height="6" rx="1.5"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v4M12 17v4M3 12h4M17 12h4"/>
+                    <circle cx="12" cy="3" r="1"/>
+                    <circle cx="12" cy="21" r="1"/>
+                    <circle cx="3" cy="12" r="1"/>
+                    <circle cx="21" cy="12" r="1"/>
                 </svg>
-                <h4 class="text-lg font-semibold text-white">Kaspersky Security Center (Central Console)</h4>
+                <h4 class="text-lg font-semibold text-white">Central Management Console</h4>
                 </header>
                 <p class="text-slate-400 text-sm leading-relaxed">
-                    Acts as the hub for overseeing the entire EDR setup. It's used for deploying and managing agents such as Windows, Linux and macOS endpoints, configuring policies, push updates and 
-                    viewing dashboards with alerts and reports. This component simplifies administration, allowing IT teams to monitor multiple endpoints from one place, set up automated 
-                    responses, and ensure consistent security across the network.
+                    The central console is the operational hub of the EDR platform. It is where administrators and analysts deploy agents, configure policies, review alerts, investigate incidents, monitor 
+                    endpoint posture, and manage response actions across the environment. This component is essential for scale. Rather than working host by host, security teams can manage Windows, Linux, 
+                    macOS, server, and sometimes cloud workloads from a single interface. The console also acts as the coordination layer between telemetry, analytics, and response.
                 </p>
             </article>
             <article class="bg-[#101e33] ring-1 ring-white/10 rounded-2xl p-6 flex flex-col">
                 <header class="flex items-center gap-3 mb-3">
-                <svg class="w-8 h-8 text-amber-300" xmlns="http://www.w3.org/2000/svg" fill="none"
-                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                    <circle cx="11" cy="11" r="7"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 16l4 4"/>
-                </svg>
-                <h4 class="text-lg font-semibold text-white">Detection Engines</h4>
+                    <svg class="w-8 h-8 text-amber-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 19h16"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 16l3-4 3 2 4-6"/>
+                        <circle cx="7" cy="16" r="1"/>
+                        <circle cx="10" cy="12" r="1"/>
+                        <circle cx="13" cy="14" r="1"/>
+                        <circle cx="17" cy="8" r="1"/>
+                    </svg>
+                    <h4 class="text-lg font-semibold text-white">Detection and Analytics Engine</h4>
                 </header>
+                <p class="text-slate-400 text-sm leading-relaxed mb-3">
+                    The detection engine is the analytic core of the platform. It processes collected telemetry and identifies suspicious or malicious activity using multiple methods, including:
+                </p>
+                <ul class="text-slate-400 text-sm leading-relaxed space-y-2 list-disc pl-5 mb-3">
+                    <li><span class="font-medium text-slate-300">Indicators of Compromise (IoCs):</span> known bad hashes, IPs, domains, file paths, or other observable artifacts</li>
+                    <li><span class="font-medium text-slate-300">Indicators of Attack (IoAs):</span> behavioral patterns associated with attacker activity</li>
+                    <li><span class="font-medium text-slate-300">Rule-based detection:</span> logic built around known malicious techniques</li>
+                    <li><span class="font-medium text-slate-300">Behavior analytics and machine learning:</span> methods used to detect evasive or previously unseen threats</li>
+                </ul>
+            
                 <p class="text-slate-400 text-sm leading-relaxed">
-                    These are the core analytical tools that process collected data. Indicators of Compromise (IoC) scans for known threats like malicious IPs or file hashes, based on the feeds, while Indicators of Attack
-                    (IoA) focuses on behavioral patterns, such as unusual process activities. They're used to identify evasive threats quickly, often with MITRE ATT&CK mapping for better context, helping security teams investigate and prioritize incidents.                </p>
-            </article>
-            <article class="bg-[#101e33] ring-1 ring-white/10 rounded-2xl p-6 flex flex-col">
-                <header class="flex items-center gap-3 mb-3">
-                <svg class="w-8 h-8 text-rose-300" xmlns="http://www.w3.org/2000/svg" fill="none"
-                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M12 2l7 4v5c0 5-3.5 9-7 10-3.5-1-7-5-7-10V6l7-4z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M13 9l-2 4h3l-2 4"/>
-                </svg>
-                <h4 class="text-lg font-semibold text-white">Response & Automation</h4>
-                </header>
-                <p class="text-slate-400 text-sm leading-relaxed">
-                    This component handles automated actions like isolating infected devices, quarantining files, or blocking malicious processes with "single-click" simplicity. It's used to 
-                    minimize response times, reduce manual effort, and contain threats before they spread, making it ideal for businesses with limited in-house expertise.
+                    This is the stage where raw endpoint data is converted into meaningful detections. Strong EDR platforms do not rely on signatures alone; they correlate behaviors, sequence events, and map activity to adversary techniques, often using frameworks such as MITRE ATT&amp;CK.
                 </p>
             </article>
             <article class="bg-[#101e33] ring-1 ring-white/10 rounded-2xl p-6 flex flex-col">
                 <header class="flex items-center gap-3 mb-3">
-                <svg class="w-8 h-8 text-indigo-300" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    <svg class="w-8 h-8 text-rose-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 3l7 4v5c0 4.5-2.8 8.3-7 10-4.2-1.7-7-5.5-7-10V7l7-4z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 19l-2 2"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 19l2 2"/>
+                    </svg>
+                    <h4 class="text-lg font-semibold text-white">Response, Containment, and Automation</h4>
+                </header>
+                <p class="text-slate-400 text-sm leading-relaxed mb-3">
+                    Detection without response leaves defenders chasing alerts manually. The response layer allows security teams to act directly from the platform using actions such as:
+                </p>
+                <ul class="text-slate-400 text-sm leading-relaxed space-y-2 list-disc pl-5 mb-3">
+                    <li>isolating a host</li>
+                    <li>killing a malicious process</li>
+                    <li>quarantining a file</li>
+                    <li>blocking an indicator or execution path</li>
+                    <li>collecting forensic artifacts</li>
+                    <li>triggering automated workflows or playbooks</li>
+                </ul>
+            
+                <p class="text-slate-400 text-sm leading-relaxed">
+                    This component reduces dwell time and helps contain threats before they spread across the environment. In mature deployments, automation also reduces analyst workload by handling common containment tasks consistently and at speed.
+                </p>
+            </article>
+            <article class="bg-[#101e33] ring-1 ring-white/10 rounded-2xl p-6 flex flex-col">
+                <header class="flex items-center gap-3 mb-3">
+                <svg class="w-8 h-8 text-indigo-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                    <circle cx="12" cy="12" r="9"/>
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"/>
+                    <circle cx="12" cy="12" r="3"/>
+                    <circle cx="5" cy="5" r="2"/>
+                    <circle cx="19" cy="5" r="2"/>
+                    <circle cx="5" cy="19" r="2"/>
+                    <circle cx="19" cy="19" r="2"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 7l3 3M17 7l-3 3M7 17l3-3M17 17l-3-3"/>
                 </svg>
                 <h4 class="text-lg font-semibold text-white">Threat Intelligence</h4>
                 </header>
                 <p class="text-slate-400 text-sm leading-relaxed">
-                    Kaspersky EDR Optimum pulls in real-time threat data from Kaspersky's global intelligence feeds. This is used to enrich detections, correlate events with known attack patterns, 
-                    and stay updated on emerging threats, enhancing proactive defense without requiring constant manual updates.
+                    Threat intelligence enhances detections by adding reputation, campaign context, adversary associations, and known TTPs. It helps the platform correlate suspicious activity with 
+                    malicious infrastructure, malware families, or previously observed attack patterns. This enrichment improves both speed and accuracy. Analysts are not just shown that a process 
+                    behaved abnormally; they are also given context about whether the related hash, domain, or IP address is associated with known threats. In practice, threat intelligence strengthens 
+                    triage, prioritization, and decision-making.
+                </p>
+            </article>
+            <article class="bg-[#101e33] ring-1 ring-white/10 rounded-2xl p-6 flex flex-col">
+                <header class="flex items-center gap-3 mb-3">
+                <svg class="w-8 h-8 text-indigo-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <circle cx="10" cy="10" r="5"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 14l6 6"/>
+                    <circle cx="6" cy="6" r="1"/>
+                    <circle cx="14" cy="6" r="1"/>
+                    <circle cx="6" cy="14" r="1"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 6h6M6 7v6"/>
+                </svg>
+                <h4 class="text-lg font-semibold text-white">Investigation and Threat Hunting Workspace</h4>
+                </header>
+                <p class="text-slate-400 text-sm leading-relaxed">
+                    Once an alert is triggered, analysts need a workspace to investigate it. This part of the platform typically includes timelines, process trees, root-cause views, cross-host correlation, 
+                    and fleet-wide search over current and historical telemetry. This is where defenders validate detections, understand the full attack path, determine scope, and identify lateral movement 
+                    or persistence mechanisms. Without investigation capability, EDR becomes little more than an alerting tool. With it, it becomes a full incident analysis platform.
+                </p>
+            </article>
+            <article class="bg-[#101e33] ring-1 ring-white/10 rounded-2xl p-6 flex flex-col">
+                <header class="flex items-center gap-3 mb-3">
+                <svg class="w-8 h-8 text-indigo-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 3l7 4v5c0 4.5-2.8 8.3-7 10-4.2-1.7-7-5.5-7-10V7l7-4z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12l2 2 4-4"/>
+                </svg>
+                <h4 class="text-lg font-semibold text-white">Prevention and Control Features</h4>
+                </header>
+                <p class="text-slate-400 text-sm leading-relaxed">
+                    Many EDR platforms are now bundled with preventive controls such as application control, device control, firewall policy management, script or macro restrictions, and execution control. These 
+                    features are not the analytic core of EDR, but they strengthen the endpoint security posture and reduce the attack surface.
+                </p>
+            </article>
+            <article class="bg-[#101e33] ring-1 ring-white/10 rounded-2xl p-6 flex flex-col">
+                <header class="flex items-center gap-3 mb-3">
+                <svg class="w-8 h-8 text-indigo-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3l7 4-7 4-7-4 7-4z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 7v6l7 4 7-4V7"/>
+                    <circle cx="18" cy="18" r="2.5"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 14.5v1M18 20.5v1M14.5 18h1M20.5 18h1M15.8 15.8l.7.7M19.5 19.5l.7.7M20.2 15.8l-.7.7M16.5 19.5l-.7.7"/>
+                </svg>
+                <h4 class="text-lg font-semibold text-white">Deployment, Onboarding, and Policy Management</h4>
+                </header>
+                <p class="text-slate-400 text-sm leading-relaxed">
+                    A practical EDR platform must support scalable rollout and lifecycle management. This includes remote installation, bulk onboarding, package deployment, upgrades, and policy assignment. These capabilities 
+                    are operational rather than analytic, but they are critical for enterprise adoption.
+                </p>
+            </article>
+            <article class="bg-[#101e33] ring-1 ring-white/10 rounded-2xl p-6 flex flex-col">
+                <header class="flex items-center gap-3 mb-3">
+                <svg class="w-8 h-8 text-indigo-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15 17H5l1.5-2V11a5.5 5.5 0 0111 0v4L19 17h-4"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 17a3 3 0 006 0"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 7h3M18 10h3M18 13h3"/>
+                </svg>
+                <h4 class="text-lg font-semibold text-white">Alerts, Reporting, and Compliance Evidence</h4>
+                </header>
+                <p class="text-slate-400 text-sm leading-relaxed">
+                    EDR platforms also need strong reporting functions. This includes alert dashboards, incident trends, endpoint health summaries, policy status, and audit-ready reporting for compliance or executive oversight. Reporting 
+                    does not detect threats by itself, but it is essential for operational awareness and governance.
+                </p>
+            </article>
+            <article class="bg-[#101e33] ring-1 ring-white/10 rounded-2xl p-6 flex flex-col">
+                <header class="flex items-center gap-3 mb-3">
+                <svg class="w-8 h-8 text-indigo-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <rect x="3" y="7" width="6" height="6" rx="1.5"/>
+                    <rect x="15" y="3" width="6" height="6" rx="1.5"/>
+                    <rect x="15" y="15" width="6" height="6" rx="1.5"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 10h6M12 9v6"/>
+                </svg>
+                <h4 class="text-lg font-semibold text-white">Integrations and APIs</h4>
+                </header>
+                <p class="text-slate-400 text-sm leading-relaxed">
+                    EDR rarely operates in isolation. In most enterprise environments, it integrates with SIEM, SOAR, ticketing systems, email security tools, sandboxing platforms, and threat intelligence platforms. APIs and integrations allow EDR 
+                    data and actions to become part of a larger security operations ecosystem.
+                </p>
+            </article>
+            <article class="bg-[#101e33] ring-1 ring-white/10 rounded-2xl p-6 flex flex-col">
+                <header class="flex items-center gap-3 mb-3">
+                <svg class="w-8 h-8 text-indigo-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <circle cx="12" cy="12" r="9"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4"/>
+                </svg>
+                <h4 class="text-lg font-semibold text-white">Conclusion</h4>
+                </header>
+                <p class="text-slate-400 text-sm leading-relaxed">
+                    An EDR platform is best understood as a pipeline rather than a product feature. The endpoint agent collects telemetry, the backend stores and correlates it, the detection engine identifies 
+                    threats, intelligence enriches the findings, analysts investigate through the console, and the response layer contains the threat. Around this core, modern platforms often add prevention
+                    controls, identity awareness, reporting, deployment tooling, and third-party integrations. That is what makes EDR effective: not a single component, but the way each component supports 
+                    the others in a continuous detect-investigate-respond loop.
                 </p>
             </article>
             </div>
@@ -374,78 +526,281 @@
         <section id="edr-detection" class="bg-[#142031] rounded-2xl p-8 md:p-7 shadow-lg ring-1 ring-slate-800/60">
             <h3 class="text-2xl md:text-3xl font-bold text-blue-300 mb-4"> How Does EDR Detect Malware? </h3>
             <p class=" text-slate-300 text-lg leading-relaxed">
-                let's get into the mechanics and learn how does EDR actually spot malware? It's not magic, it's a combination of smart techniques that work together to identify and neutralize threats. 
-                EDR uses several detection methods, often layered for better accuracy. Here's a closer look:
+                EDR detects malware by combining multiple layers of inspection, telemetry, and analytics. Instead of relying only on signatures, it watches how files, processes, memory, scripts, registry changes, 
+                and network connections behave over time. This lets it detect both known malware and previously unseen threats.
             </p>
             <br>
             <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
                 <article class="relative overflow-hidden rounded-2xl bg-[#11152b] p-6 ring-1 ring-white/10">
                     <span class="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-purple-500 to-indigo-500"></span>
-                    <header class="flex items-center gap-3">
-                        <svg class="w-8 h-8 text-purple-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                        <h4 class="text-lg font-semibold text-white"> Behavior-Based Detection </h4>
+                
+                    <header class="flex items-start gap-3 pr-2">
+                        <div class="mt-0.5 shrink-0 rounded-xl bg-purple-500/10 p-2 ring-1 ring-purple-400/20">
+                            <svg class="h-6 w-6 text-purple-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" >
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m5.25 2.25a8.25 8.25 0 1 1-16.5 0 8.25 8.25 0 0 1 16.5 0Z"/>
+                            </svg>
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="text-lg font-semibold leading-snug text-white">
+                                Static and Reputation-Based Detection
+                            </h4>
+                        </div>
                     </header>
-                    <p class="mt-4 text-slate-400 leading-relaxed">
-                        To handle unknown threats, EDR analyzes the behavior of processes and files in real-time. For instance, if a program starts encrypting files rapidly, a common ransomware tactic,
-                        or makes unusual network calls, EDR can raise an alarm. This method uses heuristics and machine learning models to spot deviations from normal activity. It's like watching 
-                        someone act suspiciously in a crowd, even if you've never seen them before, their actions give them away.
-                    </p>
+                    <div class="mt-4 space-y-4">
+                        <p class="text-slate-400 leading-7">
+                            Before or during execution, EDR can inspect files for suspicious traits such as unusual PE structure,
+                            high entropy, obfuscation, suspicious imports, invalid or missing signatures, and execution from
+                            uncommon paths. Many platforms also use reputation signals like file hash reputation, signer trust,
+                            prevalence, and artifact age to identify files that are known malicious or unusually rare.
+                        </p>
+                        <div class="rounded-xl border border-white/5 bg-white/5 p-4">
+                            <p class="mb-3 text-sm font-medium uppercase tracking-wide text-purple-200/90">
+                                Before a file even runs, the agent can inspect:
+                            </p>
+                            <ul class="grid gap-2 text-sm text-slate-300 sm:grid-cols-2">
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">PE structure anomalies</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Import table oddities</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Packers and obfuscators</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Suspicious sections and entropy</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Embedded macros, scripts, or LOLBin launch patterns</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Malformed signatures or stolen certificates</li>
+                            </ul>
+                        </div>
+                    </div>
+                </article>
+                <article class="relative overflow-hidden rounded-2xl bg-[#11152b] p-6 ring-1 ring-white/10">
+                    <span class="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-purple-500 to-indigo-500"></span>
+                    <header class="flex items-start gap-3 pr-2">
+                        <div class="mt-0.5 shrink-0 rounded-xl bg-purple-500/10 p-2 ring-1 ring-purple-400/20">
+                            <svg class="h-6 w-6 text-purple-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" >
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h12M6 12h12M6 18h6" />
+                                <circle cx="18" cy="18" r="2" />
+                            </svg>
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="text-lg font-semibold leading-snug text-white">
+                                Behavioral and Heuristic Detection
+                            </h4>
+                        </div>
+                    </header>
+                    <div class="mt-4 space-y-4">
+                        <p class="text-slate-400 leading-7">
+                            One of the core strengths of EDR is monitoring behavior in real time. It looks for
+                            actions commonly associated with malware such as rapid file encryption,
+                            suspicious parent-child process chains, encoded PowerShell, abuse of LOLBins,
+                            registry tampering, unauthorized persistence changes, and unusual outbound
+                            connections. Heuristic detection complements this by using rule-based logic
+                            to identify suspicious patterns even when the exact malware sample has never
+                            been seen before.
+                        </p>
+                        <div class="rounded-xl border border-white/5 bg-white/5 p-4">
+                            <p class="mb-3 text-sm font-medium uppercase tracking-wide text-purple-200/90">
+                                Suspicious parent–child process chains:
+                            </p>
+                            <ul class="grid gap-2 text-sm text-slate-300 sm:grid-cols-2">
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">winword.exe spawning powershell.exe</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">rundll32.exe launching a script host</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Browser spawning cmd.exe</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">svchost.exe spawning unsigned binaries from user-writable paths</li>
+                            </ul>
+                        </div>
+                    </div>
                 </article>
                 <article class="relative overflow-hidden rounded-2xl bg-[#11152b] p-6 ring-1 ring-white/10">
                     <span class="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-teal-400 to-emerald-500"></span>
-                    <header class="flex items-center gap-3">
-                        <svg class="w-8 h-8 text-teal-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16M4 12h16" />
-                        </svg>
-                        <h4 class="text-lg font-semibold text-white"> Machine Learning (ML) & AI </h4>
+                    <header class="flex items-start gap-3 pr-2">
+                        <div class="mt-0.5 shrink-0 rounded-xl bg-teal-500/10 p-2 ring-1 ring-teal-400/20">
+                            <svg class="h-6 w-6 text-teal-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.5l4.5-4.5 4 4 8-8"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 5h4v4"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21H3" />
+                            </svg>
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="text-lg font-semibold leading-snug text-white">
+                                Correlation, Anomaly Detection, and ML-Assisted Analytics
+                            </h4>
+                        </div>
                     </header>
-                    <p class="mt-4 text-slate-400 leading-relaxed">
-                        EDR solutions ingest massive amounts of data. ML models learn what "normal" endpoint behavior looks like for your specific environment. They then flag significant deviations 
-                        from this baseline as potential threats. AI helps correlate events and identify subtle, complex attack patterns that humans might miss.
-                    </p>
+                    <div class="mt-4 space-y-4">
+                        <p class="text-slate-400 leading-7">
+                            EDR collects large amounts of endpoint telemetry across file, process, memory, registry, identity,
+                            and network events. Machine learning models and correlation engines help identify deviations from
+                            normal activity, score suspicious behavior, and link multiple weak signals into a stronger detection.
+                            For example, a phishing document spawning PowerShell, followed by memory injection and outbound
+                            beaconing, is much more suspicious when analyzed as a chain than as isolated events.
+                        </p>
+                        <div class="rounded-xl border border-white/5 bg-white/5 p-4">
+                            <p class="mb-3 text-sm font-medium uppercase tracking-wide text-teal-200/90">
+                                EDR watches for one process manipulating another:
+                            </p>
+                            <ul class="grid gap-2 text-sm text-slate-300 sm:grid-cols-2">
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">OpenProcess / WriteProcessMemory / CreateRemoteThread</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">APC queuing</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Section mapping</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Thread hijacking</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Token theft or duplication</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Handle duplication into protected processes</li>
+                            </ul>
+                        </div>
+                        <p class="text-slate-400 leading-7">
+                            A lot of post-exploitation frameworks reveal themselves here even when the payload itself is obfuscated.
+                        </p>
+                    </div>
                 </article>
                 <article class="relative overflow-hidden rounded-2xl bg-[#11152b] p-6 ring-1 ring-white/10">
                     <span class="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-rose-500 to-pink-500"></span>
-                    <header class="flex items-center gap-3">
-                        <svg class="w-8 h-8 text-rose-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4h16v16H4z" />
-                        </svg>
-                        <h4 class="text-lg font-semibold text-white"> Indicator of Compromise (IOC) and Threat Intelligence Integration </h4>
+                    <header class="flex items-start gap-3 pr-2">
+                        <div class="mt-0.5 shrink-0 rounded-xl bg-rose-500/10 p-2 ring-1 ring-rose-400/20">
+                            <svg class="h-6 w-6 text-rose-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" >
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 15l4-4 4 4 8-8" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14 7h7v7" />
+                                <circle cx="5" cy="19" r="1.5"/>
+                                <circle cx="11" cy="19" r="1.5"/>
+                                <circle cx="17" cy="19" r="1.5"/>
+                            </svg>
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="text-lg font-semibold leading-snug text-white">
+                                IOC, Threat Intelligence, and Network-Based Detection
+                            </h4>
+                        </div>
                     </header>
-                    <p class="mt-4 text-slate-400 leading-relaxed">
-                        EDR often pulls in external threat intelligence feeds, which provide lists of known bad IPs, domains, or file hashes. By cross-referencing this with endpoint data, EDR can
-                        detect compromises faster. For example, if a device communicates with a command-and-control server listed in a threat feed, it's a red flag.
-                    </p>
+                    <div class="mt-4 space-y-4">
+                        <p class="text-slate-400 leading-7">
+                            EDR commonly enriches endpoint activity with threat intelligence feeds containing
+                            known malicious IPs, domains, URLs, hashes, certificates, and command-and-control
+                            infrastructure. It also monitors network behavior such as beaconing patterns,
+                            rare destinations, suspicious DNS activity, lateral movement protocols,
+                            and abnormal outbound traffic from unusual processes. This helps detect both
+                            known malware and compromised systems communicating with attacker infrastructure.
+                        </p>
+                        <div class="rounded-xl border border-white/5 bg-white/5 p-4">
+                            <p class="mb-3 text-sm font-medium uppercase tracking-wide text-rose-200/90">
+                                Detection signals include:
+                            </p>
+                            <ul class="grid gap-2 text-sm text-slate-300 sm:grid-cols-2">
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">First-time external destinations</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Beaconing intervals</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Low-and-slow periodic C2</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Domain-generation-like patterns</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Unusual JA3 / JA4 TLS fingerprints</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">DNS tunneling characteristics</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Internal lateral movement (SMB, WinRM, WMI, RDP, PsExec-like)</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Abnormal egress from unusual processes</li>
+                            </ul>
+                        </div>
+                    </div>
                 </article>
                 <article class="relative overflow-hidden rounded-2xl bg-[#11152b] p-6 ring-1 ring-white/10">
                     <span class="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-amber-400 to-orange-500"></span>
-                    <header class="flex items-center gap-3">
-                        <svg class="w-8 h-8 text-amber-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5.5 2h7l6 6v13.5A1.5 1.5 0 0117 23H7A1.5 1.5 0 015.5 21.5V2z"/>
-                        <polyline stroke-linecap="round" stroke-linejoin="round" points="12 2 12 8 18 8"/>
-                        </svg>
-                        <h4 class="text-lg font-semibold text-white">Fileless Malware Detection</h4>
+                    <header class="flex items-start gap-3 pr-2">
+                        <div class="mt-0.5 shrink-0 rounded-xl bg-amber-500/10 p-2 ring-1 ring-amber-400/20">
+                            <svg class="h-6 w-6 text-amber-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" >
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.75h4.5l1.2 2.4 2.55.45a1 1 0 0 1 .55 1.7l-1.83 1.78.43 2.52a1 1 0 0 1-1.45 1.05L13 12.5l-2.47 1.3a1 1 0 0 1-1.45-1.05l.43-2.52-1.83-1.78a1 1 0 0 1 .55-1.7l2.55-.45 1.2-2.4Z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 19h16"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M7 16.5h10"/>
+                            </svg>
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="text-lg font-semibold leading-snug text-white">
+                                Memory and Fileless Malware Detection
+                            </h4>
+                        </div>
                     </header>
-                    <p class="mt-4 text-slate-400 leading-relaxed">
-                        Fileless malware never drops an executable to disk; it runs straight from memory via PowerShell, WMI, exploit-loaded shellcode, or any other posible ways, leaving traditional 
-                        AV blind. EDR watches script engines and memory allocations in real time, so when a process spawns unusual, in-RAM code, the agent can flag, capture, and stop it before a 
-                        reboot wipes the evidence.
-                    </p>
+                    <div class="mt-4 space-y-4">
+                        <p class="text-slate-400 leading-7">
+                            EDR is particularly valuable against threats that operate mainly in memory. It monitors
+                            script engines, shellcode execution, reflective DLL loading, process hollowing, thread
+                            injection, suspicious memory permission changes, and code running from regions not backed
+                            by a legitimate file. This is how EDR detects fileless malware delivered through
+                            PowerShell, WMI, macros, exploit chains, or in-memory loaders without relying on a
+                            dropped executable.
+                        </p>
+                        <div class="rounded-xl border border-white/5 bg-white/5 p-4">
+                            <p class="mb-3 text-sm font-medium uppercase tracking-wide text-amber-200/90">
+                                Suspicious arguments and launch patterns:
+                            </p>
+                            <ul class="grid gap-2 text-sm text-slate-300 sm:grid-cols-2">
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Base64 PowerShell</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">AMSI bypass strings</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">LOLBin abuse like mshta, regsvr32, wmic, rundll32, certutil</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Encoded JavaScript, HTA, VBS, and macro stagers</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2 sm:col-span-2">Suspicious schtasks, sc, net, nltest, dsquery, vssadmin, and bcdedit usage</li>
+                            </ul>
+                        </div>
+                        <div class="rounded-xl border border-white/5 bg-white/5 p-4">
+                            <p class="mb-3 text-sm font-medium uppercase tracking-wide text-amber-200/90">
+                                Mature EDR memory inspection looks for:
+                            </p>
+                            <ul class="grid gap-2 text-sm text-slate-300 sm:grid-cols-2">
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Executable private memory regions</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">RWX or RX transitions</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Shellcode-like byte patterns</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">PE headers in memory with no mapped file</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Module stomping</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Hollowed processes</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Thread start addresses outside known modules</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Anomalous call stacks</li>
+                            </ul>
+                        </div>
+                    </div>
                 </article>
                 <article class="relative overflow-hidden rounded-2xl bg-[#11152b] p-6 ring-1 ring-white/10">
                     <span class="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-violet-400 to-indigo-500"></span>
-                    <header class="flex items-center gap-3">
-                        <svg class="w-8 h-8 text-violet-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h3m3 0h3m3 0h3M5 8.5l2 7M10 8.5l2 7m4-7l2 7m4-7l2 7" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 2a9 9 0 019 9c0 4.97-4.03 9-9 9S3 15.97 3 11a9 9 0 019-9z" />
-                        </svg>
-                        <h4 class="text-lg font-semibold text-white">Heuristic Analysis</h4>
+                    <header class="flex items-start gap-3 pr-2">
+                        <div class="mt-0.5 shrink-0 rounded-xl bg-violet-500/10 p-2 ring-1 ring-violet-400/20">
+                            <svg class="h-6 w-6 text-violet-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 10.5h10.5A1.5 1.5 0 0 1 18.75 12v6A1.5 1.5 0 0 1 17.25 19.5H6.75A1.5 1.5 0 0 1 5.25 18v-6a1.5 1.5 0 0 1 1.5-1.5Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 14.25v1.5" />
+                            </svg>
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="text-lg font-semibold leading-snug text-white">
+                                Persistence, Privilege Escalation, and Credential Access Detection
+                            </h4>
+                        </div>
                     </header>
-                    <p class="mt-4 text-slate-400 leading-relaxed">
-                        Using rules and algorithms to identify suspicious characteristics or patterns in code or behavior that are commonly associated with malware, even if it's a new variant.
-                    </p>
+                    <div class="mt-4 space-y-4">
+                        <p class="text-slate-400 leading-7">
+                            Malware often becomes easier to detect when it tries to stay resident, elevate privileges,
+                            or steal credentials. EDR watches for new services, scheduled tasks, Run keys, WMI event
+                            subscriptions, COM hijacks, suspicious token manipulation, LSASS access, SAM hive access,
+                            and abuse of credential dumping techniques. These activities are strong signals because
+                            they often appear during post-exploitation and ransomware staging.
+                        </p>
+                        <div class="rounded-xl border border-white/5 bg-white/5 p-4">
+                            <p class="mb-3 text-sm font-medium uppercase tracking-wide text-violet-200/90">
+                                Persistence mechanisms EDR tracks:
+                            </p>
+                            <ul class="grid gap-2 text-sm text-slate-300 sm:grid-cols-2">
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Run keys / RunOnce</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Startup folder writes</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Services and drivers</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Scheduled tasks</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">WMI permanent event subscriptions</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">COM hijacks</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Shell/open command hijacks</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">LSA providers, SSPs, and AppInit DLLs</li>
+                            </ul>
+                        </div>
+                        <div class="rounded-xl border border-white/5 bg-white/5 p-4">
+                            <p class="mb-3 text-sm font-medium uppercase tracking-wide text-violet-200/90">
+                                Credential theft and privilege abuse signals:
+                            </p>
+                            <ul class="grid gap-2 text-sm text-slate-300 sm:grid-cols-2">
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">LSASS access or memory dumping attempts</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Suspicious use of MiniDumpWriteDump</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Driver-assisted memory reads</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">SAM / SECURITY hive access</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Token impersonation</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">SeDebugPrivilege enablement</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">Unexpected Kerberos ticket operations</li>
+                                <li class="rounded-lg bg-[#161c36] px-3 py-2">DPAPI abuse</li>
+                            </ul>
+                        </div>
+                    </div>
                 </article>
                 <article class="relative overflow-hidden rounded-2xl bg-[#11152b] p-6 ring-1 ring-white/10">
                     <span class="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-cyan-400 to-blue-500"></span>
@@ -454,11 +809,12 @@
                             <rect x="3" y="3" width="18" height="18" rx="2"/>
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 9h6v6H9zM9 1v2m6-2v2m8 8h-2m2 6h-2m-6 6v-2m-6 2v-2M1 15h2M1 9h2" />
                         </svg>
-                        <h4 class="text-lg font-semibold text-white">Kernel and Memory Level Instrumentation</h4>
+                        <h4 class="text-lg font-semibold text-white">Kernel-Level Visibility and Telemetry Collection</h4>
                     </header>
                     <p class="mt-4 text-slate-400 leading-relaxed">
-                        Hooks system calls, monitors stack traces, and taps ETW providers to expose direct syscalls, unhooking attempts, reflective DLL injection, and APC abuse, surfacing 
-                        stealthy in-memory loaders and rootkits even inside protected user-mode sandboxes.
+                        Many advanced EDR capabilities depend on low-level visibility provided through kernel drivers, ETW, script telemetry, API monitoring, and system call observation. This layer helps expose direct syscalls, 
+                        unhooking attempts, process tampering, APC abuse, and other evasion techniques designed to bypass user-mode security monitoring. It is not a separate detection category by itself, but it enables 
+                        higher-fidelity detection across the rest of the platform.
                     </p>
                 </article>
             </div>
