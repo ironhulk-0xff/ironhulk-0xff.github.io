@@ -183,28 +183,28 @@
                   </ul>
                 </div>
               </div>
-              <div class="rounded-3xl border border-white/10 bg-white/[0.04] overflow-hidden">
-                <button @click="open = (open === 4 ? null : 4)" class="w-full flex items-center justify-between p-5 text-left">
-                  <div class="flex items-center gap-3">
-                    <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-500/10 border border-amber-300/20">🏆</span>
-                    <div>
-                      <div class="text-lg font-semibold">Achievements</div>
-                      <div class="text-sm text-slate-400">Key milestones, awards, certifications, and accomplishments throughout my journey</div>
-                    </div>
+            </div>
+            <div class="rounded-3xl border border-white/10 bg-white/[0.04] overflow-hidden">
+              <button @click="open = (open === 4 ? null : 4)" class="w-full flex items-center justify-between p-5 text-left">
+                <div class="flex items-center gap-3">
+                  <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-500/10 border border-amber-300/20">🏆</span>
+                  <div>
+                    <div class="text-lg font-semibold">Achievements</div>
+                    <div class="text-sm text-slate-400">Key milestones, awards, certifications, and accomplishments throughout my journey</div>
                   </div>
-                  <span class="text-slate-400" :class="open===4 ? 'rotate-180' : ''" style="transition:transform .2s;">⌄</span>
-                </button>
+                </div>
+                <span class="text-slate-400" :class="open===4 ? 'rotate-180' : ''" style="transition:transform .2s;">⌄</span>
+              </button>
 
-                <div x-show="open===4" x-collapse class="px-6 pb-5">
-                  <div class="rounded-2xl border border-white/10 bg-[#0b1220]/60 p-5">
-                    <ul class="space-y-2">
-                      <li>
-                        <a href="Achiv/ODPC.html" class="flex items-center gap-2 hover:text-amber-200 transition">
-                          🛡️ <span>Offensive Development Practitioner Certification Course (ODPC)</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
+              <div x-show="open===4" x-collapse class="px-6 pb-5">
+                <div class="rounded-2xl border border-white/10 bg-[#0b1220]/60 p-5">
+                  <ul class="space-y-2">
+                    <li>
+                      <a href="Achiv/ODPC.html" class="flex items-center gap-2 hover:text-amber-200 transition">
+                        🛡️ <span>Offensive Development Practitioner Certification Course (ODPC)</span>
+                      </a>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
