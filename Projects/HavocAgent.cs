@@ -3,8 +3,7 @@
  *
  * Author:  Iron Hulk  (@IronHulk_0xff)
  *
- * Compile (C# 5, .NET 4.5+):
- *   C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe /target:library /out:agent.dll HavocAgent.cs
+ *   C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe /target:exe /out:HavocAgent.exe HavocAgent.cs
  */
 
 using System;
